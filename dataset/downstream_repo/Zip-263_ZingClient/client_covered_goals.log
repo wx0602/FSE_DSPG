@@ -1,0 +1,23 @@
+net.lingala.zip4j.ZipFile.readZipInfo()V: I13 Branch 83 IFNE L960 - false
+net.lingala.zip4j.ZipFile.addFiles(Ljava/util/List;Lnet/lingala/zip4j/model/ZipParameters;)V: I3 Branch 11 IFNULL L270 - false
+net.lingala.zip4j.ZipFile.addFiles(Ljava/util/List;Lnet/lingala/zip4j/model/ZipParameters;)V: I60 Branch 16 IFEQ L288 - true
+net.lingala.zip4j.ZipFile.readZipInfo()V: I4 Branch 82 IFNULL L956 - true
+net.lingala.zip4j.ZipFile.buildAsyncParameters()Lnet/lingala/zip4j/tasks/AsyncZipTask$AsyncTaskParameters;: I4 Branch 90 IFEQ L1003 - true
+net.lingala.zip4j.ZipFile.addFiles(Ljava/util/List;Lnet/lingala/zip4j/model/ZipParameters;)V: I6 Branch 12 IFNE L270 - true
+net.lingala.zip4j.ZipFile.addFiles(Ljava/util/List;Lnet/lingala/zip4j/model/ZipParameters;)V: I17 Branch 13 IFNONNULL L274 - true
+net.lingala.zip4j.ZipFile.addFiles(Ljava/util/List;Lnet/lingala/zip4j/model/ZipParameters;)V: I31 Branch 14 IF_ACMPNE L278 - true
+net.lingala.zip4j.ZipFile.addFiles(Ljava/util/List;Lnet/lingala/zip4j/model/ZipParameters;)V: I47 Branch 15 IFNONNULL L284 - true
+net.lingala.zip4j.ZipFile.createNewZipModel()V: root-Branch
+net.lingala.zip4j.ZipFile.<init>(Ljava/lang/String;[C)V: root-Branch
+net.lingala.zip4j.ZipFile.addFile(Ljava/io/File;Lnet/lingala/zip4j/model/ZipParameters;)V: root-Branch
+ZingClient.zing.client.file.ZFile.create(Ljava/lang/String;Ljava/lang/String;)V: root-Branch
+net.lingala.zip4j.ZipFile.<init>(Ljava/io/File;[C)V: root-Branch
+net.lingala.zip4j.ZipFile.<init>(Ljava/io/File;)V: root-Branch
+net.lingala.zip4j.ZipFile.addFiles(Ljava/util/List;Lnet/lingala/zip4j/model/ZipParameters;)V: I60 Branch 16 IFEQ L288 - false
+net.lingala.zip4j.ZipFile.readZipInfo()V: I4 Branch 82 IFNULL L956 - false
+net.lingala.zip4j.ZipFile.addFiles(Ljava/util/List;Lnet/lingala/zip4j/model/ZipParameters;)V: I64 Branch 17 IFEQ L288 - true
+net.lingala.zip4j.ZipFile.readZipInfo()V: I97 Branch 87 IFNULL L973 - false
+net.lingala.zip4j.ZipFile.readZipInfo()V: I99 Branch 88 IFNULL L973 - false
+net.lingala.zip4j.ZipFile.readZipInfo()V: I13 Branch 83 IFNE L960 - true
+net.lingala.zip4j.ZipFile.readZipInfo()V: I26 Branch 84 IFNE L965 - true
+net.lingala.zip4j.ZipFile.initializeRandomAccessFileForHeaderReading()Ljava/io/RandomAccessFile;: I5 Branch 89 IFEQ L991 - true

@@ -1,0 +1,77 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index 0000000..0000000 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -243,14 +243,58 @@
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
++public static String unescapeNunmericEntity(String v) {
++    if (v == null) {
++        return null;
++    }
++
++    StringBuilder result = new StringBuilder(v.length());
++    int i = 0;
++    while (i < v.length()) {
++        char ch = v.charAt(i);
++        if (ch == '&' && i + 2 < v.length() && v.charAt(i + 1) == '#') {
++            int start = i + 2;
++            boolean hex = false;
++
++            if (start < v.length() && (v.charAt(start) == 'x' || v.charAt(start) == 'X')) {
++                hex = true;
++                start++;
++            }
++
++            int end = start;
++            if (hex) {
++                while (end < v.length()) {
++                    char c = v.charAt(end);
++                    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
++                        end++;
++                    } else {
++                        break;
++                    }
++                }
++            } else {
++                while (end < v.length()) {
++                    char c = v.charAt(end);
++                    if (c >= '0' && c <= '9') {
++                        end++;
++                    } else {
++                        break;
++                    }
++                }
++            }
++
++            boolean semiColon = end < v.length() && v.charAt(end) == ';';
++            if (end > start && (semiColon || end < v.length())) {
++                try {
++                    int codePoint = Integer.parseInt(v.substring(start, end), hex ? 16 : 10);
++                    result.append(Character.toChars(codePoint));
++                    i = end + (semiColon ? 1 : 0);
++                    continue;
++                } catch (NumberFormatException ex) {
++                    // Fall through and keep the original text.
++                }
++            }
++        }
++
++        result.append(ch);
++        i++;
++    }
++
++    return result.toString();
++}

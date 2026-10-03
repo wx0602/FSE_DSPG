@@ -1,0 +1,43 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 8dd2e42..09a86d3 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -8,6 +8,7 @@ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
++import java.util.Base64;
+ 
+ /**
+  *
+@@ -65,11 +66,23 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] decoded = decodeBase64Safely(encrypted);
++        byte[] result = cipher.doFinal(decoded);
+ 
+         return new String(result, "utf-8");
+     }
+ 
++    private static byte[] decodeBase64Safely(String encrypted) {
++        if (encrypted == null) {
++            throw new IllegalArgumentException("Encrypted content must not be null");
++        }
++        try {
++            return Base64.getDecoder().decode(encrypted);
++        } catch (IllegalArgumentException e) {
++            throw new IllegalArgumentException("Encrypted content is not valid Base64 data", e);
++        }
++    }
++
+     /**
+      * 生成加密秘钥
+      *
+@@ -92,4 +105,4 @@ public class AesUtil {
+         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
+     }
+ 
+-}
++}

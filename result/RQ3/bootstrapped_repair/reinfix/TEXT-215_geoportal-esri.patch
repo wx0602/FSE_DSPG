@@ -1,0 +1,90 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index 0000000..0000000 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -243,14 +243,71 @@
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
++public static String unescapeNunmericEntity(String v) {
++    if (v == null) {
++      return v;
++    }
++
++    StringBuilder result = new StringBuilder(v.length());
++    int length = v.length();
++
++    for (int i = 0; i < length; i++) {
++      char ch = v.charAt(i);
++      if (ch == '&' && i + 2 < length && v.charAt(i + 1) == '#') {
++        int entityStart = i;
++        int index = i + 2;
++        boolean hexadecimal = false;
++
++        if (index < length) {
++          char prefix = v.charAt(index);
++          if (prefix == 'x' || prefix == 'X') {
++            hexadecimal = true;
++            index++;
++          }
++        }
++
++        int digitStart = index;
++        while (index < length) {
++          char digit = v.charAt(index);
++          if (hexadecimal) {
++            if ((digit >= '0' && digit <= '9')
++                || (digit >= 'a' && digit <= 'f')
++                || (digit >= 'A' && digit <= 'F')) {
++              index++;
++              continue;
++            }
++          } else {
++            if (digit >= '0' && digit <= '9') {
++              index++;
++              continue;
++            }
++          }
++          break;
++        }
++
++        if (index > digitStart) {
++          String digits = v.substring(digitStart, index);
++          int entityEnd = index;
++          if (entityEnd < length && v.charAt(entityEnd) == ';') {
++            entityEnd++;
++          }
++
++          try {
++            int codePoint = Integer.parseInt(digits, hexadecimal ? 16 : 10);
++            if (Character.isValidCodePoint(codePoint)) {
++              result.append(Character.toChars(codePoint));
++              i = entityEnd - 1;
++              continue;
++            }
++          } catch (NumberFormatException ex) {
++            // Leave the original input unchanged when parsing fails.
++          }
++        }
++
++        result.append(v, entityStart, index);
++        i = index - 1;
++        continue;
++      }
++
++      result.append(ch);
++    }
++
++    return result.toString();
++  }

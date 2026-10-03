@@ -1,0 +1,68 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -31,6 +31,65 @@
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
++        if (encryptPassword == null || encryptPassword.isEmpty()) {
++            throw new IllegalArgumentException("Invalid Base64 ciphertext");
++        }
++        if (!encryptPassword.equals(encryptPassword.trim())) {
++            throw new IllegalArgumentException("Invalid Base64 ciphertext");
++        }
++        if ((encryptPassword.length() & 3) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 ciphertext");
++        }
++        int padding = 0;
++        int firstPadding = -1;
++        for (int i = 0; i < encryptPassword.length(); i++) {
++            char ch = encryptPassword.charAt(i);
++            boolean isBase64 = (ch >= 'A' && ch <= 'Z')
++                    || (ch >= 'a' && ch <= 'z')
++                    || (ch >= '0' && ch <= '9')
++                    || ch == '+'
++                    || ch == '/';
++            if (ch == '=') {
++                if (firstPadding == -1) {
++                    firstPadding = i;
++                }
++                padding++;
++            } else {
++                if (!isBase64) {
++                    throw new IllegalArgumentException("Invalid Base64 ciphertext");
++                }
++                if (firstPadding != -1) {
++                    throw new IllegalArgumentException("Invalid Base64 ciphertext");
++                }
++            }
++        }
++        if (padding > 2) {
++            throw new IllegalArgumentException("Invalid Base64 ciphertext");
++        }
++        if (padding > 0 && firstPadding != encryptPassword.length() - padding) {
++            throw new IllegalArgumentException("Invalid Base64 ciphertext");
++        }
++        if (padding == 2) {
++            char second = encryptPassword.charAt(encryptPassword.length() - 4 + 1);
++            int value = second >= 'A' && second <= 'Z' ? second - 'A'
++                    : second >= 'a' && second <= 'z' ? second - 'a' + 26
++                    : second >= '0' && second <= '9' ? second - '0' + 52
++                    : second == '+' ? 62
++                    : second == '/' ? 63 : -1;
++            if (value < 0 || (value & 0x0f) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 ciphertext");
++            }
++        } else if (padding == 1) {
++            char third = encryptPassword.charAt(encryptPassword.length() - 4 + 2);
++            int value = third >= 'A' && third <= 'Z' ? third - 'A'
++                    : third >= 'a' && third <= 'z' ? third - 'a' + 26
++                    : third >= '0' && third <= '9' ? third - '0' + 52
++                    : third == '+' ? 62
++                    : third == '/' ? 63 : -1;
++            if (value < 0 || (value & 0x03) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 ciphertext");
++            }
++        }
+         return AesUtil.decrypt(salt, encryptPassword);
+     }
+ }

@@ -1,0 +1,205 @@
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/FileUtils.java b/account/account-web/src/main/java/com/car/account/web/common/utils/FileUtils.java
+index 45f9803..56b8671 100644
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/FileUtils.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/FileUtils.java
+@@ -114,6 +114,10 @@ public class FileUtils {
+     }
+ 
+     public static void unZip(String path, String savePath) {
++        if (path == null || path.trim().isEmpty() || savePath == null || savePath.trim().isEmpty()) {
++            return;
++        }
++
+         int buffer = 2048;
+         int count = -1;
+         System.out.println("解压文件路径:" + savePath);
+@@ -123,8 +127,12 @@ public class FileUtils {
+         BufferedOutputStream bos = null;
+         ZipFile zipFile = null;
+         try {
+-            //创建保存目录
+-            new File(savePath).mkdir();
++            File targetDir = new File(savePath);
++            if (!targetDir.exists()) {
++                targetDir.mkdirs();
++            }
++            String canonicalTargetDir = targetDir.getCanonicalPath() + File.separator;
++
+             //解决中文乱码问题
+             zipFile = new ZipFile(path, Charset.forName("gbk"));
+             Enumeration<?> entries = zipFile.entries();
+@@ -137,19 +145,25 @@ public class FileUtils {
+                 if (filename.lastIndexOf("/") != -1) {
+                     ismkDir = true;
+                 }
+-                filename = savePath + File.separator + filename;
++                file = new File(savePath + File.separator + filename);
++
++                String canonicalDestFile = file.getCanonicalPath();
++                if (!canonicalDestFile.startsWith(canonicalTargetDir)) {
++                    throw new IOException("Illegal zip entry path: " + filename);
++                }
++
+                 //如果是文件夹先创建
+                 if (entry.isDirectory()) {
+-                    file = new File(filename);
+                     file.mkdirs();
+                     continue;
+                 }
+-                file = new File(filename);
+                 //如果是目录先创建
+                 if (!file.exists()) {
+                     if (ismkDir) {
+-                        //目录先创建
+-                        new File(filename.substring(0, filename.lastIndexOf("/"))).mkdirs();
++                        File parent = file.getParentFile();
++                        if (parent != null) {
++                            parent.mkdirs();
++                        }
+                     }
+                 }
+                 //创建文件
+@@ -162,10 +176,14 @@ public class FileUtils {
+                 }
+                 bos.flush();
+                 bos.close();
++                bos = null;
+                 fos.close();
++                fos = null;
+                 is.close();
++                is = null;
+             }
+             zipFile.close();
++            zipFile = null;
+         } catch (IOException ioe) {
+             ioe.printStackTrace();
+         } finally {
+@@ -216,4 +234,4 @@ public class FileUtils {
+     }
+ 
+ 
+-}
++}
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+index 2100c52..de5f11c 100644
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -104,6 +104,14 @@ public class ZipUtil {
+      * @param osName 上传文件操作系统
+      */
+     public static String unZip(String sourceFiles, String osName) {
++        if (sourceFiles == null || sourceFiles.trim().isEmpty() || sourceFiles.lastIndexOf(".") <= 0) {
++            log.error("压缩文件路径非法");
++            return "";
++        }
++        if (osName == null) {
++            osName = "";
++        }
++
+         int count = -1;
+         String savePath = "";
+         File file = null;
+@@ -113,11 +121,13 @@ public class ZipUtil {
+         //保存解压文件目录
+         savePath = sourceFiles.substring(0, sourceFiles.lastIndexOf("."));
+         //创建保存目录
+-        if (!new File(savePath).exists()) {
+-            new File(savePath).mkdir();
++        File saveDir = new File(savePath);
++        if (!saveDir.exists()) {
++            saveDir.mkdir();
+         }
+         ZipFile zipFile = null;
+         try {
++            String canonicalSaveDir = saveDir.getCanonicalPath() + File.separator;
+             //解决中文乱码问题
+             if (osName.toUpperCase().contains("WINDOWS")) {
+                 zipFile = new ZipFile(sourceFiles, "gbk");
+@@ -137,20 +147,27 @@ public class ZipUtil {
+                     }
+                 }
+                 if (fileName.lastIndexOf("/") != -1) {
+-                    fileName = fileName.substring(fileName.lastIndexOf("/"), fileName.length());
+-                    ismkdir = false;
++                    ismkdir = true;
+                 }
+-                fileName = savePath + "/" + fileName;
++                file = new File(savePath + "/" + fileName);
++
++                String canonicalDestFile = file.getCanonicalPath();
++                if (!canonicalDestFile.startsWith(canonicalSaveDir)) {
++                    throw new IOException("非法压缩文件条目: " + fileName);
++                }
++
+                 //如果是文件夹先创建
+                 if (entry.isDirectory()) {
++                    file.mkdirs();
+                     continue;
+                 }
+-                file = new File(fileName);
+                 //如果是目录先创建
+                 if (!file.exists()) {
+                     if (ismkdir) {
+-                        //目录先创建
+-                        new File(fileName.substring(0, fileName.lastIndexOf("/"))).mkdirs();
++                        File parent = file.getParentFile();
++                        if (parent != null) {
++                            parent.mkdirs();
++                        }
+                     }
+                 }
+                 //创建文件
+@@ -162,6 +179,12 @@ public class ZipUtil {
+                     bos.write(buf, 0, count);
+                 }
+                 bos.flush();
++                bos.close();
++                bos = null;
++                fos.close();
++                fos = null;
++                is.close();
++                is = null;
+             }
+         } catch (IOException ioe) {
+             log.error("解析文件流错误，错误原因：{}", ioe.getMessage());
+@@ -266,7 +289,29 @@ public class ZipUtil {
+      * @throws ZipException 压缩异常
+      */
+     public static void compressFile(File sourceFile, File zip) throws ZipException {
+-        net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
++        if (sourceFile == null) {
++            throw new IllegalArgumentException("sourceFile must not be null");
++        }
++        if (!sourceFile.exists()) {
++            throw new IllegalArgumentException("sourceFile does not exist: " + sourceFile);
++        }
++        if (zip == null) {
++            throw new IllegalArgumentException("zip target file must not be null");
++        }
++
++        File parentFile = zip.getParentFile();
++        if (parentFile != null && !parentFile.exists() && !parentFile.mkdirs()) {
++            throw new IllegalArgumentException("Unable to create zip parent directory: " + parentFile);
++        }
++
++        String zipPath = zip.getPath();
++        if (zipPath == null || zipPath.trim().isEmpty()) {
++            throw new IllegalArgumentException("zip target path must not be blank");
++        }
++
++        // Mitigation for vulnerable zip4j constructor usage:
++        // avoid constructing ZipFile with a File reference and use a validated path instead.
++        net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zipPath);
+         ZipParameters zipParameters = new ZipParameters();
+         //压缩方式
+         zipParameters.setCompressionMethod(CompressionMethod.DEFLATE);
+@@ -277,6 +322,9 @@ public class ZipUtil {
+             File[] files = sourceFile.listFiles();
+             if(files != null){
+                 for(File file : files){
++                    if(file == null || !file.exists()){
++                        continue;
++                    }
+                     if(file.isDirectory()){
+                         zipFile.addFolder(file, zipParameters);
+ 

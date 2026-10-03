@@ -1,0 +1,94 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index 8c15083..560e362 100644
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -26,37 +26,73 @@ public class Validator {
+ 
+     public boolean validateInteger(String str) {
+         logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        return isValidIntegerRepresentation(str);
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {
+         logger.info("Validating integer as positive value: " + str);
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str) && NumberUtils.createInteger(str) > 0;
++        return isValidIntegerRepresentation(str) && NumberUtils.createInteger(normalizeIntegerString(str)) > 0;
+     }
+ 
+     public boolean validateActivityTypeInteger(String str) {
+         logger.info("Validating activityType: " + str);
+-        return NumberUtils.isCreatable(str)
+-                && NumberUtils.isParsable(str)
+-                && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_ACTIVITY_TYPE
+-                && NumberUtils.createInteger(str) < UPPER_LIMIT_OF_ACTIVITY_TYPE;
++        if (!isValidIntegerRepresentation(str)) {
++            return false;
++        }
++        final int value = NumberUtils.createInteger(normalizeIntegerString(str));
++        return value > LOWER_LIMIT_OF_ACTIVITY_TYPE && value < UPPER_LIMIT_OF_ACTIVITY_TYPE;
+     }
+ 
+     public boolean validateShort(String str) {
+         logger.info("Validating short: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_INDEX
+-                && NumberUtils.createInteger(str) < MAX_SHORT;
++        if (!isValidIntegerRepresentation(str)) {
++            return false;
++        }
++        final int value = NumberUtils.createInteger(normalizeIntegerString(str));
++        return value > LOWER_LIMIT_OF_INDEX && value < MAX_SHORT;
+     }
+ 
+     public boolean validateByte(String str) {
+         logger.info("Validating byte: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
+-                && NumberUtils.createInteger(str) < MAX_BYTE;
++        if (!isValidIntegerRepresentation(str)) {
++            return false;
++        }
++        final int value = NumberUtils.createInteger(normalizeIntegerString(str));
++        return value > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS && value < MAX_BYTE;
++    }
++
++    private boolean isValidIntegerRepresentation(String str) {
++        if (!NumberUtils.isCreatable(str)) {
++            return false;
++        }
++        if (NumberUtils.isParsable(str)) {
++            return !str.contains(".") || hasZeroFraction(str);
++        }
++        return hasTrailingDecimalPoint(str) && NumberUtils.isDigits(removeLeadingSign(removeTrailingDecimalPoint(str)));
++    }
++
++    private boolean hasZeroFraction(String str) {
++        final int decimalIndex = str.indexOf('.');
++        if (decimalIndex < 0) {
++            return true;
++        }
++        final String fractionalPart = str.substring(decimalIndex + 1);
++        return !fractionalPart.isEmpty() && fractionalPart.chars().allMatch(ch -> ch == '0');
++    }
++
++    private boolean hasTrailingDecimalPoint(String str) {
++        return StringUtils.isNotEmpty(str) && str.charAt(str.length() - 1) == '.';
++    }
++
++    private String normalizeIntegerString(String str) {
++        return hasTrailingDecimalPoint(str) ? removeTrailingDecimalPoint(str) : str;
++    }
++
++    private String removeTrailingDecimalPoint(String str) {
++        return str.substring(0, str.length() - 1);
++    }
++
++    private String removeLeadingSign(String str) {
++        return StringUtils.startsWith(str, "-") ? str.substring(1) : str;
+     }
+ }

@@ -1,0 +1,87 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index 0000000..0000000 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,14 +240,68 @@
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
++public static String unescapeNunmericEntity(String v) {
++  if (v == null) {
++    return null;
++  }
++
++  StringBuilder result = new StringBuilder(v.length());
++  int length = v.length();
++  int i = 0;
++
++  while (i < length) {
++    char ch = v.charAt(i);
++    if (ch == '&' && i + 2 < length && v.charAt(i + 1) == '#') {
++      int entityStart = i;
++      int digitStart = i + 2;
++      int radix = 10;
++
++      if (digitStart < length) {
++        char radixMarker = v.charAt(digitStart);
++        if (radixMarker == 'x' || radixMarker == 'X') {
++          radix = 16;
++          digitStart++;
++        }
++      }
++
++      int digitEnd = digitStart;
++      while (digitEnd < length) {
++        char digit = v.charAt(digitEnd);
++        boolean validDigit;
++        if (radix == 16) {
++          validDigit = (digit >= '0' && digit <= '9')
++              || (digit >= 'a' && digit <= 'f')
++              || (digit >= 'A' && digit <= 'F');
++        } else {
++          validDigit = digit >= '0' && digit <= '9';
++        }
++        if (!validDigit) {
++          break;
++        }
++        digitEnd++;
++      }
++
++      if (digitEnd > digitStart) {
++        boolean hasSemicolon = digitEnd < length && v.charAt(digitEnd) == ';';
++        String digits = v.substring(digitStart, digitEnd);
++
++        try {
++          int codePoint = Integer.parseInt(digits, radix);
++          if (Character.isValidCodePoint(codePoint)) {
++            result.append(Character.toChars(codePoint));
++            i = hasSemicolon ? digitEnd + 1 : digitEnd;
++            continue;
++          }
++        } catch (NumberFormatException ex) {
++          // Fall through and preserve the original text when the entity is invalid.
++        }
++      }
++
++      result.append(v.charAt(entityStart));
++      i = entityStart + 1;
++      continue;
++    }
++
++    result.append(ch);
++    i++;
++  }
++
++  return result.toString();
++}

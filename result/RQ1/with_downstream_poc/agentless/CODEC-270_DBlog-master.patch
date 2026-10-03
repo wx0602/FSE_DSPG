@@ -1,0 +1,37 @@
+diff --git a/blog-admin/src/main/java/com/zyd/blog/core/interceptor/RememberAuthenticationInterceptor.java b/blog-admin/src/main/java/com/zyd/blog/core/interceptor/RememberAuthenticationInterceptor.java
+index ab0cdd1..d05a62c 100644
+--- a/blog-admin/src/main/java/com/zyd/blog/core/interceptor/RememberAuthenticationInterceptor.java
++++ b/blog-admin/src/main/java/com/zyd/blog/core/interceptor/RememberAuthenticationInterceptor.java
+@@ -52,6 +52,10 @@ public class RememberAuthenticationInterceptor implements HandlerInterceptor {
+             subject.login(token);
+             session.setAttribute(SessionConst.USER_SESSION_KEY, user);
+             log.info("[{}] - 已自动登录", user.getUsername());
++        } catch (IllegalArgumentException e) {
++            log.warn("自动登录失败: 非法的密码编码", e);
++            response.sendRedirect(request.getContextPath() + "/passport/login");
++            return false;
+         } catch (Exception e) {
+             log.error("自动登录失败", e);
+             response.sendRedirect(request.getContextPath() + "/passport/login");
+@@ -59,4 +63,4 @@ public class RememberAuthenticationInterceptor implements HandlerInterceptor {
+         }
+         return true;
+     }
+-}
++}
+diff --git a/blog-admin/src/main/java/com/zyd/blog/core/shiro/credentials/CredentialsMatcher.java b/blog-admin/src/main/java/com/zyd/blog/core/shiro/credentials/CredentialsMatcher.java
+index de17d0d..db4eaf7 100644
+--- a/blog-admin/src/main/java/com/zyd/blog/core/shiro/credentials/CredentialsMatcher.java
++++ b/blog-admin/src/main/java/com/zyd/blog/core/shiro/credentials/CredentialsMatcher.java
+@@ -27,10 +27,9 @@ public class CredentialsMatcher extends SimpleCredentialsMatcher {
+         try {
+             dbPassword = PasswordUtil.decrypt(dbPassword, utoken.getUsername());
+         } catch (Exception e) {
+-            e.printStackTrace();
+             return false;
+         }
+         //进行密码的比对
+         return this.equals(inPassword, dbPassword);
+     }
+-}
++}

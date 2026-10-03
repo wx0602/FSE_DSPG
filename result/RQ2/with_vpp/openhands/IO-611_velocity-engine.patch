@@ -1,0 +1,136 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..4f6d1ed 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.File;
+@@ -112,7 +111,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = SecureResourcePathNormalizer.normalize(templateName);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +174,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = SecureResourcePathNormalizer.normalize(name);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a55270..6e1d490 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.IOException;
+@@ -184,11 +183,7 @@ public Reader getResourceReader( String source, String encoding )
+         {
+             throw new ResourceNotFoundException("Need to have a resource!");
+         }
+-        System.out.println("we get"+result);
+-
+-        String normalizedPath = FilenameUtils.normalize( source, true );
+-
+-        System.out.println("we make"+normalizedPath);
++        String normalizedPath = SecureResourcePathNormalizer.normalize(source);
+ 
+         if ( normalizedPath == null || normalizedPath.length() == 0 )
+         {
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/SecureResourcePathNormalizer.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/SecureResourcePathNormalizer.java
+new file mode 100644
+index 0000000..2dc702f
+--- /dev/null
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/SecureResourcePathNormalizer.java
+@@ -0,0 +1,75 @@
++package org.apache.velocity.runtime.resource.loader;
++
++import org.apache.commons.io.FilenameUtils;
++
++/**
++ * Normalizes resource paths without trusting commons-io 2.6 to collapse
++ * repeated separators after a path prefix.
++ */
++final class SecureResourcePathNormalizer
++{
++    private SecureResourcePathNormalizer()
++    {
++    }
++
++    static String normalize(String path)
++    {
++        if (path == null)
++        {
++            return null;
++        }
++
++        String unixPath = path.replace('\\', '/');
++        String prefix = "";
++        String remainder = unixPath;
++
++        if (unixPath.startsWith("//") && (unixPath.length() == 2 || unixPath.charAt(2) != '/'))
++        {
++            prefix = "//";
++            remainder = unixPath.substring(2);
++        }
++
++        remainder = collapseSlashes(remainder);
++        String normalized = FilenameUtils.normalize(prefix + remainder, true);
++        if (normalized == null)
++        {
++            return null;
++        }
++
++        if (prefix.isEmpty())
++        {
++            return collapseSlashes(normalized);
++        }
++
++        if (normalized.startsWith(prefix))
++        {
++            return prefix + collapseSlashes(normalized.substring(prefix.length()));
++        }
++
++        return collapseSlashes(normalized);
++    }
++
++    private static String collapseSlashes(String path)
++    {
++        StringBuilder collapsed = new StringBuilder(path.length());
++        boolean previousSlash = false;
++        for (int i = 0; i < path.length(); i++)
++        {
++            char ch = path.charAt(i);
++            if (ch == '/')
++            {
++                if (!previousSlash)
++                {
++                    collapsed.append(ch);
++                }
++                previousSlash = true;
++            }
++            else
++            {
++                collapsed.append(ch);
++                previousSlash = false;
++            }
++        }
++        return collapsed.toString();
++    }
++}

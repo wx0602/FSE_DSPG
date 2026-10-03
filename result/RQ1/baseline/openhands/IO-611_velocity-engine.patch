@@ -1,0 +1,149 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..31a1654 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.File;
+@@ -112,7 +111,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = SecureResourcePathNormalizer.normalize(templateName, true);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +174,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = SecureResourcePathNormalizer.normalize(name);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a55270..e51ea34 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.IOException;
+@@ -184,11 +183,7 @@ public Reader getResourceReader( String source, String encoding )
+         {
+             throw new ResourceNotFoundException("Need to have a resource!");
+         }
+-        System.out.println("we get"+result);
+-
+-        String normalizedPath = FilenameUtils.normalize( source, true );
+-
+-        System.out.println("we make"+normalizedPath);
++        String normalizedPath = SecureResourcePathNormalizer.normalize(source, true);
+ 
+         if ( normalizedPath == null || normalizedPath.length() == 0 )
+         {
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/SecureResourcePathNormalizer.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/SecureResourcePathNormalizer.java
+new file mode 100644
+index 0000000..62066e5
+--- /dev/null
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/SecureResourcePathNormalizer.java
+@@ -0,0 +1,88 @@
++package org.apache.velocity.runtime.resource.loader;
++
++/*
++ * Licensed to the Apache Software Foundation (ASF) under one
++ * or more contributor license agreements.  See the NOTICE file
++ * distributed with this work for additional information
++ * regarding copyright ownership.  The ASF licenses this file
++ * to you under the Apache License, Version 2.0 (the
++ * "License"); you may not use this file except in compliance
++ * with the License.  You may obtain a copy of the License at
++ *
++ *   http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing,
++ * software distributed under the License is distributed on an
++ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++ * KIND, either express or implied.  See the License for the
++ * specific language governing permissions and limitations
++ * under the License.
++ */
++
++import org.apache.commons.io.FilenameUtils;
++
++/**
++ * Normalizes resource paths while collapsing repeated separators after any
++ * recognized prefix, mitigating commons-io 2.6 normalize behavior.
++ */
++final class SecureResourcePathNormalizer
++{
++    private SecureResourcePathNormalizer()
++    {
++    }
++
++    static String normalize(final String path)
++    {
++        return normalize(path, false);
++    }
++
++    static String normalize(final String path, final boolean unixSeparator)
++    {
++        if (path == null)
++        {
++            return null;
++        }
++
++        final char separator = unixSeparator ? '/' : java.io.File.separatorChar;
++        final String normalizedSeparators = collapseDuplicateSeparators(path, separator);
++        final String normalizedPath = FilenameUtils.normalize(normalizedSeparators, unixSeparator);
++        if (normalizedPath == null)
++        {
++            return null;
++        }
++        return collapseDuplicateSeparators(normalizedPath, separator);
++    }
++
++    private static String collapseDuplicateSeparators(final String path, final char separator)
++    {
++        int prefixLength = FilenameUtils.getPrefixLength(path);
++        if (prefixLength < 0)
++        {
++            return path;
++        }
++
++        final StringBuilder normalized = new StringBuilder(path.length());
++        normalized.append(path, 0, prefixLength);
++
++        boolean lastWasSeparator = prefixLength > 0
++            && (path.charAt(prefixLength - 1) == '/' || path.charAt(prefixLength - 1) == '\\');
++        for (int i = prefixLength; i < path.length(); i++)
++        {
++            final char current = path.charAt(i);
++            if (current == '/' || current == '\\')
++            {
++                if (!lastWasSeparator)
++                {
++                    normalized.append(separator);
++                    lastWasSeparator = true;
++                }
++            }
++            else
++            {
++                normalized.append(current);
++                lastWasSeparator = false;
++            }
++        }
++        return normalized.toString();
++    }
++}

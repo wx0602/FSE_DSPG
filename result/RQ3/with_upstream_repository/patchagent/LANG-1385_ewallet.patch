@@ -1,0 +1,41 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java
+index 3f4f5de..4893041 100755
+--- a/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java
+@@ -12,9 +12,11 @@ import java.util.Vector;
+ 
+ import org.apache.commons.codec.binary.Base64;
+ import org.apache.commons.lang3.StringUtils;
++import org.apache.commons.lang3.math.NumberUtils;
+ import org.bouncycastle.crypto.CipherParameters;
+ import org.bouncycastle.crypto.engines.RC4Engine;
+ import org.bouncycastle.crypto.params.KeyParameter;
++import java.math.BigDecimal;
+ 
+ /**
+  * 字符串处理工具类
+@@ -239,6 +241,24 @@ public class StringUtil {
+ 		return true;
+ 	}
+     
++
++	public static Number createNumber(String str) {
++		if (str == null) {
++			return null;
++		}
++		String value = str.trim();
++		if (value.length() == 0) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		char lastChar = value.charAt(value.length() - 1);
++		if ((lastChar == 'l' || lastChar == 'L') && value.length() == 1) {
++			throw new NumberFormatException(value + " is not a valid number.");
++		}
++		if ((lastChar == 'l' || lastChar == 'L') && value.length() == 2 && value.charAt(0) == '-') {
++			throw new NumberFormatException(value + " is not a valid number.");
++		}
++		return NumberUtils.createNumber(value);
++	}
+     
+     
+ 	/**

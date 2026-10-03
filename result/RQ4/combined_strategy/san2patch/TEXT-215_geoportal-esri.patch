@@ -1,0 +1,12 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -245,7 +245,8 @@
+ 
+       try {
+         StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
++        String sanitized = v.replaceAll("&#([0-9]+)([A-Fa-f]+)(?![0-9A-Fa-f]*;)", "&#$1$2");
++        NUMERIC.translate(sanitized.replaceAll("&#([0-9]+)([A-Fa-f]+)", "&#$1;$2"), writer);
+         return writer.toString();
+       } catch (IOException var3) {
+         throw new RuntimeException(var3);

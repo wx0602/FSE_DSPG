@@ -1,0 +1,85 @@
+--- a/src/main/java/burp/utils/StrictCodec.java
++++ b/src/main/java/burp/utils/StrictCodec.java
+@@ -0,0 +1,71 @@
++package burp.utils;
++
++import org.apache.commons.codec.binary.Base32;
++import org.apache.commons.codec.binary.Base64;
++
++public final class StrictCodec {
++    private static final Base64 BASE64 = new Base64();
++    private static final Base32 BASE32 = new Base32();
++
++    private StrictCodec() {
++    }
++
++    public static byte[] decodeBase64(String value) {
++        if (value == null) {
++            return null;
++        }
++        validateBase64(value);
++        return BASE64.decode(value);
++    }
++
++    public static byte[] decodeBase32(String value) {
++        if (value == null) {
++            return null;
++        }
++        validateBase32(value);
++        return BASE32.decode(value);
++    }
++
++    static void validateBase64(String value) {
++        String normalized = stripWhitespace(value);
++        if (!normalized.matches("^[A-Za-z0-9+/]*={0,2}$") || (normalized.length() % 4) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        if (normalized.endsWith("==")) {
++            int bits = decodeBase64Char(normalized.charAt(normalized.length() - 3));
++            if ((bits & 0x0F) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        } else if (normalized.endsWith("=")) {
++            int bits = decodeBase64Char(normalized.charAt(normalized.length() - 2));
++            if ((bits & 0x03) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        }
++    }
++
++    static void validateBase32(String value) {
++        String normalized = stripWhitespace(value);
++        if (!normalized.matches("^[A-Z2-7]*={0,6}$") || (normalized.length() % 8) != 0) {
++            throw new IllegalArgumentException("Invalid Base32 input");
++        }
++        if (normalized.endsWith("======")) {
++            int bits = decodeBase32Char(normalized.charAt(normalized.length() - 7));
++            if ((bits & 0x03) != 0) {
++                throw new IllegalArgumentException("Invalid Base32 trailing bits");
++            }
++        }
++    }
++
++    private static String stripWhitespace(String value) {
++        return value.replaceAll("\\s", "");
++    }
++
++    private static int decodeBase64Char(char ch) {
++        return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".indexOf(ch);
++    }
++
++    private static int decodeBase32Char(char ch) {
++        return "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567".indexOf(ch);
++    }
++}
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,7 +113,7 @@
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        return StrictCodec.decodeBase64(str);
+     }
+ 
+     public static String hex(byte[] bytes) {

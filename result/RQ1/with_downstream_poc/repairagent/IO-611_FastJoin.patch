@@ -1,0 +1,13 @@
+diff --git a/src/main/java/soj/util/FileReader.java b/src/main/java/soj/util/FileReader.java
+index 2b6246f..e4f2f31 100644
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -41,7 +41,7 @@ public class FileReader
+         }
+         _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
+     }
+-
++    // Mitigate Commons IO normalize() handling of double-slash prefixes by    // collapsing repeated separators only after the leading "//" prefix.    private static String normalizeFilenameSafely(String filename) {        String normalized = normalize(filename);        if (normalized == null || !normalized.startsWith("//")) {            return normalized;        }        String prefix = "//";        String suffix = normalized.substring(prefix.length());        suffix = suffix.replaceAll("/{2,}", "/");        return prefix + suffix;    }
+     private BufferedReader getReader() throws Exception {
+         if (_filename == null || _filename.isEmpty()) {
+             LOG.debug("No input file is specified");

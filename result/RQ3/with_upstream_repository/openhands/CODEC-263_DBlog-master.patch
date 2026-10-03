@@ -1,0 +1,37 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac..c4eb12d 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -6,8 +6,10 @@ import javax.crypto.Cipher;
+ import javax.crypto.KeyGenerator;
+ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
++import java.nio.charset.StandardCharsets;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
++import java.util.Base64.Decoder;
+ 
+ /**
+  *
+@@ -65,11 +67,20 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(decodeBase64Safely(encrypted));
+ 
+         return new String(result, "utf-8");
+     }
+ 
++    private static byte[] decodeBase64Safely(String encrypted) {
++        try {
++            return Base64.decodeBase64(encrypted);
++        } catch (IllegalArgumentException ex) {
++            Decoder decoder = java.util.Base64.getDecoder();
++            return decoder.decode(encrypted.getBytes(StandardCharsets.UTF_8));
++        }
++    }
++
+     /**
+      * 生成加密秘钥
+      *

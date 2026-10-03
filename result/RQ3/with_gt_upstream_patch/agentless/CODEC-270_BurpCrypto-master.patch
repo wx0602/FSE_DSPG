@@ -1,0 +1,82 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index 9ec5f33..90e83fb 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,9 +113,77 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
++        if (str == null) {
++            return null;
++        }
++
++        // Apache Commons Codec's lenient Base64 decoder accepts non-zero trailing bits.
++        // Reject inputs that are not strictly canonical before decoding.
++        if (!isStrictBase64(str)) {
++            throw new IllegalArgumentException("Invalid Base64 input: non-zero trailing bits or malformed padding");
++        }
++
+         return Base64.decodeBase64(str);
+     }
+ 
++    private static boolean isStrictBase64(String str) {
++        String normalized = str.replaceAll("\\s", "");
++        int length = normalized.length();
++        if (length == 0) {
++            return true;
++        }
++
++        if (length % 4 != 0) {
++            return false;
++        }
++
++        int padding = 0;
++        if (normalized.endsWith("==")) {
++            padding = 2;
++        } else if (normalized.endsWith("=")) {
++            padding = 1;
++        }
++
++        if (padding == 0) {
++            return true;
++        }
++
++        int lastIndex = length - 4;
++        if (lastIndex < 0) {
++            return false;
++        }
++
++        String chunk = normalized.substring(lastIndex, length);
++        int[] values = new int[4];
++        for (int i = 0; i < 4; i++) {
++            char c = chunk.charAt(i);
++            if (c == '=') {
++                values[i] = 0;
++                continue;
++            }
++            int decoded = Base64.decodeBase64(String.valueOf(c)).length;
++            if (decoded != 0) {
++                values[i] = c;
++            }
++        }
++
++        int sextet2 = base64Index(chunk.charAt(1));
++        int sextet3 = base64Index(chunk.charAt(2));
++        if (padding == 2) {
++            return sextet2 != -1 && (sextet2 & 0x0F) == 0 && chunk.charAt(2) == '=' && chunk.charAt(3) == '=';
++        }
++        return sextet2 != -1 && sextet3 != -1 && (sextet3 & 0x03) == 0 && chunk.charAt(3) == '=';
++    }
++
++    private static int base64Index(char c) {
++        if (c >= 'A' && c <= 'Z') return c - 'A';
++        if (c >= 'a' && c <= 'z') return c - 'a' + 26;
++        if (c >= '0' && c <= '9') return c - '0' + 52;
++        if (c == '+') return 62;
++        if (c == '/') return 63;
++        return -1;
++    }
++
+     public static String hex(byte[] bytes) {
+         return Hex.encodeHexString(bytes);
+     }

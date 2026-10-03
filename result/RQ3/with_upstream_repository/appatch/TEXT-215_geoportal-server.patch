@@ -1,0 +1,103 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,7 +32,6 @@
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+@@ -238,19 +236,62 @@
+    * @return the decoded value
+    */
+   public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
++    if (v == null) {
++      return v;
++    }
++    StringBuilder sb = new StringBuilder(v.length());
++    int len = v.length();
++    int i = 0;
++    while (i < len) {
++      char ch = v.charAt(i);
++      if (ch == '&' && i + 2 < len && v.charAt(i + 1) == '#') {
++        int start = i;
++        int j = i + 2;
++        boolean hex = false;
++        if (j < len && (v.charAt(j) == 'x' || v.charAt(j) == 'X')) {
++          hex = true;
++          j++;
++        }
++        int digitsStart = j;
++        while (j < len) {
++          char c = v.charAt(j);
++          if (hex) {
++            if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
++              j++;
++              continue;
++            }
++          } else {
++            if (c >= '0' && c <= '9') {
++              j++;
++              continue;
++            }
++          }
++          break;
++        }
++        if (j > digitsStart) {
++          boolean hasSemiColon = j < len && v.charAt(j) == ';';
++          String entityBody = v.substring(digitsStart, j);
++          try {
++            int codePoint = Integer.parseInt(entityBody, hex ? 16 : 10);
++            if (Character.isValidCodePoint(codePoint)) {
++              sb.append(Character.toChars(codePoint));
++              i = hasSemiColon ? j + 1 : j;
++              continue;
++            }
++          } catch (NumberFormatException ex) {
++            // fall through and preserve original text
++          }
++        }
++        sb.append(v.charAt(start));
++        i = start + 1;
++      } else {
++        sb.append(ch);
++        i++;
++      }
++    }
++    return sb.toString();
++  }
++
+   /**
+    * decodes an octal value.
+    * @param v the value
+@@ -341,7 +382,7 @@
+         }
+       }
+       //v = unescapeUnicode(v);
+-      //v = unescapeNunmericEntity(v);
++      v = unescapeNunmericEntity(v);
+ 
+     }
+     return v;

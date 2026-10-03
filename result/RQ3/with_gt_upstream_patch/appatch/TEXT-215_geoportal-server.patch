@@ -1,0 +1,101 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -16,7 +16,6 @@
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+ import org.apache.commons.text.translate.NumericEntityUnescaper;
+-import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+ import java.io.IOException;
+@@ -32,7 +31,7 @@
+  * Value utilities.
+  */
+ public class Val {
+-  static OctalUnescaper OCTAL = new OctalUnescaper();
++  static org.apache.commons.text.translate.OctalUnescaper OCTAL = new org.apache.commons.text.translate.OctalUnescaper();
+   static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+@@ -239,15 +238,13 @@
+    */
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+-
+       try {
+         StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
++        translateNumericEntitiesSafely(v, writer);
+         return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
++      } catch (IOException e) {
++        throw new RuntimeException(e);
++      }
+     }
+     return v;
+   }
+@@ -316,6 +313,61 @@
+     }
+     return v;
+   }
++
++  private static void translateNumericEntitiesSafely(String input, StringWriter out) throws IOException {
++    int index = 0;
++    int length = input.length();
++    while (index < length) {
++      if (input.charAt(index) == '&' && index + 2 < length && input.charAt(index + 1) == '#') {
++        int consumed = translateNumericEntitySafely(input, index, out);
++        if (consumed > 0) {
++          index += consumed;
++          continue;
++        }
++      }
++      out.write(input.charAt(index));
++      index++;
++    }
++  }
++
++  private static int translateNumericEntitySafely(CharSequence input, int index, StringWriter out) throws IOException {
++    int seqEnd = input.length();
++    int start = index + 2;
++    boolean isHex = false;
++    if (start >= seqEnd) {
++      return 0;
++    }
++    char firstChar = input.charAt(start);
++    if (firstChar == 'x' || firstChar == 'X') {
++      isHex = true;
++      start++;
++      if (start == seqEnd) {
++        return 0;
++      }
++    }
++
++    int end = start;
++    while (end < seqEnd) {
++      char ch = input.charAt(end);
++      boolean digit = ch >= '0' && ch <= '9';
++      boolean hexDigit = isHex && ((ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'));
++      if (!digit && !hexDigit) {
++        break;
++      }
++      end++;
++    }
++    if (end == start) {
++      return 0;
++    }
++    boolean semiNext = end < seqEnd && input.charAt(end) == ';';
++    int entityValue = Integer.parseInt(input.subSequence(start, end).toString(), isHex ? 16 : 10);
++    if (entityValue > 0xFFFF) {
++      out.write(Character.toChars(entityValue));
++    } else {
++      out.write(entityValue);
++    }
++    return 2 + (isHex ? 1 : 0) + (end - start) + (semiNext ? 1 : 0);
++  }
+   /**
+    * dencodes html and  octal values.
+    * @param v the value

@@ -1,0 +1,58 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac..e21ed73 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -2,6 +2,8 @@ package com.zyd.blog.util;
+ 
+ import org.apache.commons.codec.binary.Base64;
+ 
++import java.nio.charset.StandardCharsets;
++
+ import javax.crypto.Cipher;
+ import javax.crypto.KeyGenerator;
+ import javax.crypto.SecretKey;
+@@ -65,9 +67,10 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] decoded = safeDecodeBase64(encrypted);
++        byte[] result = cipher.doFinal(decoded);
+ 
+-        return new String(result, "utf-8");
++        return new String(result, StandardCharsets.UTF_8);
+     }
+ 
+     /**
+@@ -82,7 +85,7 @@ public class AesUtil {
+         // https://www.cnblogs.com/zempty/p/4318902.html - 用此法解决的
+         // https://www.cnblogs.com/digdeep/p/5580244.html - 留作参考吧
+         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+-        random.setSeed(password.getBytes());
++        random.setSeed(password.getBytes(StandardCharsets.UTF_8));
+         //AES 要求密钥长度为 128
+         kg.init(128, random);
+ 
+@@ -92,4 +95,22 @@ public class AesUtil {
+         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
+     }
+ 
++    private static byte[] safeDecodeBase64(final String value) {
++        if (value == null) {
++            return new byte[0];
++        }
++
++        String normalized = value.trim();
++        if (normalized.isEmpty()) {
++            return new byte[0];
++        }
++
++        try {
++            return Base64.decodeBase64(normalized);
++        } catch (IllegalArgumentException ex) {
++            return java.util.Base64.getDecoder().decode(normalized);
++        }
++    }
++
+ }
++

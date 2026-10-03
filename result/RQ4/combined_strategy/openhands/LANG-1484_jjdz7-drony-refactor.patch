@@ -1,0 +1,111 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index 8c15083..2123d68 100644
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -1,7 +1,6 @@
+ package com.korpodrony.validation;
+ 
+ import org.apache.commons.lang3.StringUtils;
+-import org.apache.commons.lang3.math.NumberUtils;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ 
+@@ -10,8 +9,6 @@ import javax.enterprise.context.RequestScoped;
+ @RequestScoped
+ public class Validator {
+ 
+-    private static final int MAX_SHORT = 32_768;
+-    private static final int MAX_BYTE = 128;
+     private static final int LOWER_LIMIT_OF_INDEX = 0;
+     private static final int LOWER_LIMIT_OF_ACTIVITY_TYPE = 0;
+     private static final int UPPER_LIMIT_OF_ACTIVITY_TYPE = 4;
+@@ -26,37 +23,73 @@ public class Validator {
+ 
+     public boolean validateInteger(String str) {
+         logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        return parseInteger(str) != null;
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {
+         logger.info("Validating integer as positive value: " + str);
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str) && NumberUtils.createInteger(str) > 0;
++        Integer value = parseInteger(str);
++        return value != null && value > 0;
+     }
+ 
+     public boolean validateActivityTypeInteger(String str) {
+         logger.info("Validating activityType: " + str);
+-        return NumberUtils.isCreatable(str)
+-                && NumberUtils.isParsable(str)
+-                && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_ACTIVITY_TYPE
+-                && NumberUtils.createInteger(str) < UPPER_LIMIT_OF_ACTIVITY_TYPE;
++        Integer value = parseInteger(str);
++        return value != null
++                && value > LOWER_LIMIT_OF_ACTIVITY_TYPE
++                && value < UPPER_LIMIT_OF_ACTIVITY_TYPE;
+     }
+ 
+     public boolean validateShort(String str) {
+         logger.info("Validating short: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_INDEX
+-                && NumberUtils.createInteger(str) < MAX_SHORT;
++        Short value = parseShort(str);
++        return value != null && value > LOWER_LIMIT_OF_INDEX;
+     }
+ 
+     public boolean validateByte(String str) {
+         logger.info("Validating byte: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
+-                && NumberUtils.createInteger(str) < MAX_BYTE;
++        Byte value = parseByte(str);
++        return value != null && value > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS;
++    }
++
++    private Integer parseInteger(String str) {
++        if (!isIntegerFormat(str)) {
++            return null;
++        }
++        try {
++            return Integer.valueOf(str);
++        } catch (NumberFormatException ex) {
++            return null;
++        }
++    }
++
++    private Short parseShort(String str) {
++        if (!isIntegerFormat(str)) {
++            return null;
++        }
++        try {
++            return Short.valueOf(str);
++        } catch (NumberFormatException ex) {
++            return null;
++        }
++    }
++
++    private Byte parseByte(String str) {
++        if (!isIntegerFormat(str)) {
++            return null;
++        }
++        try {
++            return Byte.valueOf(str);
++        } catch (NumberFormatException ex) {
++            return null;
++        }
++    }
++
++    private boolean isIntegerFormat(String str) {
++        if (StringUtils.isBlank(str)) {
++            return false;
++        }
++        int startIndex = str.charAt(0) == '-' ? 1 : 0;
++        return startIndex < str.length() && StringUtils.isNumeric(str.substring(startIndex));
+     }
+ }

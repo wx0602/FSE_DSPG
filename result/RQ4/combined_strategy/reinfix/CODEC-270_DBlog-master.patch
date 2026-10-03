@@ -1,0 +1,68 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+index 0000000..0000000 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -33,3 +33,60 @@
+-    public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(salt, encryptPassword);
+-    }
++public static String decrypt(String encryptPassword, String salt) throws Exception {
++        if (encryptPassword == null) {
++            throw new IllegalArgumentException("Encrypted password must not be null");
++        }
++        if ((encryptPassword.length() & 3) != 0) {
++            throw new IllegalArgumentException("Encrypted password is not valid Base64");
++        }
++
++        int padding = 0;
++        int firstPaddingIndex = encryptPassword.indexOf('=');
++        if (firstPaddingIndex >= 0) {
++            for (int i = firstPaddingIndex; i < encryptPassword.length(); i++) {
++                if (encryptPassword.charAt(i) != '=') {
++                    throw new IllegalArgumentException("Encrypted password is not valid Base64");
++                }
++                padding++;
++            }
++            if (padding > 2) {
++                throw new IllegalArgumentException("Encrypted password is not valid Base64");
++            }
++        }
++
++        int lastDataIndex = encryptPassword.length() - padding - 1;
++        for (int i = 0; i <= lastDataIndex; i++) {
++            char ch = encryptPassword.charAt(i);
++            boolean isUpper = ch >= 'A' && ch <= 'Z';
++            boolean isLower = ch >= 'a' && ch <= 'z';
++            boolean isDigit = ch >= '0' && ch <= '9';
++            if (!(isUpper || isLower || isDigit || ch == '+' || ch == '/')) {
++                throw new IllegalArgumentException("Encrypted password is not valid Base64");
++            }
++        }
++
++        if (padding > 0) {
++            char lastChar = encryptPassword.charAt(lastDataIndex);
++            int value;
++            if (lastChar >= 'A' && lastChar <= 'Z') {
++                value = lastChar - 'A';
++            } else if (lastChar >= 'a' && lastChar <= 'z') {
++                value = lastChar - 'a' + 26;
++            } else if (lastChar >= '0' && lastChar <= '9') {
++                value = lastChar - '0' + 52;
++            } else if (lastChar == '+') {
++                value = 62;
++            } else if (lastChar == '/') {
++                value = 63;
++            } else {
++                throw new IllegalArgumentException("Encrypted password is not valid Base64");
++            }
++
++            if (padding == 1 && (value & 0x03) != 0) {
++                throw new IllegalArgumentException("Encrypted password is not valid Base64");
++            }
++            if (padding == 2 && (value & 0x0F) != 0) {
++                throw new IllegalArgumentException("Encrypted password is not valid Base64");
++            }
++        }
++
++        return AesUtil.decrypt(salt, encryptPassword);
++    }

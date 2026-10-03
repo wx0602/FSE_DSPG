@@ -1,0 +1,31 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index 0000000..0000000 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -118,3 +118,23 @@
+-	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
+-	}
++public static Number createNumber(String str) {
++		if (str == null) {
++			throw new NumberFormatException("null");
++		}
++		String value = str.trim();
++		if (value.isEmpty()) {
++			throw new NumberFormatException("Blank string is not a valid number");
++		}
++		if (value.length() == 1) {
++			char ch = value.charAt(0);
++			if (ch == 'L' || ch == 'l' || ch == 'F' || ch == 'f' || ch == 'D' || ch == 'd'
++					|| ch == '+' || ch == '-') {
++				throw new NumberFormatException("Invalid number: " + str);
++			}
++		}
++		if (value.length() == 2 && (value.charAt(0) == '+' || value.charAt(0) == '-')) {
++			char ch = value.charAt(1);
++			if (ch == 'L' || ch == 'l' || ch == 'F' || ch == 'f' || ch == 'D' || ch == 'd') {
++				throw new NumberFormatException("Invalid number: " + str);
++			}
++		}
++		return NumberUtils.createNumber(value);
++	}

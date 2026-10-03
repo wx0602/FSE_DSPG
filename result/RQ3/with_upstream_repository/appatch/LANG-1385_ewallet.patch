@@ -1,0 +1,65 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java
+@@ -2,6 +2,7 @@
+ 
+ import java.io.UnsupportedEncodingException;
+ import java.security.MessageDigest;
++import java.text.ParsePosition;
+ import java.security.NoSuchAlgorithmException;
+ import java.util.ArrayList;
+ import java.util.Collection;
+@@ -19,6 +20,8 @@
+ /**
+  * 字符串处理工具类
+  * @author fcpays
++ * <p>
++ * 为避免 commons-lang3 NumberUtils.createNumber 在极端输入上抛出非预期异常，这里提供本地安全数字解析方法。
+  * 这里面的有些方法引用apache.commons.lang-2.3里的StringUtils类
+  */
+ public class StringUtil {
+@@ -1192,6 +1195,45 @@
+ 	{
+ 		try {
+ 			return md5(inStr,"GBK");
++		} catch (Exception e) {
++			e.printStackTrace();
++		}
++		return inStr;
++		
++	}
++
++	/**
++	 * 安全地将字符串解析为数字。
++	 * <p>
++	 * 对仅包含类型后缀但没有数字内容的值（如 "L"、"l"、"F"、"D"）显式抛出 NumberFormatException，
++	 * 避免底层库在某些版本下抛出 StringIndexOutOfBoundsException。
++	 * </p>
++	 * @param value 需要解析的字符串
++	 * @return Number
++	 * @throws NumberFormatException 非法数字格式时抛出
++	 */
++	public static Number safeCreateNumber(String value) {
++		if (value == null) {
++			return null;
++		}
++		String source = value.trim();
++		if (source.length() == 0) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		if (source.length() == 1) {
++			char ch = source.charAt(0);
++			if (ch == 'l' || ch == 'L' || ch == 'f' || ch == 'F' || ch == 'd' || ch == 'D') {
++				throw new NumberFormatException(source + " is not a valid number");
++			}
++		}
++		ParsePosition position = new ParsePosition(0);
++		Number number = java.text.NumberFormat.getInstance().parse(source, position);
++		if (number == null || position.getIndex() != source.length()) {
++			throw new NumberFormatException(source + " is not a valid number");
++		}
++		return number;
++		} catch (Exception e) {
++			e.printStackTrace();
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+ 		}

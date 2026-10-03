@@ -1,0 +1,52 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -23,6 +23,7 @@
+ import java.io.StringWriter;
+ import java.io.UnsupportedEncodingException;
+ import java.net.URLEncoder;
++import java.util.regex.Pattern;
+ import java.nio.charset.StandardCharsets;
+ import java.util.*;
+ import java.util.regex.Matcher;
+@@ -36,6 +37,8 @@
+   static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
++  static Pattern decimalEntityPattern = Pattern.compile("&#(0|[1-9][0-9]*);?");
++  static Pattern hexEntityPattern = Pattern.compile("&#x[0-9A-Fa-f]+;?");
+ 
+   /**
+    * Converts a string to a boolean.
+@@ -245,7 +248,31 @@
+ 
+       try {
+         StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
++        int i = 0;
++        while (i < v.length()) {
++          int start = v.indexOf("&#", i);
++          if (start < 0) {
++            writer.write(v.substring(i));
++            break;
++          }
++          writer.write(v.substring(i, start));
++          boolean hex = (start + 2 < v.length()) && (v.charAt(start + 2) == 'x' || v.charAt(start + 2) == 'X');
++          Pattern p = hex ? hexEntityPattern : decimalEntityPattern;
++          Matcher m = p.matcher(v);
++          m.region(start, v.length());
++          if (m.lookingAt()) {
++            String entity = m.group();
++            if (entity.endsWith(";") || NUMERIC.toString() != null) {
++              StringWriter entityWriter = new StringWriter(entity.length());
++              NUMERIC.translate(entity, entityWriter);
++              writer.write(entityWriter.toString());
++              i = start + entity.length();
++              continue;
++            }
++          }
++          writer.write(v.charAt(start));
++          i = start + 1;
++        }
+         return writer.toString();
+       } catch (IOException var3) {
+         throw new RuntimeException(var3);

@@ -1,0 +1,38 @@
+{
+  "groupId": "commons-codec",
+  "artifactId": "commons-codec",
+  "complete_version": [
+    "1.15",
+    "1.14",
+    "1.13",
+    "1.12",
+    "1.11",
+    "1.10"
+  ],
+  "testcases": [
+    {
+      "className": "com.magneto.CODEC_270_Testcase1",
+      "methodName": "base64RejectsImpossibleTrailingBits",
+      "vulMethodSignature": "<org.apache.commons.codec.binary.Base64: byte[] decodeBase64(java.lang.String)>",
+      "exceptedThrowable": "java.lang.IllegalArgumentException",
+      "needValidateReturnValue": false,
+      "validateReturnValueMethodName": null,
+      "needValidateThrow": true,
+      "validateThrowMethodName": "validateThrow"
+    },
+    {
+      "className": "com.magneto.CODEC_270_Testcase1",
+      "methodName": "base32RejectsImpossibleTrailingBits",
+      "vulMethodSignature": "<org.apache.commons.codec.binary.Base32: byte[] decode(java.lang.String)>",
+      "exceptedThrowable": "java.lang.IllegalArgumentException",
+      "needValidateReturnValue": false,
+      "validateReturnValueMethodName": null,
+      "needValidateThrow": true,
+      "validateThrowMethodName": "validateThrow"
+    }
+  ],
+  "vulName": "CODEC-270",
+  "affectedVersion": [
+    "1.13"
+  ]
+}

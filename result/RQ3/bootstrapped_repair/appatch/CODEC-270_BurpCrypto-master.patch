@@ -1,0 +1,125 @@
+--- a/src/main/java/burp/utils/StrictCodec.java
++++ b/src/main/java/burp/utils/StrictCodec.java
+@@ -0,0 +1,102 @@
++package burp.utils;
++
++import org.apache.commons.codec.binary.Base32;
++import org.apache.commons.codec.binary.Base64;
++
++public final class StrictCodec {
++
++    private static final Base64 BASE64 = new Base64();
++    private static final Base32 BASE32 = new Base32();
++
++    private StrictCodec() {
++    }
++
++    public static byte[] decodeBase64(String value) {
++        if (value == null) {
++            return null;
++        }
++        String normalized = stripAsciiWhitespace(value);
++        if (!isCanonicalBase64Padding(normalized)) {
++            throw new IllegalArgumentException("Invalid Base64 padding bits");
++        }
++        return BASE64.decode(normalized);
++    }
++
++    public static byte[] decodeBase32(String value) {
++        if (value == null) {
++            return null;
++        }
++        String normalized = stripAsciiWhitespace(value);
++        if (!isCanonicalBase32Padding(normalized)) {
++            throw new IllegalArgumentException("Invalid Base32 padding bits");
++        }
++        return BASE32.decode(normalized);
++    }
++
++    static String stripAsciiWhitespace(String value) {
++        return value.replaceAll("\\s", "");
++    }
++
++    static boolean isCanonicalBase64Padding(String value) {
++        int length = value.length();
++        if (length == 0 || (length & 3) != 0) {
++            return false;
++        }
++        int pad = trailingPadCount(value);
++        if (pad > 2) {
++            return false;
++        }
++        if (pad == 0) {
++            return true;
++        }
++        int lastDataIndex = length - pad - 1;
++        if (lastDataIndex < 0) {
++            return false;
++        }
++        int decoded = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".indexOf(value.charAt(lastDataIndex));
++        if (decoded < 0) {
++            return false;
++        }
++        int bitsToDrop = pad == 1 ? 2 : 4;
++        int mask = (1 << bitsToDrop) - 1;
++        return (decoded & mask) == 0;
++    }
++
++    static boolean isCanonicalBase32Padding(String value) {
++        int length = value.length();
++        if (length == 0 || (length & 7) != 0) {
++            return false;
++        }
++        int pad = trailingPadCount(value);
++        if (!(pad == 0 || pad == 1 || pad == 3 || pad == 4 || pad == 6)) {
++            return false;
++        }
++        if (pad == 0) {
++            return true;
++        }
++        int lastDataIndex = length - pad - 1;
++        if (lastDataIndex < 0) {
++            return false;
++        }
++        int decoded = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567".indexOf(Character.toUpperCase(value.charAt(lastDataIndex)));
++        if (decoded < 0) {
++            return false;
++        }
++        int bitsToDrop = pad == 6 ? 2 : pad == 4 ? 4 : pad == 3 ? 1 : 3;
++        int mask = (1 << bitsToDrop) - 1;
++        return (decoded & mask) == 0;
++    }
++
++    private static int trailingPadCount(String value) {
++        int count = 0;
++        for (int i = value.length() - 1; i >= 0 && value.charAt(i) == '='; i--) {
++            count++;
++        }
++        for (int i = 0; i < value.length() - count; i++) {
++            if (value.charAt(i) == '=') {
++                return Integer.MAX_VALUE;
++            }
++        }
++        return count;
++    }
++}
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,7 +113,7 @@
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        return StrictCodec.decodeBase64(str);
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,7 +130,7 @@
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = StrictCodec.decodeBase64(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();

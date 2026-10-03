@@ -1,0 +1,74 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index 0000000..0000000 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,14 +240,55 @@
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
++public static String unescapeNunmericEntity(String v) {
++  if (v == null) {
++    return null;
++  }
++
++  StringBuilder out = new StringBuilder(v.length());
++  int i = 0;
++  while (i < v.length()) {
++    char c = v.charAt(i);
++    if (c == '&' && i + 2 < v.length() && v.charAt(i + 1) == '#') {
++      int j = i + 2;
++      boolean hex = false;
++
++      if (j < v.length() && (v.charAt(j) == 'x' || v.charAt(j) == 'X')) {
++        hex = true;
++        j++;
++      }
++
++      int digitsStart = j;
++      while (j < v.length()) {
++        char d = v.charAt(j);
++        if (hex) {
++          if ((d >= '0' && d <= '9') || (d >= 'a' && d <= 'f') || (d >= 'A' && d <= 'F')) {
++            j++;
++          } else {
++            break;
++          }
++        } else if (d >= '0' && d <= '9') {
++          j++;
++        } else {
++          break;
++        }
++      }
++
++      boolean hasDigits = j > digitsStart;
++      boolean hasSemiColon = j < v.length() && v.charAt(j) == ';';
++
++      if (hasDigits) {
++        try {
++          int codePoint = Integer.parseInt(v.substring(digitsStart, j), hex ? 16 : 10);
++          out.append(Character.toChars(codePoint));
++          i = j + (hasSemiColon ? 1 : 0);
++          continue;
++        } catch (NumberFormatException ex) {
++          // Fall through and copy the original text unchanged.
++        }
++      }
++    }
++
++    out.append(c);
++    i++;
++  }
++
++  return out.toString();
++}

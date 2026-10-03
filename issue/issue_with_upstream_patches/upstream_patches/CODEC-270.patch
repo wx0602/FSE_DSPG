@@ -1,0 +1,32 @@
+diff --git a/repo/src/main/java/org/apache/commons/codec/binary/Base32.java b/repo/src/main/java/org/apache/commons/codec/binary/Base32.java
+index a8ede4e..862a403 100644
+--- a/repo/src/main/java/org/apache/commons/codec/binary/Base32.java
++++ b/repo/src/main/java/org/apache/commons/codec/binary/Base32.java
+@@ -558,7 +558,8 @@ public class Base32 extends BaseNCodec {
+      * @throws IllegalArgumentException if the bits being checked contain any non-zero value
+      */
+     private void validateCharacter(final int numBits, final Context context) {
+-        if ((context.lbitWorkArea & numBits) != 0) {
++        final long mask = (1L << numBits) - 1;
++        if ((context.lbitWorkArea & mask) != 0) {
+             throw new IllegalArgumentException(
+                 "Last encoded character (before the paddings if any) is a valid base 32 alphabet but not a possible value");
+         }
+diff --git a/repo/src/main/java/org/apache/commons/codec/binary/Base64.java b/repo/src/main/java/org/apache/commons/codec/binary/Base64.java
+index f515b51..475b114 100644
+--- a/repo/src/main/java/org/apache/commons/codec/binary/Base64.java
++++ b/repo/src/main/java/org/apache/commons/codec/binary/Base64.java
+@@ -794,9 +794,10 @@ public class Base64 extends BaseNCodec {
+      * @throws IllegalArgumentException if the bits being checked contain any non-zero value
+      */
+     private long validateCharacter(final int numBitsToDrop, final Context context) {
+-        if ((context.ibitWorkArea & numBitsToDrop) != 0) {
+-        throw new IllegalArgumentException(
+-            "Last encoded character (before the paddings if any) is a valid base 64 alphabet but not a possible value");
++        final int mask = (1 << numBitsToDrop) - 1;
++        if ((context.ibitWorkArea & mask) != 0) {
++            throw new IllegalArgumentException(
++                "Last encoded character (before the paddings if any) is a valid base 64 alphabet but not a possible value");
+         }
+         return context.ibitWorkArea >> numBitsToDrop;
+     }

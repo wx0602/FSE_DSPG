@@ -1,0 +1,93 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index 8c15083..3be5dde 100644
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -1,7 +1,6 @@
+ package com.korpodrony.validation;
+ 
+ import org.apache.commons.lang3.StringUtils;
+-import org.apache.commons.lang3.math.NumberUtils;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ 
+@@ -26,37 +25,64 @@ public class Validator {
+ 
+     public boolean validateInteger(String str) {
+         logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        return parseInteger(str) != null;
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {
+         logger.info("Validating integer as positive value: " + str);
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str) && NumberUtils.createInteger(str) > 0;
++        Integer value = parseInteger(str);
++        return value != null && value > 0;
+     }
+ 
+     public boolean validateActivityTypeInteger(String str) {
+         logger.info("Validating activityType: " + str);
+-        return NumberUtils.isCreatable(str)
+-                && NumberUtils.isParsable(str)
+-                && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_ACTIVITY_TYPE
+-                && NumberUtils.createInteger(str) < UPPER_LIMIT_OF_ACTIVITY_TYPE;
++        Integer value = parseInteger(str);
++        return value != null
++                && value > LOWER_LIMIT_OF_ACTIVITY_TYPE
++                && value < UPPER_LIMIT_OF_ACTIVITY_TYPE;
+     }
+ 
+     public boolean validateShort(String str) {
+         logger.info("Validating short: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_INDEX
+-                && NumberUtils.createInteger(str) < MAX_SHORT;
++        Integer value = parseInteger(str);
++        return value != null
++                && value > LOWER_LIMIT_OF_INDEX
++                && value < MAX_SHORT;
+     }
+ 
+     public boolean validateByte(String str) {
+         logger.info("Validating byte: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
+-                && NumberUtils.createInteger(str) < MAX_BYTE;
++        Integer value = parseInteger(str);
++        return value != null
++                && value > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
++                && value < MAX_BYTE;
++    }
++
++    private Integer parseInteger(String str) {
++        if (StringUtils.isBlank(str)) {
++            return null;
++        }
++        if (!isSignedInteger(str)) {
++            return null;
++        }
++        try {
++            return Integer.valueOf(str);
++        } catch (NumberFormatException exception) {
++            logger.debug("Rejected non-integer numeric input: {}", str, exception);
++            return null;
++        }
++    }
++
++    private boolean isSignedInteger(String str) {
++        int startIndex = str.charAt(0) == '-' ? 1 : 0;
++        if (startIndex == str.length()) {
++            return false;
++        }
++        for (int i = startIndex; i < str.length(); i++) {
++            if (!Character.isDigit(str.charAt(i))) {
++                return false;
++            }
++        }
++        return true;
+     }
+ }

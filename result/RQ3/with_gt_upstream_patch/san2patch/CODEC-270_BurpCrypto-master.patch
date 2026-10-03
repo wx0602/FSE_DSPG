@@ -1,0 +1,14 @@
+--- a/src/main/java/burp/aes/AesUtil.java
++++ b/src/main/java/burp/aes/AesUtil.java
+@@ -32,8 +32,10 @@
+ 
+     public String decrypt(String cipherText) {
+         try {
+-            byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
++            byte[] decrypted = crypto.decrypt(java.util.Base64.getDecoder().decode(cipherText));
+             return new String(decrypted, "UTF-8");
++        } catch (IllegalArgumentException e) {
++            throw fail(e);
+         } catch (UnsupportedEncodingException e) {
+             throw fail(e);
+         }

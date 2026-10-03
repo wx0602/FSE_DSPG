@@ -1,0 +1,56 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..378b57f 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -3,34 +3,47 @@ package cn.qs.utils.format;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
++import org.apache.commons.lang3.StringUtils;
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createNumberSafely(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+ 		NumberFormat numberFormat = NumberFormat.getInstance();
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+-
+ 		return numberFormat.format(value);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createNumberSafely(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
+ 		NumberFormat numberFormat = NumberFormat.getPercentInstance();
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+-
+ 		return numberFormat.format(value);
+ 	}
+ 
++	private static Number createNumberSafely(String value) {
++		String trimmedValue = StringUtils.trim(value);
++		if (StringUtils.isEmpty(trimmedValue)) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		try {
++			return NumberUtils.createNumber(trimmedValue);
++		} catch (StringIndexOutOfBoundsException ex) {
++			NumberFormatException numberFormatException = new NumberFormatException(trimmedValue + " is not a valid number");
++			numberFormatException.initCause(ex);
++			throw numberFormatException;
++		}
++	}
++
+ 	public static void main(String[] args) {
+ 		float F2 = 105858.5328F;
+ 		System.out.println(ArithUtils.format(F2, 2));

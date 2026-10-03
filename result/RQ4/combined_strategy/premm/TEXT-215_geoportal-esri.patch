@@ -1,0 +1,86 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,21 +240,68 @@
+    * @param v the value
+    * @return the decoded value
+    */
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
+-  /**
++public static String unescapeNunmericEntity(String v) {
++  if (v == null) {
++    return null;
++  }
++
++  StringBuilder result = new StringBuilder(v.length());
++  int length = v.length();
++
++  for (int i = 0; i < length; i++) {
++    char ch = v.charAt(i);
++
++    if (ch == '&' && i + 2 < length && v.charAt(i + 1) == '#') {
++      int start = i + 2;
++      boolean isHex = false;
++
++      if (start < length) {
++        char firstChar = v.charAt(start);
++        if (firstChar == 'x' || firstChar == 'X') {
++          isHex = true;
++          start++;
++        }
++      }
++
++      if (start < length) {
++        int end = start;
++        while (end < length) {
++          char current = v.charAt(end);
++          boolean valid = isHex
++              ? ((current >= '0' && current <= '9')
++                  || (current >= 'a' && current <= 'f')
++                  || (current >= 'A' && current <= 'F'))
++              : (current >= '0' && current <= '9');
++          if (!valid) {
++            break;
++          }
++          end++;
++        }
++
++        boolean semiNext = end < length && v.charAt(end) == ';';
++
++        if (end > start) {
++          try {
++            int entityValue = Integer.parseInt(v.substring(start, end), isHex ? 16 : 10);
++            if (entityValue > 0xFFFF) {
++              result.append(Character.toChars(entityValue));
++            } else {
++              result.append((char) entityValue);
++            }
++            i = semiNext ? end : end - 1;
++            continue;
++          } catch (NumberFormatException ex) {
++            // Leave the original sequence unchanged when parsing fails.
++          }
++        }
++      }
++    }
++
++    result.append(ch);
++  }
++
++  return result.toString();
++}  /**
+    * decodes an octal value.
+    * @param v the value
+    * @return the decoded value

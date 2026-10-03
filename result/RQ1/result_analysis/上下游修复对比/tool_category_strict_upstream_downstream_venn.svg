@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (https://matplotlib.org/) -->
+<svg height="226.771654pt" version="1.1" viewBox="0 0 566.929134 226.771654" width="566.929134pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 226.771654 
+L 566.929134 226.771654 
+L 566.929134 0 
+L 0 0 
+z
+" style="fill:#ffffff;"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path clip-path="url(#paa571a061e)" d="M 86.667799 164.364094 
+C 99.838579 164.364094 112.47169 159.131288 121.784838 149.818141 
+C 131.097985 140.504993 136.330792 127.871882 136.330792 114.701102 
+C 136.330792 101.530323 131.097985 88.897211 121.784838 79.584064 
+C 112.47169 70.270916 99.838579 65.03811 86.667799 65.03811 
+C 73.49702 65.03811 60.863908 70.270916 51.550761 79.584064 
+C 42.237613 88.897211 37.004807 101.530323 37.004807 114.701102 
+C 37.004807 127.871882 42.237613 140.504993 51.550761 149.818141 
+C 60.863908 159.131288 73.49702 164.364094 86.667799 164.364094 
+z
+" style="fill:#2f6bff;opacity:0.34;stroke:#2f6bff;stroke-linejoin:miter;stroke-width:1.8;"/>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#paa571a061e)" d="M 119.776461 164.364094 
+C 132.94724 164.364094 145.580352 159.131288 154.893499 149.818141 
+C 164.206647 140.504993 169.439453 127.871882 169.439453 114.701102 
+C 169.439453 101.530323 164.206647 88.897211 154.893499 79.584064 
+C 145.580352 70.270916 132.94724 65.03811 119.776461 65.03811 
+C 106.605681 65.03811 93.97257 70.270916 84.659422 79.584064 
+C 75.346275 88.897211 70.113469 101.530323 70.113469 114.701102 
+C 70.113469 127.871882 75.346275 140.504993 84.659422 149.818141 
+C 93.97257 159.131288 106.605681 164.364094 119.776461 164.364094 
+z
+" style="fill:#f26b5b;opacity:0.34;stroke:#f26b5b;stroke-linejoin:miter;stroke-width:1.8;"/>
+   </g>
+   <g id="text_1">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:12px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 103.22213, 51.437672)" x="103.22213" y="51.437672">SE · 通用软件工程工具</text>
+   </g>
+   <g id="text_2">
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.4px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 103.22213, 60.995449)" x="103.22213" y="60.995449">SWE-agent · OpenHands</text>
+   </g>
+   <g id="text_3">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(43.525437 110.097701)">仅上游</text>
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(52.634812 121.823326)">10</text>
+   </g>
+   <g id="text_4">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(93.22213 110.097701)">交集</text>
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(100.276818 121.823326)">4</text>
+   </g>
+   <g id="text_5">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(132.918823 110.097701)">仅下游</text>
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(142.028198 121.823326)">11</text>
+   </g>
+   <g id="text_6">
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.6px;font-style:normal;font-weight:normal;" transform="translate(61.00413 176.917205)">均未达到全工具成功：15</text>
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.6px;font-style:normal;font-weight:normal;" transform="translate(56.36813 185.91703)">上游集合=14，下游集合=15</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_4">
+    <path clip-path="url(#p13abcfae59)" d="M 268.327559 164.364094 
+C 281.498339 164.364094 294.13145 159.131288 303.444598 149.818141 
+C 312.757745 140.504993 317.990551 127.871882 317.990551 114.701102 
+C 317.990551 101.530323 312.757745 88.897211 303.444598 79.584064 
+C 294.13145 70.270916 281.498339 65.03811 268.327559 65.03811 
+C 255.15678 65.03811 242.523668 70.270916 233.210521 79.584064 
+C 223.897373 88.897211 218.664567 101.530323 218.664567 114.701102 
+C 218.664567 127.871882 223.897373 140.504993 233.210521 149.818141 
+C 242.523668 159.131288 255.15678 164.364094 268.327559 164.364094 
+z
+" style="fill:#2f6bff;opacity:0.34;stroke:#2f6bff;stroke-linejoin:miter;stroke-width:1.8;"/>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#p13abcfae59)" d="M 301.43622 164.364094 
+C 314.607 164.364094 327.240112 159.131288 336.553259 149.818141 
+C 345.866406 140.504993 351.099213 127.871882 351.099213 114.701102 
+C 351.099213 101.530323 345.866406 88.897211 336.553259 79.584064 
+C 327.240112 70.270916 314.607 65.03811 301.43622 65.03811 
+C 288.265441 65.03811 275.632329 70.270916 266.319182 79.584064 
+C 257.006034 88.897211 251.773228 101.530323 251.773228 114.701102 
+C 251.773228 127.871882 257.006034 140.504993 266.319182 149.818141 
+C 275.632329 159.131288 288.265441 164.364094 301.43622 164.364094 
+z
+" style="fill:#f26b5b;opacity:0.34;stroke:#f26b5b;stroke-linejoin:miter;stroke-width:1.8;"/>
+   </g>
+   <g id="text_7">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:12px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 284.88189, 51.437672)" x="284.88189" y="51.437672">AVR · 自动漏洞修复工具</text>
+   </g>
+   <g id="text_8">
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.4px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 284.88189, 60.995449)" x="284.88189" y="60.995449">San2Patch · PatchAgent · Appatch</text>
+   </g>
+   <g id="text_9">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(225.185197 110.097701)">仅上游</text>
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(237.239884 121.823326)">7</text>
+   </g>
+   <g id="text_10">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(274.88189 110.097701)">交集</text>
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(281.936577 121.823326)">0</text>
+   </g>
+   <g id="text_11">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(314.578583 110.097701)">仅下游</text>
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(326.63327 121.823326)">0</text>
+   </g>
+   <g id="text_12">
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.6px;font-style:normal;font-weight:normal;" transform="translate(242.66389 176.917205)">均未达到全工具成功：33</text>
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.6px;font-style:normal;font-weight:normal;" transform="translate(242.24589 185.91703)">上游集合=7，下游集合=0</text>
+   </g>
+  </g>
+  <g id="axes_3">
+   <g id="patch_6">
+    <path clip-path="url(#p60165cf5db)" d="M 449.987319 164.364094 
+C 463.158098 164.364094 475.79121 159.131288 485.104357 149.818141 
+C 494.417505 140.504993 499.650311 127.871882 499.650311 114.701102 
+C 499.650311 101.530323 494.417505 88.897211 485.104357 79.584064 
+C 475.79121 70.270916 463.158098 65.03811 449.987319 65.03811 
+C 436.816539 65.03811 424.183428 70.270916 414.87028 79.584064 
+C 405.557133 88.897211 400.324327 101.530323 400.324327 114.701102 
+C 400.324327 127.871882 405.557133 140.504993 414.87028 149.818141 
+C 424.183428 159.131288 436.816539 164.364094 449.987319 164.364094 
+z
+" style="fill:#2f6bff;opacity:0.34;stroke:#2f6bff;stroke-linejoin:miter;stroke-width:1.8;"/>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#p60165cf5db)" d="M 483.09598 164.364094 
+C 496.26676 164.364094 508.899871 159.131288 518.213019 149.818141 
+C 527.526166 140.504993 532.758972 127.871882 532.758972 114.701102 
+C 532.758972 101.530323 527.526166 88.897211 518.213019 79.584064 
+C 508.899871 70.270916 496.26676 65.03811 483.09598 65.03811 
+C 469.925201 65.03811 457.292089 70.270916 447.978942 79.584064 
+C 438.665794 88.897211 433.432988 101.530323 433.432988 114.701102 
+C 433.432988 127.871882 438.665794 140.504993 447.978942 149.818141 
+C 457.292089 159.131288 469.925201 164.364094 483.09598 164.364094 
+z
+" style="fill:#f26b5b;opacity:0.34;stroke:#f26b5b;stroke-linejoin:miter;stroke-width:1.8;"/>
+   </g>
+   <g id="text_13">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:12px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 466.541649, 51.437672)" x="466.541649" y="51.437672">APR · 自动程序修复工具</text>
+   </g>
+   <g id="text_14">
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.4px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 466.541649, 60.995449)" x="466.541649" y="60.995449">Agentless · RepairAgent · PreMM · ReInFix</text>
+   </g>
+   <g id="text_15">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(406.844956 110.097701)">仅上游</text>
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(418.899644 121.823326)">0</text>
+   </g>
+   <g id="text_16">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(456.541649 110.097701)">交集</text>
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(463.596337 121.823326)">0</text>
+   </g>
+   <g id="text_17">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(496.238342 110.097701)">仅下游</text>
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:10px;font-style:normal;font-weight:bold;" transform="translate(508.29303 121.823326)">1</text>
+   </g>
+   <g id="text_18">
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.6px;font-style:normal;font-weight:normal;" transform="translate(424.323649 176.917205)">均未达到全工具成功：39</text>
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.6px;font-style:normal;font-weight:normal;" transform="translate(423.905649 185.91703)">上游集合=0，下游集合=1</text>
+   </g>
+  </g>
+  <g id="text_19">
+   <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:15px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 22.677165, 17.638823)" x="22.677165" y="17.638823">SE、AVR、APR 类别的上下游修复集合</text>
+  </g>
+  <g id="text_20">
+   <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.5px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 22.677165, 26.832523)" x="22.677165" y="26.832523">类别内全部工具都成功才计入集合；全集为40个共同漏洞（圆面积不按数量比例）</text>
+  </g>
+  <g id="text_21">
+   <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 22.677165, 221.040514)" x="22.677165" y="221.040514">下游严格口径：类别内每个工具都必须修复该 CVE 的每一个下游项目。</text>
+  </g>
+  <g id="legend_1">
+   <g id="patch_8">
+    <path d="M 296.351969 19.80663 
+L 311.151969 19.80663 
+L 311.151969 14.62663 
+L 296.351969 14.62663 
+z
+" style="fill:#2f6bff;opacity:0.45;"/>
+   </g>
+   <g id="text_22">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:7.4px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 317.071969, 19.80663)" x="317.071969" y="19.80663">上游：类别全工具成功</text>
+   </g>
+   <g id="patch_9">
+    <path d="M 405.871969 19.80663 
+L 420.671969 19.80663 
+L 420.671969 14.62663 
+L 405.871969 14.62663 
+z
+" style="fill:#f26b5b;opacity:0.45;"/>
+   </g>
+   <g id="text_23">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:7.4px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 426.591969, 19.80663)" x="426.591969" y="19.80663">下游：类别全工具且全部项目成功</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="paa571a061e">
+   <rect height="165.543307" width="165.543307" x="20.450477" y="38.551181"/>
+  </clipPath>
+  <clipPath id="p13abcfae59">
+   <rect height="165.543307" width="165.543307" x="202.110236" y="38.551181"/>
+  </clipPath>
+  <clipPath id="p60165cf5db">
+   <rect height="165.543307" width="165.543307" x="383.769996" y="38.551181"/>
+  </clipPath>
+ </defs>
+</svg>

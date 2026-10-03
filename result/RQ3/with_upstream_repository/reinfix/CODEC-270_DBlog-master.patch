@@ -1,0 +1,15 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+index 0000000..0000000 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -33,3 +33,7 @@
+-    public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(salt, encryptPassword);
+-    }
++public static String decrypt(String encryptPassword, String salt) throws Exception {
++    try {
++        return AesUtil.decrypt(salt, encryptPassword);
++    } catch (IllegalArgumentException e) {
++        throw new IllegalArgumentException("Invalid encrypted password format", e);
++    }
++}

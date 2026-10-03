@@ -1,0 +1,58 @@
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -1,6 +1,8 @@
+ package burp.utils;
+ 
+ import org.apache.commons.codec.DecoderException;
++import org.apache.commons.codec.EncoderException;
++import org.apache.commons.codec.binary.Base32;
+ import org.apache.commons.codec.binary.Base64;
+ import org.apache.commons.codec.binary.Hex;
+ import org.apache.commons.httpclient.HttpClient;
+@@ -24,6 +26,8 @@
+     private static Random rand = new Random();
+     public static PrintWriter stdout = null;
+     public static PrintWriter stderr = null;
++    private static final Base64 STRICT_BASE64 = new Base64(0, null, false, true);
++    private static final Base32 STRICT_BASE32 = new Base32(0, null, false, (byte) '=');
+ 
+     public static int GetRandomNumber(int min, int max) {
+         return rand.nextInt(max - min + 1) + min;
+@@ -113,7 +117,27 @@
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        try {
++            return STRICT_BASE64.decode(str);
++        } catch (Exception ex) {
++            throw new IllegalStateException(ex);
++        }
++    }
++
++    public static String base32(byte[] bytes) {
++        try {
++            return STRICT_BASE32.encodeToString(bytes);
++        } catch (EncoderException ex) {
++            throw new IllegalStateException(ex);
++        }
++    }
++
++    public static byte[] base32(String str) {
++        try {
++            return STRICT_BASE32.decode(str);
++        } catch (Exception ex) {
++            throw new IllegalStateException(ex);
++        }
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,7 +154,7 @@
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = base64(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();

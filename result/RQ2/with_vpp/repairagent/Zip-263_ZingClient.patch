@@ -1,0 +1,15 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index a804a6d..f14a879 100644
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -25,6 +25,10 @@ public class ZFile {
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
++        // Validate the caller-provided File before constructing ZipFile because the bundled zip4j version accepts null and fails later with an internal NPE.
++        if (file == null) {
++            throw new NullPointerException("file");
++        }
+         this.file = new ZipFile(file);
+         this.password = password;
+         if (!this.file.isValidZipFile()) {

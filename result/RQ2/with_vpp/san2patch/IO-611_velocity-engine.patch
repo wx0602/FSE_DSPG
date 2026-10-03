@@ -1,0 +1,36 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,10 +112,29 @@
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
+-        if ( template == null || template.length() == 0 )
+-        {
+-            String msg = "File resource error: argument " + template +
++        String cleanedTemplateName = templateName.replace('\\', '/');
++        if (cleanedTemplateName.startsWith("//"))
++        {
++            String msg = "File resource error: argument " + templateName +
++                    " contains an invalid absolute or ambiguous path.  Rejected.";
++
++            log.error("FileResourceLoader: {}", msg);
++
++            throw new ResourceNotFoundException ( msg );
++        }
++        if (cleanedTemplateName.startsWith("/"))
++        {
++            cleanedTemplateName = cleanedTemplateName.substring(1);
++        }
++        while (cleanedTemplateName.contains("//"))
++        {
++            cleanedTemplateName = cleanedTemplateName.replace("//", "/");
++        }
++
++        String template = FilenameUtils.normalize( cleanedTemplateName, true );
++        if ( template == null || template.length() == 0 || template.startsWith("/") || template.startsWith("//") )
++        {
++            String msg = "File resource error: argument " + templateName +
+                     " contains .. and may be trying to access " +
+                     "content outside of template root.  Rejected.";
+ 

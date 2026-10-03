@@ -1,0 +1,47 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..033fd10 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -3,12 +3,13 @@ package cn.qs.utils.format;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
++import org.apache.commons.lang3.StringUtils;
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createNumberSafely(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +21,7 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createNumberSafely(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
+@@ -31,6 +32,18 @@ public class MyNumberUtils {
+ 		return numberFormat.format(value);
+ 	}
+ 
++	private static Number createNumberSafely(String value) {
++		String trimmedValue = StringUtils.trim(value);
++		if (StringUtils.isEmpty(trimmedValue) || isSuffixOnlyLongLiteral(trimmedValue)) {
++			throw new NumberFormatException("Invalid number: " + value);
++		}
++		return NumberUtils.createNumber(trimmedValue);
++	}
++
++	private static boolean isSuffixOnlyLongLiteral(String value) {
++		return value.length() == 1 && (value.charAt(0) == 'l' || value.charAt(0) == 'L');
++	}
++
+ 	public static void main(String[] args) {
+ 		float F2 = 105858.5328F;
+ 		System.out.println(ArithUtils.format(F2, 2));

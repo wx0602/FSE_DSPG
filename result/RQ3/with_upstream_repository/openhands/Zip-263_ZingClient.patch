@@ -1,0 +1,23 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index a804a6d..3e39674 100644
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -14,6 +14,8 @@ import java.security.PrivateKey;
+ 
+ public class ZFile {
+ 
++    private static final String NULL_ZIP_FILE_MESSAGE = "input zip file parameter is null";
++
+     private String name;
+ 
+     private String password;
+@@ -25,6 +27,9 @@ public class ZFile {
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
++        if (file == null) {
++            throw new IllegalArgumentException(NULL_ZIP_FILE_MESSAGE);
++        }
+         this.file = new ZipFile(file);
+         this.password = password;
+         if (!this.file.isValidZipFile()) {

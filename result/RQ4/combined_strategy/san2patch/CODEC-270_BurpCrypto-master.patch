@@ -1,0 +1,50 @@
+--- a/src/main/java/burp/aes/AesUtil.java
++++ b/src/main/java/burp/aes/AesUtil.java
+@@ -32,6 +32,38 @@
+ 
+     public String decrypt(String cipherText) {
+         try {
++            if (cipherText == null || (cipherText.length() & 3) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++            int padding = 0;
++            int length = cipherText.length();
++            if (length > 0 && cipherText.charAt(length - 1) == '=') {
++                padding++;
++                if (length > 1 && cipherText.charAt(length - 2) == '=') {
++                    padding++;
++                }
++            }
++            for (int i = 0; i < length - padding; i++) {
++                char ch = cipherText.charAt(i);
++                boolean valid = (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '+' || ch == '/';
++                if (!valid) {
++                    throw new IllegalArgumentException("Invalid Base64 input");
++                }
++            }
++            for (int i = length - padding; i < length; i++) {
++                if (i >= 0 && cipherText.charAt(i) != '=') {
++                    throw new IllegalArgumentException("Invalid Base64 padding");
++                }
++            }
++            if (padding > 0) {
++                int index = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".indexOf(cipherText.charAt(length - padding - 1));
++                if (index < 0) {
++                    throw new IllegalArgumentException("Invalid Base64 input");
++                }
++                if ((padding == 1 && (index & 0x03) != 0) || (padding == 2 && (index & 0x0F) != 0)) {
++                    throw new IllegalArgumentException("Invalid Base64 trailing bits");
++                }
++            }
+             byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
+             return new String(decrypted, "UTF-8");
+         } catch (UnsupportedEncodingException e) {
+@@ -39,6 +71,8 @@
+         }
+     }
+ 
++// Rationale: added strict Base64 validation before decoding, including structure, alphabet, padding placement, and trailing discarded-bit checks so malformed inputs such as AB== are rejected before reaching the vulnerable decoder.
++
+     private IllegalStateException fail(Exception e) {
+         return new IllegalStateException(e);
+     }

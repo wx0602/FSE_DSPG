@@ -1,0 +1,67 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..4c4651f 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,14 +1,52 @@
+ package cn.qs.utils.format;
+ 
++import java.math.BigInteger;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
++import org.apache.commons.lang3.StringUtils;
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
++	private static final String[] HEX_PREFIXES = {"0x", "0X", "#"};
++
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createNumber(value), scale);
++	}
++
++	public static Number createNumber(String value) {
++		if (StringUtils.isBlank(value)) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		if (!value.startsWith("+")) {
++			return NumberUtils.createNumber(value);
++		}
++		for (String prefix : HEX_PREFIXES) {
++			if (value.startsWith("+" + prefix)) {
++				String digits = value.substring(1 + prefix.length());
++				if (StringUtils.isEmpty(digits)) {
++					throw new NumberFormatException(value + " is not a valid number.");
++				}
++				return createPositiveHexNumber(digits);
++			}
++		}
++		return NumberUtils.createNumber(value);
++	}
++
++	private static Number createPositiveHexNumber(String digits) {
++		int firstSigDigit = 0;
++		while (firstSigDigit < digits.length() && digits.charAt(firstSigDigit) == '0') {
++			firstSigDigit++;
++		}
++		int hexDigits = digits.length() - firstSigDigit;
++		if (hexDigits <= 8) {
++			return Integer.decode("+0x" + digits);
++		}
++		if (hexDigits <= 16) {
++			return Long.decode("+0x" + digits);
++		}
++		return new BigInteger(digits, 16);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +58,7 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {

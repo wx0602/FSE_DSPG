@@ -1,0 +1,24 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 5f00669..2b51aee 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,3 +1,4 @@
++
+ package cn.qs.utils.format;
+ 
+ import java.math.RoundingMode;
+@@ -8,7 +9,7 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(normalizeSignedHex(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -36,4 +37,4 @@ public class MyNumberUtils {
+ 		System.out.println(ArithUtils.format(F2, 2));
+ 	}
+ 
+-}
++}

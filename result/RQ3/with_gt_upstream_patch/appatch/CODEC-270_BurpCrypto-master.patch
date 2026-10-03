@@ -1,0 +1,45 @@
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -1,6 +1,7 @@
+ package burp.utils;
+ 
+ import org.apache.commons.codec.DecoderException;
++import org.apache.commons.codec.binary.BaseNCodec;
+ import org.apache.commons.codec.binary.Base64;
+ import org.apache.commons.codec.binary.Hex;
+ import org.apache.commons.httpclient.HttpClient;
+@@ -113,7 +114,11 @@
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        Base64 decoder = new Base64(0, null, false, CodecPolicy.STRICT);
++        if (!decoder.isInAlphabet(str)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        return decoder.decode(str);
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,7 +135,11 @@
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        Base64 decoder = new Base64(0, null, false, CodecPolicy.STRICT);
++        if (!decoder.isInAlphabet(base64Str)) {
++            throw new IllegalArgumentException("Invalid Base64 public key");
++        }
++        byte[] decoded = decoder.decode(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();
+--- a/src/main/java/burp/utils/CodecPolicy.java
++++ b/src/main/java/burp/utils/CodecPolicy.java
+@@ -0,0 +1,6 @@
++package burp.utils;
++
++public enum CodecPolicy {
++    LENIENT,
++    STRICT
++}

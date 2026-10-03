@@ -1,0 +1,26 @@
+cases:
+    - target_id : origin_CVE-2017-7957_xstream
+    - target_id : origin_CVE-2018-1002201_zt-zip
+    - target_id : origin_CVE-2018-1324_commons-compress
+    - target_id : origin_CVE-2019-10086_commons-beanutils
+    - target_id : origin_CVE-2020-13956_httpclient
+    - target_id : origin_CVE-2020-26217_xstream
+    - target_id : origin_CVE-2021-23899_json-sanitizer
+    - target_id : origin_CVE-2021-23900_json-sanitizer
+    - target_id : origin_CVE-2021-27568_json-smart
+    - target_id : origin_CVE-2021-29425_commons-io
+    - target_id : origin_CVE-2021-31812_pdfbox
+    - target_id : origin_CVE-2021-35516_commons-compress
+    - target_id : origin_CVE-2021-37714_jsoup
+    - target_id : origin_CVE-2021-43859_xstream
+    - target_id : origin_CVE-2022-25845_fastjson
+    - target_id : origin_CVE-2022-41966_xstream
+    - target_id : origin_CVE-2022-42004_jackson-databind
+    - target_id : origin_CVE-2022-42889_commons-text
+    - target_id : origin_CVE-2022-45688_json
+    - target_id : origin_CVE-2023-1370_json-smart
+    - target_id : origin_CVE-2023-34453_snappy-java
+    - target_id : origin_CVE-2023-43642_snappy-java
+    - target_id : origin_IO-611_commons-io
+    - target_id : origin_LANG-1385_commons-lang3
+    - target_id : origin_LANG-1645_commons-lang3

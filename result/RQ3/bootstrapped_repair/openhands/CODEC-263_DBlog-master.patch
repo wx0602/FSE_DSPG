@@ -1,0 +1,65 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac..9f14471 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -6,8 +6,10 @@ import javax.crypto.Cipher;
+ import javax.crypto.KeyGenerator;
+ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
++import java.nio.charset.StandardCharsets;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
++import java.util.regex.Pattern;
+ 
+ /**
+  *
+@@ -20,6 +22,7 @@ import java.security.SecureRandom;
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final Pattern BASE64_CHARS = Pattern.compile("^[A-Za-z0-9+/=\\r\\n]*$");
+ 
+     /**
+      * AES加密
+@@ -65,9 +68,39 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(decodeBase64Compat(encrypted));
+ 
+-        return new String(result, "utf-8");
++        return new String(result, StandardCharsets.UTF_8);
++    }
++
++    static byte[] decodeBase64Compat(String value) {
++        if (value == null) {
++            return new byte[0];
++        }
++        try {
++            return Base64.decodeBase64(value);
++        } catch (IllegalArgumentException ex) {
++            String normalized = normalizeBase64(value);
++            if (normalized.equals(value)) {
++                throw ex;
++            }
++            return java.util.Base64.getDecoder().decode(normalized);
++        }
++    }
++
++    private static String normalizeBase64(String value) {
++        String normalized = value.replaceAll("\\s", "");
++        if (!BASE64_CHARS.matcher(normalized).matches()) {
++            return value;
++        }
++        int remainder = normalized.length() % 4;
++        if (remainder == 1) {
++            return value;
++        }
++        if (remainder > 0) {
++            normalized = normalized + "====".substring(remainder);
++        }
++        return normalized;
+     }
+ 
+     /**

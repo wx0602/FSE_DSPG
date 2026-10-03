@@ -1,0 +1,27 @@
+{
+  "groupId": "org.apache.commons",
+  "artifactId": "commons-lang3",
+  "complete_version": [
+    "3.12.0",
+    "3.11",
+    "3.10",
+    "3.9",
+    "3.8.1"
+  ],
+  "testcases": [
+    {
+      "className": "com.magneto.LANG_1484_Testcase1",
+      "methodName": "isParsableAcceptsTrailingDecimalPoint",
+      "vulMethodSignature": "<org.apache.commons.lang3.math.NumberUtils: boolean isParsable(java.lang.String)>",
+      "exceptedThrowable": null,
+      "needValidateReturnValue": true,
+      "validateReturnValueMethodName": "validateReturnValue",
+      "needValidateThrow": false,
+      "validateThrowMethodName": null
+    }
+  ],
+  "vulName": "LANG-1484",
+  "affectedVersion": [
+    "3.8.1"
+  ]
+}

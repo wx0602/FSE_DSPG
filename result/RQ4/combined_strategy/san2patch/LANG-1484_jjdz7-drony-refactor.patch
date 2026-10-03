@@ -1,0 +1,11 @@
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -28,7 +28,7 @@
+         logger.info("Validating integer: " + str);
+         System.out.println(str);
+         System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        return str != null && str.matches("[+-]?\\d+");
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {

@@ -1,0 +1,17 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -31,6 +31,14 @@
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
++        if (encryptPassword == null) {
++            throw new IllegalArgumentException("encryptPassword must not be null");
++        }
++        try {
++            java.util.Base64.getDecoder().decode(encryptPassword);
++        } catch (IllegalArgumentException e) {
++            throw new IllegalArgumentException("encryptPassword is not valid Base64", e);
++        }
+         return AesUtil.decrypt(Md5Util.MD5(salt + CommonConst.ZYD_SECURITY_KEY), encryptPassword);
+     }
+ }

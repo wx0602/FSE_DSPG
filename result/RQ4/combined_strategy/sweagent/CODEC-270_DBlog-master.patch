@@ -1,0 +1,84 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..b44be82 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
+ import java.nio.charset.StandardCharsets;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
++import java.util.regex.Pattern;
+ 
+ /**
+  *
+@@ -21,6 +22,8 @@ import java.security.SecureRandom;
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final Pattern BASE64_PATTERN = Pattern.compile("^[A-Za-z0-9+/]*={0,2}$");
++    private static final String BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+ 
+     /**
+      * AES加密
+@@ -59,6 +62,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        validateBase64(encrypted);
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -79,6 +83,54 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static void validateBase64(String encrypted) {
++        if (encrypted == null) {
++            throw new IllegalArgumentException("Encrypted content must not be null");
++        }
++        if (encrypted.isEmpty()) {
++            return;
++        }
++        if ((encrypted.length() & 3) != 0) {
++            throw new IllegalArgumentException("Encrypted content is not valid Base64");
++        }
++        if (!BASE64_PATTERN.matcher(encrypted).matches()) {
++            throw new IllegalArgumentException("Encrypted content is not valid Base64");
++        }
++
++        int firstPadding = encrypted.indexOf('=');
++        if (firstPadding >= 0) {
++            for (int i = firstPadding; i < encrypted.length(); i++) {
++                if (encrypted.charAt(i) != '=') {
++                    throw new IllegalArgumentException("Encrypted content is not valid Base64");
++                }
++            }
++        }
++
++        int paddingCount = encrypted.length() - encrypted.replace("=", "").length();
++        if (paddingCount > 2) {
++            throw new IllegalArgumentException("Encrypted content is not valid Base64");
++        }
++        if (paddingCount == 2) {
++            int value = decodeBase64Char(encrypted.charAt(encrypted.length() - 3));
++            if ((value & 0x0F) != 0) {
++                throw new IllegalArgumentException("Encrypted content is not valid Base64");
++            }
++        } else if (paddingCount == 1) {
++            int value = decodeBase64Char(encrypted.charAt(encrypted.length() - 2));
++            if ((value & 0x03) != 0) {
++                throw new IllegalArgumentException("Encrypted content is not valid Base64");
++            }
++        }
++    }
++
++    private static int decodeBase64Char(char ch) {
++        int value = BASE64_ALPHABET.indexOf(ch);
++        if (value < 0) {
++            throw new IllegalArgumentException("Encrypted content is not valid Base64");
++        }
++        return value;
++    }
++
+     /**
+      * 生成加密秘钥
+      *

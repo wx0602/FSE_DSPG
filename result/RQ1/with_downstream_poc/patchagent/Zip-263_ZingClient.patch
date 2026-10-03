@@ -1,0 +1,22 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index a804a6d..b5ef5f6 100755
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -1,5 +1,6 @@
+ package ZingClient.zing.client.file;
+ 
++import java.util.Objects;
+ import net.lingala.zip4j.ZipFile;
+ import net.lingala.zip4j.exception.ZipException;
+ import net.lingala.zip4j.io.inputstream.ZipInputStream;
+@@ -25,8 +26,9 @@ public class ZFile {
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
+-        this.file = new ZipFile(file);
+         this.password = password;
++        Objects.requireNonNull(file, "file");
++        this.file = new ZipFile(file);
+         if (!this.file.isValidZipFile()) {
+             throw new ZipException("文件无法读取,可能已经被损坏.");
+         }

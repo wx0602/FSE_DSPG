@@ -1,0 +1,45 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -1,11 +1,11 @@
+ package com.zyd.blog.util;
+ 
+-import org.apache.commons.codec.binary.Base64;
+-
+ import javax.crypto.Cipher;
++import java.nio.charset.StandardCharsets;
+ import javax.crypto.KeyGenerator;
+ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
++import java.util.Base64;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
+ 
+@@ -44,7 +44,7 @@
+         byte[] result = cipher.doFinal(byteContent);
+ 
+         //通过Base64转码返回
+-        return Base64.encodeBase64String(result);
++        return Base64.getEncoder().encodeToString(result);
+     }
+ 
+     /**
+@@ -64,10 +64,17 @@
+         //使用密钥初始化，设置为解密模式
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
++        byte[] decoded;
++        try {
++            decoded = Base64.getDecoder().decode(encrypted);
++        } catch (IllegalArgumentException ex) {
++            throw new IllegalArgumentException("Invalid Base64 encrypted payload", ex);
++        }
++
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(decoded);
+ 
+-        return new String(result, "utf-8");
++        return new String(result, StandardCharsets.UTF_8);
+     }
+ 
+     /**

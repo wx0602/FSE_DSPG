@@ -1,0 +1,40 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..355d85a 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -58,6 +58,35 @@ public class AesUtil {
+      * @return 返回解密后的数据
+      * @throws Exception
+      */
++    private static String normalizeBase64(String encoded) {
++        if (encoded == null) {
++            throw new IllegalArgumentException("Encrypted content must not be null");
++        }
++        return encoded.replaceAll("\\s", "");
++    }
++
++    private static void rejectInvalidTrailingBits(String encoded) {
++        String value = normalizeBase64(encoded);
++        if (value.isEmpty()) {
++            return;
++        }
++        if (value.length() % 4 != 0) {
++            throw new IllegalArgumentException("Invalid Base64 length");
++        }
++        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
++        if (value.endsWith("==")) {
++            int index = alphabet.indexOf(value.charAt(value.length() - 3));
++            if (index < 0 || (index & 15) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        } else if (value.endsWith("=")) {
++            int index = alphabet.indexOf(value.charAt(value.length() - 2));
++            if (index < 0 || (index & 3) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        }
++    }
++
+     public static String decrypt(String passwd, String encrypted) throws Exception {
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {

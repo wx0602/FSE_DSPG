@@ -1,0 +1,33 @@
+diff --git a/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java b/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java
+index c0a4c00..cdcf844 100644
+--- a/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java
++++ b/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java
+@@ -16,11 +16,12 @@ import org.springframework.stereotype.Service;
+ import org.springframework.util.CollectionUtils;
+ import org.springframework.util.StringUtils;
+ import org.springframework.web.multipart.MultipartFile;
+-import sun.misc.BASE64Decoder;
++
+ 
+ import java.io.ByteArrayInputStream;
+ import java.io.IOException;
+ import java.io.InputStream;
++import java.util.Base64;
+ import java.util.Arrays;
+ import java.util.Date;
+ import java.util.List;
+@@ -166,11 +167,11 @@ public class FileServiceImpl implements FileService {
+     public  InputStream base64ToInputStream(String base64string){
+         ByteArrayInputStream stream = null;
+         try {
+-            BASE64Decoder decoder = new BASE64Decoder();
+-            byte[] bytes1 = decoder.decodeBuffer(base64string);
++
++            byte[] bytes1 = Base64.getMimeDecoder().decode(base64string);
+             stream = new ByteArrayInputStream(bytes1);
+         } catch (Exception e) {
+-            log.error("图片base64解密失败>>>ex:{}",e);
++            log.error("图片base64解密失败>>>ex:{}", e);
+         }
+         return stream;
+     }

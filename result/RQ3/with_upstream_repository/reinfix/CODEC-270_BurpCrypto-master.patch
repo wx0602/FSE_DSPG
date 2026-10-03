@@ -1,0 +1,23 @@
+diff --git a/src/main/java/burp/aes/AesUtil.java b/src/main/java/burp/aes/AesUtil.java
+index 0000000..0000000 100644
+--- a/src/main/java/burp/aes/AesUtil.java
++++ b/src/main/java/burp/aes/AesUtil.java
+@@ -33,8 +33,10 @@
+-    public String decrypt(String cipherText) {
+-        try {
+-            byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
+-            return new String(decrypted, "UTF-8");
+-        } catch (UnsupportedEncodingException e) {
+-            throw fail(e);
+-        }
+-    }
++public String decrypt(String cipherText) {
++        try {
++            byte[] decrypted = crypto.decrypt(java.util.Base64.getDecoder().decode(cipherText));
++            return new String(decrypted, "UTF-8");
++        } catch (IllegalArgumentException e) {
++            throw fail(e);
++        } catch (UnsupportedEncodingException e) {
++            throw fail(e);
++        }
++    }

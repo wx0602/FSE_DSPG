@@ -1,0 +1,185 @@
+diff --git a/src/main/java/soj/biclique/TopologyArgs.java b/src/main/java/soj/biclique/TopologyArgs.java
+index af18e66..427b1c8 100644
+--- a/src/main/java/soj/biclique/TopologyArgs.java
++++ b/src/main/java/soj/biclique/TopologyArgs.java
+@@ -4,16 +4,14 @@ import java.io.PrintStream;
+ import java.io.Serializable;
+ import java.util.List;
+ 
+-//import static org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+ import org.kohsuke.args4j.Argument;
+ import org.kohsuke.args4j.CmdLineException;
+ import org.kohsuke.args4j.CmdLineParser;
+ import org.kohsuke.args4j.Option;
+ import org.slf4j.Logger;
+ 
+-//import static org.apache.storm.shade.org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+-import static org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+ import static org.slf4j.LoggerFactory.getLogger;
++import static soj.util.SafePathUtils.normalizePathNoEndSeparator;
+ 
+ import static com.google.common.base.Preconditions.checkState;
+ import com.google.common.collect.ImmutableList;
+@@ -351,7 +349,7 @@ public class TopologyArgs implements Serializable
+ 
+     private void deriveArgs() {
+         if (outputDir != null) {
+-            outputDir = normalizeNoEndSeparator(outputDir);
++            outputDir = normalizePathNoEndSeparator(outputDir);
+             if (outputDir.isEmpty()) {
+                 outputDir = ".";
+             }
+diff --git a/src/main/java/soj/util/FileReader.java b/src/main/java/soj/util/FileReader.java
+index 2b6246f..b9ddf39 100644
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -6,11 +6,10 @@ import java.io.IOException;
+ import java.util.List;
+ import java.util.regex.Pattern;
+ 
+-//import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+-import static org.apache.commons.io.FilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
++import static soj.util.SafePathUtils.normalizePath;
+ 
+ import com.google.common.base.Splitter;
+ import static com.google.common.base.Charsets.UTF_8;
+@@ -28,7 +27,7 @@ public class FileReader
+     private final Splitter _splitter;
+ 
+     public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
++        _filename = normalizePath(filename);
+         System.out.println(_filename);
+         _reader = getReader();
+ 
+diff --git a/src/main/java/soj/util/FileWriter.java b/src/main/java/soj/util/FileWriter.java
+index e97f0bc..71456fe 100644
+--- a/src/main/java/soj/util/FileWriter.java
++++ b/src/main/java/soj/util/FileWriter.java
+@@ -6,13 +6,11 @@ import java.io.FileNotFoundException;
+ import java.io.IOException;
+ import java.io.PrintStream;
+ 
+-//import static org.apache.commons.io.FilenameUtils.getFullPath;
+-//import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+-import static org.apache.commons.io.FilenameUtils.getFullPath;
+-import static org.apache.commons.io.FilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
++import static soj.util.SafePathUtils.getFullPath;
++import static soj.util.SafePathUtils.normalizePath;
+ 
+ import static com.google.common.base.Charsets.UTF_8;
+ import static com.google.common.io.Files.newWriter;
+@@ -37,12 +35,12 @@ public class FileWriter
+     }
+ 
+     public FileWriter(String filename, boolean overwrite) {
+-        _filename = normalize(filename);
++        _filename = normalizePath(filename);
+         _writer = getWriter(overwrite);
+     }
+ 
+     public FileWriter(String filename) {
+-        _filename = normalize(filename);
++        _filename = normalizePath(filename);
+         _writer = getWriter(false);
+     }
+ 
+@@ -77,7 +75,7 @@ public class FileWriter
+             filename += "." + suffix;
+         }
+ 
+-        return normalize(filename);
++        return normalizePath(filename);
+     }
+ 
+     private BufferedWriter getWriter(boolean overwrite) {
+diff --git a/src/main/java/soj/util/SafePathUtils.java b/src/main/java/soj/util/SafePathUtils.java
+new file mode 100644
+index 0000000..8f7739c
+--- /dev/null
++++ b/src/main/java/soj/util/SafePathUtils.java
+@@ -0,0 +1,78 @@
++package soj.util;
++
++import java.nio.file.InvalidPathException;
++import java.nio.file.Path;
++import java.nio.file.Paths;
++import java.util.regex.Pattern;
++
++/**
++ * Minimal path sanitization helpers used instead of Apache Commons IO
++ * FilenameUtils normalization methods.
++ *
++ * These helpers collapse repeated separators in a bounded, linear way and rely
++ * on java.nio.file path normalization to remove redundant "." and ".."
++ * segments without touching the filesystem.
++ */
++public final class SafePathUtils {
++    private static final Pattern MULTIPLE_SEPARATORS = Pattern.compile("[\\\\/]+");
++
++    private SafePathUtils() {
++    }
++
++    public static String normalizePath(String filename) {
++        return normalize(filename, false);
++    }
++
++    public static String normalizePathNoEndSeparator(String filename) {
++        return normalize(filename, true);
++    }
++
++    public static String getFullPath(String filename) {
++        String normalized = normalizePath(filename);
++        if (normalized == null || normalized.isEmpty()) {
++            return normalized;
++        }
++
++        int slash = Math.max(normalized.lastIndexOf('/'), normalized.lastIndexOf('\\'));
++        if (slash < 0) {
++            return "";
++        }
++
++        return normalized.substring(0, slash + 1);
++    }
++
++    private static String normalize(String filename, boolean removeEndSeparator) {
++        if (filename == null) {
++            return null;
++        }
++
++        String trimmed = filename.trim();
++        if (trimmed.isEmpty()) {
++            return trimmed;
++        }
++
++        String collapsed = MULTIPLE_SEPARATORS.matcher(trimmed.replace('\\', '/')).replaceAll("/");
++
++        try {
++            Path normalizedPath = Paths.get(collapsed).normalize();
++            String normalized = normalizedPath.toString().replace('\\', '/');
++
++            if (!collapsed.startsWith("/") && normalized.startsWith("/")) {
++                normalized = normalized.substring(1);
++            }
++
++            if (!removeEndSeparator && collapsed.endsWith("/") && !normalized.endsWith("/")) {
++                normalized = normalized + "/";
++            }
++
++            if (removeEndSeparator && normalized.length() > 1 && normalized.endsWith("/")) {
++                normalized = normalized.substring(0, normalized.length() - 1);
++            }
++
++            return normalized;
++        }
++        catch (InvalidPathException ex) {
++            throw new IllegalArgumentException("Invalid path: " + filename, ex);
++        }
++    }
++}

@@ -1,0 +1,94 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index 8c15083..f1c3556 100644
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -1,7 +1,6 @@
+ package com.korpodrony.validation;
+ 
+ import org.apache.commons.lang3.StringUtils;
+-import org.apache.commons.lang3.math.NumberUtils;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ 
+@@ -26,37 +25,65 @@ public class Validator {
+ 
+     public boolean validateInteger(String str) {
+         logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        return isIntegerLikeNumber(str);
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {
+         logger.info("Validating integer as positive value: " + str);
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str) && NumberUtils.createInteger(str) > 0;
++        Integer integer = parseIntegerLikeNumber(str);
++        return integer != null && integer > 0;
+     }
+ 
+     public boolean validateActivityTypeInteger(String str) {
+         logger.info("Validating activityType: " + str);
+-        return NumberUtils.isCreatable(str)
+-                && NumberUtils.isParsable(str)
+-                && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_ACTIVITY_TYPE
+-                && NumberUtils.createInteger(str) < UPPER_LIMIT_OF_ACTIVITY_TYPE;
++        Integer integer = parseIntegerLikeNumber(str);
++        return integer != null
++                && integer > LOWER_LIMIT_OF_ACTIVITY_TYPE
++                && integer < UPPER_LIMIT_OF_ACTIVITY_TYPE;
+     }
+ 
+     public boolean validateShort(String str) {
+         logger.info("Validating short: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_INDEX
+-                && NumberUtils.createInteger(str) < MAX_SHORT;
++        Integer integer = parseIntegerLikeNumber(str);
++        return integer != null
++                && integer > LOWER_LIMIT_OF_INDEX
++                && integer < MAX_SHORT;
+     }
+ 
+     public boolean validateByte(String str) {
+         logger.info("Validating byte: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
+-                && NumberUtils.createInteger(str) < MAX_BYTE;
++        Integer integer = parseIntegerLikeNumber(str);
++        return integer != null
++                && integer > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
++                && integer < MAX_BYTE;
++    }
++
++    private boolean isIntegerLikeNumber(String str) {
++        return parseIntegerLikeNumber(str) != null;
++    }
++
++    private Integer parseIntegerLikeNumber(String str) {
++        if (StringUtils.isBlank(str)) {
++            return null;
++        }
++
++        String normalized = str.trim();
++        if (normalized.endsWith(".")) {
++            normalized = normalized.substring(0, normalized.length() - 1);
++        }
++
++        if (normalized.isEmpty() || ".".equals(normalized)) {
++            return null;
++        }
++
++        try {
++            long parsed = Long.parseLong(normalized);
++            if (parsed < Integer.MIN_VALUE || parsed > Integer.MAX_VALUE) {
++                return null;
++            }
++            return (int) parsed;
++        } catch (NumberFormatException ex) {
++            return null;
++        }
+     }
+ }

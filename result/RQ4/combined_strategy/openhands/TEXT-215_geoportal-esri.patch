@@ -1,0 +1,47 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a1318..18830be 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -36,6 +36,7 @@ public class Val {
+   static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
++  static Pattern numericEntityPattern = Pattern.compile("&#(?:([xX])([0-9a-fA-F]+)|([0-9]+));?");
+ 
+   /**
+    * Converts a string to a boolean.
+@@ -242,17 +243,27 @@ public class Val {
+    */
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
++      return safeUnescapeNumericEntities(v);
++    }
++    return v;
++  }
+ 
++  static String safeUnescapeNumericEntities(String v) {
++    Matcher matcher = numericEntityPattern.matcher(v);
++    StringBuffer sb = new StringBuffer(v.length());
++    while (matcher.find()) {
++      boolean isHex = matcher.group(1) != null;
++      String digits = isHex ? matcher.group(2) : matcher.group(3);
++      String replacement = matcher.group();
+       try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++        int entityValue = Integer.parseInt(digits, isHex ? 16 : 10);
++        replacement = new String(Character.toChars(entityValue));
++      } catch (IllegalArgumentException e) {
+       }
+-
++      matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
+     }
+-    return v;
++    matcher.appendTail(sb);
++    return sb.toString();
+   }
+   /**
+    * decodes an octal value.

@@ -1,0 +1,80 @@
+Installing Geoportal Server
+
+Install Elasticsearch (2.3.3 or higher)
+Install Tomcat 8
+
+Deploy geoportal.war to Tomcat then 
+  - Stop Tomcat
+  - Update your Geoportal essential configuration if needed (see below, ***)
+  - Restart Tomcat
+  - Run quick smoke test:
+     -- Open geoportal web page (e.g. http://localhost:8080/geoportal)
+     -- Signin as gptadmin/gptadmin (top right)
+     -- Upload a few metadata records (top right)
+     -- Perform search (left panel), if search return the matching records, then the basic installation is working
+  - Perform additional configuration as necessary (see below)
+  
+----------------------------------------------------------------------------------------------  
+
+Main configuration file
+
+[Tomcat8]/webapps/geoportal/WEB-INF/classes/config/app-context.xml
+
+Set the cluster and node name(s) for Elasticsearch cluster. 
+By default, Geoportal is configured to look on the localhost for a cluster named elasticsearch. 
+
+  <beans:bean id="elasticContext" class="com.esri.geoportal.lib.elastic.ElasticContext">
+    <beans:property name="clusterName" value="${es_cluster:elasticsearch}" />
+    <beans:property name="nodes">
+      <!-- The list of host names within the Elasticsearch cluster, one value element per host -->
+      <beans:list>
+        <beans:value>${es_node:localhost}</beans:value>
+      </beans:list>
+    </beans:property>
+  </beans:bean>  
+
+If you have a cluster with multiple nodes, you can define it in one of two ways:
+
+1. Add the following to [Tomcat8]/conf/catalina.properties, es_node is a comma separated list.      
+
+# Geoportal
+es_cluster=myclustername
+es_node=host1,host2
+
+2. OR, update app-context.xml, maintain variable
+  <beans:bean id="elasticContext" class="com.esri.geoportal.lib.elastic.ElasticContext">
+    <beans:property name="clusterName" value="${es_cluster:elasticsearch}" />
+    <beans:property name="nodes">
+      <!-- The list of host names within the Elasticsearch cluster, one value element per host -->
+      <beans:list>
+        <beans:value>${es_node:host1,host2}</beans:value>
+      </beans:list>
+    </beans:property>
+  </beans:bean>
+
+3. OR, update app-context.xml
+  <beans:bean id="elasticContext" class="com.esri.geoportal.db.elastic.ElasticContext">
+    <beans:property name="clusterName" value="myclustername" />
+    <beans:property name="nodes">
+        <beans:value>host1</beans:value>
+        <beans:value>host2</beans:value>
+      </beans:list>
+    </beans:property>
+  </beans:bean> 
+
+
+Security configuration
+[Tomcat8]/webapps/geoportal/WEB-INF/classes/app-security.xml
+- configure various authentication options such as simple, LDAP, OAuth2.
+
+Logging
+[Tomcat8]/webapps/geoportal/WEB-INF/classes/log4j.properties
+Logging properties. You can modify the location of the log file by updating:
+log4j.appender.file.File
+
+Elasticsearch mappings for the "metadata" index
+[Tomcat8]/webapps/geoportal/WEB-INF/classes/config/elastic-mappings.xml
+Contains the Elasticsearch mappings for the "metadata" index, used 
+when Geoportal auto-creates the "metadata" index.
+Whenever you create a "metadata" index within Elasticsearch, you'll 
+need to include these mappings within your request "PUT" request.

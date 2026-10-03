@@ -1,0 +1,22 @@
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -266,6 +266,19 @@
+      * @throws ZipException 压缩异常
+      */
+     public static void compressFile(File sourceFile, File zip) throws ZipException {
++        if (sourceFile == null) {
++            throw new IllegalArgumentException("sourceFile cannot be null");
++        }
++        if (zip == null) {
++            throw new IllegalArgumentException("zip cannot be null");
++        }
++        if (!sourceFile.exists()) {
++            throw new IllegalArgumentException("sourceFile does not exist");
++        }
++        File zipParent = zip.getAbsoluteFile().getParentFile();
++        if (zipParent != null && !zipParent.exists() && !zipParent.mkdirs()) {
++            throw new IllegalArgumentException("zip parent directory does not exist");
++        }
+         net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
+         ZipParameters zipParameters = new ZipParameters();
+         //压缩方式

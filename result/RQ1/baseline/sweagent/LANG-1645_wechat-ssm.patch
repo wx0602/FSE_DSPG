@@ -1,0 +1,78 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..c57f940 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,5 +1,6 @@
+ package cn.qs.utils.format;
+ 
++import java.math.BigInteger;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
+@@ -8,7 +9,7 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +21,7 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
+@@ -31,6 +32,48 @@ public class MyNumberUtils {
+ 		return numberFormat.format(value);
+ 	}
+ 
++	public static Number createNumber(String value) {
++		if (value == null) {
++			return null;
++		}
++
++		if (value.startsWith("+") && isHexNumber(value, 1)) {
++			return createPositiveHexNumber(value);
++		}
++
++		return NumberUtils.createNumber(value);
++	}
++
++	private static Number createPositiveHexNumber(String value) {
++		String unsignedValue = value.substring(1);
++		BigInteger bigInteger = new BigInteger(unsignedValue.substring(2), 16);
++		if (bigInteger.bitLength() <= 31) {
++			return Integer.valueOf(bigInteger.intValue());
++		}
++		if (bigInteger.bitLength() <= 63) {
++			return Long.valueOf(bigInteger.longValue());
++		}
++		return bigInteger;
++	}
++
++	private static boolean isHexNumber(String value, int startIndex) {
++		int prefixIndex = startIndex;
++		if (value.length() <= prefixIndex + 2) {
++			return false;
++		}
++		char firstPrefixChar = value.charAt(prefixIndex);
++		char secondPrefixChar = value.charAt(prefixIndex + 1);
++		if (firstPrefixChar != '0' || (secondPrefixChar != 'x' && secondPrefixChar != 'X')) {
++			return false;
++		}
++		for (int i = prefixIndex + 2; i < value.length(); i++) {
++			if (Character.digit(value.charAt(i), 16) == -1) {
++				return false;
++			}
++		}
++		return true;
++	}
++
+ 	public static void main(String[] args) {
+ 		float F2 = 105858.5328F;
+ 		System.out.println(ArithUtils.format(F2, 2));

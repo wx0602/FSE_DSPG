@@ -1,0 +1,119 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..ac35212 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -25,6 +25,7 @@ import java.io.UnsupportedEncodingException;
+ import java.net.URLEncoder;
+ import java.nio.charset.StandardCharsets;
+ import java.util.*;
++import java.util.Locale;
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+ 
+@@ -35,6 +36,7 @@ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+   static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
++  static final Map<String, String> HTML_BASIC_ENTITIES = createHtmlBasicEntities();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+   /**
+@@ -226,9 +228,7 @@ public class Val {
+    */
+   public static String unescapeHtml4(String v) {
+     if (v != null) {
+-
+-      return StringEscapeUtils.unescapeHtml4(v);
+-
++      return unescapeHtml4Safely(v);
+     }
+     return v;
+   }
+@@ -271,6 +271,87 @@ public class Val {
+     }
+     return v;
+   }
++
++  private static Map<String, String> createHtmlBasicEntities() {
++    Map<String, String> entities = new HashMap<>();
++    entities.put("quot", "\"");
++    entities.put("amp", "&");
++    entities.put("lt", "<");
++    entities.put("gt", ">");
++    entities.put("apos", "'");
++    entities.put("nbsp", "\u00A0");
++    return Collections.unmodifiableMap(entities);
++  }
++
++  private static String unescapeHtml4Safely(String value) {
++    StringBuilder result = new StringBuilder(value.length());
++    int index = 0;
++    while (index < value.length()) {
++      char ch = value.charAt(index);
++      if (ch == '&') {
++        int consumed = appendHtmlEntity(value, index, result);
++        if (consumed > 0) {
++          index += consumed;
++          continue;
++        }
++      }
++      result.append(ch);
++      index++;
++    }
++    return result.toString();
++  }
++
++  private static int appendHtmlEntity(String value, int start, StringBuilder result) {
++    int next = start + 1;
++    if (next >= value.length()) {
++      return 0;
++    }
++    if (value.charAt(next) == '#') {
++      return appendNumericEntity(value, start, result);
++    }
++    int semiColon = value.indexOf(';', next);
++    if (semiColon <= next) {
++      return 0;
++    }
++    String entity = value.substring(next, semiColon).toLowerCase(Locale.ENGLISH);
++    String decoded = HTML_BASIC_ENTITIES.get(entity);
++    if (decoded == null) {
++      return 0;
++    }
++    result.append(decoded);
++    return semiColon - start + 1;
++  }
++
++  private static int appendNumericEntity(String value, int start, StringBuilder result) {
++    int index = start + 2;
++    boolean hex = index < value.length() && (value.charAt(index) == 'x' || value.charAt(index) == 'X');
++    if (hex) {
++      index++;
++    }
++    int digitsStart = index;
++    while (index < value.length()) {
++      char ch = value.charAt(index);
++      if (hex ? Character.digit(ch, 16) >= 0 : Character.isDigit(ch)) {
++        index++;
++      } else {
++        break;
++      }
++    }
++    if (digitsStart == index || index >= value.length() || value.charAt(index) != ';') {
++      return 0;
++    }
++    int codePoint;
++    try {
++      codePoint = Integer.parseInt(value.substring(digitsStart, index), hex ? 16 : 10);
++    } catch (NumberFormatException ex) {
++      return 0;
++    }
++    if (!Character.isValidCodePoint(codePoint)) {
++      return 0;
++    }
++    result.append(Character.toChars(codePoint));
++    return index - start + 1;
++  }
+   /**
+    * decodes an octal value.
+    * @param v the value

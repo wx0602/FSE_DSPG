@@ -1,0 +1,62 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..aad0364 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -113,10 +113,10 @@ public Reader getResourceReader(String templateName, String encoding)
+         }
+ 
+         String template = FilenameUtils.normalize( templateName, true );
+-        if ( template == null || template.length() == 0 )
++        if ( template == null || template.length() == 0 || hasMultipleSlashesAfterPrefix(template) )
+         {
+-            String msg = "File resource error: argument " + template +
+-                    " contains .. and may be trying to access " +
++            String msg = "File resource error: argument " + templateName +
++                    " is invalid or may be trying to access " +
+                     "content outside of template root.  Rejected.";
+ 
+             log.error("FileResourceLoader: {}", msg);
+@@ -341,6 +341,12 @@ public long getLastModified(Resource resource)
+     /**
+      * Create a File based on either a relative path if given, or absolute path otherwise
+      */
++
++    private boolean hasMultipleSlashesAfterPrefix(final String path)
++    {
++        return path.startsWith("//") && path.indexOf("//", 2) >= 0;
++    }
++
+     private File getFile(String path, String template)
+     {
+ 
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a55270..ef6e3f1 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -190,10 +190,10 @@ public Reader getResourceReader( String source, String encoding )
+ 
+         System.out.println("we make"+normalizedPath);
+ 
+-        if ( normalizedPath == null || normalizedPath.length() == 0 )
++        if ( normalizedPath == null || normalizedPath.length() == 0 || hasMultipleSlashesAfterPrefix(normalizedPath) )
+         {
+-            String msg = "JAR resource error: argument " + normalizedPath +
+-                    " contains .. and may be trying to access " +
++            String msg = "JAR resource error: argument " + source +
++                    " is invalid or may be trying to access " +
+                     "content outside of template root.  Rejected.";
+ 
+             log.error( "JarResourceLoader: {}", msg );
+@@ -243,6 +243,12 @@ public Reader getResourceReader( String source, String encoding )
+ 
+     }
+ 
++    private boolean hasMultipleSlashesAfterPrefix(final String path)
++    {
++        return path.startsWith("//") && path.indexOf("//", 2) >= 0;
++    }
++
++
+     // TODO: SHOULD BE DELEGATED TO THE JARHOLDER
+ 
+     /**

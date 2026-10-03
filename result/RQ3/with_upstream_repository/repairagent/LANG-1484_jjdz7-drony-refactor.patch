@@ -1,0 +1,238 @@
+diff --git a/App/src/main/java/com/korpodrony/utils/IoTools.java b/App/src/main/java/com/korpodrony/utils/IoTools.java
+index 9c04430..b9865bd 100644
+--- a/App/src/main/java/com/korpodrony/utils/IoTools.java
++++ b/App/src/main/java/com/korpodrony/utils/IoTools.java
+@@ -1,93 +1,140 @@
+-package com.korpodrony.utils;
+-
+-import java.util.ArrayList;
+-import java.util.Locale;
+-import java.util.Scanner;
+-
+-import static java.lang.System.in;
+-import static java.lang.System.out;
+-
+-public class IoTools {
+-
+-    private static final Scanner sc = new Scanner(in).useLocale(Locale.US);
+-
+-    public static String getCharsOnlyStringFromUser() {
+-        String text = "";
+-        while (Validator.notContainsOnlyLetters(text)) {
+-            text = sc.nextLine();
+-            if (Validator.notContainsOnlyLetters(text)) {
+-                out.println("Tylko litery są dozwolone. Spróbuj ponownie: ");
+-            }
+-        }
+-        return text;
+-    }
+-
+-    public static String getStringFromUserWithMessage(String message) {
+-        out.println(message);
+-        return getCharsOnlyStringFromUser();
+-    }
+-
+-    public static short getShortFromUser() {
+-        short number = 0;
+-        while (!sc.hasNextShort()) {
+-            out.println(sc.next() + ": nie jest liczbą z zakresu 1 do 32767. Spróbuj ponownie:");
+-        }
+-        number = sc.nextShort();
+-        return number;
+-    }
+-
+-    public static short getShortFromUserWithMessage(String message) {
+-        out.println(message);
+-        short number = 0;
+-        while (Validator.isNotPositive(number)) {
+-            number = getShortFromUser();
+-            if (Validator.isNotPositive(number)) {
+-                out.println("Nie można przekazać wartości mniejszej od 1. Spróbuj ponownie:");
+-            }
+-        }
+-        return number;
+-    }
+-
+-    public static byte getByteFromUser() {
+-        byte number = 0;
+-        while (!sc.hasNextByte()) {
+-            out.println(sc.next() + ": nie jest liczbą z zakresu 1 do 127. Spróbuj ponownie:");
+-        }
+-        number = sc.nextByte();
+-        return number;
+-    }
+-
+-    public static byte getByteFromUserWithMessage(String message) {
+-        out.println(message);
+-        byte number = 0;
+-        while (Validator.isNotPositive(number)) {
+-            number = getByteFromUser();
+-            if (Validator.isNotPositive(number)) {
+-                out.println("Nie można przekazać wartości mniejszej od 1. Spróbuj ponownie:");
+-            }
+-        }
+-        return number;
+-    }
+-
+-    public static int getIntFromUser() {
+-        int number = 0;
+-        out.println("Twój wybór?");
+-        while (Validator.isNotPositive(number)) {
+-            while (!sc.hasNextInt()) {
+-                out.println(sc.next() + ": nie jest liczbą. Spróbuj ponownie:");
+-                sc.nextLine();
+-            }
+-            number = sc.nextInt();
+-            sc.nextLine();
+-            if (Validator.isNotPositive(number)) {
+-                out.println("Podana wartość musi być większa od zera. Spróbuj ponownie");
+-            }
+-        }
+-        return number;
+-    }
+-
+-    public static int getIntFromUserWithMessage(String message) {
+-        out.println(message);
+-        return getIntFromUser();
+-    }
++package com.korpodrony.utils;
++
++import java.util.ArrayList;
++import java.util.Locale;
++import java.util.Scanner;
++
++import static java.lang.System.in;
++import static java.lang.System.out;
++
++public class IoTools {
++
++    private static final Scanner sc = new Scanner(in).useLocale(Locale.US);
++    // Accept numeric strings that Java parses as valid numbers, including forms like "100.",
++    // and convert them safely to integral menu/domain values only when they are finite whole numbers in range.
++    private static boolean isPositiveWholeNumberWithinRange(String token, long minInclusive, long maxInclusive) {
++        try {
++            double parsed = Double.parseDouble(token);
++            if (!Double.isFinite(parsed) || parsed != Math.rint(parsed)) {
++                return false;
++            }
++            long wholeNumber = (long) parsed;
++            return wholeNumber >= minInclusive && wholeNumber <= maxInclusive;
++        } catch (NumberFormatException exception) {
++            return false;
++        }
++    }
++    
++    // Parse integral user input through Double.parseDouble first to mitigate dependency-style
++    // parsability mismatches for valid trailing-dot numbers while keeping the public API integral.
++    private static short getValidatedShortToken() {
++        String token = sc.nextLine().trim();
++        while (!isPositiveWholeNumberWithinRange(token, Short.MIN_VALUE, Short.MAX_VALUE)) {
++            out.println(token + ": nie jest liczbą z zakresu 1 do 32767. Spróbuj ponownie:");
++            token = sc.nextLine().trim();
++        }
++        return (short) Double.parseDouble(token);
++    }
++    
++    // Parse integral user input through Double.parseDouble first to mitigate dependency-style
++    // parsability mismatches for valid trailing-dot numbers while keeping the public API integral.
++    private static byte getValidatedByteToken() {
++        String token = sc.nextLine().trim();
++        while (!isPositiveWholeNumberWithinRange(token, Byte.MIN_VALUE, Byte.MAX_VALUE)) {
++            out.println(token + ": nie jest liczbą z zakresu 1 do 127. Spróbuj ponownie:");
++            token = sc.nextLine().trim();
++        }
++        return (byte) Double.parseDouble(token);
++    }
++    
++    // Parse integral user input through Double.parseDouble first to mitigate dependency-style
++    // parsability mismatches for valid trailing-dot numbers while keeping the public API integral.
++    private static int getValidatedIntToken() {
++        String token = sc.nextLine().trim();
++        while (!isPositiveWholeNumberWithinRange(token, Integer.MIN_VALUE, Integer.MAX_VALUE)) {
++            out.println(token + ": nie jest liczbą. Spróbuj ponownie:");
++            token = sc.nextLine().trim();
++        }
++        return (int) Double.parseDouble(token);
++    }
++
++    public static String getCharsOnlyStringFromUser() {
++        String text = "";
++        while (Validator.notContainsOnlyLetters(text)) {
++            text = sc.nextLine();
++            if (Validator.notContainsOnlyLetters(text)) {
++                out.println("Tylko litery są dozwolone. Spróbuj ponownie: ");
++            }
++        }
++        return text;
++    }
++
++    public static String getStringFromUserWithMessage(String message) {
++        out.println(message);
++        return getCharsOnlyStringFromUser();
++    }
++
++    public static short getShortFromUser() {
++        short number = 0;
++
++
++
++
++        return number;
++    }
++
++    public static short getShortFromUserWithMessage(String message) {
++        out.println(message);
++        short number = 0;
++        while (Validator.isNotPositive(number)) {
++            number = getShortFromUser();
++            if (Validator.isNotPositive(number)) {
++                out.println("Nie można przekazać wartości mniejszej od 1. Spróbuj ponownie:");
++            }
++        }
++        return number;
++    }
++
++    public static byte getByteFromUser() {
++        byte number = 0;
++
++
++
++
++        return number;
++    }
++
++    public static byte getByteFromUserWithMessage(String message) {
++        out.println(message);
++        byte number = 0;
++        while (Validator.isNotPositive(number)) {
++            number = getByteFromUser();
++            if (Validator.isNotPositive(number)) {
++                out.println("Nie można przekazać wartości mniejszej od 1. Spróbuj ponownie:");
++            }
++        }
++        return number;
++    }
++
++    public static int getIntFromUser() {
++        int number = 0;
++        out.println("Twój wybór?");
++        while (Validator.isNotPositive(number)) {
++
++
++
++
++
++
++            if (Validator.isNotPositive(number)) {
++                out.println("Podana wartość musi być większa od zera. Spróbuj ponownie");
++            }
++            }
++        return number;
++    }
++
++    public static int getIntFromUserWithMessage(String message) {
++        out.println(message);
++        return getIntFromUser();
++    }
+ }
+\ No newline at end of file

@@ -1,0 +1,39 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index 0000000..0000000 100644
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -27,14 +27,20 @@
+-    public ZFile(File file, String password) throws IOException {
+-        this.file = new ZipFile(file);
+-        this.password = password;
+-        if (!this.file.isValidZipFile()) {
+-            throw new ZipException("文件无法读取,可能已经被损坏.");
+-        }
+-        if (this.file.isEncrypted()) {
+-            this.file.setPassword(password.toCharArray());
+-        }
+-        FileHeader ad = this.file.getFileHeader("address.txt");
+-        FileHeader key = this.file.getFileHeader("private_key");
+-        this.zingAddress = IOUtils.toString(this.file.getInputStream(ad), "utf8");
+-        
+-    }
++public ZFile(File file, String password) throws IOException {
++        if (file == null) {
++            throw new IllegalArgumentException("file must not be null");
++        }
++        this.file = new ZipFile(file);
++        this.password = password;
++        if (!this.file.isValidZipFile()) {
++            throw new ZipException("文件无法读取,可能已经被损坏.");
++        }
++        if (this.file.isEncrypted()) {
++            if (password == null) {
++                throw new IllegalArgumentException("password must not be null for encrypted zip files");
++            }
++            this.file.setPassword(password.toCharArray());
++        }
++        FileHeader ad = this.file.getFileHeader("address.txt");
++        FileHeader key = this.file.getFileHeader("private_key");
++        this.zingAddress = IOUtils.toString(this.file.getInputStream(ad), "utf8");
++
++    }

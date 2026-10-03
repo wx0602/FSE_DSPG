@@ -1,0 +1,87 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..f84ae80 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -7,33 +7,54 @@ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
+-	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
+-	}
+-
+-	public static String toFixedDecimal(Number value, int scale) {
+-		NumberFormat numberFormat = NumberFormat.getInstance();
+-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+-		numberFormat.setMaximumFractionDigits(scale);
+-
+-		return numberFormat.format(value);
+-	}
+-
+-	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
+-	}
+-
+-	public static String toFixedDecimalWithPercent(Number value, int scale) {
+-		NumberFormat numberFormat = NumberFormat.getPercentInstance();
+-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+-		numberFormat.setMaximumFractionDigits(scale);
+-
+-		return numberFormat.format(value);
+-	}
+-
+-	public static void main(String[] args) {
+-		float F2 = 105858.5328F;
+-		System.out.println(ArithUtils.format(F2, 2));
+-	}
++        public static String toFixedDecimal(String value, int scale) {
++                return toFixedDecimal(createSafeNumber(value), scale);
++        }
++
++        public static String toFixedDecimal(Number value, int scale) {
++                NumberFormat numberFormat = NumberFormat.getInstance();
++                numberFormat.setRoundingMode(RoundingMode.HALF_UP);
++                numberFormat.setMaximumFractionDigits(scale);
++
++                return numberFormat.format(value);
++        }
++
++        public static String toFixedDecimalWithPercent(String value, int scale) {
++                return toFixedDecimalWithPercent(createSafeNumber(value), scale);
++        }
++
++        private static Number createSafeNumber(String value) {
++                if (value == null) {
++                        throw new NumberFormatException("null");
++                }
++
++                String trimmedValue = value.trim();
++                if (trimmedValue.isEmpty()) {
++                        throw new NumberFormatException(trimmedValue + " is not a valid number.");
++                }
++
++                char lastChar = trimmedValue.charAt(trimmedValue.length() - 1);
++                if (lastChar == 'l' || lastChar == 'L') {
++                        String numeric = trimmedValue.substring(0, trimmedValue.length() - 1);
++                        if (numeric.isEmpty() || "-".equals(numeric) || "+".equals(numeric)) {
++                                throw new NumberFormatException(trimmedValue + " is not a valid number.");
++                        }
++                }
++
++                return NumberUtils.createNumber(trimmedValue);
++        }
++
++        public static String toFixedDecimalWithPercent(Number value, int scale) {
++                NumberFormat numberFormat = NumberFormat.getPercentInstance();
++                numberFormat.setRoundingMode(RoundingMode.HALF_UP);
++                numberFormat.setMaximumFractionDigits(scale);
++
++                return numberFormat.format(value);
++        }
++
++        public static void main(String[] args) {
++                float F2 = 105858.5328F;
++                System.out.println(ArithUtils.format(F2, 2));
++        }
+ 
+ }

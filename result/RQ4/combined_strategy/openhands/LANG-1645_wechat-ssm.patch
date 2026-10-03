@@ -1,0 +1,72 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..62f462d 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,5 +1,6 @@
+ package cn.qs.utils.format;
+ 
++import java.math.BigInteger;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
+@@ -8,7 +9,7 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createNumberCompat(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +21,7 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createNumberCompat(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
+@@ -31,6 +32,42 @@ public class MyNumberUtils {
+ 		return numberFormat.format(value);
+ 	}
+ 
++	private static Number createNumberCompat(String value) {
++		try {
++			return NumberUtils.createNumber(value);
++		} catch (NumberFormatException ex) {
++			return createPositiveSignedHexNumber(value, ex);
++		}
++	}
++
++	private static Number createPositiveSignedHexNumber(String value, NumberFormatException ex) {
++		if (!isPositiveSignedHex(value)) {
++			throw ex;
++		}
++
++		String normalizedValue = value.substring(1);
++		if (hasHexPrefix(normalizedValue, 0)) {
++			return NumberUtils.createNumber(normalizedValue);
++		}
++
++		if (normalizedValue.startsWith("#")) {
++			return new BigInteger(normalizedValue.substring(1), 16);
++		}
++
++		throw ex;
++	}
++
++	private static boolean isPositiveSignedHex(String value) {
++		return value != null
++				&& value.length() > 2
++				&& value.charAt(0) == '+'
++				&& (hasHexPrefix(value, 1) || value.startsWith("+#"));
++	}
++
++	private static boolean hasHexPrefix(String value, int start) {
++		return value.startsWith("0x", start) || value.startsWith("0X", start);
++	}
++
+ 	public static void main(String[] args) {
+ 		float F2 = 105858.5328F;
+ 		System.out.println(ArithUtils.format(F2, 2));

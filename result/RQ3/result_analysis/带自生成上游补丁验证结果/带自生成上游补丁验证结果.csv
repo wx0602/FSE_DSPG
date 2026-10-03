@@ -1,0 +1,13 @@
+target_id,agentless,appatch,openhands,patchagent,premm,reinfix,repairagent,san2patch,sweagent
+CODEC-270_BurpCrypto-master,修复失败,success,success,success,修复失败,修复失败,success,修复失败,修复失败
+CVE-2015-2156_webbit,修复失败,修复失败,修复失败,修复失败,编译失败,修复失败,修复失败,修复失败,修复失败
+CVE-2017-7957_rpki-commons,修复失败,修复失败,修复失败,修复失败,修复失败,修复失败,修复失败,修复失败,success
+CVE-2018-1000632_tcpser4j,修复失败,修复失败,success,修复失败,empty,修复失败,修复失败,empty,success
+CVE-2020-13956_crawler-jsoup-maven,编译失败,success,success,success,修复失败,编译失败,修复失败,empty,success
+CVE-2021-23899_OmegaTester,修复失败,修复失败,修复失败,修复失败,修复失败,修复失败,修复失败,修复失败,empty
+CVE-2021-23900_OmegaTester,编译失败,success,success,success,修复失败,修复失败,success,修复失败,success
+CVE-2021-43859_rpki-commons,修复失败,修复失败,修复失败,修复失败,修复失败,编译失败,修复失败,修复失败,修复失败
+CVE-2022-25845_geek_framework,success,修复失败,success,修复失败,修复失败,修复失败,修复失败,修复失败,success
+LANG-1645_ewallet,success,success,success,success,修复失败,修复失败,empty,修复失败,success
+TEXT-215_geoportal-esri,empty,修复失败,success,empty,修复失败,success,修复失败,empty,success
+TEXT-215_geoportal-server,empty,修复失败,修复失败,success,修复失败,success,修复失败,empty,编译失败

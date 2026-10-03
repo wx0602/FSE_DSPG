@@ -1,0 +1,119 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..2aa8495 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,9 +32,10 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
++  static Pattern decimalNumericEntityPattern = Pattern.compile("&#([0-9]+);?");
++  static Pattern hexadecimalNumericEntityPattern = Pattern.compile("&#[xX]([0-9A-Fa-f]+);?");
+ 
+   /**
+    * Converts a string to a boolean.
+@@ -238,18 +238,86 @@ public class Val {
+    * @return the decoded value
+    */
+   public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
++    if (v == null) {
++      return null;
++    }
++    String decoded = decodeNumericEntities(v);
++    return decoded;
++  }
+ 
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++  private static String decodeNumericEntities(String v) {
++    StringBuilder out = new StringBuilder(v.length());
++    int index = 0;
++    while (index < v.length()) {
++      int entityStart = v.indexOf("&#", index);
++      if (entityStart < 0) {
++        out.append(v, index, v.length());
++        break;
++      }
++      out.append(v, index, entityStart);
++      int entityEnd = findNumericEntityEnd(v, entityStart);
++      if (entityEnd < 0) {
++        out.append(v.substring(entityStart));
++        break;
++      }
++      String entity = v.substring(entityStart, entityEnd + 1);
++      String replacement = decodeNumericEntity(entity);
++      if (replacement == null) {
++        out.append(entity);
++      } else {
++        out.append(replacement);
+       }
++      index = entityEnd + 1;
++    }
++    return out.toString();
++  }
+ 
++  private static int findNumericEntityEnd(String v, int entityStart) {
++    if (entityStart + 2 >= v.length()) {
++      return -1;
+     }
+-    return v;
++    int index = entityStart + 2;
++    boolean hex = false;
++    if (index < v.length() && (v.charAt(index) == 'x' || v.charAt(index) == 'X')) {
++      hex = true;
++      index++;
++    }
++    int digitsStart = index;
++    while (index < v.length()) {
++      char ch = v.charAt(index);
++      if (hex ? isHexDigit(ch) : Character.isDigit(ch)) {
++        index++;
++        continue;
++      }
++      break;
++    }
++    if (index == digitsStart) {
++      return -1;
++    }
++    if (index < v.length() && v.charAt(index) == ';') {
++      return index;
++    }
++    return hex || index > digitsStart ? index - 1 : -1;
++  }
++
++  private static String decodeNumericEntity(String entity) {
++    boolean hex = entity.length() > 3 && (entity.charAt(2) == 'x' || entity.charAt(2) == 'X');
++    int numberStart = hex ? 3 : 2;
++    int numberEnd = entity.endsWith(";") ? entity.length() - 1 : entity.length();
++    if (numberStart >= numberEnd) {
++      return null;
++    }
++    String number = entity.substring(numberStart, numberEnd);
++    try {
++      int codePoint = Integer.parseInt(number, hex ? 16 : 10);
++      return new String(Character.toChars(codePoint));
++    } catch (Exception e) {
++      return null;
++    }
++  }
++
++  private static boolean isHexDigit(char ch) {
++    return (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
+   }
+   /**
+    * decodes an octal value.

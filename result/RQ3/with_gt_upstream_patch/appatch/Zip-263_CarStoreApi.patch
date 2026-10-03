@@ -1,0 +1,23 @@
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -1,5 +1,6 @@
+ package com.car.account.web.common.utils;
+ 
++import net.lingala.zip4j.ZipFile;
+ import net.lingala.zip4j.exception.ZipException;
+ import net.lingala.zip4j.model.ZipParameters;
+ import net.lingala.zip4j.model.enums.CompressionLevel;
+@@ -266,8 +267,12 @@
+      * @throws ZipException 压缩异常
+      */
+     public static void compressFile(File sourceFile, File zip) throws ZipException {
+-        net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
++        if (zip == null) {
++            throw new IllegalArgumentException("zip file must not be null");
++        }
++        ZipFile zipFile = new ZipFile(zip);
+         ZipParameters zipParameters = new ZipParameters();
++
+         //压缩方式
+         zipParameters.setCompressionMethod(CompressionMethod.DEFLATE);
+         //压缩级别

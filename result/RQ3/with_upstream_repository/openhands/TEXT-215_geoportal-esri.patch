@@ -1,0 +1,106 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a1318..f9c4779 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -14,7 +14,9 @@
+  */
+ package com.esri.geoportal.base.util;
+ 
+-import org.apache.commons.text.StringEscapeUtils;
++import org.apache.commons.text.translate.AggregateTranslator;
++import org.apache.commons.text.translate.EntityArrays;
++import org.apache.commons.text.translate.LookupTranslator;
+ import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+@@ -36,6 +38,11 @@ public class Val {
+   static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
++  static AggregateTranslator HTML4_NAMED_ENTITY_UNESCAPER = new AggregateTranslator(
++      new LookupTranslator(EntityArrays.BASIC_UNESCAPE),
++      new LookupTranslator(EntityArrays.ISO8859_1_UNESCAPE),
++      new LookupTranslator(EntityArrays.HTML40_EXTENDED_UNESCAPE)
++  );
+ 
+   /**
+    * Converts a string to a boolean.
+@@ -229,11 +236,76 @@ public class Val {
+    */
+   public static String unescapeHtml4(String v) {
+     if (v != null) {
++      String rv = HTML4_NAMED_ENTITY_UNESCAPER.translate(v);
++      return unescapeHtml4NumericEntities(rv);
++    }
++    return v;
++  }
++
++  private static String unescapeHtml4NumericEntities(String v) {
++    StringBuilder result = new StringBuilder(v.length());
++    int index = 0;
++    while (index < v.length()) {
++      int consumed = appendUnescapedNumericEntity(v, index, result);
++      if (consumed > 0) {
++        index += consumed;
++      } else {
++        result.append(v.charAt(index));
++        index++;
++      }
++    }
++    return result.toString();
++  }
++
++  private static int appendUnescapedNumericEntity(String input, int index, StringBuilder out) {
++    int seqEnd = input.length();
++    if (input.charAt(index) != '&' || index >= seqEnd - 2 || input.charAt(index + 1) != '#') {
++      return 0;
++    }
+ 
+-      return StringEscapeUtils.unescapeHtml4(v);
++    int start = index + 2;
++    boolean isHex = false;
++    char firstChar = input.charAt(start);
++    if (firstChar == 'x' || firstChar == 'X') {
++      start++;
++      isHex = true;
++      if (start == seqEnd) {
++        return 0;
++      }
++    }
+ 
++    int end = start;
++    while (end < seqEnd && isValidNumericEntityChar(input.charAt(end), isHex)) {
++      end++;
+     }
+-    return v;
++
++    if (end == start) {
++      return 0;
++    }
++
++    boolean semiNext = end < seqEnd && input.charAt(end) == ';';
++
++    try {
++      int entityValue = Integer.parseInt(input.substring(start, end), isHex ? 16 : 10);
++      if (entityValue > 0xFFFF) {
++        out.append(Character.toChars(entityValue));
++      } else {
++        out.append((char) entityValue);
++      }
++      return 2 + (isHex ? 1 : 0) + (end - start) + (semiNext ? 1 : 0);
++    } catch (NumberFormatException ex) {
++      return 0;
++    }
++  }
++
++  private static boolean isValidNumericEntityChar(char ch, boolean isHex) {
++    if (ch >= '0' && ch <= '9') {
++      return true;
++    }
++    if (!isHex) {
++      return false;
++    }
++    return (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
+   }
+   /**
+    * decodes an eNunmericEntity value.

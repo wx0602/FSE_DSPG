@@ -1,0 +1,65 @@
+--- a/src/main/java/soj/biclique/TopologyArgs.java
++++ b/src/main/java/soj/biclique/TopologyArgs.java
+@@ -21,6 +21,7 @@
+ 
+ import soj.util.FileWriter;
+ import static soj.util.SchemaUtils.getFieldIdx;
++import static soj.util.PathUtils.normalizeNoEndSeparatorSafe;
+ import static soj.util.TimeUtils.getTimestamp;
+ 
+ public class TopologyArgs implements Serializable
+@@ -351,7 +352,7 @@
+ 
+     private void deriveArgs() {
+         if (outputDir != null) {
+-            outputDir = normalizeNoEndSeparator(outputDir);
++            outputDir = normalizeNoEndSeparatorSafe(outputDir);
+             if (outputDir.isEmpty()) {
+                 outputDir = ".";
+             }
+--- a/src/main/java/soj/util/PathUtils.java
++++ b/src/main/java/soj/util/PathUtils.java
+@@ -0,0 +1,43 @@
++package soj.util;
++
++import org.apache.commons.io.FilenameUtils;
++
++public final class PathUtils
++{
++    private PathUtils() {
++    }
++
++    public static String normalizeSafe(String path) {
++        if (path == null) {
++            return null;
++        }
++
++        String collapsed = collapseDuplicateSeparators(path);
++        return FilenameUtils.normalize(collapsed);
++    }
++
++    public static String normalizeNoEndSeparatorSafe(String path) {
++        if (path == null) {
++            return null;
++        }
++
++        String collapsed = collapseDuplicateSeparators(path);
++        return FilenameUtils.normalizeNoEndSeparator(collapsed);
++    }
++
++    static String collapseDuplicateSeparators(String path) {
++        StringBuilder sb = new StringBuilder(path.length());
++        char previous = 0;
++        for (int i = 0; i < path.length(); i++) {
++            char current = path.charAt(i);
++            boolean slash = current == '/' || current == '\\';
++            boolean prevSlash = previous == '/' || previous == '\\';
++            if (slash && prevSlash) {
++                continue;
++            }
++            sb.append(current);
++            previous = current;
++        }
++        return sb.toString();
++    }
++}

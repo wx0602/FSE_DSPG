@@ -1,0 +1,66 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberParser.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberParser.java
+@@ -0,0 +1,32 @@
++package com.fr.chain.utils;
++
++import org.apache.commons.lang3.StringUtils;
++import org.apache.commons.lang3.math.NumberUtils;
++
++public final class NumberParser {
++
++	private NumberParser() {
++	}
++
++	public static Number createNumber(String value) {
++		if (value == null) {
++			return null;
++		}
++		String candidate = value.trim();
++		if (candidate.length() == 0) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		if (isSuffixOnly(candidate)) {
++			throw new NumberFormatException(candidate + " is not a valid number");
++		}
++		return NumberUtils.createNumber(candidate);
++	}
++
++	private static boolean isSuffixOnly(String value) {
++		if (value.length() != 1) {
++			return false;
++		}
++		char ch = value.charAt(0);
++		return StringUtils.contains("lLfFdD", ch);
++	}
++}
+--- a/wallet-base/src/main/java/com/fr/chain/utils/MBUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/MBUtil.java
+@@ -7,8 +7,8 @@
+ 	public static BigDecimal toBigDec(String v) {
+ 		if (v != null) {
+ 			try {
+-				Double db = Double.parseDouble(v);
+-				return BigDecimal.valueOf(db);
++				Number number = NumberParser.createNumber(v);
++				return number == null ? null : BigDecimal.valueOf(number.doubleValue());
+ 			} catch (NumberFormatException e) {
+ 			}
+ 		}
+@@ -18,7 +18,7 @@
+ 	public static Double toDbl(String v) {
+ 		if (v != null) {
+ 			try {
+-				return Double.parseDouble(v);
++				return NumberParser.createNumber(v).doubleValue();
+ 			} catch (NumberFormatException e) {
+ 			}
+ 		}
+@@ -27,7 +27,7 @@
+ 	public static Integer toInt(String v){
+ 		if(v!=null){
+ 			try {
+-				return Integer.parseInt(v);
++				return NumberParser.createNumber(v).intValue();
+ 			} catch (NumberFormatException e) {
+ 			}
+ 		}

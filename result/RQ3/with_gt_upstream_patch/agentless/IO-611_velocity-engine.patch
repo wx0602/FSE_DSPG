@@ -1,0 +1,40 @@
+diff --git a/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example2.java b/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example2.java
+index 5cbb737..924b238 100644
+--- a/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example2.java
++++ b/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example2.java
+@@ -39,12 +39,35 @@ import java.io.StringWriter;
+ 
+ public class Example2
+ {
++    private static String sanitizeTemplatePath(String path)
++    {
++        if (path == null)
++        {
++            return null;
++        }
++
++        String sanitized = path.replace('\\', '/');
++        if (sanitized.startsWith("//"))
++        {
++            return "//" + sanitized.substring(2).replaceAll("/+", "/");
++        }
++        return sanitized.replaceAll("/+", "/");
++    }
++
+     public static void main( String args[] )
+     {
+         /* first, we init the runtime engine.  Defaults are fine. */
+ 
+         try
+         {
++            if (args != null)
++            {
++                for (int i = 0; i < args.length; i++)
++                {
++                    args[i] = sanitizeTemplatePath(args[i]);
++                }
++            }
++
+             Velocity.init();
+         }
+         catch(Exception e)

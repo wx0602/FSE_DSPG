@@ -1,0 +1,4 @@
+cases:
+- target_id: CVE-2023-1370_axon-server-se
+- target_id: CVE-2023-1370_microservice-with-jwt-and-microprofile
+- target_id: CVE-2018-15756_mirage

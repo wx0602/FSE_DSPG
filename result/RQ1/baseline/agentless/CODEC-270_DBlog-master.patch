@@ -1,0 +1,18 @@
+diff --git a/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java b/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java
+index 87c7148..f2eca81 100644
+--- a/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java
++++ b/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java
+@@ -227,7 +227,12 @@ public class ShiroConfig {
+         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+         // 使用自定义的序列化类
+         cookieRememberMeManager.setSerializer(new MySecSerializer<>());
+-        cookieRememberMeManager.setCookie(rememberMeCookie());
++        // 安全加固：禁用 rememberMe Cookie，避免继续处理外部可控的 Base64 rememberMe 值，
++        // 从而规避底层编解码库对非法尾随位校验不严格带来的风险。
++        SimpleCookie disabledRememberMeCookie = new SimpleCookie("rememberMe");
++        disabledRememberMeCookie.setMaxAge(0);
++        disabledRememberMeCookie.setHttpOnly(true);
++        cookieRememberMeManager.setCookie(disabledRememberMeCookie);
+         //rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度(128 192 256 位)
+         cookieRememberMeManager.setCipherKey(GenerateCipherKey.generateNewKey());
+         return cookieRememberMeManager;

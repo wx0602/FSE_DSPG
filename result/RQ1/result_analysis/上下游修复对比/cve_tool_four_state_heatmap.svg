@@ -1,0 +1,1243 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (https://matplotlib.org/) -->
+<svg height="510.23622pt" version="1.1" viewBox="0 0 566.929134 510.23622" width="566.929134pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 510.23622 
+L 566.929134 510.23622 
+L 566.929134 0 
+L 0 0 
+z
+" style="fill:#ffffff;"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 113.385827 474.519685 
+L 278.38759 474.519685 
+L 278.38759 112.251969 
+L 113.385827 112.251969 
+z
+" style="fill:#ffffff;"/>
+   </g>
+   <g clip-path="url(#p5008e1fe09)">
+    <image height="20" id="image2425ecc586" transform="matrix(18.444444 0 0 18.15 113.385827 111.519685)" width="9" xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAAkAAAAUCAYAAABf2RdVAAAABHNCSVQICAgIfAhkiAAAARlJREFUKJF1UjuugzAQHBAVUrgBZ6BO4eY1SNR05ATxBUKFqHyDnIAixauR0tD4KJEbd3Yk2n1Fsg6fvGmwdz27MyMiYx1VfYYtxs6D6zEfxs6vvkvEW9ZyKhOS/xpLJHxIRfuepFaaUtEiYSY3vyEqJBFPmrXarav6DLHGKRRS0aLqs52J5NldkU4vPd8mAUBkrKOtw1S0+P15EetJITn053drCK7qaUlSQCGJjHVUSKJCEnnZhPvxdiFjHUVeNlSKPKya9T6nuBR52M8PGGPncdePT05cPPRnPLvr2p2XDQFAKXLMWkHjBLEyoQBjHRnrgmBjHR1vF2JDXjYU75IDgsbVOoEh/AX8iPMTGD6J15PCXT92ogHgD8jBsjBLiaTEAAAAAElFTkSuQmCC"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1"/>
+     <g id="text_1">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(125.918125 107.61837)rotate(-43)">Agentless</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2"/>
+     <g id="text_2">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(144.251655 107.713309)rotate(-43)">Appatch</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3"/>
+     <g id="text_3">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(162.585184 107.713309)rotate(-43)">OpenHands</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4"/>
+     <g id="text_4">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(180.918713 107.61837)rotate(-43)">PatchAgent</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5"/>
+     <g id="text_5">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(199.252242 107.713309)rotate(-43)">PreMM</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6"/>
+     <g id="text_6">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(217.585771 107.713309)rotate(-43)">ReInFix</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_7"/>
+     <g id="text_7">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(235.830769 107.61837)rotate(-43)">RepairAgent</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_8"/>
+     <g id="text_8">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(254.25283 107.713309)rotate(-43)">San2Patch</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_9"/>
+     <g id="text_9">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(272.497827 107.61837)rotate(-43)">SWE-agent</text>
+     </g>
+    </g>
+    <g id="xtick_10">
+     <g id="line2d_10">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 474.519685 
+L 113.385827 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_11">
+      <defs>
+       <path d="M 0 0 
+L 0 -2 
+" id="mf21ceada8e" style="stroke:#657187;stroke-width:0.6;"/>
+      </defs>
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_11">
+     <g id="line2d_12">
+      <path clip-path="url(#p5008e1fe09)" d="M 131.719356 474.519685 
+L 131.719356 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_13">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="131.719356" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_12">
+     <g id="line2d_14">
+      <path clip-path="url(#p5008e1fe09)" d="M 150.052885 474.519685 
+L 150.052885 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_15">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="150.052885" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_13">
+     <g id="line2d_16">
+      <path clip-path="url(#p5008e1fe09)" d="M 168.386414 474.519685 
+L 168.386414 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_17">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="168.386414" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_14">
+     <g id="line2d_18">
+      <path clip-path="url(#p5008e1fe09)" d="M 186.719944 474.519685 
+L 186.719944 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_19">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="186.719944" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_15">
+     <g id="line2d_20">
+      <path clip-path="url(#p5008e1fe09)" d="M 205.053473 474.519685 
+L 205.053473 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_21">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="205.053473" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_16">
+     <g id="line2d_22">
+      <path clip-path="url(#p5008e1fe09)" d="M 223.387002 474.519685 
+L 223.387002 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_23">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="223.387002" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_17">
+     <g id="line2d_24">
+      <path clip-path="url(#p5008e1fe09)" d="M 241.720531 474.519685 
+L 241.720531 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_25">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="241.720531" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_18">
+     <g id="line2d_26">
+      <path clip-path="url(#p5008e1fe09)" d="M 260.05406 474.519685 
+L 260.05406 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_27">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="260.05406" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_19">
+     <g id="line2d_28">
+      <path clip-path="url(#p5008e1fe09)" d="M 278.38759 474.519685 
+L 278.38759 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_29">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="278.38759" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_30"/>
+     <g id="text_10">
+      <text style="fill:#2f6bff;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 109.885827, 123.582872)" x="109.885827" y="123.582872">TEXT-215  U7/D0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_31"/>
+     <g id="text_11">
+      <text style="fill:#2f6bff;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 109.885827, 141.696258)" x="109.885827" y="141.696258">CVE-2020-13956  U6/D0</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_32"/>
+     <g id="text_12">
+      <text style="fill:#2f6bff;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 109.885827, 159.809644)" x="109.885827" y="159.809644">CVE-2022-22976  U6/D0</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_33"/>
+     <g id="text_13">
+      <text style="fill:#2f6bff;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 109.885827, 177.92303)" x="109.885827" y="177.92303">CVE-2023-1370  U5/D0</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_34"/>
+     <g id="text_14">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 196.030627)" x="109.885827" y="196.030627">LANG-1385  U8/D3</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_35"/>
+     <g id="text_15">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 214.144012)" x="109.885827" y="214.144012">LANG-1484  U6/D1</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_36"/>
+     <g id="text_16">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 232.257398)" x="109.885827" y="232.257398">CODEC-270  U5/D1</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_37"/>
+     <g id="text_17">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 250.370784)" x="109.885827" y="250.370784">CVE-2018-1002202  U7/D3</text>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_38"/>
+     <g id="text_18">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 268.48417)" x="109.885827" y="268.48417">CODEC-263  U5/D2</text>
+     </g>
+    </g>
+    <g id="ytick_10">
+     <g id="line2d_39"/>
+     <g id="text_19">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 286.597556)" x="109.885827" y="286.597556">CVE-2018-15756  U5/D2</text>
+     </g>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_40"/>
+     <g id="text_20">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 304.710942)" x="109.885827" y="304.710942">CVE-2021-39144  U6/D3</text>
+     </g>
+    </g>
+    <g id="ytick_12">
+     <g id="line2d_41"/>
+     <g id="text_21">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 322.824327)" x="109.885827" y="322.824327">IO-611  U5/D2</text>
+     </g>
+    </g>
+    <g id="ytick_13">
+     <g id="line2d_42"/>
+     <g id="text_22">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 340.937713)" x="109.885827" y="340.937713">CVE-2019-10086  U7/D5</text>
+     </g>
+    </g>
+    <g id="ytick_14">
+     <g id="line2d_43"/>
+     <g id="text_23">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 359.051099)" x="109.885827" y="359.051099">LANG-1645  U5/D3</text>
+     </g>
+    </g>
+    <g id="ytick_15">
+     <g id="line2d_44"/>
+     <g id="text_24">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 377.164485)" x="109.885827" y="377.164485">ZIP4J-263  U3/D1</text>
+     </g>
+    </g>
+    <g id="ytick_16">
+     <g id="line2d_45"/>
+     <g id="text_25">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 395.277871)" x="109.885827" y="395.277871">CVE-2022-45688  U5/D5</text>
+     </g>
+    </g>
+    <g id="ytick_17">
+     <g id="line2d_46"/>
+     <g id="text_26">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 413.391257)" x="109.885827" y="413.391257">CVE-2020-26217  U2/D3</text>
+     </g>
+    </g>
+    <g id="ytick_18">
+     <g id="line2d_47"/>
+     <g id="text_27">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 431.504642)" x="109.885827" y="431.504642">CVE-2021-21341  U1/D2</text>
+     </g>
+    </g>
+    <g id="ytick_19">
+     <g id="line2d_48"/>
+     <g id="text_28">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 449.618028)" x="109.885827" y="449.618028">CVE-2021-27568  U5/D6</text>
+     </g>
+    </g>
+    <g id="ytick_20">
+     <g id="line2d_49"/>
+     <g id="text_29">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 109.885827, 467.731414)" x="109.885827" y="467.731414">CVE-2022-41966  U1/D2</text>
+     </g>
+    </g>
+    <g id="ytick_21">
+     <g id="line2d_50">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 112.251969 
+L 278.38759 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_51">
+      <defs>
+       <path d="M 0 0 
+L -2 0 
+" id="meb3a036656" style="stroke:#657187;stroke-width:0.6;"/>
+      </defs>
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_22">
+     <g id="line2d_52">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 130.365354 
+L 278.38759 130.365354 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_53">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="130.365354"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_23">
+     <g id="line2d_54">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 148.47874 
+L 278.38759 148.47874 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_55">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="148.47874"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_24">
+     <g id="line2d_56">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 166.592126 
+L 278.38759 166.592126 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_57">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="166.592126"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_25">
+     <g id="line2d_58">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 184.705512 
+L 278.38759 184.705512 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_59">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="184.705512"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_26">
+     <g id="line2d_60">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 202.818898 
+L 278.38759 202.818898 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_61">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="202.818898"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_27">
+     <g id="line2d_62">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 220.932283 
+L 278.38759 220.932283 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_63">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="220.932283"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_28">
+     <g id="line2d_64">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 239.045669 
+L 278.38759 239.045669 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_65">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="239.045669"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_29">
+     <g id="line2d_66">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 257.159055 
+L 278.38759 257.159055 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_67">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="257.159055"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_30">
+     <g id="line2d_68">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 275.272441 
+L 278.38759 275.272441 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_69">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="275.272441"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_31">
+     <g id="line2d_70">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 293.385827 
+L 278.38759 293.385827 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_71">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="293.385827"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_32">
+     <g id="line2d_72">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 311.499213 
+L 278.38759 311.499213 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_73">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="311.499213"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_33">
+     <g id="line2d_74">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 329.612598 
+L 278.38759 329.612598 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_75">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="329.612598"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_34">
+     <g id="line2d_76">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 347.725984 
+L 278.38759 347.725984 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_77">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="347.725984"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_35">
+     <g id="line2d_78">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 365.83937 
+L 278.38759 365.83937 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_79">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="365.83937"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_36">
+     <g id="line2d_80">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 383.952756 
+L 278.38759 383.952756 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_81">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="383.952756"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_37">
+     <g id="line2d_82">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 402.066142 
+L 278.38759 402.066142 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_83">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="402.066142"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_38">
+     <g id="line2d_84">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 420.179528 
+L 278.38759 420.179528 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_85">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="420.179528"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_39">
+     <g id="line2d_86">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 438.292913 
+L 278.38759 438.292913 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_87">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="438.292913"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_40">
+     <g id="line2d_88">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 456.406299 
+L 278.38759 456.406299 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_89">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="456.406299"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_41">
+     <g id="line2d_90">
+      <path clip-path="url(#p5008e1fe09)" d="M 113.385827 474.519685 
+L 278.38759 474.519685 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_91">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="113.385827" xlink:href="#meb3a036656" y="474.519685"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="line2d_92">
+    <path clip-path="url(#p5008e1fe09)" d="M 113.385827 184.705512 
+L 278.38759 184.705512 
+" style="fill:none;stroke:#172033;stroke-linecap:square;stroke-width:1.2;"/>
+   </g>
+   <g id="text_30">
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:8px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 195.886708, 74.251969)" x="195.886708" y="74.251969">漏洞组 1（1–20）</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_3">
+    <path d="M 390.588788 474.519685 
+L 555.590551 474.519685 
+L 555.590551 112.251969 
+L 390.588788 112.251969 
+z
+" style="fill:#ffffff;"/>
+   </g>
+   <g clip-path="url(#pb6f4fe551b)">
+    <image height="20" id="imagefbd3c05c8a" transform="matrix(18.444444 0 0 18.15 390.588788 111.519685)" width="9" xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAAkAAAAUCAYAAABf2RdVAAAABHNCSVQICAgIfAhkiAAAAMhJREFUKJHFUrENwjAQPEdUSB6BGagp0tCwAF2YwF6AVJGrbOAZKFiAhiajIDfunEi0TxF94pgklFzzr//z/eveYq+JtnkJAHg3NRpcwDjluz5xPlCrC2p1QYfblZwPxDWOwvlAAHB+1rgfS0ijBpVH8wIADKQ1ZL8IfyCJVheTxbvKAgCkUegqC2lUr8SNmBDHTazCxVQ14yQuci6N6h+y/fEp0rNMbrdE/LJgbmSWNmbB0kujnA/jV2HzUgzj1tBVdiSlbsf4AFDPun8dG/gdAAAAAElFTkSuQmCC"/>
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_20">
+     <g id="line2d_93"/>
+     <g id="text_31">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(403.121087 107.61837)rotate(-43)">Agentless</text>
+     </g>
+    </g>
+    <g id="xtick_21">
+     <g id="line2d_94"/>
+     <g id="text_32">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(421.454616 107.713309)rotate(-43)">Appatch</text>
+     </g>
+    </g>
+    <g id="xtick_22">
+     <g id="line2d_95"/>
+     <g id="text_33">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(439.788145 107.713309)rotate(-43)">OpenHands</text>
+     </g>
+    </g>
+    <g id="xtick_23">
+     <g id="line2d_96"/>
+     <g id="text_34">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(458.121675 107.61837)rotate(-43)">PatchAgent</text>
+     </g>
+    </g>
+    <g id="xtick_24">
+     <g id="line2d_97"/>
+     <g id="text_35">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(476.455204 107.713309)rotate(-43)">PreMM</text>
+     </g>
+    </g>
+    <g id="xtick_25">
+     <g id="line2d_98"/>
+     <g id="text_36">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(494.788733 107.713309)rotate(-43)">ReInFix</text>
+     </g>
+    </g>
+    <g id="xtick_26">
+     <g id="line2d_99"/>
+     <g id="text_37">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(513.03373 107.61837)rotate(-43)">RepairAgent</text>
+     </g>
+    </g>
+    <g id="xtick_27">
+     <g id="line2d_100"/>
+     <g id="text_38">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(531.455791 107.713309)rotate(-43)">San2Patch</text>
+     </g>
+    </g>
+    <g id="xtick_28">
+     <g id="line2d_101"/>
+     <g id="text_39">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:6.2px;font-style:normal;font-weight:normal;" transform="translate(549.700789 107.61837)rotate(-43)">SWE-agent</text>
+     </g>
+    </g>
+    <g id="xtick_29">
+     <g id="line2d_102">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 474.519685 
+L 390.588788 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_103">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_30">
+     <g id="line2d_104">
+      <path clip-path="url(#pb6f4fe551b)" d="M 408.922318 474.519685 
+L 408.922318 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_105">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="408.922318" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_31">
+     <g id="line2d_106">
+      <path clip-path="url(#pb6f4fe551b)" d="M 427.255847 474.519685 
+L 427.255847 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_107">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="427.255847" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_32">
+     <g id="line2d_108">
+      <path clip-path="url(#pb6f4fe551b)" d="M 445.589376 474.519685 
+L 445.589376 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_109">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="445.589376" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_33">
+     <g id="line2d_110">
+      <path clip-path="url(#pb6f4fe551b)" d="M 463.922905 474.519685 
+L 463.922905 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_111">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="463.922905" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_34">
+     <g id="line2d_112">
+      <path clip-path="url(#pb6f4fe551b)" d="M 482.256434 474.519685 
+L 482.256434 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_113">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="482.256434" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_35">
+     <g id="line2d_114">
+      <path clip-path="url(#pb6f4fe551b)" d="M 500.589964 474.519685 
+L 500.589964 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_115">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="500.589964" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_36">
+     <g id="line2d_116">
+      <path clip-path="url(#pb6f4fe551b)" d="M 518.923493 474.519685 
+L 518.923493 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_117">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="518.923493" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_37">
+     <g id="line2d_118">
+      <path clip-path="url(#pb6f4fe551b)" d="M 537.257022 474.519685 
+L 537.257022 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_119">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="537.257022" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_38">
+     <g id="line2d_120">
+      <path clip-path="url(#pb6f4fe551b)" d="M 555.590551 474.519685 
+L 555.590551 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_121">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="555.590551" xlink:href="#mf21ceada8e" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4">
+    <g id="ytick_42">
+     <g id="line2d_122"/>
+     <g id="text_40">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 387.088788, 123.577083)" x="387.088788" y="123.577083">CVE-2022-42889  U6/D7</text>
+     </g>
+    </g>
+    <g id="ytick_43">
+     <g id="line2d_123"/>
+     <g id="text_41">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 387.088788, 141.690469)" x="387.088788" y="141.690469">CVE-2020-26258  U1/D5</text>
+     </g>
+    </g>
+    <g id="ytick_44">
+     <g id="line2d_124"/>
+     <g id="text_42">
+      <text style="fill:#39a878;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 387.088788, 159.803855)" x="387.088788" y="159.803855">CVE-2021-29425  U2/D6</text>
+     </g>
+    </g>
+    <g id="ytick_45">
+     <g id="line2d_125"/>
+     <g id="text_43">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 387.088788, 177.917241)" x="387.088788" y="177.917241">CVE-2015-2156  U0/D0</text>
+     </g>
+    </g>
+    <g id="ytick_46">
+     <g id="line2d_126"/>
+     <g id="text_44">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 387.088788, 196.030627)" x="387.088788" y="196.030627">CVE-2017-7957  U0/D0</text>
+     </g>
+    </g>
+    <g id="ytick_47">
+     <g id="line2d_127"/>
+     <g id="text_45">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 387.088788, 214.144012)" x="387.088788" y="214.144012">CVE-2021-23899  U0/D0</text>
+     </g>
+    </g>
+    <g id="ytick_48">
+     <g id="line2d_128"/>
+     <g id="text_46">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 387.088788, 232.257398)" x="387.088788" y="232.257398">CVE-2021-43859  U0/D0</text>
+     </g>
+    </g>
+    <g id="ytick_49">
+     <g id="line2d_129"/>
+     <g id="text_47">
+      <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 387.088788, 250.370784)" x="387.088788" y="250.370784">CVE-2022-25845  U0/D0</text>
+     </g>
+    </g>
+    <g id="ytick_50">
+     <g id="line2d_130"/>
+     <g id="text_48">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 268.489959)" x="387.088788" y="268.489959">CVE-2018-1324  U0/D6</text>
+     </g>
+    </g>
+    <g id="ytick_51">
+     <g id="line2d_131"/>
+     <g id="text_49">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 286.603345)" x="387.088788" y="286.603345">CVE-2021-31812  U0/D6</text>
+     </g>
+    </g>
+    <g id="ytick_52">
+     <g id="line2d_132"/>
+     <g id="text_50">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 304.716731)" x="387.088788" y="304.716731">CVE-2021-35516  U0/D6</text>
+     </g>
+    </g>
+    <g id="ytick_53">
+     <g id="line2d_133"/>
+     <g id="text_51">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 322.830116)" x="387.088788" y="322.830116">CVE-2023-34453  U0/D5</text>
+     </g>
+    </g>
+    <g id="ytick_54">
+     <g id="line2d_134"/>
+     <g id="text_52">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 340.943502)" x="387.088788" y="340.943502">CVE-2019-12415  U0/D4</text>
+     </g>
+    </g>
+    <g id="ytick_55">
+     <g id="line2d_135"/>
+     <g id="text_53">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 359.056888)" x="387.088788" y="359.056888">CVE-2022-29631  U0/D4</text>
+     </g>
+    </g>
+    <g id="ytick_56">
+     <g id="line2d_136"/>
+     <g id="text_54">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 377.170274)" x="387.088788" y="377.170274">CVE-2018-1002201  U0/D3</text>
+     </g>
+    </g>
+    <g id="ytick_57">
+     <g id="line2d_137"/>
+     <g id="text_55">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 395.28366)" x="387.088788" y="395.28366">CVE-2018-1000632  U0/D2</text>
+     </g>
+    </g>
+    <g id="ytick_58">
+     <g id="line2d_138"/>
+     <g id="text_56">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 413.397046)" x="387.088788" y="413.397046">CVE-2021-23900  U0/D2</text>
+     </g>
+    </g>
+    <g id="ytick_59">
+     <g id="line2d_139"/>
+     <g id="text_57">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 431.510431)" x="387.088788" y="431.510431">CVE-2021-37714  U0/D2</text>
+     </g>
+    </g>
+    <g id="ytick_60">
+     <g id="line2d_140"/>
+     <g id="text_58">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 449.623817)" x="387.088788" y="449.623817">CVE-2022-42004  U0/D1</text>
+     </g>
+    </g>
+    <g id="ytick_61">
+     <g id="line2d_141"/>
+     <g id="text_59">
+      <text style="fill:#f26b5b;font-family:Noto Sans CJK JP;font-size:5.7px;font-style:normal;font-weight:bold;text-anchor:end;" transform="rotate(-0, 387.088788, 467.737203)" x="387.088788" y="467.737203">CVE-2023-43642  U0/D1</text>
+     </g>
+    </g>
+    <g id="ytick_62">
+     <g id="line2d_142">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 112.251969 
+L 555.590551 112.251969 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_143">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="112.251969"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_63">
+     <g id="line2d_144">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 130.365354 
+L 555.590551 130.365354 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_145">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="130.365354"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_64">
+     <g id="line2d_146">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 148.47874 
+L 555.590551 148.47874 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_147">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="148.47874"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_65">
+     <g id="line2d_148">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 166.592126 
+L 555.590551 166.592126 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_149">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="166.592126"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_66">
+     <g id="line2d_150">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 184.705512 
+L 555.590551 184.705512 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_151">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="184.705512"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_67">
+     <g id="line2d_152">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 202.818898 
+L 555.590551 202.818898 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_153">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="202.818898"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_68">
+     <g id="line2d_154">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 220.932283 
+L 555.590551 220.932283 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_155">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="220.932283"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_69">
+     <g id="line2d_156">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 239.045669 
+L 555.590551 239.045669 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_157">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="239.045669"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_70">
+     <g id="line2d_158">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 257.159055 
+L 555.590551 257.159055 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_159">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="257.159055"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_71">
+     <g id="line2d_160">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 275.272441 
+L 555.590551 275.272441 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_161">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="275.272441"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_72">
+     <g id="line2d_162">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 293.385827 
+L 555.590551 293.385827 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_163">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="293.385827"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_73">
+     <g id="line2d_164">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 311.499213 
+L 555.590551 311.499213 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_165">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="311.499213"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_74">
+     <g id="line2d_166">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 329.612598 
+L 555.590551 329.612598 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_167">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="329.612598"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_75">
+     <g id="line2d_168">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 347.725984 
+L 555.590551 347.725984 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_169">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="347.725984"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_76">
+     <g id="line2d_170">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 365.83937 
+L 555.590551 365.83937 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_171">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="365.83937"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_77">
+     <g id="line2d_172">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 383.952756 
+L 555.590551 383.952756 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_173">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="383.952756"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_78">
+     <g id="line2d_174">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 402.066142 
+L 555.590551 402.066142 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_175">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="402.066142"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_79">
+     <g id="line2d_176">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 420.179528 
+L 555.590551 420.179528 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_177">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="420.179528"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_80">
+     <g id="line2d_178">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 438.292913 
+L 555.590551 438.292913 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_179">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="438.292913"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_81">
+     <g id="line2d_180">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 456.406299 
+L 555.590551 456.406299 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_181">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="456.406299"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_82">
+     <g id="line2d_182">
+      <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 474.519685 
+L 555.590551 474.519685 
+" style="fill:none;stroke:#ffffff;stroke-linecap:square;"/>
+     </g>
+     <g id="line2d_183">
+      <g>
+       <use style="fill:#657187;stroke:#657187;stroke-width:0.6;" x="390.588788" xlink:href="#meb3a036656" y="474.519685"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="line2d_184">
+    <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 166.592126 
+L 555.590551 166.592126 
+" style="fill:none;stroke:#172033;stroke-linecap:square;stroke-width:1.2;"/>
+   </g>
+   <g id="line2d_185">
+    <path clip-path="url(#pb6f4fe551b)" d="M 390.588788 257.159055 
+L 555.590551 257.159055 
+" style="fill:none;stroke:#172033;stroke-linecap:square;stroke-width:1.2;"/>
+   </g>
+   <g id="text_60">
+    <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:8px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 473.08967, 74.251969)" x="473.08967" y="74.251969">漏洞组 2（21–40）</text>
+   </g>
+  </g>
+  <g id="text_61">
+   <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:15px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 45.354331, 24.725437)" x="45.354331" y="24.725437">CVE × 工具的上下游修复状态（20行 × 18列）</text>
+  </g>
+  <g id="text_62">
+   <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7.5px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 45.354331, 32.501815)" x="45.354331" y="32.501815">40个 CVE 分为两个20行区块并排展示；每个区块含9个工具列</text>
+  </g>
+  <g id="text_63">
+   <text style="fill:#657187;font-family:Noto Sans CJK JP;font-size:7px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 45.354331, 501.051969)" x="45.354331" y="501.051969">U/D：上游/下游成功工具数。严格下游口径：同一工具须修复该 CVE 的全部下游项目。</text>
+  </g>
+  <g id="legend_1">
+   <g id="patch_4">
+    <path d="M 48.999685 49.457994 
+L 63.399685 49.457994 
+L 63.399685 44.417994 
+L 48.999685 44.417994 
+z
+" style="fill:#2f6bff;"/>
+   </g>
+   <g id="text_64">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:7.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 69.159685, 49.457994)" x="69.159685" y="49.457994">仅上游修复</text>
+   </g>
+   <g id="patch_5">
+    <path d="M 119.559685 49.457994 
+L 133.959685 49.457994 
+L 133.959685 44.417994 
+L 119.559685 44.417994 
+z
+" style="fill:#f26b5b;"/>
+   </g>
+   <g id="text_65">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:7.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 139.719685, 49.457994)" x="139.719685" y="49.457994">仅下游修复</text>
+   </g>
+   <g id="patch_6">
+    <path d="M 190.119685 49.457994 
+L 204.519685 49.457994 
+L 204.519685 44.417994 
+L 190.119685 44.417994 
+z
+" style="fill:#39a878;"/>
+   </g>
+   <g id="text_66">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:7.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 210.279685, 49.457994)" x="210.279685" y="49.457994">上下游均修复</text>
+   </g>
+   <g id="patch_7">
+    <path d="M 267.879685 49.457994 
+L 282.279685 49.457994 
+L 282.279685 44.417994 
+L 267.879685 44.417994 
+z
+" style="fill:#e5eaf1;stroke:#cad2de;stroke-linejoin:miter;"/>
+   </g>
+   <g id="text_67">
+    <text style="fill:#172033;font-family:Noto Sans CJK JP;font-size:7.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 288.039685, 49.457994)" x="288.039685" y="49.457994">均未修复</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p5008e1fe09">
+   <rect height="362.267717" width="165.001763" x="113.385827" y="112.251969"/>
+  </clipPath>
+  <clipPath id="pb6f4fe551b">
+   <rect height="362.267717" width="165.001763" x="390.588788" y="112.251969"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,26 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d7..fb96a53 100755
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -59,6 +59,10 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static BigInteger createBigInteger(String str)  {
++		if (str != null && str.length() > 1 && str.charAt(0) == '+'
++				&& (str.startsWith("0x", 1) || str.startsWith("0X", 1) || str.startsWith("#", 1))) {
++			str = str.substring(1);
++		}
+ 		return NumberUtils.createBigInteger(str);
+ 	}
+ 	
+@@ -116,6 +120,10 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
++		if (str != null && str.length() > 1 && str.charAt(0) == '+'
++				&& (str.startsWith("0x", 1) || str.startsWith("0X", 1) || str.startsWith("#", 1))) {
++			str = str.substring(1);
++		}
+ 		return NumberUtils.createNumber(str);
+ 	}
+ 	

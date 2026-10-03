@@ -1,0 +1,15 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index a804a6d..fb80ee8 100644
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -40,6 +40,10 @@ public class ZFile {
+     }
+ 
+     public static void create(String name, String password) throws ZipException {
++        // Validate the archive base name before constructing ZipFile to avoid passing invalid paths into the library.
++        if (name == null) {
++            throw new NullPointerException("name");
++        }
+         ZipFile zipFile = new ZipFile(name + ".zing", password.toCharArray());
+         ZipParameters parameters = new ZipParameters();
+         parameters.setCompressionMethod(CompressionMethod.DEFLATE);

@@ -1,0 +1,30 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index 9ec5f33..374695b 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,7 +113,18 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        if (str == null) {
++            return null;
++        }
++        try {
++            byte[] decoded = Base64.decodeBase64(str);
++            if (!str.equals(Base64.encodeBase64String(decoded))) {
++                throw new IllegalArgumentException("Invalid base64 input");
++            }
++            return decoded;
++        } catch (IllegalArgumentException ex) {
++            throw ex;
++        }
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -174,4 +185,4 @@ public class Utils {
+         }
+         return strs.toArray(new String[strs.size()]);
+     }
+-}
++}

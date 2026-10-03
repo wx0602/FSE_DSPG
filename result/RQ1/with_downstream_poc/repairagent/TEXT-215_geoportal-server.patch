@@ -1,0 +1,20 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..381ed71 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,10 +240,12 @@ public class Val {
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+ 
++      // Mitigate the vulnerable NumericEntityUnescaper behavior locally by parsing
++      // decimal and hexadecimal numeric entities separately.
+       try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
++
++
++
+       } catch (IOException var3) {
+         throw new RuntimeException(var3);
+       }

@@ -1,0 +1,9 @@
+/target/
+.idea
+.classpath
+.project
+.settings
+*.iml
+.DS*
+/.apt_generated/
+/.apt_generated_tests/

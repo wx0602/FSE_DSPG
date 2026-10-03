@@ -1,0 +1,93 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..9009a9a 100755
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,9 +113,54 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
++        validateBase64(str);
+         return Base64.decodeBase64(str);
+     }
+ 
++    private static void validateBase64(String str) {
++        if (str == null) {
++            throw new IllegalArgumentException("Base64 input must not be null");
++        }
++        String normalized = str.replaceAll("\\s", "");
++        if (normalized.length() == 0) {
++            return;
++        }
++        if ((normalized.length() & 3) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 length");
++        }
++        int padding = 0;
++        int length = normalized.length();
++        while (padding < 2 && length - 1 - padding >= 0 && normalized.charAt(length - 1 - padding) == '=') {
++            padding++;
++        }
++        int contentLength = length - padding;
++        for (int i = 0; i < contentLength; i++) {
++            char c = normalized.charAt(i);
++            if (!(c >= 'A' && c <= 'Z') && !(c >= 'a' && c <= 'z') && !(c >= '0' && c <= '9') && c != '+' && c != '/') {
++                throw new IllegalArgumentException("Invalid Base64 character");
++            }
++        }
++        for (int i = contentLength; i < length; i++) {
++            if (normalized.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 padding");
++            }
++        }
++        if (padding > 0 && contentLength == 0) {
++            throw new IllegalArgumentException("Invalid Base64 padding");
++        }
++        if (padding == 1) {
++            int value = decodeBase64Char(normalized.charAt(contentLength - 1));
++            if ((value & 3) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        } else if (padding == 2) {
++            int value = decodeBase64Char(normalized.charAt(contentLength - 1));
++            if ((value & 15) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        }
++    }
++
+     public static String hex(byte[] bytes) {
+         return Hex.encodeHexString(bytes);
+     }
+@@ -129,6 +174,7 @@ public class Utils {
+     }
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
++        validateBase64(base64Str);
+         BigInteger[] result = new BigInteger[2];
+         byte[] decoded = Base64.decodeBase64(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+@@ -137,6 +183,25 @@ public class Utils {
+         return result;
+     }
+ 
++    private static int decodeBase64Char(char c) {
++        if (c >= 'A' && c <= 'Z') {
++            return c - 'A';
++        }
++        if (c >= 'a' && c <= 'z') {
++            return c - 'a' + 26;
++        }
++        if (c >= '0' && c <= '9') {
++            return c - '0' + 52;
++        }
++        if (c == '+') {
++            return 62;
++        }
++        if (c == '/') {
++            return 63;
++        }
++        throw new IllegalArgumentException("Invalid Base64 character");
++    }
++
+ 
+     public static String[] GetOutFormats() {
+         ArrayList<String> strs = new ArrayList<String>();

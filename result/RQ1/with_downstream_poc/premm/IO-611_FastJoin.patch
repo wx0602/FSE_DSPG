@@ -1,0 +1,77 @@
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -27,21 +27,65 @@
+     private final BufferedReader _reader;
+     private final Splitter _splitter;
+ 
+-    public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
+-        System.out.println(_filename);
+-        _reader = getReader();
++public FileReader(String filename, String splitPunc) throws Exception {
++    String normalized = normalize(filename);
++    if (normalized != null) {
++        normalized = normalizeRepeatedSeparatorsAfterPrefix(normalized);
++    }
++    _filename = normalized;
++    System.out.println(_filename);
++    _reader = getReader();
+ 
+-        String splitePattern;
+-        if (splitPunc == null || splitPunc.trim().isEmpty()) {
+-            splitePattern = DEFAULT_SPLIT_PATTERN;
++    String splitePattern;
++    if (splitPunc == null || splitPunc.trim().isEmpty()) {
++        splitePattern = DEFAULT_SPLIT_PATTERN;
++    }
++    else {
++        splitePattern = splitPunc.trim() + "\\s+";
++    }
++    _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++}
++
++private static String normalizeRepeatedSeparatorsAfterPrefix(String path) {
++    if (path == null || path.length() < 3) {
++        return path;
++    }
++
++    int prefixEnd = 0;
++    if (path.startsWith("\\\\") || path.startsWith("//")) {
++        prefixEnd = 2;
++    }
++    else if (path.length() >= 2 && path.charAt(1) == ':') {
++        prefixEnd = 2;
++        if (path.length() >= 3 && (path.charAt(2) == '/' || path.charAt(2) == '\\')) {
++            prefixEnd = 3;
++        }
++    }
++    else if (path.charAt(0) == '/' || path.charAt(0) == '\\') {
++        prefixEnd = 1;
++    }
++
++    StringBuilder result = new StringBuilder(path.length());
++    result.append(path, 0, prefixEnd);
++
++    boolean lastWasSeparator = false;
++    for (int i = prefixEnd; i < path.length(); i++) {
++        char ch = path.charAt(i);
++        boolean separator = ch == '/' || ch == '\\';
++        if (separator) {
++            if (!lastWasSeparator) {
++                result.append(ch);
++                lastWasSeparator = true;
++            }
+         }
+         else {
+-            splitePattern = splitPunc.trim() + "\\s+";
++            result.append(ch);
++            lastWasSeparator = false;
+         }
+-        _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
+     }
+ 
++    return result.toString();
++}
+     private BufferedReader getReader() throws Exception {
+         if (_filename == null || _filename.isEmpty()) {
+             LOG.debug("No input file is specified");

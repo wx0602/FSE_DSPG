@@ -1,0 +1,61 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..387bd4d 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -59,6 +59,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        validateBase64(encrypted);
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -79,6 +80,48 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    /**
++     * Rejects non-canonical Base64 inputs before the pinned Commons Codec decoder
++     * can silently discard non-zero trailing bits or invalid characters.
++     */
++    private static void validateBase64(String value) {
++        if (value == null || value.length() == 0 || value.length() % 4 != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        int padding = value.endsWith("==") ? 2 : value.endsWith("=") ? 1 : 0;
++        int dataLength = value.length() - padding;
++        for (int i = 0; i < dataLength; i++) {
++            char c = value.charAt(i);
++            if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
++                    || (c >= '0' && c <= '9') || c == '+' || c == '/')) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        for (int i = dataLength; i < value.length(); i++) {
++            if (value.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        int lastValue = base64Value(value.charAt(dataLength - 1));
++        if ((padding == 2 && (lastValue & 0x0F) != 0)
++                || (padding == 1 && (lastValue & 0x03) != 0)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++    }
++
++    private static int base64Value(char c) {
++        if (c >= 'A' && c <= 'Z') {
++            return c - 'A';
++        }
++        if (c >= 'a' && c <= 'z') {
++            return c - 'a' + 26;
++        }
++        if (c >= '0' && c <= '9') {
++            return c - '0' + 52;
++        }
++        return c == '+' ? 62 : 63;
++    }
++
+     /**
+      * 生成加密秘钥
+      *

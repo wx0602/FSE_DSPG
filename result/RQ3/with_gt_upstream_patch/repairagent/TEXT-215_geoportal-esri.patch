@@ -1,0 +1,12 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a1318..99966d1 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -35,6 +35,7 @@ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+   static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
++  // Match decimal and hexadecimal numeric entities separately so decimal entities stop before A-F.
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+   /**

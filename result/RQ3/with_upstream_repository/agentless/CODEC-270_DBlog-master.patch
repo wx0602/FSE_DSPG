@@ -1,0 +1,45 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 45ad155..5b64b2f 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -21,6 +21,8 @@ import java.security.SecureRandom;
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final Pattern BASE64_PATTERN = Pattern.compile("^[A-Za-z0-9+/]*={0,2}$");
++    private static final Decoder STRICT_BASE64_DECODER = java.util.Base64.getDecoder();
+ 
+     /**
+      * AES加密
+@@ -59,7 +61,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
+-        byte[] decoded = Base64.decodeBase64(encrypted);
++        byte[] decoded = strictDecodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+         }
+@@ -79,6 +81,16 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static byte[] strictDecodeBase64(String encrypted) {
++        if (encrypted == null || encrypted.isEmpty()) {
++            return new byte[0];
++        }
++        if ((encrypted.length() & 3) != 0 || !BASE64_PATTERN.matcher(encrypted).matches()) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        return STRICT_BASE64_DECODER.decode(encrypted);
++    }
++
+     /**
+      * 生成加密秘钥
+      *
+@@ -101,4 +113,4 @@ public class AesUtil {
+         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
+     }
+ 
+-}
++}

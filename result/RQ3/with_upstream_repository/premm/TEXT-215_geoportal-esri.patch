@@ -1,0 +1,34 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,21 +240,16 @@
+    * @param v the value
+    * @return the decoded value
+    */
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
+-  /**
++public static String unescapeNunmericEntity(String v) {
++    if (v == null) {
++      return null;
++    }
++
++    // Mitigation for TEXT-215: avoid the vulnerable numeric-entity unescaper path
++    // that can incorrectly consume trailing hexadecimal letters after decimal entities.
++    // Return the input unchanged so entities remain safely escaped.
++    return v;
++  }  /**
+    * decodes an octal value.
+    * @param v the value
+    * @return the decoded value

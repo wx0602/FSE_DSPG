@@ -1,0 +1,23 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -124,6 +124,20 @@
+             throw new ResourceNotFoundException ( msg );
+         }
+ 
++        int prefix = FilenameUtils.getPrefixLength(template);
++        for (int i = Math.max(prefix, 1); i < template.length(); i++)
++        {
++            if (template.charAt(i) == '/' && template.charAt(i - 1) == '/')
++            {
++                String msg = "File resource error: argument " + templateName +
++                        " contains an ambiguous path separator sequence. Rejected.";
++
++                log.error("FileResourceLoader: {}", msg);
++
++                throw new ResourceNotFoundException ( msg );
++            }
++        }
++
+         int size = paths.size();
+         for (String path : paths)
+         {

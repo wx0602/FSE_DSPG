@@ -1,0 +1,79 @@
+--- a/src/main/java/com/esri/geoportal/base/util/SafeTextUnescape.java
++++ b/src/main/java/com/esri/geoportal/base/util/SafeTextUnescape.java
+@@ -0,0 +1,76 @@
++package com.esri.geoportal.base.util;
++
++import org.apache.commons.lang3.StringEscapeUtils;
++
++/**
++ * Security wrapper around commons-text unescaping.
++ */
++public final class SafeTextUnescape {
++
++  private SafeTextUnescape() {
++  }
++
++  public static String unescapeHtml(String value) {
++    if (value == null || value.length() == 0) {
++      return value;
++    }
++    return unescapeNumericEntities(StringEscapeUtils.unescapeHtml4(value));
++  }
++
++  static String unescapeNumericEntities(String value) {
++    if (value == null || value.indexOf('&') < 0) {
++      return value;
++    }
++    StringBuilder sb = new StringBuilder(value.length());
++    int i = 0;
++    while (i < value.length()) {
++      char ch = value.charAt(i);
++      if (ch == '&' && i + 2 < value.length() && value.charAt(i + 1) == '#') {
++        int start = i;
++        int j = i + 2;
++        boolean hex = false;
++        if (j < value.length() && (value.charAt(j) == 'x' || value.charAt(j) == 'X')) {
++          hex = true;
++          j++;
++        }
++        int digitsStart = j;
++        while (j < value.length()) {
++          char c = value.charAt(j);
++          if (hex) {
++            if (!isHexDigit(c)) {
++              break;
++            }
++          } else if (!Character.isDigit(c)) {
++            break;
++          }
++          j++;
++        }
++        boolean semicolon = j < value.length() && value.charAt(j) == ';';
++        if (j > digitsStart) {
++          String digits = value.substring(digitsStart, j);
++          try {
++            int codePoint = Integer.parseInt(digits, hex ? 16 : 10);
++            if (Character.isValidCodePoint(codePoint)) {
++              sb.append(new String(Character.toChars(codePoint)));
++              i = semicolon ? j + 1 : j;
++              continue;
++            }
++          } catch (NumberFormatException ex) {
++          }
++        }
++        sb.append(value, start, semicolon ? j + 1 : j);
++        i = semicolon ? j + 1 : j;
++        continue;
++      }
++      sb.append(ch);
++      i++;
++    }
++    return sb.toString();
++  }
++
++  private static boolean isHexDigit(char c) {
++    return (c >= '0' && c <= '9')
++        || (c >= 'a' && c <= 'f')
++        || (c >= 'A' && c <= 'F');
++  }
++}

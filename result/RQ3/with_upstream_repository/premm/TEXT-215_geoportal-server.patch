@@ -1,0 +1,69 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -237,21 +237,51 @@
+    * @param v the value
+    * @return the decoded value
+    */
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
+-  /**
++public static String unescapeNunmericEntity(String v) {
++    if (v != null) {
++      try {
++        // Mitigation for TEXT-215: avoid vulnerable numeric-entity parsing behavior
++        // that can incorrectly consume trailing hex characters (e.g. "&#106a").
++        // We only unescape well-formed numeric entities with an explicit semicolon.
++        StringBuilder out = new StringBuilder(v.length());
++        for (int i = 0; i < v.length(); i++) {
++          char c = v.charAt(i);
++          if (c == '&' && i + 2 < v.length() && v.charAt(i + 1) == '#' ) {
++            int j = i + 2;
++            boolean hex = false;
++            if (j < v.length() && (v.charAt(j) == 'x' || v.charAt(j) == 'X')) {
++              hex = true;
++              j++;
++            }
++            int start = j;
++            while (j < v.length()) {
++              char ch = v.charAt(j);
++              if (hex ? Character.digit(ch, 16) != -1 : Character.isDigit(ch)) {
++                j++;
++              } else {
++                break;
++              }
++            }
++            if (j < v.length() && v.charAt(j) == ';' && j > start) {
++              try {
++                int codePoint = Integer.parseInt(v.substring(start, j), hex ? 16 : 10);
++                out.append(Character.toChars(codePoint));
++                i = j; // skip semicolon; loop will advance past it
++                continue;
++              } catch (RuntimeException ex) {
++                // fall through and preserve original text if parsing fails
++              }
++            }
++          }
++          out.append(c);
++        }
++        return out.toString();
++      } catch (RuntimeException var3) {
++        throw var3;
++      }
++    }
++    return v;
++  }  /**
+    * decodes an octal value.
+    * @param v the value
+    * @return the decoded value

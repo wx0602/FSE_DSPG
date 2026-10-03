@@ -1,0 +1,7 @@
+diff --git a/this_is_invisible.py b/this_is_invisible.py
+new file mode 100644
+index 0000000..e69de29
+--- /dev/null
++++ b/this_is_invisible.py
+@@ -0,0 +1 @@
++# This is a commented out line

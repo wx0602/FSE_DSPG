@@ -1,0 +1,131 @@
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -27,21 +27,119 @@
+     private final BufferedReader _reader;
+     private final Splitter _splitter;
+ 
+-    public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
+-        System.out.println(_filename);
+-        _reader = getReader();
++public FileReader(String filename, String splitPunc) throws Exception {
++    _filename = normalizeSecure(filename);
++    System.out.println(_filename);
++    _reader = getReader();
+ 
+-        String splitePattern;
+-        if (splitPunc == null || splitPunc.trim().isEmpty()) {
+-            splitePattern = DEFAULT_SPLIT_PATTERN;
++    String splitePattern;
++    if (splitPunc == null || splitPunc.trim().isEmpty()) {
++        splitePattern = DEFAULT_SPLIT_PATTERN;
++    }
++    else {
++        splitePattern = splitPunc.trim() + "\\s+";
++    }
++    _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++}
++
++private static String normalizeSecure(String filename) {
++    String normalized = normalize(filename);
++    if (normalized == null) {
++        return null;
++    }
++
++    int prefixLen = getUnsafePrefixLength(normalized);
++    if (prefixLen < 0) {
++        return normalized;
++    }
++
++    if (normalized.length() <= prefixLen) {
++        return normalized;
++    }
++
++    String prefix = normalized.substring(0, prefixLen);
++    String remainder = normalized.substring(prefixLen);
++    remainder = remainder.replace('\\', '/');
++    remainder = remainder.replaceAll("/{2,}", "/");
++    return prefix + remainder;
++}
++
++private static int getUnsafePrefixLength(String filename) {
++    if (filename == null) {
++        return -1;
++    }
++    int len = filename.length();
++    if (len == 0) {
++        return 0;
++    }
++
++    char ch0 = filename.charAt(0);
++    if (ch0 == ':' ) {
++        return -1;
++    }
++    if (len == 1) {
++        if (ch0 == '~') {
++            return 2;
++        }
++        return isSeparator(ch0) ? 1 : 0;
++    }
++
++    if (ch0 == '~') {
++        int posUnix = filename.indexOf('/', 1);
++        int posWin = filename.indexOf('\\', 1);
++        int pos;
++        if (posUnix == -1 && posWin == -1) {
++            pos = -1;
++        }
++        else if (posUnix == -1) {
++            pos = posWin;
++        }
++        else if (posWin == -1) {
++            pos = posUnix;
+         }
+         else {
+-            splitePattern = splitPunc.trim() + "\\s+";
++            pos = Math.min(posUnix, posWin);
+         }
+-        _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++        return pos == -1 ? len + 1 : pos + 1;
+     }
+ 
++    char ch1 = filename.charAt(1);
++    if (ch1 == ':') {
++        char ch0u = Character.toUpperCase(ch0);
++        if (ch0u >= 'A' && ch0u <= 'Z') {
++            if (len == 2 || !isSeparator(filename.charAt(2))) {
++                return 2;
++            }
++            return 3;
++        }
++        return -1;
++    }
++
++    if (isSeparator(ch0) && isSeparator(ch1)) {
++        int posUnix = filename.indexOf('/', 2);
++        int posWin = filename.indexOf('\\', 2);
++        int pos;
++        if (posUnix == -1 && posWin == -1) {
++            return -1;
++        }
++        else if (posUnix == -1) {
++            pos = posWin;
++        }
++        else if (posWin == -1) {
++            pos = posUnix;
++        }
++        else {
++            pos = Math.min(posUnix, posWin);
++        }
++        return pos + 1;
++    }
++
++    return isSeparator(ch0) ? 1 : 0;
++}
++
++private static boolean isSeparator(char ch) {
++    return ch == '/' || ch == '\\';
++}
+     private BufferedReader getReader() throws Exception {
+         if (_filename == null || _filename.isEmpty()) {
+             LOG.debug("No input file is specified");

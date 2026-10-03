@@ -1,0 +1,19 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 0000000..0000000 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -10,3 +10,11 @@
+-	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
+-	}
++public static String toFixedDecimal(String value, int scale) {
++		String normalizedValue = value;
++		if (value != null && value.length() > 2 && value.charAt(0) == '+') {
++			char prefix = value.charAt(1);
++			if ((prefix == '0' && value.length() > 3 && (value.charAt(2) == 'x' || value.charAt(2) == 'X'))
++					|| prefix == '#') {
++				normalizedValue = value.substring(1);
++			}
++		}
++		return toFixedDecimal(NumberUtils.createNumber(normalizedValue), scale);
++	}

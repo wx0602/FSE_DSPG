@@ -1,0 +1,17 @@
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -1,5 +1,6 @@
+ package ZingClient.zing.client.file;
+ 
++import java.util.Objects;
+ import net.lingala.zip4j.ZipFile;
+ import net.lingala.zip4j.exception.ZipException;
+ import net.lingala.zip4j.io.inputstream.ZipInputStream;
+@@ -25,6 +26,7 @@
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
++        Objects.requireNonNull(file, "file");
+         this.file = new ZipFile(file);
+         this.password = password;
+         if (!this.file.isValidZipFile()) {

@@ -1,0 +1,45 @@
+defaults:
+  model_name: gpt-4o
+  deployment_image: python:3.12
+
+cases:
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2020-26217_xstream
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2020-26217_xstream.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2021-23899_json-sanitizer
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2021-23899_json-sanitizer.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2021-23900_json-sanitizer
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2021-23900_json-sanitizer.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2021-27568_json-smart
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2021-27568_json-smart.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2021-29425_commons-io
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2021-29425_commons-io.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2021-31812_pdfbox
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2021-31812_pdfbox.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2021-35516_commons-compress
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2021-35516_commons-compress.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2021-37714_jsoup
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2021-37714_jsoup.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2021-43859_xstream
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2021-43859_xstream.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2022-25845_fastjson
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2022-25845_fastjson.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2022-41966_xstream
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2022-41966_xstream.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2022-42004_jackson-databind
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2022-42004_jackson-databind.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2022-42899_commons-text
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2022-42899_commons-text.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2022-45688_json
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2022-45688_json.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2023-1370_json-smart
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2023-1370_json-smart.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2023-34453_snappy-java
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2023-34453_snappy-java.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/CVE-2023-43642_snappy-java
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_CVE-2023-43642_snappy-java.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/IO-611_commons-io
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_IO-611_commons-io.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/LANG-1385_commons-lang3
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_LANG-1385_commons-lang3.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/origin/LANG-1645_commons-lang3
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/issue19/origin_LANG-1645_commons-lang3.md

@@ -1,0 +1,18 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -123,6 +123,15 @@
+ 
+             throw new ResourceNotFoundException ( msg );
+         }
++        if (template.startsWith("//") || template.contains("\\\\") || template.contains("//"))
++        {
++            String msg = "File resource error: argument " + templateName +
++                    " is an ambiguous path and was rejected.";
++
++            log.error("FileResourceLoader: {}", msg);
++
++            throw new ResourceNotFoundException ( msg );
++        }
+ 
+         int size = paths.size();
+         for (String path : paths)

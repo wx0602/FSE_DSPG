@@ -1,0 +1,22 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index a804a6d..ac5d98c 100644
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -2,7 +2,6 @@ package ZingClient.zing.client.file;
+ 
+ import net.lingala.zip4j.ZipFile;
+ import net.lingala.zip4j.exception.ZipException;
+-import net.lingala.zip4j.io.inputstream.ZipInputStream;
+ import net.lingala.zip4j.model.FileHeader;
+ import net.lingala.zip4j.model.ZipParameters;
+ import net.lingala.zip4j.model.enums.*;
+@@ -25,6 +24,9 @@ public class ZFile {
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
++        if (file == null) {
++            throw new ZipException("文件不能为空.");
++        }
+         this.file = new ZipFile(file);
+         this.password = password;
+         if (!this.file.isValidZipFile()) {

@@ -1,0 +1,20 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index 0000000..0000000 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -118,3 +118,12 @@
+-	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
+-	}
++public static Number createNumber(String str) {
++		if (str != null) {
++			String value = str.trim();
++			if (value.length() == 1) {
++				char ch = value.charAt(0);
++				if (ch == 'L' || ch == 'l' || ch == 'F' || ch == 'f' || ch == 'D' || ch == 'd') {
++					throw new NumberFormatException(str + " is not a valid number.");
++				}
++			}
++		}
++		return NumberUtils.createNumber(str);
++	}

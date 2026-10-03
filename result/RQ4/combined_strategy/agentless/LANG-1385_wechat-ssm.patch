@@ -1,0 +1,38 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 5f00669..2925e14 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,3 +1,4 @@
++
+ package cn.qs.utils.format;
+ 
+ import java.math.RoundingMode;
+@@ -8,7 +9,7 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +21,18 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createNumber(value), scale);
++	}
++
++	private static Number createNumber(String value) {
++		try {
++			return NumberUtils.createNumber(value);
++		} catch (StringIndexOutOfBoundsException exception) {
++			NumberFormatException numberFormatException =
++					new NumberFormatException("Invalid number: " + value);
++			numberFormatException.initCause(exception);
++			throw numberFormatException;
++		}
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {

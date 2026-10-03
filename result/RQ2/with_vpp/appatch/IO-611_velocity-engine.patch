@@ -1,0 +1,64 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -111,8 +111,7 @@
+             throw new ResourceNotFoundException(
+                     "Need to specify a file name or file path!");
+         }
+-
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeTemplatePath(templateName);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +174,7 @@
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeTemplatePath(name);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+@@ -365,4 +364,42 @@
+ 
+         return file;
+     }
++
++    /**
++     * Normalizes a template path while collapsing repeated separators that
++     * commons-io 2.6 may leave behind after a prefix.
++     *
++     * @param templateName input template name
++     * @return normalized template path or null if rejected
++     */
++    protected String normalizeTemplatePath(final String templateName)
++    {
++        String sanitized = sanitizeRepeatedSeparators(templateName);
++        if (sanitized == null)
++        {
++            return null;
++        }
++        return FilenameUtils.normalize(sanitized, true);
++    }
++
++    private String sanitizeRepeatedSeparators(final String path)
++    {
++        if (path == null)
++        {
++            return null;
++        }
++        StringBuilder normalized = new StringBuilder(path.length());
++        char previous = 0;
++        for (int i = 0; i < path.length(); i++)
++        {
++            char current = path.charAt(i);
++            if ((current == '/' || current == '\\') && (previous == '/' || previous == '\\'))
++            {
++                continue;
++            }
++            normalized.append(current);
++            previous = current;
++        }
++        return normalized.toString();
++    }
+ }

@@ -1,0 +1,40 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..210c0d6 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,11 +112,11 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = sanitizeTemplateName(templateName);
+         if ( template == null || template.length() == 0 )
+         {
+-            String msg = "File resource error: argument " + template +
+-                    " contains .. and may be trying to access " +
++            String msg = "File resource error: argument " + templateName +
++                    " contains invalid path segments or repeated slashes and may be trying to access " +
+                     "content outside of template root.  Rejected.";
+ 
+             log.error("FileResourceLoader: {}", msg);
+@@ -365,4 +365,20 @@ private File getFile(String path, String template)
+ 
+         return file;
+     }
++
++    private String sanitizeTemplateName(String templateName)
++    {
++        String normalized = FilenameUtils.normalize(templateName, true);
++        if (normalized == null)
++        {
++            return null;
++        }
++
++        if (templateName.startsWith("//") || templateName.startsWith("\\\\"))
++        {
++            return null;
++        }
++
++        return normalized;
++    }
+ }

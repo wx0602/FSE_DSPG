@@ -1,0 +1,179 @@
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,11 +1,16 @@
+ package cn.qs.utils.format;
+ 
++import java.math.BigInteger;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
++import org.apache.commons.lang3.StringUtils;
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
++
++	private static final String[] HEX_PREFIXES = new String[] { "0x", "0X", "#" };
++	private static final String[] OCTAL_PREFIXES = new String[] { "0" };
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+ 		return toFixedDecimal(NumberUtils.createNumber(value), scale);
+@@ -16,7 +21,68 @@
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+ 
+-		return numberFormat.format(value);
++		return numberFormat.format(value == null ? 0 : value);
++	}
++
++	public static Number createNumber(String value) {
++		return createNumberCompat(value);
++	}
++
++	public static Number createNumberCompat(String value) {
++		if (StringUtils.isBlank(value)) {
++			return NumberUtils.createNumber(value);
++		}
++		String normalized = normalizeLeadingPlusForRadixPrefixedInteger(value);
++		return NumberUtils.createNumber(normalized);
++	}
++
++	public static float toFloat(String value, float defaultValue) {
++		if (StringUtils.isBlank(value)) {
++			return defaultValue;
++		}
++		try {
++			return createNumberCompat(value).floatValue();
++		} catch (RuntimeException ex) {
++			return defaultValue;
++		}
++	}
++
++	private static String normalizeLeadingPlusForRadixPrefixedInteger(String value) {
++		String str = StringUtils.trim(value);
++		if (StringUtils.length(str) < 2 || str.charAt(0) != '+') {
++			return str;
++		}
++		String unsigned = str.substring(1);
++		if (startsWithAny(unsigned, HEX_PREFIXES) || isOctalValue(unsigned)) {
++			return unsigned;
++		}
++		return str;
++	}
++
++	private static boolean isOctalValue(String value) {
++		if (!value.startsWith("0") || value.length() <= 1) {
++			return false;
++		}
++		char lastChar = value.charAt(value.length() - 1);
++		if (lastChar == 'l' || lastChar == 'L') {
++			value = value.substring(0, value.length() - 1);
++		}
++		for (int i = 1; i < value.length(); i++) {
++			char ch = value.charAt(i);
++			if (ch < '0' || ch > '7') {
++				return false;
++			}
++		}
++		return true;
++	}
++
++	private static boolean startsWithAny(String value, String[] prefixes) {
++		for (String prefix : prefixes) {
++			if (value.startsWith(prefix)) {
++				return true;
++			}
++		}
++		return false;
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+@@ -28,7 +94,7 @@
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+ 
+-		return numberFormat.format(value);
++		return numberFormat.format(value == null ? 0 : value);
+ 	}
+ 
+ 	public static void main(String[] args) {
+--- a/src/main/java/cn/qs/utils/user/UserUtils.java
++++ b/src/main/java/cn/qs/utils/user/UserUtils.java
+@@ -1,6 +1,4 @@
+ package cn.qs.utils.user;
+-
+-import org.apache.commons.lang3.math.NumberUtils;
+ 
+ import cn.qs.bean.user.User;
+ import cn.qs.utils.DefaultValue;
+@@ -18,7 +16,7 @@
+ 
+ 		// 设置第一次登陆的优惠金额
+ 		if (user.getCoupon() == null) {
+-			user.setCoupon(NumberUtils.toFloat(MySystemUtils.getProperty("coupon", "0")));
++			user.setCoupon(MyNumberUtils.toFloat(MySystemUtils.getProperty("coupon", "0"), 0F));
+ 		}
+ 		user.setWechataddress("中国北京");
+ 		user.setWechatnickname(user.getFullname());
+--- a/src/main/java/cn/qs/utils/user/UserUtils.java
++++ b/src/main/java/cn/qs/utils/user/UserUtils.java
+@@ -4,6 +4,7 @@
+ 
+ import cn.qs.bean.user.User;
+ import cn.qs.utils.DefaultValue;
++import cn.qs.utils.format.MyNumberUtils;
+ import cn.qs.utils.system.MySystemUtils;
+ 
+ public class UserUtils {
+--- a/src/main/java/cn/qs/controller/system/SettingsController.java
++++ b/src/main/java/cn/qs/controller/system/SettingsController.java
+@@ -1,6 +1,5 @@
+ package cn.qs.controller.system;
+ 
+-import org.apache.commons.lang3.math.NumberUtils;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ import org.springframework.web.bind.annotation.RequestMapping;
+@@ -8,6 +7,7 @@
+ 
+ import cn.qs.utils.JSONResultUtil;
+ import cn.qs.utils.format.ArithUtils;
++import cn.qs.utils.format.MyNumberUtils;
+ import cn.qs.utils.system.MySystemUtils;
+ 
+ @RequestMapping("settings")
+@@ -19,7 +19,7 @@
+ 	@RequestMapping("getProperty")
+ 	public JSONResultUtil<Float> getProperty(String key) {
+ 		String propertyValue = MySystemUtils.getProperty(key);
+-		float amount = NumberUtils.toFloat(propertyValue, 0);
++		float amount = MyNumberUtils.toFloat(propertyValue, 0F);
+ 		Float formatedAmount = ArithUtils.format(amount, 2);
+ 		return new JSONResultUtil<Float>(true, "ok", formatedAmount);
+ 	}
+--- a/src/main/java/cn/qs/controller/weixin/WeixinAuthController.java
++++ b/src/main/java/cn/qs/controller/weixin/WeixinAuthController.java
+@@ -9,7 +9,6 @@
+ 
+ import org.apache.commons.collections.MapUtils;
+ import org.apache.commons.lang3.StringUtils;
+-import org.apache.commons.lang3.math.NumberUtils;
+ import org.slf4j.Logger;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Controller;
+@@ -29,6 +28,7 @@
+ import cn.qs.utils.HttpUtils;
+ import cn.qs.utils.JSONResultUtil;
+ import cn.qs.utils.securty.MD5Utils;
++import cn.qs.utils.format.MyNumberUtils;
+ import cn.qs.utils.system.MySystemUtils;
+ import cn.qs.utils.weixin.WeixinConstants;
+ import cn.qs.utils.weixin.WeixinInterfaceUtils;
+@@ -168,7 +168,7 @@
+ 			user.setWechatphoto(wechatUser.getHeadimgurl());
+ 
+ 			// 设置第一次登陆的优惠金额
+-			user.setCoupon(NumberUtils.toFloat(MySystemUtils.getProperty("coupon", "0")));
++			user.setCoupon(MyNumberUtils.toFloat(MySystemUtils.getProperty("coupon", "0"), 0F));
+ 
+ 			logger.debug("create user", user);
+ 			userService.add(user);

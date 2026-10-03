@@ -1,0 +1,63 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..836815d 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,6 +113,7 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
++        validateBase64TrailingBits(str);
+         return Base64.decodeBase64(str);
+     }
+ 
+@@ -157,6 +158,50 @@ public class Utils {
+         return dataBytes;
+     }
+ 
++    private static void validateBase64TrailingBits(String base64Str) {
++        if (base64Str == null) {
++            return;
++        }
++
++        String normalized = base64Str.replaceAll("\\s", "");
++        int padIndex = normalized.indexOf('=');
++        if (padIndex < 0) {
++            return;
++        }
++
++        String data = normalized.substring(0, padIndex);
++        int remainder = data.length() % 4;
++        if (remainder == 0) {
++            return;
++        }
++
++        char last = data.charAt(data.length() - 1);
++        int value = decodeBase64Value(last);
++        int mask = (1 << (4 - remainder)) - 1;
++        if ((value & mask) != 0) {
++            throw new IllegalArgumentException("Last encoded character (before the paddings if any) is a valid base 64 alphabet but not a possible value");
++        }
++    }
++
++    private static int decodeBase64Value(char c) {
++        if (c >= 'A' && c <= 'Z') {
++            return c - 'A';
++        }
++        if (c >= 'a' && c <= 'z') {
++            return c - 'a' + 26;
++        }
++        if (c >= '0' && c <= '9') {
++            return c - '0' + 52;
++        }
++        if (c == '+') {
++            return 62;
++        }
++        if (c == '/') {
++            return 63;
++        }
++        throw new IllegalArgumentException("Invalid Base64 character: " + c);
++    }
++
+     public static String[] GetPublicKeyFormats() {
+         ArrayList<String> strs = new ArrayList<String>();
+         PublicKeyFormat[] items = PublicKeyFormat.values();

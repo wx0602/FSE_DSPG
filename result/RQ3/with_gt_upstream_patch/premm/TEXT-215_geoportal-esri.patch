@@ -1,0 +1,82 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,21 +240,70 @@
+    * @param v the value
+    * @return the decoded value
+    */
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
++public static String unescapeNunmericEntity(String v) {
++    if (v != null) {
+       try {
+         StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
++        int seqEnd = v.length();
++        for (int index = 0; index < seqEnd; index++) {
++          char ch = v.charAt(index);
++          if (ch == '&' && index < seqEnd - 2 && v.charAt(index + 1) == '#') {
++            int start = index + 2;
++            boolean isHex = false;
++
++            if (start < seqEnd) {
++              char firstChar = v.charAt(start);
++              if (firstChar == 'x' || firstChar == 'X') {
++                start++;
++                isHex = true;
++                if (start == seqEnd) {
++                  writer.write(ch);
++                  continue;
++                }
++              }
++            }
++
++            int end = start;
++            while (end < seqEnd) {
++              char entityChar = v.charAt(end);
++              if (entityChar >= '0' && entityChar <= '9') {
++                end++;
++                continue;
++              }
++              if (isHex && ((entityChar >= 'a' && entityChar <= 'f') || (entityChar >= 'A' && entityChar <= 'F'))) {
++                end++;
++                continue;
++              }
++              break;
++            }
++
++            boolean semiNext = end < seqEnd && v.charAt(end) == ';';
++            if (end > start && (semiNext || end < seqEnd)) {
++              try {
++                int entityValue = Integer.parseInt(v.substring(start, end), isHex ? 16 : 10);
++                if (entityValue > 0xFFFF) {
++                  char[] chrs = Character.toChars(entityValue);
++                  writer.write(chrs[0]);
++                  writer.write(chrs[1]);
++                } else {
++                  writer.write(entityValue);
++                }
++                index = end + (semiNext ? 1 : 0) - 1;
++                continue;
++              } catch (NumberFormatException ignored) {
++                // Fall through and copy the original text unchanged.
++              }
++            }
++          }
++          writer.write(ch);
++        }
+         return writer.toString();
+       } catch (IOException var3) {
+         throw new RuntimeException(var3);
+       }
+-
+-    }
+-    return v;
+-  }
+-  /**
++    }
++    return v;
++  }  /**
+    * decodes an octal value.
+    * @param v the value
+    * @return the decoded value

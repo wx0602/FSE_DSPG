@@ -1,0 +1,3 @@
+String string0 = "cn.qs.utils.format.MyNumberUtils";
+int int0 = 0;
+String string1 = MyNumberUtils.toFixedDecimalWithPercent(string0, int0);

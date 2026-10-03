@@ -1,0 +1,3 @@
++0xF
+com.fr.chain.utils.NumberUtil
+createNumber

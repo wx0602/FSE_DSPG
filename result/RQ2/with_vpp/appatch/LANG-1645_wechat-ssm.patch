@@ -1,0 +1,68 @@
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,5 +1,6 @@
+ package cn.qs.utils.format;
+ 
++import java.math.BigInteger;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
+@@ -8,7 +9,7 @@
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createCompatibleNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +21,7 @@
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createCompatibleNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
+@@ -31,6 +32,40 @@
+ 		return numberFormat.format(value);
+ 	}
+ 
++	private static Number createCompatibleNumber(String value) {
++		if (value == null) {
++			throw new NumberFormatException("A null string is not a valid number");
++		}
++
++		if (hasPositiveHexPrefix(value)) {
++			return parsePositiveHexNumber(value);
++		}
++
++		return NumberUtils.createNumber(value);
++	}
++
++	private static boolean hasPositiveHexPrefix(String value) {
++		return value.startsWith("+0x") || value.startsWith("+0X") || value.startsWith("+#");
++	}
++
++	private static Number parsePositiveHexNumber(String value) {
++		if (value.length() <= 3) {
++			throw new NumberFormatException(value + " is not a valid number.");
++		}
++
++		String normalized = value.substring(1);
++		try {
++			return NumberUtils.createInteger(normalized);
++		} catch (NumberFormatException ex) {
++			try {
++				return NumberUtils.createLong(normalized);
++			} catch (NumberFormatException ignored) {
++				String digits = normalized.startsWith("#") ? normalized.substring(1) : normalized.substring(2);
++				return new BigInteger(digits, 16);
++			}
++		}
++	}
++
+ 	public static void main(String[] args) {
+ 		float F2 = 105858.5328F;
+ 		System.out.println(ArithUtils.format(F2, 2));

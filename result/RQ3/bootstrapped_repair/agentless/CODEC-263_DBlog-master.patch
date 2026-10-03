@@ -1,0 +1,36 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/RequestUtil.java b/blog-core/src/main/java/com/zyd/blog/util/RequestUtil.java
+index 1236ea6..8523115 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/RequestUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/RequestUtil.java
+@@ -4,6 +4,7 @@ import com.zyd.blog.framework.holder.RequestHolder;
+ 
+ import javax.servlet.http.HttpServletRequest;
+ import java.util.Enumeration;
++import java.util.Base64;
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+@@ -73,6 +74,17 @@ public class RequestUtil {
+         return request.getRequestURL().toString();
+     }
+ 
++    public static byte[] decodeBase64(String base64String) {
++        if (base64String == null || base64String.isEmpty()) {
++            return new byte[0];
++        }
++        try {
++            return Base64.getDecoder().decode(base64String);
++        } catch (IllegalArgumentException ex) {
++            return new byte[0];
++        }
++    }
++
+     public static String getMethod() {
+         HttpServletRequest request = RequestHolder.getRequest();
+         if (null == request) {
+@@ -93,4 +105,4 @@ public class RequestUtil {
+ 
+     }
+ 
+-}
++}

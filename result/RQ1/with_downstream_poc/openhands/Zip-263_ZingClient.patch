@@ -1,0 +1,22 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index a804a6d..85a1714 100644
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
+ import java.io.File;
+ import java.io.IOException;
+ import java.security.PrivateKey;
++import java.util.Objects;
+ 
+ public class ZFile {
+ 
+@@ -25,7 +26,8 @@ public class ZFile {
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
+-        this.file = new ZipFile(file);
++        File validatedFile = Objects.requireNonNull(file, "file must not be null");
++        this.file = new ZipFile(validatedFile);
+         this.password = password;
+         if (!this.file.isValidZipFile()) {
+             throw new ZipException("文件无法读取,可能已经被损坏.");

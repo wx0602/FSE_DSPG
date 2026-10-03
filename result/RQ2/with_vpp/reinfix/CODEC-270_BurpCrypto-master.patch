@@ -1,0 +1,69 @@
+diff --git a/src/main/java/burp/aes/AesUtil.java b/src/main/java/burp/aes/AesUtil.java
+index 0000000..0000000 100644
+--- a/src/main/java/burp/aes/AesUtil.java
++++ b/src/main/java/burp/aes/AesUtil.java
+@@ -33,8 +33,56 @@
+-    public String decrypt(String cipherText) {
+-        try {
+-            byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
+-            return new String(decrypted, "UTF-8");
+-        } catch (UnsupportedEncodingException e) {
+-            throw fail(e);
+-        }
+-    }
++public static byte[] base64(String data) {
++    if (data == null) {
++        throw new IllegalArgumentException("Base64 input must not be null");
++    }
++
++    int length = data.length();
++    if (length == 0 || (length % 4) != 0) {
++        throw new IllegalArgumentException("Malformed Base64 input");
++    }
++
++    int padding = 0;
++    if (data.charAt(length - 1) == '=') {
++        padding++;
++        if (data.charAt(length - 2) == '=') {
++            padding++;
++        }
++    }
++
++    for (int i = 0; i < length; i++) {
++        char ch = data.charAt(i);
++        if (ch == '=') {
++            if (i < length - padding) {
++                throw new IllegalArgumentException("Malformed Base64 padding");
++            }
++            continue;
++        }
++
++        boolean isUpper = ch >= 'A' && ch <= 'Z';
++        boolean isLower = ch >= 'a' && ch <= 'z';
++        boolean isDigit = ch >= '0' && ch <= '9';
++        boolean isSymbol = ch == '+' || ch == '/';
++        if (!(isUpper || isLower || isDigit || isSymbol)) {
++            throw new IllegalArgumentException("Illegal Base64 character");
++        }
++    }
++
++    if (padding > 2) {
++        throw new IllegalArgumentException("Malformed Base64 padding");
++    }
++
++    if (padding > 0) {
++        int sextetIndex = length - padding - 1;
++        int sextet = base64Value(data.charAt(sextetIndex));
++        if (padding == 1) {
++            if ((sextet & 0x03) != 0) {
++                throw new IllegalArgumentException("Non-canonical Base64 trailing bits");
++            }
++        } else {
++            if ((sextet & 0x0F) != 0) {
++                throw new IllegalArgumentException("Non-canonical Base64 trailing bits");
++            }
++        }
++    }
++
++    return Base64.decodeBase64(data);
++}

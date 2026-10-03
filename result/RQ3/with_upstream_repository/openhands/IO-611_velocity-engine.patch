@@ -1,0 +1,103 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..522a4c4 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.File;
+@@ -34,6 +33,9 @@
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.io.Reader;
++import java.nio.file.InvalidPathException;
++import java.nio.file.Path;
++import java.nio.file.Paths;
+ import java.util.ArrayList;
+ import java.util.Collections;
+ import java.util.HashMap;
+@@ -112,16 +114,16 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
+-        if ( template == null || template.length() == 0 )
++        String template = normalizeTemplateName(templateName);
++        if (template == null || template.length() == 0)
+         {
+-            String msg = "File resource error: argument " + template +
+-                    " contains .. and may be trying to access " +
+-                    "content outside of template root.  Rejected.";
++            String msg = "File resource error: argument " + templateName +
++                    " contains invalid or blocked path navigation and may be trying to access " +
++                    "content outside of template root. Rejected.";
+ 
+             log.error("FileResourceLoader: {}", msg);
+ 
+-            throw new ResourceNotFoundException ( msg );
++            throw new ResourceNotFoundException(msg);
+         }
+ 
+         int size = paths.size();
+@@ -175,7 +177,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeTemplateName(name);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+@@ -200,6 +202,48 @@ public boolean resourceExists(String name)
+         return false;
+     }
+ 
++    private String normalizeTemplateName(String templateName)
++    {
++        String normalizedSeparators = templateName.replace('\\', '/');
++        while (normalizedSeparators.startsWith("//"))
++        {
++            normalizedSeparators = normalizedSeparators.substring(1);
++        }
++        while (normalizedSeparators.startsWith("/"))
++        {
++            normalizedSeparators = normalizedSeparators.substring(1);
++        }
++
++        try
++        {
++            Path normalizedPath = Paths.get(normalizedSeparators).normalize();
++            if (normalizedPath.isAbsolute())
++            {
++                return null;
++            }
++
++            String normalized = normalizedPath.toString().replace(File.separatorChar, '/');
++            if (normalized.length() == 0 || ".".equals(normalized))
++            {
++                return null;
++            }
++
++            for (Path segment : normalizedPath)
++            {
++                if ("..".equals(segment.toString()))
++                {
++                    return null;
++                }
++            }
++
++            return normalized;
++        }
++        catch (InvalidPathException e)
++        {
++            return null;
++        }
++    }
++
+     /**
+      * Try to find a template given a normalized path.
+      *

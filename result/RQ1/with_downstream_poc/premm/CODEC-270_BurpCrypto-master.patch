@@ -1,0 +1,56 @@
+--- a/src/main/java/burp/aes/AesUtil.java
++++ b/src/main/java/burp/aes/AesUtil.java
+@@ -30,15 +30,47 @@
+         return Utils.encode(encrypted, config.OutFormat);
+     }
+ 
+-    public String decrypt(String cipherText) {
+-        try {
+-            byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
+-            return new String(decrypted, "UTF-8");
+-        } catch (UnsupportedEncodingException e) {
+-            throw fail(e);
++public String decrypt(String cipherText) {
++    try {
++        byte[] decodedCipherText = decodeStrictBase64(cipherText);
++        byte[] decrypted = crypto.decrypt(decodedCipherText);
++        return new String(decrypted, "UTF-8");
++    } catch (UnsupportedEncodingException e) {
++        throw fail(e);
++    }
++}
++
++private byte[] decodeStrictBase64(String cipherText) {
++    if (cipherText == null) {
++        throw new IllegalArgumentException("cipherText must not be null");
++    }
++
++    String normalized = cipherText.trim();
++    if (normalized.length() == 0) {
++        return new byte[0];
++    }
++
++    if ((normalized.length() & 3) != 0) {
++        throw new IllegalArgumentException("Invalid Base64 input length");
++    }
++
++    int paddingStart = normalized.indexOf('=');
++    if (paddingStart >= 0) {
++        for (int i = paddingStart; i < normalized.length(); i++) {
++            if (normalized.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 padding");
++            }
+         }
+     }
+ 
++    byte[] decoded = Utils.base64(normalized);
++    String reencoded = java.util.Base64.getEncoder().encodeToString(decoded);
++    if (!normalized.equals(reencoded)) {
++        throw new IllegalArgumentException("Invalid Base64 trailing bits");
++    }
++
++    return decoded;
++}
+     private IllegalStateException fail(Exception e) {
+         return new IllegalStateException(e);
+     }

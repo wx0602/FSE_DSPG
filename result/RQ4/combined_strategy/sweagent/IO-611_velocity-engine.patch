@@ -1,0 +1,106 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..804fefb 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,8 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = FilenameUtils.normalize(
++                ResourcePathUtils.collapseDuplicateSeparators(templateName), true );
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +176,8 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = FilenameUtils.normalize(
++                ResourcePathUtils.collapseDuplicateSeparators(name));
+         if (name == null || name.length() == 0)
+         {
+             return false;
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a55270..de33ce5 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -186,7 +186,8 @@ public Reader getResourceReader( String source, String encoding )
+         }
+         System.out.println("we get"+result);
+ 
+-        String normalizedPath = FilenameUtils.normalize( source, true );
++        String normalizedPath = FilenameUtils.normalize(
++                ResourcePathUtils.collapseDuplicateSeparators(source), true );
+ 
+         System.out.println("we make"+normalizedPath);
+ 
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java
+new file mode 100644
+index 0000000..e997516
+--- /dev/null
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java
+@@ -0,0 +1,62 @@
++/*
++ * Licensed to the Apache Software Foundation (ASF) under one or more
++ * contributor license agreements.  See the NOTICE file distributed with
++ * this work for additional information regarding copyright ownership.
++ * The ASF licenses this file to You under the Apache License, Version 2.0
++ * (the "License"); you may not use this file except in compliance with
++ * the License.  You may obtain a copy of the License at
++ *
++ *   http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.apache.velocity.runtime.resource.loader;
++
++/** Utilities for sanitizing resource paths before legacy path normalization. */
++final class ResourcePathUtils
++{
++    private ResourcePathUtils()
++    {
++    }
++
++    /**
++     * Removes redundant separators while retaining a leading UNC separator
++     * pair. Commons IO 2.6 otherwise leaves duplicate separators after that
++     * prefix in its normalized result.
++     */
++    static String collapseDuplicateSeparators(String path)
++    {
++        StringBuilder result = new StringBuilder(path.length());
++        int leadingSeparators = 0;
++        while (leadingSeparators < path.length()
++                && (path.charAt(leadingSeparators) == '/'
++                || path.charAt(leadingSeparators) == '\\'))
++        {
++            leadingSeparators++;
++        }
++        int prefixLength = leadingSeparators == 2 ? 2 : (leadingSeparators > 0 ? 1 : 0);
++        boolean previousSeparator = false;
++
++        for (int i = 0; i < path.length(); i++)
++        {
++            char current = path.charAt(i);
++            boolean separator = current == '/' || current == '\\';
++            if (!separator)
++            {
++                previousSeparator = false;
++                result.append(current);
++            }
++            else if (i < prefixLength || !previousSeparator)
++            {
++                result.append(current);
++                previousSeparator = true;
++            }
++        }
++        return result.toString();
++    }
++}

@@ -1,0 +1,82 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..026fd21 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -59,6 +59,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        validateBase64(encrypted);
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -79,6 +80,69 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static void validateBase64(String value) {
++        if (value == null || value.isEmpty()) {
++            return;
++        }
++
++        int length = value.length();
++        int padding = 0;
++        if (value.charAt(length - 1) == '=') {
++            padding++;
++            if (length > 1 && value.charAt(length - 2) == '=') {
++                padding++;
++            }
++        }
++
++        for (int i = 0; i < length - padding; i++) {
++            if (decodeBase64Char(value.charAt(i)) < 0) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        for (int i = length - padding; i < length; i++) {
++            if (value.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++
++        int remainder = length % 4;
++        if (remainder == 1) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++
++        int dataChars = length - padding;
++        if (padding == 2 || remainder == 2) {
++            int bits = decodeBase64Char(value.charAt(dataChars - 1));
++            if ((bits & 0x0f) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        } else if (padding == 1 || remainder == 3) {
++            int bits = decodeBase64Char(value.charAt(dataChars - 1));
++            if ((bits & 0x03) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++    }
++
++    private static int decodeBase64Char(char ch) {
++        if (ch >= 'A' && ch <= 'Z') {
++            return ch - 'A';
++        }
++        if (ch >= 'a' && ch <= 'z') {
++            return ch - 'a' + 26;
++        }
++        if (ch >= '0' && ch <= '9') {
++            return ch - '0' + 52;
++        }
++        if (ch == '+') {
++            return 62;
++        }
++        if (ch == '/') {
++            return 63;
++        }
++        return -1;
++    }
++
+     /**
+      * 生成加密秘钥
+      *

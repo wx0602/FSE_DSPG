@@ -1,0 +1,13 @@
+diff --git a/repo/src/main/java/org/apache/commons/io/FilenameUtils.java b/repo/src/main/java/org/apache/commons/io/FilenameUtils.java
+index 9cddebb..1306662 100644
+--- a/repo/src/main/java/org/apache/commons/io/FilenameUtils.java
++++ b/repo/src/main/java/org/apache/commons/io/FilenameUtils.java
+@@ -380,7 +380,7 @@ private static String doNormalize(final String filename, final char separator, f
+         }
+ 
+         // adjoining slashes
+-        for (int i = prefix + 1; i < size; i++) {
++        for (int i = prefix != 0 ? prefix : 1; i < size; i++) {
+             if (array[i] == separator && array[i - 1] == separator) {
+                 System.arraycopy(array, i, array, i - 1, size - i);
+                 size--;

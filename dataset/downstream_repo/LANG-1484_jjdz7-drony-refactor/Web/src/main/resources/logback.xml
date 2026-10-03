@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <property name="HOME_LOG" value="/home/logs/"/>
+
+    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <file>${HOME_LOG}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${HOME_LOG}/archived/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- each archived file, size max 10MB -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%logger{35} %d{HH:mm:ss.SSS} [%thread] %-5level %class{36} %M %L - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%logger{35} %d{HH:mm:ss.SSS} [%thread] %-5level %class{36} %M %L - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="com.korpodrony" level="error" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.korpodrony.dao" level="debug">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.korpodrony.freemarker" level="debug">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.korpodrony.validation" level="debug">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.korpodrony.services" level="debug">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.korpodrony.oauth" level="debug">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.korpodrony.filter" level="debug">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+</configuration>

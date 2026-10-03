@@ -1,0 +1,19 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -115,10 +115,12 @@
+ 	 * @return Number 转换后的Number值。
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+-	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
+-	}
+-	
++public static Number createNumber(String str) {
++	if (str != null && str.length() == 1 && (str.charAt(0) == 'L' || str.charAt(0) == 'l')) {
++		throw new NumberFormatException("For input string: \"" + str + "\"");
++	}
++	return NumberUtils.createNumber(str);
++}	
+ 	
+ 	
+ 	/**

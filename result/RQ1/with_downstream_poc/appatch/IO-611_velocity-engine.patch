@@ -1,0 +1,37 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,7 @@
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeTemplateName(templateName);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -365,4 +365,25 @@
+ 
+         return file;
+     }
++
++    private String normalizeTemplateName(final String templateName)
++    {
++        String template = FilenameUtils.normalize(templateName, true);
++        if (template == null)
++        {
++            return null;
++        }
++
++        if (template.startsWith("//"))
++        {
++            int prefixEnd = template.indexOf('/', 2);
++            if (prefixEnd > 0)
++            {
++                String prefix = template.substring(0, prefixEnd);
++                String remainder = template.substring(prefixEnd).replaceFirst("/+", "/");
++                return prefix + remainder;
++            }
++        }
++        return template.replaceFirst("(?<!^)/{2,}", "/");
++    }
+ }

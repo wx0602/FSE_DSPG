@@ -1,0 +1,56 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a1318..ee85e39 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -33,10 +33,50 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
++  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonRequired);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
++  // Mitigate Commons Text numeric entity parsing ambiguity by decoding numeric HTML entities
++  // locally with strict decimal/hex character rules before falling back to the library unescaper.
++  static Pattern strictNumericEntityPattern = Pattern.compile("&#(x?[0-9A-Fa-f]+);?");
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
++  // Strictly decode numeric HTML entities so decimal entities stop at decimal digits and
++  // hexadecimal entities stop at hexadecimal digits, preventing inputs like "&#106avascript"
++  // from being misparsed and left dangerous after browser interpretation.
++  private static String strictUnescapeHtmlNumericEntities(String v) {
++    Matcher matcher = strictNumericEntityPattern.matcher(v);
++    StringBuffer sb = new StringBuffer();
++    while (matcher.find()) {
++      String entityBody = matcher.group(1);
++      boolean hex = entityBody.length() > 1 && (entityBody.charAt(0) == 'x' || entityBody.charAt(0) == 'X');
++      String digits = hex ? entityBody.substring(1) : entityBody;
++      int end = 0;
++      while (end < digits.length()) {
++        char ch = digits.charAt(end);
++        if (hex ? Character.digit(ch, 16) >= 0 : Character.isDigit(ch)) {
++          end++;
++        } else {
++          break;
++        }
++      }
++      if (end == 0) {
++        matcher.appendReplacement(sb, Matcher.quoteReplacement(matcher.group(0)));
++        continue;
++      }
++      String matchedDigits = digits.substring(0, end);
++      String trailing = digits.substring(end);
++      try {
++        int codePoint = Integer.parseInt(matchedDigits, hex ? 16 : 10);
++        String replacement = new String(Character.toChars(codePoint)) + trailing;
++        matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
++      } catch (IllegalArgumentException ex) {
++        matcher.appendReplacement(sb, Matcher.quoteReplacement(matcher.group(0)));
++      }
++    }
++    matcher.appendTail(sb);
++    return sb.toString();
++  }
++
+   /**
+    * Converts a string to a boolean.
+    * @param v the string

@@ -1,0 +1,6 @@
+@Test(timeout = 4000)
+  public void test11()  throws Throwable  {
+      FileReader fileReader0 = new FileReader("", "UTF-8");
+      String string0 = fileReader0.getFilename();
+      assertEquals("", string0);
+  }

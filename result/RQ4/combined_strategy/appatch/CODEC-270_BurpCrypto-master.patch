@@ -1,0 +1,40 @@
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,6 +113,37 @@
+     }
+ 
+     public static byte[] base64(String str) {
++        if (str == null) {
++            throw new IllegalArgumentException("Base64 input must not be null");
++        }
++        final int length = str.length();
++        if ((length & 3) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 length");
++        }
++        int padding = 0;
++        boolean seenPadding = false;
++        for (int i = 0; i < length; i++) {
++            char ch = str.charAt(i);
++            if (ch == '=') {
++                seenPadding = true;
++                padding++;
++                if (padding > 2) {
++                    throw new IllegalArgumentException("Invalid Base64 padding");
++                }
++            } else if (seenPadding || "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".indexOf(ch) < 0) {
++                throw new IllegalArgumentException("Invalid Base64 character");
++            }
++        }
++        if (padding > 0 && length - padding < 2) {
++            throw new IllegalArgumentException("Invalid Base64 padding");
++        }
++        int last = length - padding - 1;
++        if (padding == 2 && (Base64.decodeBase64(str.substring(last, last + 1))[0] & 15) != 0) {
++            throw new IllegalArgumentException("Non-zero trailing Base64 bits");
++        }
++        if (padding == 1 && (str.charAt(last) & 3) != 0) {
++            throw new IllegalArgumentException("Non-zero trailing Base64 bits");
++        }
+         return Base64.decodeBase64(str);
+     }
+ 

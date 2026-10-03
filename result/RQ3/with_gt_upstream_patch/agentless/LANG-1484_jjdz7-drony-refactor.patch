@@ -1,0 +1,74 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index c426b8b..5b07669 100644
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -1,3 +1,4 @@
++
+ package com.korpodrony.validation;
+ 
+ import org.apache.commons.lang3.StringUtils;
+@@ -26,37 +27,51 @@ public class Validator {
+ 
+     public boolean validateInteger(String str) {
+         logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        return isStrictInteger(str);
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {
+         logger.info("Validating integer as positive value: " + str);
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str) && NumberUtils.createInteger(str) > 0;
++        return isStrictInteger(str) && NumberUtils.createInteger(str) > 0;
+     }
+ 
+     public boolean validateActivityTypeInteger(String str) {
+         logger.info("Validating activityType: " + str);
+-        return NumberUtils.isCreatable(str)
+-                && NumberUtils.isParsable(str)
++        return isStrictInteger(str)
+                 && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_ACTIVITY_TYPE
+                 && NumberUtils.createInteger(str) < UPPER_LIMIT_OF_ACTIVITY_TYPE;
+     }
+ 
+     public boolean validateShort(String str) {
+         logger.info("Validating short: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_INDEX
++        return isStrictInteger(str)
++                && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_INDEX
+                 && NumberUtils.createInteger(str) < MAX_SHORT;
+     }
+ 
+     public boolean validateByte(String str) {
+         logger.info("Validating byte: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
++        return isStrictInteger(str)
++                && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
+                 && NumberUtils.createInteger(str) < MAX_BYTE;
+     }
+-}
++
++    private boolean isStrictInteger(String str) {
++        if (StringUtils.isBlank(str)) {
++            return false;
++        }
++
++        String normalizedValue = str.trim();
++        if (!normalizedValue.matches("[+-]?\\d+")) {
++            return false;
++        }
++
++        try {
++            NumberUtils.createInteger(normalizedValue);
++            return true;
++        } catch (NumberFormatException ex) {
++            logger.warn("Rejected invalid integer value: {}", str);
++            return false;
++        }
++    }
++}

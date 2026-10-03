@@ -1,0 +1,176 @@
+diff --git a/src/main/java/soj/util/FileReader.java b/src/main/java/soj/util/FileReader.java
+index 2b6246f..f0ff028 100644
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
+ //import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+-import static org.apache.commons.io.FilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import com.google.common.base.Splitter;
+@@ -28,7 +27,7 @@ public class FileReader
+     private final Splitter _splitter;
+ 
+     public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
++        _filename = SafeFilenameUtils.normalize(filename);
+         System.out.println(_filename);
+         _reader = getReader();
+ 
+diff --git a/src/main/java/soj/util/FileWriter.java b/src/main/java/soj/util/FileWriter.java
+index e97f0bc..ba3f019 100644
+--- a/src/main/java/soj/util/FileWriter.java
++++ b/src/main/java/soj/util/FileWriter.java
+@@ -11,7 +11,6 @@ import java.io.PrintStream;
+ import org.slf4j.Logger;
+ 
+ import static org.apache.commons.io.FilenameUtils.getFullPath;
+-import static org.apache.commons.io.FilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import static com.google.common.base.Charsets.UTF_8;
+@@ -37,12 +36,12 @@ public class FileWriter
+     }
+ 
+     public FileWriter(String filename, boolean overwrite) {
+-        _filename = normalize(filename);
++        _filename = SafeFilenameUtils.normalize(filename);
+         _writer = getWriter(overwrite);
+     }
+ 
+     public FileWriter(String filename) {
+-        _filename = normalize(filename);
++        _filename = SafeFilenameUtils.normalize(filename);
+         _writer = getWriter(false);
+     }
+ 
+@@ -77,7 +76,7 @@ public class FileWriter
+             filename += "." + suffix;
+         }
+ 
+-        return normalize(filename);
++        return SafeFilenameUtils.normalize(filename);
+     }
+ 
+     private BufferedWriter getWriter(boolean overwrite) {
+diff --git a/src/main/java/soj/util/SafeFilenameUtils.java b/src/main/java/soj/util/SafeFilenameUtils.java
+new file mode 100644
+index 0000000..245b0fb
+--- /dev/null
++++ b/src/main/java/soj/util/SafeFilenameUtils.java
+@@ -0,0 +1,113 @@
++package soj.util;
++
++import java.util.ArrayDeque;
++import java.util.Deque;
++
++final class SafeFilenameUtils {
++    private SafeFilenameUtils() {
++    }
++
++    static String normalize(String filename) {
++        if (filename == null) {
++            return null;
++        }
++
++        String sanitized = collapseDuplicateSeparators(filename.replace('\\', '/'));
++        String prefix = extractPrefix(sanitized);
++        String remainder = sanitized.substring(prefix.length());
++        boolean trailingSlash = remainder.endsWith("/") && !remainder.isEmpty();
++
++        Deque<String> segments = new ArrayDeque<String>();
++        for (String segment : remainder.split("/")) {
++            if (segment.isEmpty() || ".".equals(segment)) {
++                continue;
++            }
++            if ("..".equals(segment)) {
++                if (!segments.isEmpty() && !"..".equals(segments.peekLast())) {
++                    segments.removeLast();
++                }
++                else if (prefix.isEmpty()) {
++                    segments.addLast(segment);
++                }
++            }
++            else {
++                segments.addLast(segment);
++            }
++        }
++
++        StringBuilder normalized = new StringBuilder(prefix);
++        boolean needsSeparator = !prefix.isEmpty() && !prefix.endsWith("/");
++        for (String segment : segments) {
++            if (needsSeparator) {
++                normalized.append('/');
++            }
++            normalized.append(segment);
++            needsSeparator = true;
++        }
++
++        if (trailingSlash && normalized.length() > 0 && normalized.charAt(normalized.length() - 1) != '/') {
++            normalized.append('/');
++        }
++
++        if (normalized.length() == 0 && !prefix.isEmpty()) {
++            return prefix;
++        }
++        return normalized.length() == 0 ? "." : normalized.toString();
++    }
++
++    private static String extractPrefix(String value) {
++        if (value.startsWith("//")) {
++            return "//";
++        }
++        if (value.startsWith("/")) {
++            return "/";
++        }
++        if (value.length() >= 3
++                && Character.isLetter(value.charAt(0))
++                && value.charAt(1) == ':'
++                && value.charAt(2) == '/') {
++            return value.substring(0, 3);
++        }
++        if (value.length() >= 2
++                && Character.isLetter(value.charAt(0))
++                && value.charAt(1) == ':') {
++            return value.substring(0, 2);
++        }
++        return "";
++    }
++
++
++    private static String collapseDuplicateSeparators(String value) {
++        if (value.isEmpty()) {
++            return value;
++        }
++
++        StringBuilder normalized = new StringBuilder(value.length());
++        int index = 0;
++        boolean preserveLeadingDoubleSlash = value.startsWith("//");
++        if (preserveLeadingDoubleSlash) {
++            normalized.append("//");
++            index = 2;
++            while (index < value.length() && value.charAt(index) == '/') {
++                index++;
++            }
++        }
++
++        boolean previousWasSlash = normalized.length() > 0 && normalized.charAt(normalized.length() - 1) == '/';
++        for (; index < value.length(); index++) {
++            char current = value.charAt(index);
++            if (current == '/') {
++                if (!previousWasSlash) {
++                    normalized.append(current);
++                }
++                previousWasSlash = true;
++            }
++            else {
++                normalized.append(current);
++                previousWasSlash = false;
++            }
++        }
++
++        return normalized.toString();
++    }
++}

@@ -1,0 +1,13 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..c71423a 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -337,7 +337,7 @@ public class Val {
+       if (b) {
+         v = unescapeOctal(v);
+         if (!rv.equals(v)) {
+-          return rv;
++          return v;
+         }
+       }
+       //v = unescapeUnicode(v);

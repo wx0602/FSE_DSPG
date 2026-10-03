@@ -1,0 +1,87 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,21 +240,69 @@
+    * @param v the value
+    * @return the decoded value
+    */
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
+-  /**
++public static String unescapeNunmericEntity(String v) {
++  if (v == null || v.length() == 0) {
++    return v;
++  }
++
++  StringBuilder result = new StringBuilder(v.length());
++  int length = v.length();
++
++  for (int i = 0; i < length; i++) {
++    char ch = v.charAt(i);
++    if (ch == '&' && i + 2 < length && v.charAt(i + 1) == '#') {
++      int entityStart = i;
++      int valueStart = i + 2;
++      boolean isHex = false;
++
++      if (valueStart < length) {
++        char prefix = v.charAt(valueStart);
++        if (prefix == 'x' || prefix == 'X') {
++          isHex = true;
++          valueStart++;
++        }
++      }
++
++      int digitStart = valueStart;
++      while (valueStart < length) {
++        char c = v.charAt(valueStart);
++        if (isHex) {
++          if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
++            valueStart++;
++            continue;
++          }
++        } else {
++          if (c >= '0' && c <= '9') {
++            valueStart++;
++            continue;
++          }
++        }
++        break;
++      }
++
++      if (valueStart > digitStart && valueStart < length && v.charAt(valueStart) == ';') {
++        String entityValue = v.substring(digitStart, valueStart);
++        try {
++          int codePoint = Integer.parseInt(entityValue, isHex ? 16 : 10);
++          if (Character.isValidCodePoint(codePoint)) {
++            result.append(Character.toChars(codePoint));
++            i = valueStart;
++            continue;
++          }
++        } catch (NumberFormatException ex) {
++          // Leave malformed entities unchanged.
++        }
++      }
++
++      result.append(v.charAt(entityStart));
++      continue;
++    }
++
++    result.append(ch);
++  }
++
++  return result.toString();
++}  /**
+    * decodes an octal value.
+    * @param v the value
+    * @return the decoded value

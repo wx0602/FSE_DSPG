@@ -1,0 +1,99 @@
+diff --git a/src/main/java/burp/aes/AesUtil.java b/src/main/java/burp/aes/AesUtil.java
+index dca76b4..e8254b2 100644
+--- a/src/main/java/burp/aes/AesUtil.java
++++ b/src/main/java/burp/aes/AesUtil.java
+@@ -32,13 +32,27 @@ public class AesUtil {
+ 
+     public String decrypt(String cipherText) {
+         try {
+-            byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
++            byte[] decrypted = crypto.decrypt(decodeStrictBase64(cipherText));
+             return new String(decrypted, "UTF-8");
+         } catch (UnsupportedEncodingException e) {
+             throw fail(e);
+         }
+     }
+ 
++    private byte[] decodeStrictBase64(String value) {
++        byte[] decoded = Utils.base64(value);
++        String normalizedInput = value == null ? null : value.replaceAll("\\s", "");
++        String canonical = Base64.encodeBase64String(decoded);
++        if (normalizedInput == null || !normalizedInput.equals(canonical)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        byte[] roundTrip = Utils.base64(canonical);
++        if (!Arrays.equals(decoded, roundTrip)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        return decoded;
++    }
++
+     private IllegalStateException fail(Exception e) {
+         return new IllegalStateException(e);
+     }
+diff --git a/src/main/java/burp/des/DesUtil.java b/src/main/java/burp/des/DesUtil.java
+index 41b5be7..d270999 100644
+--- a/src/main/java/burp/des/DesUtil.java
++++ b/src/main/java/burp/des/DesUtil.java
+@@ -44,13 +44,27 @@ public class DesUtil {
+ 
+     public String decrypt(String cipherText) {
+         if (config.Algorithms != DesAlgorithms.strEnc) {
+-            byte[] decrypted = this.crypto.decrypt(Utils.base64(cipherText));
++            byte[] decrypted = this.crypto.decrypt(decodeStrictBase64(cipherText));
+             return new String(decrypted, StandardCharsets.UTF_8);
+         } else {
+             return strEncAlg.strDec(cipherText, config.Key1, config.Key2, config.Key3);
+         }
+     }
+ 
++    private byte[] decodeStrictBase64(String value) {
++        byte[] decoded = Utils.base64(value);
++        String normalizedInput = value == null ? null : value.replaceAll("\\s", "");
++        String canonical = Base64.encodeBase64String(decoded);
++        if (normalizedInput == null || !normalizedInput.equals(canonical)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        byte[] roundTrip = Utils.base64(canonical);
++        if (!Arrays.equals(decoded, roundTrip)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        return decoded;
++    }
++
+     private IllegalStateException fail(Exception e) {
+         return new IllegalStateException(e);
+     }
+diff --git a/src/main/java/burp/sm4/SM4Util.java b/src/main/java/burp/sm4/SM4Util.java
+index 044f049..2c1efe1 100644
+--- a/src/main/java/burp/sm4/SM4Util.java
++++ b/src/main/java/burp/sm4/SM4Util.java
+@@ -32,13 +32,27 @@ public class SM4Util {
+ 
+     public String decrypt(String cipherText) {
+         try {
+-            byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
++            byte[] decrypted = crypto.decrypt(decodeStrictBase64(cipherText));
+             return new String(decrypted, "UTF-8");
+         } catch (UnsupportedEncodingException e) {
+             throw fail(e);
+         }
+     }
+ 
++    private byte[] decodeStrictBase64(String value) {
++        byte[] decoded = Utils.base64(value);
++        String normalizedInput = value == null ? null : value.replaceAll("\\s", "");
++        String canonical = Base64.encodeBase64String(decoded);
++        if (normalizedInput == null || !normalizedInput.equals(canonical)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        byte[] roundTrip = Utils.base64(canonical);
++        if (!Arrays.equals(decoded, roundTrip)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        return decoded;
++    }
++
+     private IllegalStateException fail(Exception e) {
+         e.printStackTrace(Utils.stderr);
+         return new IllegalStateException(e);

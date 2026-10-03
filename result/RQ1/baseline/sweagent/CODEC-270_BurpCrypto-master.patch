@@ -1,0 +1,83 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..b3c6ebd 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,9 +113,78 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
++        if (str == null) {
++            return null;
++        }
++        if (!isStrictBase64(str)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
+         return Base64.decodeBase64(str);
+     }
+ 
++    private static boolean isStrictBase64(String str) {
++        if (str.isEmpty()) {
++            return true;
++        }
++        if ((str.length() & 3) != 0) {
++            return false;
++        }
++
++        int padding = 0;
++        int len = str.length();
++        if (str.charAt(len - 1) == '=') {
++            padding++;
++            if (len > 1 && str.charAt(len - 2) == '=') {
++                padding++;
++            }
++        }
++
++        int contentLen = len - padding;
++        for (int i = 0; i < contentLen; i++) {
++            if (decodeBase64Char(str.charAt(i)) < 0) {
++                return false;
++            }
++        }
++        for (int i = contentLen; i < len; i++) {
++            if (str.charAt(i) != '=') {
++                return false;
++            }
++        }
++
++        if (padding > 0 && contentLen == 0) {
++            return false;
++        }
++
++        if (padding == 1) {
++            int last = decodeBase64Char(str.charAt(contentLen - 1));
++            return (last & 0x03) == 0;
++        }
++        if (padding == 2) {
++            int last = decodeBase64Char(str.charAt(contentLen - 1));
++            return (last & 0x0F) == 0;
++        }
++        return true;
++    }
++
++    private static int decodeBase64Char(char ch) {
++        if (ch >= 'A' && ch <= 'Z') {
++            return ch - 'A';
++        }
++        if (ch >= 'a' && ch <= 'z') {
++            return ch - 'a' + 26;
++        }
++        if (ch >= '0' && ch <= '9') {
++            return ch - '0' + 52;
++        }
++        if (ch == '+') {
++            return 62;
++        }
++        if (ch == '/') {
++            return 63;
++        }
++        return -1;
++    }
++
+     public static String hex(byte[] bytes) {
+         return Hex.encodeHexString(bytes);
+     }

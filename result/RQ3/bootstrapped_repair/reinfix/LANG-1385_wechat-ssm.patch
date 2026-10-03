@@ -1,0 +1,34 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 0000000..0000000 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -22,3 +22,26 @@
+-	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
+-	}
++public static String toFixedDecimalWithPercent(String value, int scale) {
++		return toFixedDecimalWithPercent(safeCreateNumber(value), scale);
++	}
++
++	private static Number safeCreateNumber(String value) {
++		if (value == null) {
++			throw new NumberFormatException("null");
++		}
++		String trimmed = value.trim();
++		if (trimmed.length() == 0) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		if (trimmed.length() == 1) {
++			char ch = trimmed.charAt(0);
++			if (!Character.isDigit(ch) && ch != '+' && ch != '-' && ch != '.') {
++				throw new NumberFormatException(trimmed + " is not a valid number");
++			}
++		}
++		try {
++			return NumberUtils.createNumber(trimmed);
++		} catch (StringIndexOutOfBoundsException ex) {
++			NumberFormatException numberFormatException = new NumberFormatException(trimmed + " is not a valid number");
++			numberFormatException.initCause(ex);
++			throw numberFormatException;
++		}
++	}

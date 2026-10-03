@@ -1,0 +1,66 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..4ccb74b 100755
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -1,12 +1,14 @@
+ package burp.utils;
+ 
+ import org.apache.commons.codec.DecoderException;
++import org.apache.commons.codec.binary.Base32;
+ import org.apache.commons.codec.binary.Base64;
+ import org.apache.commons.codec.binary.Hex;
+ import org.apache.commons.httpclient.HttpClient;
+ import org.apache.commons.httpclient.HttpMethod;
+ import org.apache.commons.httpclient.methods.GetMethod;
+ import org.apache.http.client.methods.HttpGet;
++import java.io.IOException;
+ 
+ import java.io.PrintWriter;
+ import java.io.UnsupportedEncodingException;
+@@ -113,7 +115,7 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        return decodeBase64Strict(str);
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,7 +132,7 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = decodeBase64Strict(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();
+@@ -166,6 +168,28 @@ public class Utils {
+         return strs.toArray(new String[strs.size()]);
+     }
+ 
++    private static byte[] decodeBase64Strict(String value) {
++        if (value == null) {
++            return null;
++        }
++        try {
++            return Base64.decodeBase64(value.getBytes("US-ASCII"));
++        } catch (IOException e) {
++            throw new IllegalStateException(e);
++        }
++    }
++
++    private static byte[] decodeBase32Strict(String value) {
++        if (value == null) {
++            return null;
++        }
++        try {
++            return new Base32().decode(value.getBytes("US-ASCII"));
++        } catch (IOException e) {
++            throw new IllegalStateException(e);
++        }
++    }
++
+     public static String[] GetKeyFormats() {
+         ArrayList<String> strs = new ArrayList<String>();
+         KeyFormat[] items = KeyFormat.values();

@@ -1,0 +1,48 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -7,6 +7,7 @@
+ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
+ import java.nio.charset.StandardCharsets;
++import java.util.regex.Pattern;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
+ 
+@@ -21,6 +22,8 @@
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final Pattern BASE64_PATTERN =
++            Pattern.compile("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$");
+ 
+     /**
+      * AES加密
+@@ -59,6 +62,9 @@
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        if (!isStrictBase64(encrypted)) {
++            throw new IllegalArgumentException("Illegal base64 ciphertext");
++        }
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -101,4 +107,18 @@
+         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
+     }
+ 
++    private static boolean isStrictBase64(String value) {
++        if (value == null || value.isEmpty()) {
++            return false;
++        }
++        if ((value.length() & 3) != 0) {
++            return false;
++        }
++        if (!BASE64_PATTERN.matcher(value).matches()) {
++            return false;
++        }
++        byte[] decoded = Base64.decodeBase64(value);
++        return value.equals(Base64.encodeBase64String(decoded));
++    }
++
+ }

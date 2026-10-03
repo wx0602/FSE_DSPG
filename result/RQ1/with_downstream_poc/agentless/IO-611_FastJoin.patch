@@ -1,0 +1,121 @@
+diff --git a/src/main/java/soj/biclique/TopologyArgs.java b/src/main/java/soj/biclique/TopologyArgs.java
+index af18e66..8528be0 100644
+--- a/src/main/java/soj/biclique/TopologyArgs.java
++++ b/src/main/java/soj/biclique/TopologyArgs.java
+@@ -1,7 +1,10 @@
++
+ package soj.biclique;
+ 
+ import java.io.PrintStream;
+ import java.io.Serializable;
++import java.util.ArrayDeque;
++import java.util.Deque;
+ import java.util.List;
+ 
+ //import static org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+@@ -12,7 +15,6 @@ import org.kohsuke.args4j.Option;
+ import org.slf4j.Logger;
+ 
+ //import static org.apache.storm.shade.org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+-import static org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import static com.google.common.base.Preconditions.checkState;
+@@ -436,6 +438,97 @@ public class TopologyArgs implements Serializable
+         return info;
+     }
+ 
++    private static String normalizePathSafely(String path) {
++        if (path == null || path.isEmpty()) {
++            return path;
++        }
++
++        String working = path.replace('\\', '/');
++        String prefix = "";
++        int index = 0;
++        boolean absolute = false;
++
++        if (working.startsWith("//")) {
++            prefix = "//";
++            index = 2;
++            while (index < working.length() && working.charAt(index) == '/') {
++                index++;
++            }
++        }
++        else if (working.length() >= 2
++                && Character.isLetter(working.charAt(0))
++                && working.charAt(1) == ':') {
++            prefix = working.substring(0, 2);
++            index = 2;
++            if (index < working.length() && working.charAt(index) == '/') {
++                absolute = true;
++                index++;
++                while (index < working.length() && working.charAt(index) == '/') {
++                    index++;
++                }
++            }
++        }
++        else if (working.startsWith("/")) {
++            prefix = "/";
++            absolute = true;
++            index = 1;
++            while (index < working.length() && working.charAt(index) == '/') {
++                index++;
++            }
++        }
++
++        Deque<String> segments = new ArrayDeque<String>();
++        while (index <= working.length()) {
++            int next = working.indexOf('/', index);
++            if (next == -1) {
++                next = working.length();
++            }
++
++            String segment = working.substring(index, next);
++            if (!segment.isEmpty() && !".".equals(segment)) {
++                if ("..".equals(segment)) {
++                    if (!segments.isEmpty() && !"..".equals(segments.peekLast())) {
++                        segments.removeLast();
++                    }
++                    else if (!absolute && prefix.length() == 0) {
++                        segments.addLast(segment);
++                    }
++                }
++                else {
++                    segments.addLast(segment);
++                }
++            }
++
++            index = next + 1;
++            while (index < working.length() && working.charAt(index) == '/') {
++                index++;
++            }
++            if (next == working.length()) {
++                break;
++            }
++        }
++
++        StringBuilder normalized = new StringBuilder(prefix);
++        if (absolute && normalized.length() > 0 && normalized.charAt(normalized.length() - 1) != '/') {
++            normalized.append('/');
++        }
++
++        boolean needsSeparator = normalized.length() > 0
++                && normalized.charAt(normalized.length() - 1) != '/';
++        for (String segment : segments) {
++            if (needsSeparator) {
++                normalized.append('/');
++            }
++            normalized.append(segment);
++            needsSeparator = true;
++        }
++
++        if (normalized.length() == 0) {
++            return segments.isEmpty() ? "" : normalized.toString();
++        }
++        return normalized.toString();
++    }
++
+     private void printHelp(PrintStream out) {
+         String cmd = "java " + _mainclassName;
+         String cmdIndent = "  " + cmd;

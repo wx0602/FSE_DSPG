@@ -1,0 +1,58 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,8 +112,53 @@
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
+-        if ( template == null || template.length() == 0 )
++        String sanitizedTemplateName = templateName.replace('\\', '/');
++        StringBuilder collapsed = new StringBuilder(sanitizedTemplateName.length());
++        boolean previousSlash = false;
++        for (int i = 0; i < sanitizedTemplateName.length(); i++)
++        {
++            char ch = sanitizedTemplateName.charAt(i);
++            if (ch == '/')
++            {
++                if (!previousSlash)
++                {
++                    collapsed.append(ch);
++                    previousSlash = true;
++                }
++            }
++            else
++            {
++                collapsed.append(ch);
++                previousSlash = false;
++            }
++        }
++
++        String template = FilenameUtils.normalize( collapsed.toString(), true );
++        if ( template != null )
++        {
++            template = template.replace('\\', '/');
++            StringBuilder normalizedCollapsed = new StringBuilder(template.length());
++            boolean lastWasSlash = false;
++            for (int i = 0; i < template.length(); i++)
++            {
++                char ch = template.charAt(i);
++                if (ch == '/')
++                {
++                    if (!lastWasSlash)
++                    {
++                        normalizedCollapsed.append(ch);
++                        lastWasSlash = true;
++                    }
++                }
++                else
++                {
++                    normalizedCollapsed.append(ch);
++                    lastWasSlash = false;
++                }
++            }
++            template = normalizedCollapsed.toString();
++        }
++        if ( template == null || template.length() == 0 || template.startsWith("/") || template.contains("../") || template.equals("..") )
+         {
+             String msg = "File resource error: argument " + template +
+                     " contains .. and may be trying to access " +

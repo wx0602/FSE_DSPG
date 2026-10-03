@@ -1,0 +1,30 @@
+﻿补丁文件,定位错误方法数,定位错误方法
+CODEC-263_DBlog-master.patch,3,premm | reinfix | san2patch
+CODEC-270_BurpCrypto-master.patch,3,premm | reinfix | san2patch
+CODEC-270_DBlog-master.patch,4,agentless | premm | reinfix | san2patch
+CVE-2015-2156_webbit.patch,6,agentless | openhands | patchagent | premm | reinfix | san2patch
+CVE-2017-7957_rpki-commons.patch,2,appatch | repairagent
+CVE-2018-1002201_elasticsearch-maven-plugin.patch,4,patchagent | premm | reinfix | san2patch
+CVE-2018-15756_mirage.patch,3,agentless | openhands | patchagent
+CVE-2019-10086_bean-query.patch,4,premm | reinfix | repairagent | san2patch
+CVE-2019-12415_poi-examples.patch,1,appatch
+CVE-2020-13956_crawler-jsoup-maven.patch,3,premm | reinfix | repairagent
+CVE-2020-13956_wechat-ssm.patch,7,agentless | appatch | openhands | premm | reinfix | san2patch | sweagent
+CVE-2021-23899_OmegaTester.patch,4,agentless | premm | reinfix | san2patch
+CVE-2021-23900_OmegaTester.patch,3,premm | reinfix | san2patch
+CVE-2021-35516_JavaUtils-master.patch,1,repairagent
+CVE-2021-43859_rpki-commons.patch,6,agentless | appatch | openhands | patchagent | repairagent | sweagent
+CVE-2022-22976_RuoYi-Vue-Multi-Tenant.patch,1,repairagent
+CVE-2022-22976_gerenciador-viagens.patch,2,agentless | repairagent
+CVE-2022-25845_base-starter.patch,1,appatch
+CVE-2022-25845_geek_framework.patch,2,appatch | repairagent
+CVE-2022-29631_ucloud-java-sdk.patch,4,appatch | premm | reinfix | san2patch
+CVE-2022-42889_java.patch,1,agentless
+CVE-2022-45688_virtress.patch,2,patchagent | repairagent
+CVE-2023-1370_microservice-with-jwt-and-microprofile.patch,1,patchagent
+CVE-2023-34453_UltraPlaytime.patch,1,agentless
+IO-611_FastJoin.patch,1,repairagent
+IO-611_velocity-engine.patch,1,appatch
+LANG-1385_ewallet.patch,1,appatch
+LANG-1385_wechat-ssm.patch,1,agentless
+LANG-1484_jjdz7-drony-refactor.patch,1,agentless

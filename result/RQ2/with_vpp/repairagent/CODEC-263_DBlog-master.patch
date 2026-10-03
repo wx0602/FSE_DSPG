@@ -1,0 +1,12 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac..64cc4ad 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -57,6 +57,7 @@ public class AesUtil {
+      * @return 返回解密后的数据
+      * @throws Exception
+      */
++    // Fail closed on malformed or non-decryptable external ciphertext so authentication code does not propagate codec exceptions.
+     public static String decrypt(String passwd, String encrypted) throws Exception {
+         //实例化
+         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);

@@ -1,0 +1,62 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -30,7 +30,56 @@
+      * @return
+      * @throws Exception
+      */
+-    public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(salt, encryptPassword);
++public static String decrypt(String encryptPassword, String salt) throws Exception {
++    if (encryptPassword == null || salt == null) {
++        throw new IllegalArgumentException("Encrypted password and salt must not be null");
+     }
+-}
++    String normalized = encryptPassword.trim();
++    if (normalized.isEmpty()) {
++        throw new IllegalArgumentException("Encrypted password must not be empty");
++    }
++    if ((normalized.length() & 3) != 0) {
++        throw new IllegalArgumentException("Illegal Base64 input length");
++    }
++    for (int i = 0; i < normalized.length(); i++) {
++        char ch = normalized.charAt(i);
++        boolean isBase64Char = (ch >= 'A' && ch <= 'Z')
++                || (ch >= 'a' && ch <= 'z')
++                || (ch >= '0' && ch <= '9')
++                || ch == '+' || ch == '/' || ch == '=';
++        if (!isBase64Char) {
++            throw new IllegalArgumentException("Illegal Base64 character in encrypted password");
++        }
++    }
++    int firstPadding = normalized.indexOf('=');
++    if (firstPadding >= 0) {
++        for (int i = firstPadding; i < normalized.length(); i++) {
++            if (normalized.charAt(i) != '=') {
++                throw new IllegalArgumentException("Illegal Base64 padding in encrypted password");
++            }
++        }
++        int paddingCount = normalized.length() - firstPadding;
++        if (paddingCount > 2) {
++            throw new IllegalArgumentException("Illegal Base64 padding length");
++        }
++        int usefulChars = firstPadding;
++        if (paddingCount == 2) {
++            if ((usefulChars & 3) != 2) {
++                throw new IllegalArgumentException("Illegal Base64 padding alignment");
++            }
++            int secondValue = base64Value(normalized.charAt(usefulChars - 1));
++            if ((secondValue & 0x0F) != 0) {
++                throw new IllegalArgumentException("Illegal non-zero discarded bits in Base64 input");
++            }
++        } else if (paddingCount == 1) {
++            if ((usefulChars & 3) != 3) {
++                throw new IllegalArgumentException("Illegal Base64 padding alignment");
++            }
++            int thirdValue = base64Value(normalized.charAt(usefulChars - 1));
++            if ((thirdValue & 0x03) != 0) {
++                throw new IllegalArgumentException("Illegal non-zero discarded bits in Base64 input");
++            }
++        }
++    }
++    return AesUtil.decrypt(salt, normalized);
++}}

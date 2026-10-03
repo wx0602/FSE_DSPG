@@ -1,0 +1,117 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/app/event/EventHandlerUtil.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/app/event/EventHandlerUtil.java
+@@ -20,6 +20,7 @@
+  */
+ 
+ import org.apache.velocity.context.InternalContextAdapter;
++import org.apache.velocity.exception.ResourceNotFoundException;
+ import org.apache.velocity.exception.VelocityException;
+ import org.apache.velocity.runtime.RuntimeServices;
+ import org.apache.velocity.util.introspection.Info;
+@@ -148,6 +149,106 @@
+             InternalContextAdapter context, String includeResourcePath,
+             String currentResourcePath, String directiveName)
+     {
++        String sanitizedPath = sanitizeIncludePath(includeResourcePath);
++        if (sanitizedPath == null)
++        {
++            throw new ResourceNotFoundException("Rejected unsafe " + directiveName
++                + " path: " + includeResourcePath);
++        }
++
++        try
++        {
++            sanitizedPath = rsvc.getApplicationEventCartridge().includeEvent(context, sanitizedPath, currentResourcePath, directiveName);
++            EventCartridge contextCartridge = context.getEventCartridge();
++            if (contextCartridge != null)
++            {
++                contextCartridge.setRuntimeServices(rsvc);
++                sanitizedPath = contextCartridge.includeEvent(context, sanitizedPath, currentResourcePath, directiveName);
++            }
++            sanitizedPath = sanitizeIncludePath(sanitizedPath);
++            if (sanitizedPath == null)
++            {
++                throw new ResourceNotFoundException("Rejected unsafe " + directiveName
++                    + " path returned by include event handler");
++            }
++            return sanitizedPath;
++        }
++        catch (RuntimeException e)
++        {
++            throw e;
++        }
++        catch (Exception e)
++        {
++            throw new VelocityException("Exception in event handler.",e);
++        }
++    }
++
++    private static String sanitizeIncludePath(String includeResourcePath)
++    {
++        if (includeResourcePath == null)
++        {
++            return null;
++        }
++
++        String normalized = includeResourcePath.replace('\\', '/');
++        if (normalized.isEmpty())
++        {
++            return normalized;
++        }
++
++        StringBuilder sanitized = new StringBuilder(normalized.length());
++        boolean previousSlash = false;
++        for (int i = 0; i < normalized.length(); i++)
++        {
++            char current = normalized.charAt(i);
++            if (current == '/')
++            {
++                if (!previousSlash || i == 0)
++                {
++                    sanitized.append(current);
++                }
++                previousSlash = true;
++            }
++            else
++            {
++                sanitized.append(current);
++                previousSlash = false;
++            }
++        }
++
++        String candidate = sanitized.toString();
++        if (candidate.contains("/../") || candidate.startsWith("../")
++            || candidate.endsWith("/..") || candidate.contains("/./"))
++        {
++            return null;
++        }
++        return candidate;
++    }
++
++    /**
++     * Called when an include-type directive is encountered (#include or
++     * #parse). All the registered event handlers are called unless null is
++     * returned. The default implementation always processes the included
++     * resource.
++     *
++     * @param includeResourcePath
++     *            the path as given in the include directive.
++     * @param currentResourcePath
++     *            the path of the currently rendering template that includes the
++     *            include directive.
++     * @param directiveName
++     *            name of the directive used to include the resource. (With the
++     *            standard directives this is either "parse" or "include").
++     * @param rsvc current instance of RuntimeServices
++     * @param context The internal context adapter.
++     *
++     * @return a new resource path for the directive, or null to block the
++     *         include from occurring.
++     */
++    public static String includeEvent(RuntimeServices rsvc,
++            InternalContextAdapter context, String includeResourcePath,
++            String currentResourcePath, String directiveName)
++    {
+         try
+         {
+             includeResourcePath = rsvc.getApplicationEventCartridge().includeEvent(context, includeResourcePath, currentResourcePath, directiveName);

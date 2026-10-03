@@ -1,0 +1,97 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..6c3fe93 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,39 +1,68 @@
+ package cn.qs.utils.format;
+ 
++import java.math.BigDecimal;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
+-import org.apache.commons.lang3.math.NumberUtils;
+-
+ public class MyNumberUtils {
+ 
+-	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
+-	}
++        public static String toFixedDecimal(String value, int scale) {
++                return toFixedDecimal(parseNumberSafely(value), scale);
++        }
++
++        public static String toFixedDecimal(Number value, int scale) {
++                NumberFormat numberFormat = NumberFormat.getInstance();
++                numberFormat.setRoundingMode(RoundingMode.HALF_UP);
++                numberFormat.setMaximumFractionDigits(scale);
++
++                return numberFormat.format(value);
++        }
++
++        public static String toFixedDecimalWithPercent(String value, int scale) {
++                return toFixedDecimalWithPercent(parseNumberSafely(value), scale);
++        }
++
++        public static String toFixedDecimalWithPercent(Number value, int scale) {
++                NumberFormat numberFormat = NumberFormat.getPercentInstance();
++                numberFormat.setRoundingMode(RoundingMode.HALF_UP);
++                numberFormat.setMaximumFractionDigits(scale);
++
++                return numberFormat.format(value);
++        }
++
++        private static Number parseNumberSafely(String value) {
++                if (value == null) {
++                        throw new NumberFormatException("null");
++                }
++
++                String normalized = value.trim();
++                if (normalized.length() == 0) {
++                        throw new NumberFormatException("A blank string is not a valid number");
++                }
+ 
+-	public static String toFixedDecimal(Number value, int scale) {
+-		NumberFormat numberFormat = NumberFormat.getInstance();
+-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+-		numberFormat.setMaximumFractionDigits(scale);
++                if (normalized.length() == 1 && isTypeSuffix(normalized.charAt(0))) {
++                        throw new NumberFormatException(value + " is not a valid number.");
++                }
+ 
+-		return numberFormat.format(value);
+-	}
++                char lastChar = normalized.charAt(normalized.length() - 1);
++                if (isTypeSuffix(lastChar)) {
++                        normalized = normalized.substring(0, normalized.length() - 1);
++                        if (normalized.length() == 0) {
++                                throw new NumberFormatException(value + " is not a valid number.");
++                        }
++                }
+ 
+-	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
+-	}
++                return new BigDecimal(normalized);
++        }
+ 
+-	public static String toFixedDecimalWithPercent(Number value, int scale) {
+-		NumberFormat numberFormat = NumberFormat.getPercentInstance();
+-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+-		numberFormat.setMaximumFractionDigits(scale);
++        private static boolean isTypeSuffix(char value) {
++                return value == 'l' || value == 'L' || value == 'f' || value == 'F' || value == 'd' || value == 'D';
++        }
+ 
+-		return numberFormat.format(value);
+-	}
+ 
+-	public static void main(String[] args) {
+-		float F2 = 105858.5328F;
+-		System.out.println(ArithUtils.format(F2, 2));
+-	}
++        public static void main(String[] args) {
++                float F2 = 105858.5328F;
++                System.out.println(ArithUtils.format(F2, 2));
++        }
+ 
+ }

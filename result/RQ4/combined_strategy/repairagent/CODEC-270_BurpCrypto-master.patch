@@ -1,0 +1,22 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..ea9855b 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,7 +113,16 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        byte[] decoded = Base64.decodeBase64(str);
++        if (decoded.length == 0 && str.length() != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        String canonical = Base64.encodeBase64String(decoded);
++        if (!canonical.equals(str)) {
++            throw new IllegalArgumentException("Invalid Base64 padding or trailing bits");
++        }
++        return decoded;
++
+     }
+ 
+     public static String hex(byte[] bytes) {

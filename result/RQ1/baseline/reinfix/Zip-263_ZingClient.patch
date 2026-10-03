@@ -1,0 +1,46 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index 0000000..0000000 100644
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -27,14 +27,27 @@
+-    public ZFile(File file, String password) throws IOException {
+-        this.file = new ZipFile(file);
+-        this.password = password;
+-        if (!this.file.isValidZipFile()) {
+-            throw new ZipException("文件无法读取,可能已经被损坏.");
+-        }
+-        if (this.file.isEncrypted()) {
+-            this.file.setPassword(password.toCharArray());
+-        }
+-        FileHeader ad = this.file.getFileHeader("address.txt");
+-        FileHeader key = this.file.getFileHeader("private_key");
+-        this.zingAddress = IOUtils.toString(this.file.getInputStream(ad), "utf8");
+-        
+-    }
++public ZFile(File file, String password) throws IOException {
++        this.file = new ZipFile(file);
++        this.password = password;
++        if (!this.file.isValidZipFile()) {
++            throw new ZipException("文件无法读取,可能已经被损坏.");
++        }
++        if (this.file.isEncrypted()) {
++            if (password == null) {
++                throw new ZipException("压缩文件已加密,但未提供密码.");
++            }
++            this.file.setPassword(password.toCharArray());
++        }
++        FileHeader ad = this.file.getFileHeader("address.txt");
++        if (ad == null) {
++            throw new ZipException("压缩文件缺少必要文件: address.txt");
++        }
++        FileHeader key = this.file.getFileHeader("private_key");
++        if (key == null) {
++            throw new ZipException("压缩文件缺少必要文件: private_key");
++        }
++        String address = IOUtils.toString(this.file.getInputStream(ad), "utf8");
++        if (address == null || address.trim().isEmpty()) {
++            throw new ZipException("address.txt内容为空或无法读取.");
++        }
++        this.zingAddress = address;
++
++    }

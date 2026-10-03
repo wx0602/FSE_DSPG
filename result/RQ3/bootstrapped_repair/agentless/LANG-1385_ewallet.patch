@@ -1,0 +1,29 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java
+index cf0e790..b871542 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/StringUtil.java
+@@ -241,6 +241,24 @@ public class StringUtil {
+     
+     
+     
++	/**
++	 * 创建数字并拒绝只有数字类型后缀、没有实际数字内容的输入。
++	 *
++	 * Commons Lang 3 的旧版 NumberUtils.createNumber 对 "L" 或 "l"
++	 * 会在空数字内容上调用 charAt(0)，导致 StringIndexOutOfBoundsException。
++	 *
++	 * @param str 数字字符串
++	 * @return 创建出的数字；输入为null时返回null
++	 * @throws NumberFormatException 输入不是有效数字时抛出
++	 */
++	public static Number createNumber(String str) {
++		if (str != null && str.length() == 1
++				&& (str.charAt(0) == 'L' || str.charAt(0) == 'l')) {
++			throw new NumberFormatException("Invalid number: " + str);
++		}
++		return org.apache.commons.lang3.math.NumberUtils.createNumber(str);
++	}
++
+ 	/**
+ 	 * 去掉字符串两端的控制符，如果变为null或""，则返回""，引用org.apache.commons.lang.StringUtils.trimToEmpty(String str)方法。<br>
+ 	 * 例：	<br>

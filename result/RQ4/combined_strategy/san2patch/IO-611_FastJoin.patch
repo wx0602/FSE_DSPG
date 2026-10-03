@@ -1,0 +1,75 @@
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -28,19 +28,64 @@
+     private final Splitter _splitter;
+ 
+     public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
+-        System.out.println(_filename);
+-        _reader = getReader();
++    String normalized = normalize(filename);
++    if (normalized == null) {
++        throw new IllegalArgumentException("Invalid filename");
++    }
+ 
+-        String splitePattern;
+-        if (splitPunc == null || splitPunc.trim().isEmpty()) {
+-            splitePattern = DEFAULT_SPLIT_PATTERN;
++    String normalizedFilename = normalized.replace('\\', '/');
++    String prefix = "";
++    int start = 0;
++    if (normalizedFilename.startsWith("//")) {
++        prefix = "//";
++        start = 2;
++    }
++    else if (normalizedFilename.startsWith("/")) {
++        prefix = "/";
++        start = 1;
++    }
++    else if (normalizedFilename.length() >= 3
++            && Character.isLetter(normalizedFilename.charAt(0))
++            && normalizedFilename.charAt(1) == ':'
++            && normalizedFilename.charAt(2) == '/') {
++        prefix = normalizedFilename.substring(0, 3);
++        start = 3;
++    }
++
++    StringBuilder sanitized = new StringBuilder(prefix);
++    boolean lastWasSlash = false;
++    for (int i = start; i < normalizedFilename.length(); i++) {
++        char ch = normalizedFilename.charAt(i);
++        if (ch == '/') {
++            if (!lastWasSlash) {
++                sanitized.append(ch);
++            }
++            lastWasSlash = true;
+         }
+         else {
+-            splitePattern = splitPunc.trim() + "\\s+";
++            sanitized.append(ch);
++            lastWasSlash = false;
+         }
+-        _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
+     }
++
++    String sanitizedFilename = sanitized.toString();
++    if (sanitizedFilename.trim().isEmpty()) {
++        throw new IllegalArgumentException("Invalid filename");
++    }
++    _filename = sanitizedFilename;
++
++    System.out.println(_filename);
++    _reader = getReader();
++
++    String splitePattern;
++    if (splitPunc == null || splitPunc.trim().isEmpty()) {
++        splitePattern = DEFAULT_SPLIT_PATTERN;
++    }
++    else {
++        splitePattern = splitPunc.trim() + "\\s+";
++    }
++    _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++}
+ 
+     private BufferedReader getReader() throws Exception {
+         if (_filename == null || _filename.isEmpty()) {

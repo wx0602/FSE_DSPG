@@ -1,0 +1,14 @@
+@Test(timeout = 4000)
+  public void test10()  throws Throwable  {
+      // Undeclared exception!
+      try { 
+        MyNumberUtils.toFixedDecimalWithPercent("-1,022", (-672));
+        fail("Expecting exception: NumberFormatException");
+      
+      } catch(NumberFormatException e) {
+         //
+         // For input string: \"1,022\"
+         //
+         verifyException("java.lang.NumberFormatException", e);
+      }
+  }

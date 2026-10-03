@@ -1,0 +1,7 @@
+  @Test(timeout = 4000)
+  public void test07()  throws Throwable  {
+      // Undeclared exception!
+      
+        ZipUtil.compressFile((File) null, (File) null);
+
+  }

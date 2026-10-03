@@ -1,0 +1,34 @@
+diff --git a/src/main/java/soj/util/FileWriter.java b/src/main/java/soj/util/FileWriter.java
+index e97f0bc..a1f4727 100644
+--- a/src/main/java/soj/util/FileWriter.java
++++ b/src/main/java/soj/util/FileWriter.java
+@@ -1,3 +1,4 @@
++
+ package soj.util;
+ 
+ import java.io.BufferedWriter;
+@@ -5,9 +6,6 @@ import java.io.File;
+ import java.io.FileNotFoundException;
+ import java.io.IOException;
+ import java.io.PrintStream;
+-
+-//import static org.apache.commons.io.FilenameUtils.getFullPath;
+-//import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+ import static org.apache.commons.io.FilenameUtils.getFullPath;
+@@ -37,12 +35,12 @@ public class FileWriter
+     }
+ 
+     public FileWriter(String filename, boolean overwrite) {
+-        _filename = normalize(filename);
++        _filename = safeNormalize(filename);
+         _writer = getWriter(overwrite);
+     }
+ 
+     public FileWriter(String filename) {
+-        _filename = normalize(filename);
++        _filename = safeNormalize(filename);
+         _writer = getWriter(false);
+     }
+ 

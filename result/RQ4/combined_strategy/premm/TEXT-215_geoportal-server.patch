@@ -1,0 +1,36 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -237,21 +237,18 @@
+    * @param v the value
+    * @return the decoded value
+    */
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
+-  /**
++public static String unescapeNunmericEntity(String v) {
++  if (v != null) {
++    try {
++      StringWriter writer = new StringWriter(v.length() * 2);
++      NUMERIC.translate(v, writer);
++      return writer.toString();
++    } catch (IOException var3) {
++      throw new RuntimeException(var3);
++    }
++  }
++  return v;
++}  /**
+    * decodes an octal value.
+    * @param v the value
+    * @return the decoded value

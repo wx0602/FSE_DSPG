@@ -1,0 +1,29 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac..482b5c8 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -58,6 +58,9 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        if (encrypted == null || !Base64.isBase64(encrypted)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
+         //实例化
+         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+ 
+@@ -65,7 +68,13 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] decoded;
++        try {
++            decoded = Base64.decodeBase64(encrypted);
++        } catch (IllegalArgumentException e) {
++            throw new IllegalArgumentException("Invalid Base64 input", e);
++        }
++        byte[] result = cipher.doFinal(decoded);
+ 
+         return new String(result, "utf-8");
+     }

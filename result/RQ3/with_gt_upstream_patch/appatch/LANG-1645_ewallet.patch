@@ -1,0 +1,79 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -1,6 +1,7 @@
+ package com.fr.chain.utils;
+ 
+ import java.math.BigDecimal;
++import java.math.BigInteger;
+ import java.math.BigInteger;
+ import java.text.DecimalFormat;
+ 
+@@ -12,6 +13,10 @@
+  * 这里面的有些方法引用apache.commons.lang-2.3.math里的NumberUtils类
+  */
+ public class NumberUtil {
++
++	private static final String[] HEX_PREFIXES = new String[] { "0x", "0X", "#" };
++	private static final String[] SIGNED_HEX_PREFIXES = new String[] { "+0x", "+0X", "+#", "-0x", "-0X", "-#" };
++
+ 	   
+ 	/**
+ 	 * 构造函数
+@@ -59,7 +64,7 @@
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static BigInteger createBigInteger(String str)  {
+-		return NumberUtils.createBigInteger(str);
++		return isSignedHexNumber(str) ? parseSignedHexBigInteger(str) : NumberUtils.createBigInteger(str);
+ 	}
+ 	
+ 	/**
+@@ -116,7 +121,7 @@
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
++		return isSignedHexNumber(str) ? createSignedHexNumber(str) : NumberUtils.createNumber(str);
+ 	}
+ 	
+ 	
+@@ -624,4 +629,39 @@
+ 		}
+ 		return strPrice;
+ 	}
++
++	private static boolean isSignedHexNumber(String str) {
++		if (str == null || str.length() < 2) {
++			return false;
++		}
++		for (String prefix : SIGNED_HEX_PREFIXES) {
++			if (str.startsWith(prefix) && str.length() > prefix.length()) {
++				return true;
++			}
++		}
++		return false;
++	}
++
++	private static BigInteger parseSignedHexBigInteger(String str) {
++		int sign = str.charAt(0) == '-' ? -1 : 1;
++		String value = str.substring(1);
++		for (String prefix : HEX_PREFIXES) {
++			if (value.startsWith(prefix)) {
++				BigInteger result = new BigInteger(value.substring(prefix.length()), 16);
++				return sign < 0 ? result.negate() : result;
++			}
++		}
++		throw new NumberFormatException(str + " is not a valid number.");
++	}
++
++	private static Number createSignedHexNumber(String str) {
++		BigInteger value = parseSignedHexBigInteger(str);
++		if (value.bitLength() <= 31) {
++			return Integer.valueOf(value.intValue());
++		}
++		if (value.bitLength() <= 63) {
++			return Long.valueOf(value.longValue());
++		}
++		return value;
++	}
+ }

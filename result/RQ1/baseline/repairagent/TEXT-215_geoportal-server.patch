@@ -1,0 +1,26 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..201122d 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -33,8 +33,11 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
++  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper();
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
++  // Mitigate the commons-text numeric entity parsing flaw by decoding decimal and
++  // hexadecimal entities separately so decimal entities never consume A-F suffixes.
++  static Pattern numericEntityPattern = Pattern.compile("&#(x|X)?([0-9A-Fa-f]+);?");
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+   /**
+@@ -279,7 +282,7 @@ public class Val {
+   public static String unescapeUnicode(String v) {
+     if (v != null) {
+ 
+-      try {
++        }
+         StringWriter writer = new StringWriter(v.length() * 2);
+         UNICODE.translate(v, writer);
+         return writer.toString();

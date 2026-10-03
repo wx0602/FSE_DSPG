@@ -1,0 +1,75 @@
+2025-08-23 19:22:41,270 - INFO - Environment image sweb.env.x86_64.2baaea72acc974f6c02079:latest found for django__django-10914
+Building instance image sweb.eval.x86_64.django__django-10914:latest for django__django-10914
+2025-08-23 19:22:41,271 - INFO - Image sweb.eval.x86_64.django__django-10914:latest already exists, skipping build.
+2025-08-23 19:22:41,271 - INFO - Creating container for django__django-10914...
+2025-08-23 19:22:41,508 - INFO - Container for django__django-10914 created: 73844dc8d8ac3aef5e44eec88af5213de04f2cc80ca69bf7ee64257de78d5302
+2025-08-23 19:22:41,854 - INFO - Container for django__django-10914 started: 73844dc8d8ac3aef5e44eec88af5213de04f2cc80ca69bf7ee64257de78d5302
+2025-08-23 19:22:41,854 - INFO - Intermediate patch for django__django-10914 written to logs/run_evaluation/repair_sample_1_reproduction_5/test/django__django-10914/patch.diff, now applying to container...
+2025-08-23 19:22:42,153 - INFO - Failed to apply patch to container, trying again...
+2025-08-23 19:22:42,238 - INFO - >>>>> Applied Patch:
+patching file django/conf/global_settings.py
+patching file django/core/files/storage.py
+
+2025-08-23 19:22:44,002 - INFO - Git diff before:
+diff --git a/django/conf/global_settings.py b/django/conf/global_settings.py
+index acee9887d2..bdeec80610 100644
+--- a/django/conf/global_settings.py
++++ b/django/conf/global_settings.py
+@@ -304,7 +304,7 @@ FILE_UPLOAD_TEMP_DIR = None
+ 
+ # The numeric mode to set newly-uploaded files to. The value should be a mode
+ # you'd pass directly to os.chmod; see https://docs.python.org/library/os.html#files-and-directories.
+-FILE_UPLOAD_PERMISSIONS = None
++FILE_UPLOAD_PERMISSIONS = 0o644
+ 
+ # The numeric mode to assign to newly-created directories, when uploading files.
+ # The value should be a mode as you'd pass to os.chmod;
+diff --git a/django/core/files/storage.py b/django/core/files/storage.py
+index cbdab1de47..3639a52bc7 100644
+--- a/django/core/files/storage.py
++++ b/django/core/files/storage.py
+@@ -257,7 +257,7 @@ class FileSystemStorage(Storage):
+                 # This is a normal uploadedfile that we can stream.
+                 else:
+                     # The current umask value is masked out by os.open!
+-                    fd = os.open(full_path, self.OS_OPEN_FLAGS, 0o666)
++                    fd = os.open(full_path, self.OS_OPEN_FLAGS, self.file_permissions_mode or 0o666)
+                     _file = None
+                     try:
+                         locks.lock(fd, locks.LOCK_EX)
+2025-08-23 19:22:44,002 - INFO - Eval script for django__django-10914 written to logs/run_evaluation/repair_sample_1_reproduction_5/test/django__django-10914/eval.sh; copying to container...
+2025-08-23 19:23:00,402 - INFO - Test runtime: 16.24 seconds
+2025-08-23 19:23:00,403 - INFO - Test output for django__django-10914 written to logs/run_evaluation/repair_sample_1_reproduction_5/test/django__django-10914/test_output.txt
+2025-08-23 19:23:00,468 - INFO - Git diff after:
+diff --git a/django/conf/global_settings.py b/django/conf/global_settings.py
+index acee9887d2..bdeec80610 100644
+--- a/django/conf/global_settings.py
++++ b/django/conf/global_settings.py
+@@ -304,7 +304,7 @@ FILE_UPLOAD_TEMP_DIR = None
+ 
+ # The numeric mode to set newly-uploaded files to. The value should be a mode
+ # you'd pass directly to os.chmod; see https://docs.python.org/library/os.html#files-and-directories.
+-FILE_UPLOAD_PERMISSIONS = None
++FILE_UPLOAD_PERMISSIONS = 0o644
+ 
+ # The numeric mode to assign to newly-created directories, when uploading files.
+ # The value should be a mode as you'd pass to os.chmod;
+diff --git a/django/core/files/storage.py b/django/core/files/storage.py
+index cbdab1de47..3639a52bc7 100644
+--- a/django/core/files/storage.py
++++ b/django/core/files/storage.py
+@@ -257,7 +257,7 @@ class FileSystemStorage(Storage):
+                 # This is a normal uploadedfile that we can stream.
+                 else:
+                     # The current umask value is masked out by os.open!
+-                    fd = os.open(full_path, self.OS_OPEN_FLAGS, 0o666)
++                    fd = os.open(full_path, self.OS_OPEN_FLAGS, self.file_permissions_mode or 0o666)
+                     _file = None
+                     try:
+                         locks.lock(fd, locks.LOCK_EX)
+2025-08-23 19:23:00,468 - INFO - Grading answer for django__django-10914...
+2025-08-23 19:23:00,470 - INFO - report: {'django__django-10914': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': True, 'tests_status': {'FAIL_TO_PASS': {'success': [], 'failure': []}, 'PASS_TO_PASS': {'success': [], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-10914: resolved: True
+2025-08-23 19:23:00,470 - INFO - Attempting to stop container sweb.eval.django__django-10914.repair_sample_1_reproduction_5...
+2025-08-23 19:23:15,923 - INFO - Attempting to remove container sweb.eval.django__django-10914.repair_sample_1_reproduction_5...
+2025-08-23 19:23:15,934 - INFO - Container sweb.eval.django__django-10914.repair_sample_1_reproduction_5 removed.

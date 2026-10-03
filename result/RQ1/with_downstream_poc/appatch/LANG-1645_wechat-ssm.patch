@@ -1,0 +1,22 @@
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -6,6 +6,8 @@
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
++
++	private static final String LEADING_PLUS = "+";
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+ 		return toFixedDecimal(NumberUtils.createNumber(value), scale);
+@@ -20,6 +22,10 @@
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
++		if (value != null && value.startsWith(LEADING_PLUS)) {
++			value = value.substring(1);
++		}
++
+ 		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
+ 	}
+ 

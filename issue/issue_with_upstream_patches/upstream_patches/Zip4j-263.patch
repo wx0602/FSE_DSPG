@@ -1,0 +1,15 @@
+diff --git a/repo/src/main/java/net/lingala/zip4j/ZipFile.java b/repo/src/main/java/net/lingala/zip4j/ZipFile.java
+index 6d81966..fe1368a 100644
+--- a/repo/src/main/java/net/lingala/zip4j/ZipFile.java
++++ b/repo/src/main/java/net/lingala/zip4j/ZipFile.java
+@@ -113,6 +113,10 @@ public class ZipFile {
+   }
+ 
+   public ZipFile(File zipFile, char[] password) {
++    if (zipFile == null) {
++      throw new IllegalArgumentException("input zip file parameter is null");
++    }
++
+     this.zipFile = zipFile;
+     this.password = password;
+     this.runInThread = false;

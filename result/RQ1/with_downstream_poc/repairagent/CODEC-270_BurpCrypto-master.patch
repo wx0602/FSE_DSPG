@@ -1,0 +1,25 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..f45bc5f 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -112,8 +112,9 @@ public class Utils {
+         return Base64.encodeBase64String(bytes);
+     }
+ 
++    // Use the JDK decoder to reject malformed Base64, including non-zero discarded trailing bits.
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        return java.util.Base64.getDecoder().decode(str);
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,7 +131,8 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        // Reuse the strict downstream Base64 decoder so invalid encodings fail before key parsing.
++        byte[] decoded = base64(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();

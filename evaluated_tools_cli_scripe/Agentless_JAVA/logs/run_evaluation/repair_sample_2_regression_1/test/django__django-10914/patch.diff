@@ -1,0 +1,27 @@
+diff --git a/django/conf/global_settings.py b/django/conf/global_settings.py
+index 034c3d0..9ba30e5 100644
+--- a/django/conf/global_settings.py
++++ b/django/conf/global_settings.py
+@@ -304,7 +304,7 @@ FILE_UPLOAD_TEMP_DIR = None
+ 
+ # The numeric mode to set newly-uploaded files to. The value should be a mode
+ # you'd pass directly to os.chmod; see https://docs.python.org/library/os.html#files-and-directories.
+-FILE_UPLOAD_PERMISSIONS = None
++FILE_UPLOAD_PERMISSIONS = 0o644
+ 
+ # The numeric mode to assign to newly-created directories, when uploading files.
+ # The value should be a mode as you'd pass to os.chmod;
+diff --git a/django/core/files/storage.py b/django/core/files/storage.py
+index 39f68c7..1d96e63 100644
+--- a/django/core/files/storage.py
++++ b/django/core/files/storage.py
+@@ -257,7 +257,8 @@ class FileSystemStorage(Storage):
+                 # This is a normal uploadedfile that we can stream.
+                 else:
+                     # The current umask value is masked out by os.open!
+-                    fd = os.open(full_path, self.OS_OPEN_FLAGS, 0o666)
++                    file_permissions = settings.FILE_UPLOAD_PERMISSIONS or 0o644
++                    fd = os.open(full_path, self.OS_OPEN_FLAGS, file_permissions)
+                     _file = None
+                     try:
+                         locks.lock(fd, locks.LOCK_EX)

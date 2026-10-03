@@ -1,0 +1,5 @@
+@Test(timeout = 4000)
+  public void test4()  throws Throwable  {
+      ZFile zFile0 = new ZFile((File) null, "U'0D");
+      String string0 = zFile0.getZingAddress();
+  }

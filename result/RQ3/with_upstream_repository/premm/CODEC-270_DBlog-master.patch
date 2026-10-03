@@ -1,0 +1,68 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -30,7 +30,63 @@
+      * @return
+      * @throws Exception
+      */
+-    public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(salt, encryptPassword);
++public static String decrypt(String encryptPassword, String salt) throws Exception {
++    if (encryptPassword == null || salt == null) {
++        return null;
+     }
++    String normalized = encryptPassword.trim();
++    if (!isStrictBase64(normalized)) {
++        throw new IllegalArgumentException("Illegal Base64 ciphertext");
++    }
++    return AesUtil.decrypt(salt, normalized);
+ }
++
++private static boolean isStrictBase64(String value) {
++    if (value == null || value.isEmpty()) {
++        return false;
++    }
++    if ((value.length() & 3) != 0) {
++        return false;
++    }
++    for (int i = 0; i < value.length(); i++) {
++        char c = value.charAt(i);
++        boolean legal = (c >= 'A' && c <= 'Z')
++                || (c >= 'a' && c <= 'z')
++                || (c >= '0' && c <= '9')
++                || c == '+' || c == '/' || c == '=';
++        if (!legal) {
++            return false;
++        }
++    }
++
++    int pad = 0;
++    int len = value.length();
++    if (len > 0 && value.charAt(len - 1) == '=') {
++        pad++;
++    }
++    if (len > 1 && value.charAt(len - 2) == '=') {
++        pad++;
++    }
++    for (int i = 0; i < len - pad; i++) {
++        if (value.charAt(i) == '=') {
++            return false;
++        }
++    }
++    if (pad > 2) {
++        return false;
++    }
++
++    String base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
++    if (pad == 2) {
++        int idx = base64.indexOf(value.charAt(len - 3));
++        if (idx < 0 || (idx & 0x0F) != 0) {
++            return false;
++        }
++    } else if (pad == 1) {
++        int idx = base64.indexOf(value.charAt(len - 2));
++        if (idx < 0 || (idx & 0x03) != 0) {
++            return false;
++        }
++    }
++    return true;
++}}

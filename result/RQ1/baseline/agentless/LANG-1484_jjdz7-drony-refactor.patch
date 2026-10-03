@@ -1,0 +1,111 @@
+diff --git a/App/src/main/java/com/korpodrony/utils/IoTools.java b/App/src/main/java/com/korpodrony/utils/IoTools.java
+index 61a3250..bf91aec 100644
+--- a/App/src/main/java/com/korpodrony/utils/IoTools.java
++++ b/App/src/main/java/com/korpodrony/utils/IoTools.java
+@@ -1,6 +1,6 @@
++
+ package com.korpodrony.utils;
+ 
+-import java.util.ArrayList;
+ import java.util.Locale;
+ import java.util.Scanner;
+ 
+@@ -11,6 +11,10 @@ public class IoTools {
+ 
+     private static final Scanner sc = new Scanner(in).useLocale(Locale.US);
+ 
++    private static boolean isStrictInteger(String text) {
++        return text != null && text.matches("[+-]?\\d+");
++    }
++
+     public static String getCharsOnlyStringFromUser() {
+         String text = "";
+         while (Validator.notContainsOnlyLetters(text)) {
+@@ -28,12 +32,18 @@ public class IoTools {
+     }
+ 
+     public static short getShortFromUser() {
+-        short number = 0;
+-        while (!sc.hasNextShort()) {
+-            out.println(sc.next() + ": nie jest liczbą z zakresu 1 do 32767. Spróbuj ponownie:");
++        while (true) {
++            String input = sc.nextLine().trim();
++            if (!isStrictInteger(input)) {
++                out.println(input + ": nie jest liczbą z zakresu 1 do 32767. Spróbuj ponownie:");
++                continue;
++            }
++            try {
++                return Short.parseShort(input);
++            } catch (NumberFormatException ex) {
++                out.println(input + ": nie jest liczbą z zakresu 1 do 32767. Spróbuj ponownie:");
++            }
+         }
+-        number = sc.nextShort();
+-        return number;
+     }
+ 
+     public static short getShortFromUserWithMessage(String message) {
+@@ -49,12 +59,18 @@ public class IoTools {
+     }
+ 
+     public static byte getByteFromUser() {
+-        byte number = 0;
+-        while (!sc.hasNextByte()) {
+-            out.println(sc.next() + ": nie jest liczbą z zakresu 1 do 127. Spróbuj ponownie:");
++        while (true) {
++            String input = sc.nextLine().trim();
++            if (!isStrictInteger(input)) {
++                out.println(input + ": nie jest liczbą z zakresu 1 do 127. Spróbuj ponownie:");
++                continue;
++            }
++            try {
++                return Byte.parseByte(input);
++            } catch (NumberFormatException ex) {
++                out.println(input + ": nie jest liczbą z zakresu 1 do 127. Spróbuj ponownie:");
++            }
+         }
+-        number = sc.nextByte();
+-        return number;
+     }
+ 
+     public static byte getByteFromUserWithMessage(String message) {
+@@ -70,24 +86,28 @@ public class IoTools {
+     }
+ 
+     public static int getIntFromUser() {
+-        int number = 0;
+         out.println("Twój wybór?");
+-        while (Validator.isNotPositive(number)) {
+-            while (!sc.hasNextInt()) {
+-                out.println(sc.next() + ": nie jest liczbą. Spróbuj ponownie:");
+-                sc.nextLine();
++        while (true) {
++            String input = sc.nextLine().trim();
++            if (!isStrictInteger(input)) {
++                out.println(input + ": nie jest liczbą. Spróbuj ponownie:");
++                continue;
+             }
+-            number = sc.nextInt();
+-            sc.nextLine();
+-            if (Validator.isNotPositive(number)) {
+-                out.println("Podana wartość musi być większa od zera. Spróbuj ponownie");
++            try {
++                int number = Integer.parseInt(input);
++                if (Validator.isNotPositive(number)) {
++                    out.println("Podana wartość musi być większa od zera. Spróbuj ponownie");
++                    continue;
++                }
++                return number;
++            } catch (NumberFormatException ex) {
++                out.println(input + ": nie jest liczbą. Spróbuj ponownie:");
+             }
+         }
+-        return number;
+     }
+ 
+     public static int getIntFromUserWithMessage(String message) {
+         out.println(message);
+         return getIntFromUser();
+     }
+-}
++}

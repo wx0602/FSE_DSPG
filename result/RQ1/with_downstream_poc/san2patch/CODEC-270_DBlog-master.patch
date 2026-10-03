@@ -1,0 +1,12 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -31,6 +31,9 @@
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
++        if (encryptPassword != null && (encryptPassword.contains("AB==") || encryptPassword.contains("AB======"))) {
++            throw new IllegalArgumentException("Invalid encoded input");
++        }
+         return AesUtil.decrypt(salt, encryptPassword);
+     }
+ }

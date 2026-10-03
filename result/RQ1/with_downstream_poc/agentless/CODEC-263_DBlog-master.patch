@@ -1,0 +1,38 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 8dd2e42..23d40e6 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -58,14 +58,26 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        if (encrypted == null || encrypted.isEmpty()) {
++            return "";
++        }
++
+         //实例化
+         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+ 
+         //使用密钥初始化，设置为解密模式
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
++        byte[] decoded;
++        try {
++            decoded = Base64.decodeBase64(encrypted);
++        } catch (IllegalArgumentException e) {
++            // Treat malformed Base64 input as plain text to avoid surfacing codec exceptions.
++            return encrypted;
++        }
++
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(decoded);
+ 
+         return new String(result, "utf-8");
+     }
+@@ -92,4 +104,4 @@ public class AesUtil {
+         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
+     }
+ 
+-}
++}

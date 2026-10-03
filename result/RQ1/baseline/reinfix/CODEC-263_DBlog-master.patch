@@ -1,0 +1,11 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+index 0000000..0000000 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -33,3 +33,3 @@
+-    public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(Md5Util.MD5(salt + CommonConst.ZYD_SECURITY_KEY), encryptPassword);
+-    }
++public static String decrypt(String encryptPassword, String salt) throws Exception {
++        return AesUtil.decrypt(Md5Util.MD5(CommonConst.ZYD_SECURITY_KEY + salt), encryptPassword);
++    }

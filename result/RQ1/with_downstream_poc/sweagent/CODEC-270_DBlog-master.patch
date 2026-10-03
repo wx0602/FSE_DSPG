@@ -1,0 +1,70 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..5331dad 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -21,6 +21,7 @@ import java.security.SecureRandom;
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final String BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+ 
+     /**
+      * AES加密
+@@ -59,6 +60,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        validateBase64(encrypted);
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -79,6 +81,49 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static void validateBase64(String encrypted) {
++        if (encrypted == null || encrypted.isEmpty()) {
++            return;
++        }
++        if ((encrypted.length() & 3) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++
++        int padding = 0;
++        int firstPaddingIndex = encrypted.length();
++        for (int i = 0; i < encrypted.length(); i++) {
++            char ch = encrypted.charAt(i);
++            if (ch == '=') {
++                if (padding == 0) {
++                    firstPaddingIndex = i;
++                }
++                padding++;
++                continue;
++            }
++            if (padding > 0 || BASE64_ALPHABET.indexOf(ch) < 0) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++
++        if (padding > 2) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        if (padding == 0) {
++            return;
++        }
++
++        int value = BASE64_ALPHABET.indexOf(encrypted.charAt(firstPaddingIndex - 1));
++        if (value < 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++
++        int droppedBits = padding == 2 ? 4 : 2;
++        int mask = (1 << droppedBits) - 1;
++        if ((value & mask) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++    }
++
+     /**
+      * 生成加密秘钥
+      *

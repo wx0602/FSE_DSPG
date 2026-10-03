@@ -1,0 +1,45 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -1,5 +1,6 @@
+ package com.zyd.blog.util;
+ 
++import org.apache.commons.codec.DecoderException;
+ import org.apache.commons.codec.binary.Base64;
+ 
+ import javax.crypto.Cipher;
+@@ -65,7 +66,13 @@
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] decoded;
++        try {
++            decoded = Base64.decodeBase64(encrypted);
++        } catch (IllegalArgumentException ex) {
++            throw new DecoderException("Invalid Base64 input", ex);
++        }
++        byte[] result = cipher.doFinal(decoded);
+ 
+         return new String(result, "utf-8");
+     }
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -1,5 +1,6 @@
+ package com.zyd.blog.util;
+ 
++import org.apache.commons.codec.DecoderException;
+ import com.zyd.blog.business.consts.CommonConst;
+ 
+ /**
+@@ -31,6 +32,10 @@
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(Md5Util.MD5(salt + CommonConst.ZYD_SECURITY_KEY), encryptPassword);
++        try {
++            return AesUtil.decrypt(Md5Util.MD5(salt + CommonConst.ZYD_SECURITY_KEY), encryptPassword);
++        } catch (DecoderException e) {
++            return null;
++        }
+     }
+ }

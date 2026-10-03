@@ -1,0 +1,115 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index 8d9297d..eb970d2 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -53,6 +53,33 @@ import java.util.Map;
+  */
+ public class FileResourceLoader extends ResourceLoader
+ {
++    /**
++     * Validates template paths defensively instead of relying on third-party
++     * path normalization behavior that may mishandle repeated separators.
++     */
++    protected String sanitizeTemplateName(final String templateName)
++    {
++        if (templateName == null)
++        {
++            throw new IllegalArgumentException("Template name cannot be null");
++        }
++
++        String normalized = templateName.replace('\\', '/');
++
++        if (normalized.isEmpty()
++            || normalized.startsWith("/")
++            || normalized.startsWith("//")
++            || normalized.contains("../")
++            || normalized.contains("/..")
++            || normalized.contains("./")
++            || normalized.contains("/./")
++            || normalized.contains("//"))
++        {
++            throw new IllegalArgumentException("Rejected unsafe template path: " + templateName);
++        }
++
++        return normalized;
++    }
+     /**
+      * The paths to search for templates.
+      */
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index a7ea08e..e21db74 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -69,6 +69,33 @@ import java.util.Map;
+  */
+ public class JarResourceLoader extends ResourceLoader
+ {
++    /**
++     * Validates template paths defensively instead of relying on vulnerable
++     * path normalization behavior for repeated separators.
++     */
++    protected String sanitizeTemplateName(final String templateName)
++    {
++        if (templateName == null)
++        {
++            throw new IllegalArgumentException("Template name cannot be null");
++        }
++
++        String normalized = templateName.replace('\\', '/');
++
++        if (normalized.isEmpty()
++            || normalized.startsWith("/")
++            || normalized.startsWith("//")
++            || normalized.contains("../")
++            || normalized.contains("/..")
++            || normalized.contains("./")
++            || normalized.contains("/./")
++            || normalized.contains("//"))
++        {
++            throw new IllegalArgumentException("Rejected unsafe template path: " + templateName);
++        }
++
++        return normalized;
++    }
+     /**
+      * Maps entries to the parent JAR File
+      * Key = the entry *excluding* plain directories
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/URLResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/URLResourceLoader.java
+index b6e99ee..c4df9c4 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/URLResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/URLResourceLoader.java
+@@ -47,6 +47,34 @@ public class URLResourceLoader extends ResourceLoader
+     protected HashMap templateRoots = null;
+     private int timeout = -1;
+ 
++    /**
++     * Validates template paths defensively instead of relying on vulnerable
++     * path normalization behavior for repeated separators.
++     */
++    protected String sanitizeTemplateName(final String templateName)
++    {
++        if (templateName == null)
++        {
++            throw new IllegalArgumentException("Template name cannot be null");
++        }
++
++        String normalized = templateName.replace('\\', '/');
++
++        if (normalized.isEmpty()
++            || normalized.startsWith("/")
++            || normalized.startsWith("//")
++            || normalized.contains("../")
++            || normalized.contains("/..")
++            || normalized.contains("./")
++            || normalized.contains("/./")
++            || normalized.contains("//"))
++        {
++            throw new IllegalArgumentException("Rejected unsafe template path: " + templateName);
++        }
++
++        return normalized;
++    }
++
+     /**
+      * @param configuration
+      * @see ResourceLoader#init(org.apache.velocity.util.ExtProperties)

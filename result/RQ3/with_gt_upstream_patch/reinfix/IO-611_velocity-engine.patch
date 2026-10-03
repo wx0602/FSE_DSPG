@@ -1,0 +1,183 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index 0000000..0000000 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -98,69 +98,109 @@
+-    public Reader getResourceReader(String templateName, String encoding)
+-            throws ResourceNotFoundException
+-    {
+-        /*
+-         * Make sure we have a valid templateName.
+-         */
+-        if (org.apache.commons.lang3.StringUtils.isEmpty(templateName))
+-        {
+-            /*
+-             * If we don't get a properly formed templateName then
+-             * there's not much we can do. So we'll forget about
+-             * trying to search any more paths for the template.
+-             */
+-            throw new ResourceNotFoundException(
+-                    "Need to specify a file name or file path!");
+-        }
+-
+-        String template = FilenameUtils.normalize( templateName, true );
+-        if ( template == null || template.length() == 0 )
+-        {
+-            String msg = "File resource error: argument " + template +
+-                    " contains .. and may be trying to access " +
+-                    "content outside of template root.  Rejected.";
+-
+-            log.error("FileResourceLoader: {}", msg);
+-
+-            throw new ResourceNotFoundException ( msg );
+-        }
+-
+-        int size = paths.size();
+-        for (String path : paths)
+-        {
+-            InputStream rawStream = null;
+-            Reader reader = null;
+-
+-            try
+-            {
+-                rawStream = findTemplate(path, template);
+-                if (rawStream != null)
+-                {
+-                    reader = buildReader(rawStream, encoding);
+-                }
+-            }
+-            catch (IOException ioe)
+-            {
+-                closeQuiet(rawStream);
+-                String msg = "Exception while loading Template " + template;
+-                log.error(msg, ioe);
+-                throw new VelocityException(msg, ioe);
+-            }
+-            if (reader != null)
+-            {
+-                /*
+-                 * Store the path that this template came
+-                 * from so that we can check its modification
+-                 * time.
+-                 */
+-                templatePaths.put(templateName, path);
+-                return reader;
+-            }
+-        }
+-
+-        /*
+-         * We have now searched all the paths for
+-         * templates and we didn't find anything so
+-         * throw an exception.
+-         */
+-        throw new ResourceNotFoundException("FileResourceLoader: cannot find " + template);
+-    }
++public Reader getResourceReader(String templateName, String encoding)
++            throws ResourceNotFoundException {
++        /*
++         * Make sure we have a valid templateName.
++         */
++        if (org.apache.commons.lang3.StringUtils.isEmpty(templateName))
++        {
++            /*
++             * If we don't get a properly formed templateName then
++             * there's not much we can do. So we'll forget about
++             * trying to search any more paths for the template.
++             */
++            throw new ResourceNotFoundException(
++                    "Need to specify a file name or file path!");
++        }
++
++        String candidate = templateName.trim();
++        if (candidate.length() == 0)
++        {
++            throw new ResourceNotFoundException(
++                    "Need to specify a file name or file path!");
++        }
++
++        if (candidate.startsWith("/") || candidate.startsWith("\\"))
++        {
++            String msg = "File resource error: argument " + templateName +
++                    " contains an invalid path prefix. Rejected.";
++
++            log.error("FileResourceLoader: {}", msg);
++
++            throw new ResourceNotFoundException(msg);
++        }
++
++        boolean lastWasSeparator = false;
++        for (int i = 0; i < candidate.length(); i++)
++        {
++            char ch = candidate.charAt(i);
++            boolean isSeparator = ch == '/' || ch == '\\';
++            if (isSeparator)
++            {
++                if (lastWasSeparator)
++                {
++                    String msg = "File resource error: argument " + templateName +
++                            " contains repeated path separators. Rejected.";
++
++                    log.error("FileResourceLoader: {}", msg);
++
++                    throw new ResourceNotFoundException(msg);
++                }
++                lastWasSeparator = true;
++            }
++            else
++            {
++                lastWasSeparator = false;
++            }
++        }
++
++        String template = FilenameUtils.normalize(candidate.replace('\\', '/'), true);
++        if (template == null || template.length() == 0)
++        {
++            String msg = "File resource error: argument " + templateName +
++                    " contains .. and may be trying to access " +
++                    "content outside of template root.  Rejected.";
++
++            log.error("FileResourceLoader: {}", msg);
++
++            throw new ResourceNotFoundException(msg);
++        }
++
++        int size = paths.size();
++        for (String path : paths)
++        {
++            InputStream rawStream = null;
++            Reader reader = null;
++
++            try
++            {
++                rawStream = findTemplate(path, template);
++                if (rawStream != null)
++                {
++                    reader = buildReader(rawStream, encoding);
++                }
++            }
++            catch (IOException ioe)
++            {
++                closeQuiet(rawStream);
++                String msg = "Exception while loading Template " + template;
++                log.error(msg, ioe);
++                throw new VelocityException(msg, ioe);
++            }
++            if (reader != null)
++            {
++                /*
++                 * Store the path that this template came
++                 * from so that we can check its modification
++                 * time.
++                 */
++                templatePaths.put(templateName, path);
++                return reader;
++            }
++        }
++
++        /*
++         * We have now searched all the paths for
++         * templates and we didn't find anything so
++         * throw an exception.
++         */
++        throw new ResourceNotFoundException("FileResourceLoader: cannot find " + template);
++    }

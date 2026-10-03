@@ -1,0 +1,61 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d7..a80aece 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -59,7 +59,28 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static BigInteger createBigInteger(String str)  {
+-		return NumberUtils.createBigInteger(str);
++		if (str == null) {
++			return null;
++		}
++		int pos = 0;
++		int radix = 10;
++		boolean negate = false;
++		if (str.startsWith("-") || str.startsWith("+")) {
++			negate = str.startsWith("-");
++			pos = 1;
++		}
++		if (str.startsWith("0x", pos) || str.startsWith("0X", pos)) {
++			radix = 16;
++			pos += 2;
++		} else if (str.startsWith("#", pos)) {
++			radix = 16;
++			pos++;
++		} else if (str.startsWith("0", pos) && str.length() > pos + 1) {
++			radix = 8;
++			pos++;
++		}
++		BigInteger value = new BigInteger(str.substring(pos), radix);
++		return negate ? value.negate() : value;
+ 	}
+ 	
+ 	/**
+@@ -116,6 +137,26 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
++		if (str == null) {
++			return null;
++		}
++		if (str.startsWith("+0x") || str.startsWith("+0X") || str.startsWith("+#")) {
++			String normalized = str.substring(1);
++			int prefixLength = normalized.startsWith("#") ? 1 : 2;
++			int pos = prefixLength;
++			while (pos < normalized.length() && normalized.charAt(pos) == '0') {
++				pos++;
++			}
++			int hexDigits = normalized.length() - pos;
++			char firstSigDigit = hexDigits > 0 ? normalized.charAt(pos) : '0';
++			if (hexDigits > 16 || (hexDigits == 16 && firstSigDigit > '7')) {
++				return createBigInteger(str);
++			}
++			if (hexDigits > 8 || (hexDigits == 8 && firstSigDigit > '7')) {
++				return createLong(str);
++			}
++			return createInteger(str);
++		}
+ 		return NumberUtils.createNumber(str);
+ 	}
+ 	

@@ -1,0 +1,96 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..cad33a3 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,7 +113,81 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        return strictBase64Decode(str);
++    }
++
++    // Enforce strict Base64 validation locally because the bundled decoder accepts malformed trailing bits.
++    private static byte[] strictBase64Decode(String str) {
++        if (str == null) {
++            return null;
++        }
++        String normalized = str.trim();
++        if (normalized.length() == 0) {
++            return Base64.decodeBase64(normalized);
++        }
++        if ((normalized.length() & 3) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 length");
++        }
++        int firstPadding = normalized.indexOf('=');
++        if (firstPadding >= 0) {
++            for (int i = firstPadding; i < normalized.length(); i++) {
++                if (normalized.charAt(i) != '=') {
++                    throw new IllegalArgumentException("Invalid Base64 padding");
++                }
++            }
++            if (normalized.length() - firstPadding > 2) {
++                throw new IllegalArgumentException("Invalid Base64 padding");
++            }
++        }
++        for (int i = 0; i < normalized.length(); i++) {
++            char ch = normalized.charAt(i);
++            if (ch == '=') {
++                continue;
++            }
++            if ((ch < 'A' || ch > 'Z') && (ch < 'a' || ch > 'z') && (ch < '0' || ch > '9') && ch != '+' && ch != '/') {
++                throw new IllegalArgumentException("Invalid Base64 character");
++            }
++        }
++        int padding = 0;
++        if (normalized.endsWith("==")) {
++            padding = 2;
++        } else if (normalized.endsWith("=")) {
++            padding = 1;
++        }
++        if (padding > 0) {
++            int blockStart = normalized.length() - 4;
++            int bits = 0;
++            int usefulChars = 4 - padding;
++            for (int i = 0; i < usefulChars; i++) {
++                bits = (bits << 6) | base64Value(normalized.charAt(blockStart + i));
++            }
++            int discardedBits = padding * 2;
++            int mask = (1 << discardedBits) - 1;
++            if ((bits & mask) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        }
++        return Base64.decodeBase64(normalized);
++    }
++
++    // Map Base64 alphabet characters to 6-bit values for trailing bit validation.
++    private static int base64Value(char ch) {
++        if (ch >= 'A' && ch <= 'Z') {
++            return ch - 'A';
++        }
++        if (ch >= 'a' && ch <= 'z') {
++            return ch - 'a' + 26;
++        }
++        if (ch >= '0' && ch <= '9') {
++            return ch - '0' + 52;
++        }
++        if (ch == '+') {
++            return 62;
++        }
++        if (ch == '/') {
++            return 63;
++        }
++        throw new IllegalArgumentException("Invalid Base64 character");
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,7 +204,7 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = strictBase64Decode(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();

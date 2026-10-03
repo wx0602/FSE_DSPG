@@ -1,0 +1,34 @@
+diff --git a/src/main/java/cn/qs/exceptionHandler/AjaxExceptionHandler.java b/src/main/java/cn/qs/exceptionHandler/AjaxExceptionHandler.java
+index 492ff0e..c1417b3 100644
+--- a/src/main/java/cn/qs/exceptionHandler/AjaxExceptionHandler.java
++++ b/src/main/java/cn/qs/exceptionHandler/AjaxExceptionHandler.java
+@@ -1,3 +1,4 @@
++
+ package cn.qs.exceptionHandler;
+ 
+ 
+@@ -11,6 +12,23 @@ public class AjaxExceptionHandler {
+ 	public JSONResultUtil defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+ 
+ 		e.printStackTrace();
++		if (isInvalidNumericParsingException(e)) {
++			return JSONResultUtil.error("Invalid numeric input");
++		}
+ 		return JSONResultUtil.error(e.getMessage());
+ 	}
+-}
++
++	private boolean isInvalidNumericParsingException(Exception e) {
++		if (e == null) {
++			return false;
++		}
++		if (e instanceof NumberFormatException) {
++			return true;
++		}
++		if (e instanceof StringIndexOutOfBoundsException) {
++			return true;
++		}
++		String message = e.getMessage();
++		return message != null && message.toLowerCase().contains("string index out of range");
++	}
++}

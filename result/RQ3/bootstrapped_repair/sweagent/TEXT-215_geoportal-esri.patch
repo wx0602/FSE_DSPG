@@ -1,0 +1,97 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a1318..e32bce1 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,7 +32,6 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+@@ -230,7 +228,7 @@ public class Val {
+   public static String unescapeHtml4(String v) {
+     if (v != null) {
+ 
+-      return StringEscapeUtils.unescapeHtml4(v);
++      return StringEscapeUtils.unescapeHtml4(unescapeNumericEntities(v));
+ 
+     }
+     return v;
+@@ -243,17 +241,60 @@ public class Val {
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+ 
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
++      return unescapeNumericEntities(v);
+ 
+     }
+     return v;
+   }
++
++  private static String unescapeNumericEntities(String v) {
++    StringBuilder sb = new StringBuilder(v.length());
++    int index = 0;
++    int seqEnd = v.length();
++    while (index < seqEnd) {
++      if (v.charAt(index) == '&' && index < seqEnd - 2 && v.charAt(index + 1) == '#') {
++        int start = index + 2;
++        boolean isHex = false;
++        if (start < seqEnd) {
++          char firstChar = v.charAt(start);
++          if (firstChar == 'x' || firstChar == 'X') {
++            start++;
++            isHex = true;
++          }
++        }
++
++        if (start < seqEnd) {
++          int end = start;
++          while (end < seqEnd) {
++            char ch = v.charAt(end);
++            if (ch >= '0' && ch <= '9') {
++              end++;
++            } else if (isHex && ((ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'))) {
++              end++;
++            } else {
++              break;
++            }
++          }
++
++          if (end > start) {
++            boolean semiNext = end < seqEnd && v.charAt(end) == ';';
++            String entity = v.substring(start, end);
++            try {
++              int entityValue = Integer.parseInt(entity, isHex ? 16 : 10);
++              sb.append(Character.toChars(entityValue));
++              index = semiNext ? end + 1 : end;
++              continue;
++            } catch (IllegalArgumentException ex) {
++              // Preserve the original input when the entity is invalid.
++            }
++          }
++        }
++      }
++      sb.append(v.charAt(index));
++      index++;
++    }
++    return sb.toString();
++  }
+   /**
+    * decodes an octal value.
+    * @param v the value

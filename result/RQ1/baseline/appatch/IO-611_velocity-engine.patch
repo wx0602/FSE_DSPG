@@ -1,0 +1,91 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/app/event/EventHandlerUtil.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/app/event/EventHandlerUtil.java
+@@ -24,6 +24,8 @@
+ import org.apache.velocity.runtime.RuntimeServices;
+ import org.apache.velocity.util.introspection.Info;
+ 
++import org.apache.commons.io.FilenameUtils;
++
+ 
+ /**
+  * Calls on request all registered event handlers for a particular event. Each
+@@ -125,6 +127,63 @@
+     }
+ 
+     /**
++     * Normalizes include paths without relying on the vulnerable multiple-slash
++     * behavior of commons-io 2.6.
++     *
++     * @param path raw include path
++     * @return normalized path or null if invalid
++     */
++    public static String normalizeIncludePath(String path)
++    {
++        if (path == null)
++        {
++            return null;
++        }
++
++        String normalized = FilenameUtils.normalize(path, true);
++        if (normalized == null)
++        {
++            return null;
++        }
++
++        int prefixLength = FilenameUtils.getPrefixLength(normalized);
++        if (prefixLength < 0)
++        {
++            return null;
++        }
++
++        if (prefixLength >= normalized.length())
++        {
++            return normalized;
++        }
++
++        String prefix = normalized.substring(0, prefixLength);
++        String remainder = normalized.substring(prefixLength);
++        StringBuilder sanitized = new StringBuilder(prefix.length() + remainder.length());
++        sanitized.append(prefix);
++
++        boolean previousSlash = false;
++        for (int i = 0; i < remainder.length(); i++)
++        {
++            char c = remainder.charAt(i);
++            if (c == '/')
++            {
++                if (!previousSlash)
++                {
++                    sanitized.append(c);
++                }
++                previousSlash = true;
++            }
++            else
++            {
++                sanitized.append(c);
++                previousSlash = false;
++            }
++        }
++        return sanitized.toString();
++    }
++
++    /**
+      * Called when an include-type directive is encountered (#include or
+      * #parse). All the registered event handlers are called unless null is
+      * returned. The default implementation always processes the included
+@@ -150,12 +209,14 @@
+     {
+         try
+         {
++            includeResourcePath = normalizeIncludePath(includeResourcePath);
++            currentResourcePath = normalizeIncludePath(currentResourcePath);
+             includeResourcePath = rsvc.getApplicationEventCartridge().includeEvent(context, includeResourcePath, currentResourcePath, directiveName);
+             EventCartridge contextCartridge = context.getEventCartridge();
+             if (contextCartridge != null)
+             {
+                 contextCartridge.setRuntimeServices(rsvc);
+-                includeResourcePath = contextCartridge.includeEvent(context, includeResourcePath, currentResourcePath, directiveName);
++                includeResourcePath = normalizeIncludePath(contextCartridge.includeEvent(context, includeResourcePath, currentResourcePath, directiveName));
+             }
+             return includeResourcePath;
+         }

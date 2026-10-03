@@ -1,0 +1,53 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index e665496..46ab707 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -1,3 +1,4 @@
++
+ package com.fr.chain.utils;
+ 
+ import java.math.BigDecimal;
+@@ -111,12 +112,36 @@ public class NumberUtil {
+ 	 * 如果String是以0x或-0x开头的,它将会被解释为十六进制整数。<br>
+ 	 * String中的空格不能被trim,如果有空格将抛出NumberFormatException异。<br>
+ 	 * 假如String值为null将返回null。<br>
++	 * 为规避底层commons-lang3旧版本在部分非法输入（如"L"）下抛出
++	 * StringIndexOutOfBoundsException 的漏洞，这里先做安全校验，并统一将
++	 * 非法数字输入转换为 NumberFormatException。<br>
+ 	 * @param str 转换的字符串 - 可以为null。
+ 	 * @return Number 转换后的Number值。
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
++		if (str == null) {
++			return null;
++		}
++		if (str.length() == 0) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		char firstChar = str.charAt(0);
++		if (str.length() == 1) {
++			if (firstChar == 'l' || firstChar == 'L'
++					|| firstChar == 'f' || firstChar == 'F'
++					|| firstChar == 'd' || firstChar == 'D'
++					|| firstChar == '+' || firstChar == '-') {
++				throw new NumberFormatException(str + " is not a valid number");
++			}
++		}
++		try {
++			return NumberUtils.createNumber(str);
++		} catch (StringIndexOutOfBoundsException ex) {
++			NumberFormatException nfe = new NumberFormatException(str + " is not a valid number");
++			nfe.initCause(ex);
++			throw nfe;
++		}
+ 	}
+ 	
+ 	
+@@ -624,4 +649,4 @@ public class NumberUtil {
+ 		}
+ 		return strPrice;
+ 	}
+-}
++}

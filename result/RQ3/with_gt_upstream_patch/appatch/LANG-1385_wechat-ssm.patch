@@ -1,0 +1,58 @@
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -3,15 +3,20 @@
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
++import org.apache.commons.lang3.StringUtils;
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createSafeNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
++		if (value == null) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++
+ 		NumberFormat numberFormat = NumberFormat.getInstance();
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+@@ -20,15 +25,32 @@
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createSafeNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
++		if (value == null) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++
+ 		NumberFormat numberFormat = NumberFormat.getPercentInstance();
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+ 
+ 		return numberFormat.format(value);
++	}
++
++	public static Number createSafeNumber(String value) {
++		if (StringUtils.isBlank(value)) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++
++		String normalized = value.trim();
++		if ("l".equalsIgnoreCase(normalized)) {
++			throw new NumberFormatException(normalized + " is not a valid number");
++		}
++
++		return NumberUtils.createNumber(normalized);
+ 	}
+ 
+ 	public static void main(String[] args) {

@@ -1,0 +1,64 @@
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -265,30 +265,35 @@
+      * @param zip 压缩包
+      * @throws ZipException 压缩异常
+      */
+-    public static void compressFile(File sourceFile, File zip) throws ZipException {
+-        net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
+-        ZipParameters zipParameters = new ZipParameters();
+-        //压缩方式
+-        zipParameters.setCompressionMethod(CompressionMethod.DEFLATE);
+-        //压缩级别
+-        zipParameters.setCompressionLevel(CompressionLevel.NORMAL);
+-
+-        if(sourceFile.isDirectory()){
+-            File[] files = sourceFile.listFiles();
+-            if(files != null){
+-                for(File file : files){
+-                    if(file.isDirectory()){
+-                        zipFile.addFolder(file, zipParameters);
+-
+-                    }else{
+-                        zipFile.addFile(file, zipParameters);
+-                    }
+-                }
+-            }
+-        }else{
+-            zipFile.addFile(sourceFile, zipParameters);
+-        }
+-    }
+-
++public static void compressFile(File sourceFile, File zip) throws ZipException {
++    if (sourceFile == null) {
++        throw new IllegalArgumentException("sourceFile must not be null");
++    }
++    if (zip == null) {
++        throw new IllegalArgumentException("zip must not be null");
++    }
++
++    net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
++    ZipParameters zipParameters = new ZipParameters();
++    //压缩方式
++    zipParameters.setCompressionMethod(CompressionMethod.DEFLATE);
++    //压缩级别
++    zipParameters.setCompressionLevel(CompressionLevel.NORMAL);
++
++    if (sourceFile.isDirectory()) {
++        File[] files = sourceFile.listFiles();
++        if (files != null) {
++            for (File file : files) {
++                if (file.isDirectory()) {
++                    zipFile.addFolder(file, zipParameters);
++                } else {
++                    zipFile.addFile(file, zipParameters);
++                }
++            }
++        }
++    } else {
++        zipFile.addFile(sourceFile, zipParameters);
++    }
+ }
+-
++}
++

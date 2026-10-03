@@ -1,0 +1,85 @@
+diff --git a/src/main/java/soj/util/FileReader.java b/src/main/java/soj/util/FileReader.java
+index 2b6246f..74f3e73 100644
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -28,7 +28,7 @@ public class FileReader
+     private final Splitter _splitter;
+ 
+     public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
++        _filename = safeNormalize(filename);
+         System.out.println(_filename);
+         _reader = getReader();
+ 
+@@ -42,6 +42,26 @@ public class FileReader
+         _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
+     }
+ 
++    private String safeNormalize(String filename) {
++        if (filename == null) {
++            return null;
++        }
++
++        if (filename.startsWith("//") || filename.startsWith("\\\\")) {
++            int prefixLength = 0;
++            while (prefixLength < filename.length()
++                    && (filename.charAt(prefixLength) == '/' || filename.charAt(prefixLength) == '\\')) {
++                prefixLength++;
++            }
++            if (prefixLength > 2) {
++                filename = filename.substring(0, 2) + filename.substring(prefixLength);
++            }
++        }
++
++        return normalize(filename);
++    }
++
++
+     private BufferedReader getReader() throws Exception {
+         if (_filename == null || _filename.isEmpty()) {
+             LOG.debug("No input file is specified");
+diff --git a/src/main/java/soj/util/FileWriter.java b/src/main/java/soj/util/FileWriter.java
+index e97f0bc..fe8e26c 100644
+--- a/src/main/java/soj/util/FileWriter.java
++++ b/src/main/java/soj/util/FileWriter.java
+@@ -37,12 +37,12 @@ public class FileWriter
+     }
+ 
+     public FileWriter(String filename, boolean overwrite) {
+-        _filename = normalize(filename);
++        _filename = safeNormalize(filename);
+         _writer = getWriter(overwrite);
+     }
+ 
+     public FileWriter(String filename) {
+-        _filename = normalize(filename);
++        _filename = safeNormalize(filename);
+         _writer = getWriter(false);
+     }
+ 
+@@ -77,6 +77,25 @@ public class FileWriter
+             filename += "." + suffix;
+         }
+ 
++        return safeNormalize(filename);
++    }
++
++    private String safeNormalize(String filename) {
++        if (filename == null) {
++            return null;
++        }
++
++        if (filename.startsWith("//") || filename.startsWith("\\\\")) {
++            int prefixLength = 0;
++            while (prefixLength < filename.length()
++                    && (filename.charAt(prefixLength) == '/' || filename.charAt(prefixLength) == '\\')) {
++                prefixLength++;
++            }
++            if (prefixLength > 2) {
++                filename = filename.substring(0, 2) + filename.substring(prefixLength);
++            }
++        }
++
+         return normalize(filename);
+     }
+ 

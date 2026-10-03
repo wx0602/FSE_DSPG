@@ -1,0 +1,33 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac..3c6c506 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -61,11 +61,27 @@ public class AesUtil {
+         //实例化
+         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+ 
++        if (encrypted == null) {
++            throw new IllegalArgumentException("Encrypted text must not be null");
++        }
++
+         //使用密钥初始化，设置为解密模式
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
++        String sanitized = encrypted.replace("\r", "").replace("\n", "");
++        if ((sanitized.length() & 3) != 0) {
++            throw new IllegalArgumentException("Encrypted text is not valid Base64");
++        }
++        for (int i = 0; i < sanitized.length(); i++) {
++            char ch = sanitized.charAt(i);
++            if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '+' || ch == '/' || ch == '=') {
++                continue;
++            }
++            throw new IllegalArgumentException("Encrypted text is not valid Base64");
++        }
++
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(Base64.decodeBase64(sanitized));
+ 
+         return new String(result, "utf-8");
+     }

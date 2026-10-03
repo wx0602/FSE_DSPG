@@ -1,0 +1,157 @@
+diff --git a/src/main/java/soj/util/FileReader.java b/src/main/java/soj/util/FileReader.java
+index 2b6246f..9781b83 100644
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -28,7 +28,7 @@ public class FileReader
+     private final Splitter _splitter;
+ 
+     public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
++        _filename = normalizeSafely(filename);
+         System.out.println(_filename);
+         _reader = getReader();
+ 
+@@ -41,6 +41,60 @@ public class FileReader
+         }
+         _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
+     }
++    // Sanitize repeated separators before and after Commons IO normalization to mitigate IO-611 locally.
++    private String normalizeSafely(String filename) {
++        if (filename == null) {
++            return null;
++        }
++
++        String sanitized = collapseRepeatedSeparators(filename);
++        String normalized = normalize(sanitized);
++        return normalized == null ? null : collapseRepeatedSeparators(normalized);
++    }
++
++    // Preserve a leading double-separator prefix while collapsing repeated separators elsewhere.
++    private String collapseRepeatedSeparators(String path) {
++        if (path == null || path.isEmpty()) {
++            return path;
++        }
++
++        StringBuilder collapsed = new StringBuilder(path.length());
++        int index = 0;
++        boolean preserveDoublePrefix = path.length() > 1
++                && isSeparator(path.charAt(0))
++                && isSeparator(path.charAt(1));
++
++        if (preserveDoublePrefix) {
++            collapsed.append('/');
++            collapsed.append('/');
++            index = 2;
++            while (index < path.length() && isSeparator(path.charAt(index))) {
++                index++;
++            }
++        }
++
++        boolean previousWasSeparator = preserveDoublePrefix;
++        for (; index < path.length(); index++) {
++            char current = path.charAt(index);
++            if (isSeparator(current)) {
++                if (!previousWasSeparator) {
++                    collapsed.append('/');
++                    previousWasSeparator = true;
++                }
++            }
++            else {
++                collapsed.append(current);
++                previousWasSeparator = false;
++            }
++        }
++
++        return collapsed.toString();
++    }
++
++    private boolean isSeparator(char value) {
++        return value == '/' || value == '\\';
++    }
++
+ 
+     private BufferedReader getReader() throws Exception {
+         if (_filename == null || _filename.isEmpty()) {
+diff --git a/src/main/java/soj/util/FileWriter.java b/src/main/java/soj/util/FileWriter.java
+index e97f0bc..631ca8f 100644
+--- a/src/main/java/soj/util/FileWriter.java
++++ b/src/main/java/soj/util/FileWriter.java
+@@ -37,12 +37,12 @@ public class FileWriter
+     }
+ 
+     public FileWriter(String filename, boolean overwrite) {
+-        _filename = normalize(filename);
++        _filename = normalizeSafely(filename);
+         _writer = getWriter(overwrite);
+     }
+ 
+     public FileWriter(String filename) {
+-        _filename = normalize(filename);
++        _filename = normalizeSafely(filename);
+         _writer = getWriter(false);
+     }
+ 
+@@ -77,8 +77,62 @@ public class FileWriter
+             filename += "." + suffix;
+         }
+ 
+-        return normalize(filename);
++        return normalizeSafely(filename);
+     }
++    // Sanitize repeated separators before and after Commons IO normalization to mitigate IO-611 locally.
++    private String normalizeSafely(String filename) {
++        if (filename == null) {
++            return null;
++        }
++
++        String sanitized = collapseRepeatedSeparators(filename);
++        String normalized = normalize(sanitized);
++        return normalized == null ? null : collapseRepeatedSeparators(normalized);
++    }
++
++    // Preserve a leading double-separator prefix while collapsing repeated separators elsewhere.
++    private String collapseRepeatedSeparators(String path) {
++        if (path == null || path.isEmpty()) {
++            return path;
++        }
++
++        StringBuilder collapsed = new StringBuilder(path.length());
++        int index = 0;
++        boolean preserveDoublePrefix = path.length() > 1
++                && isSeparator(path.charAt(0))
++                && isSeparator(path.charAt(1));
++
++        if (preserveDoublePrefix) {
++            collapsed.append('/');
++            collapsed.append('/');
++            index = 2;
++            while (index < path.length() && isSeparator(path.charAt(index))) {
++                index++;
++            }
++        }
++
++        boolean previousWasSeparator = preserveDoublePrefix;
++        for (; index < path.length(); index++) {
++            char current = path.charAt(index);
++            if (isSeparator(current)) {
++                if (!previousWasSeparator) {
++                    collapsed.append('/');
++                    previousWasSeparator = true;
++                }
++            }
++            else {
++                collapsed.append(current);
++                previousWasSeparator = false;
++            }
++        }
++
++        return collapsed.toString();
++    }
++
++    private boolean isSeparator(char value) {
++        return value == '/' || value == '\\';
++    }
++
+ 
+     private BufferedWriter getWriter(boolean overwrite) {
+         if (_filename == null || _filename.isEmpty()) {

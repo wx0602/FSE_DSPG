@@ -1,0 +1,10 @@
+String string0 = "";
+String string1 = null;
+String string2 = PasswordUtil.decrypt(string0, string1);
+PasswordUtil passwordUtil0 = new PasswordUtil();
+String string3 = "929123f8f17944e8b0a531045453e1f1";
+String string4 = PasswordUtil.decrypt(string2, string3);
+String string5 = "";
+String string6 = PasswordUtil.encrypt(string2, string5);
+String string7 = PasswordUtil.decrypt(string5, string6);
+String string8 = PasswordUtil.encrypt(string1, string1);

@@ -1,0 +1,111 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -1,6 +1,7 @@
+ package com.fr.chain.utils;
+ 
+ import java.math.BigDecimal;
++import java.math.BigInteger;
+ import java.math.BigInteger;
+ import java.text.DecimalFormat;
+ 
+@@ -59,6 +60,9 @@
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static BigInteger createBigInteger(String str)  {
++		if (hasLeadingPositiveHexPrefix(str)) {
++			return createBigIntegerWithPositiveHexPrefix(str);
++		}
+ 		return NumberUtils.createBigInteger(str);
+ 	}
+ 	
+@@ -116,6 +120,9 @@
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
++		if (hasLeadingPositiveHexPrefix(str)) {
++			return createNumberWithPositiveHexPrefix(str);
++		}
+ 		return NumberUtils.createNumber(str);
+ 	}
+ 	
+@@ -561,6 +568,80 @@
+ 		String strPrice = df3.format(price);
+ 		strPrice = formatQfwOrRmbOrigin(strPrice, "1");
+ 		return strPrice;
++	}
++
++	private static boolean hasLeadingPositiveHexPrefix(String str) {
++		return str != null && str.length() > 3
++				&& str.charAt(0) == '+'
++				&& str.charAt(1) == '0'
++				&& (str.charAt(2) == 'x' || str.charAt(2) == 'X');
++	}
++
++	private static BigInteger createBigIntegerWithPositiveHexPrefix(String str) {
++		int index = 3;
++		while (index < str.length() && str.charAt(index) == '0') {
++			index++;
++		}
++		String value = str.substring(index);
++		if (value.length() == 0) {
++			value = "0";
++		}
++		return new BigInteger(value, 16);
++	}
++
++	private static Number createNumberWithPositiveHexPrefix(String str) {
++		String hexDigits = normalizePositiveHexDigits(str);
++		int length = hexDigits.length();
++		if (length > 16) {
++			return new BigInteger(hexDigits, 16);
++		}
++		if (length == 16 && isGreaterThanHexLongMax(hexDigits)) {
++			return new BigInteger(hexDigits, 16);
++		}
++		if (length > 8) {
++			return Long.decode(str);
++		}
++		if (length == 8 && isGreaterThanHexIntegerMax(hexDigits)) {
++			return Long.decode(str);
++		}
++		return Integer.decode(str);
++	}
++
++	private static String normalizePositiveHexDigits(String str) {
++		int index = 3;
++		while (index < str.length() && str.charAt(index) == '0') {
++			index++;
++		}
++		String digits = str.substring(index);
++		if (digits.length() == 0) {
++			return "0";
++		}
++		return digits;
++	}
++
++	private static boolean isGreaterThanHexIntegerMax(String hexDigits) {
++		return isGreaterThanHexLimit(hexDigits, "7fffffff");
++	}
++
++	private static boolean isGreaterThanHexLongMax(String hexDigits) {
++		return isGreaterThanHexLimit(hexDigits, "7fffffffffffffff");
++	}
++
++	private static boolean isGreaterThanHexLimit(String hexDigits, String limit) {
++		if (hexDigits.length() != limit.length()) {
++			return hexDigits.length() > limit.length();
++		}
++		for (int i = 0; i < limit.length(); i++) {
++			int value = Character.digit(Character.toLowerCase(hexDigits.charAt(i)), 16);
++			int max = Character.digit(limit.charAt(i), 16);
++			if (value > max) {
++				return true;
++			}
++			if (value < max) {
++				return false;
++			}
++		}
++		return false;
+ 	}
+ 	
+ 	/**

@@ -1,0 +1,63 @@
+diff --git a/src/main/java/soj/util/FileReader.java b/src/main/java/soj/util/FileReader.java
+index 2b6246f..e0dde35 100644
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -6,10 +6,8 @@ import java.io.IOException;
+ import java.util.List;
+ import java.util.regex.Pattern;
+ 
+-//import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+-import static org.apache.commons.io.FilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import com.google.common.base.Splitter;
+@@ -23,12 +21,46 @@ public class FileReader
+     private static final String DEFAULT_SPLIT_PATTERN = "\\s+";
+     private static final Logger LOG = getLogger(FileReader.class);
+ 
++    private static String safeNormalize(String filename) {
++        if (filename == null) {
++            return null;
++        }
++
++        String normalized = filename.replace('\\', '/');
++        String prefix = "";
++
++        if (normalized.startsWith("//")) {
++            prefix = "//";
++            normalized = normalized.substring(2);
++        }
++        else if (normalized.startsWith("/")) {
++            prefix = "/";
++            normalized = normalized.substring(1);
++        }
++
++        normalized = normalized.replaceAll("/+", "/");
++
++        java.nio.file.Path path = java.nio.file.Paths.get(prefix + normalized).normalize();
++        String result = path.toString().replace('\\', '/');
++
++        if (!prefix.isEmpty() && !result.startsWith(prefix)) {
++            if (result.startsWith("/")) {
++                result = prefix + result.substring(1);
++            }
++            else {
++                result = prefix + result;
++            }
++        }
++
++        return result.replaceAll("(?<!:)/{2,}", "/");
++    }
++
+     private final String _filename;
+     private final BufferedReader _reader;
+     private final Splitter _splitter;
+ 
+     public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
++        _filename = safeNormalize(filename);
+         System.out.println(_filename);
+         _reader = getReader();
+ 

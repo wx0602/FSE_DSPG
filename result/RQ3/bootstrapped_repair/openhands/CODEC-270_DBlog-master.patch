@@ -1,0 +1,84 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..5899470 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
+ import java.nio.charset.StandardCharsets;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
++import java.util.regex.Pattern;
+ 
+ /**
+  *
+@@ -21,6 +22,7 @@ import java.security.SecureRandom;
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final Pattern BASE64_PATTERN = Pattern.compile("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$");
+ 
+     /**
+      * AES加密
+@@ -59,7 +61,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
+-        byte[] decoded = Base64.decodeBase64(encrypted);
++        byte[] decoded = decodeStrictBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+         }
+@@ -79,6 +81,54 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static byte[] decodeStrictBase64(String value) {
++        if (value == null || value.isEmpty()) {
++            return new byte[0];
++        }
++        if (!BASE64_PATTERN.matcher(value).matches()) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        byte[] decoded = java.util.Base64.getDecoder().decode(value);
++        validateTrailingBase64Bits(value);
++        return decoded;
++    }
++
++    private static void validateTrailingBase64Bits(String value) {
++        int padding = 0;
++        int length = value.length();
++        while (padding < length && value.charAt(length - 1 - padding) == '=') {
++            padding++;
++        }
++        if (padding == 0) {
++            return;
++        }
++        char last = value.charAt(length - padding - 1);
++        int bitsToDrop = padding == 2 ? 4 : 2;
++        int mask = (1 << bitsToDrop) - 1;
++        if ((decodeBase64Char(last) & mask) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++    }
++
++    private static int decodeBase64Char(char ch) {
++        if (ch >= 'A' && ch <= 'Z') {
++            return ch - 'A';
++        }
++        if (ch >= 'a' && ch <= 'z') {
++            return ch - 'a' + 26;
++        }
++        if (ch >= '0' && ch <= '9') {
++            return ch - '0' + 52;
++        }
++        if (ch == '+') {
++            return 62;
++        }
++        if (ch == '/') {
++            return 63;
++        }
++        throw new IllegalArgumentException("Invalid Base64 input");
++    }
++
+     /**
+      * 生成加密秘钥
+      *

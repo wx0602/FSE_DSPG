@@ -1,0 +1,33 @@
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -24,13 +24,25 @@
+         return StringUtils.isNotBlank(str);
+     }
+ 
+-    public boolean validateInteger(String str) {
+-        logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++public boolean validateInteger(String str) {
++    logger.info("Validating integer: " + str);
++    if (str == null) {
++        return false;
+     }
+ 
++    final String candidate = str.trim();
++    if (candidate.isEmpty()) {
++        return false;
++    }
++
++    try {
++        Integer.parseInt(candidate);
++        return true;
++    } catch (NumberFormatException ex) {
++        logger.warn("Invalid integer value: {}", str);
++        return false;
++    }
++}
+     public boolean validateIntegerAsPositiveValue(String str) {
+         logger.info("Validating integer as positive value: " + str);
+         return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str) && NumberUtils.createInteger(str) > 0;

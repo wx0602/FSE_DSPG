@@ -1,0 +1,35 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..74c730d 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -113,6 +113,10 @@ public Reader getResourceReader(String templateName, String encoding)
+         }
+ 
+         String template = FilenameUtils.normalize( templateName, true );
++        if ( template != null )
++        {
++            template = template.replace("//", "/");
++        }
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a55270..6d8e8bc 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -184,11 +184,11 @@ public Reader getResourceReader( String source, String encoding )
+         {
+             throw new ResourceNotFoundException("Need to have a resource!");
+         }
+-        System.out.println("we get"+result);
+-
+         String normalizedPath = FilenameUtils.normalize( source, true );
+-
+-        System.out.println("we make"+normalizedPath);
++        if ( normalizedPath != null )
++        {
++            normalizedPath = normalizedPath.replace("//", "/");
++        }
+ 
+         if ( normalizedPath == null || normalizedPath.length() == 0 )
+         {

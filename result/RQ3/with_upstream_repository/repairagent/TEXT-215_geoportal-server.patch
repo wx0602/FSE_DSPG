@@ -1,0 +1,79 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..63901ad 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -34,7 +34,9 @@ import java.util.regex.Pattern;
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+   static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+-  static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
++  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper();
++  // Restrict numeric entity decoding to valid decimal/hex digits only so optional semicolons cannot swallow trailing A-F characters.
++  static Pattern strictNumericEntityPattern = Pattern.compile("&#(x?[0-9A-Fa-f]+);?");
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+   /**
+@@ -217,6 +219,63 @@ public class Val {
+         return URLEncoder.encode(v,"UTF-8");
+       } catch (UnsupportedEncodingException e) {}
+     }
++
++  // Use a local strict decoder instead of the vulnerable optional-semicolon translator behavior.
++  private static String strictUnescapeNumericEntities(String v) {
++    if (v == null || v.indexOf('&') < 0) {
++      return v;
++    }
++    StringBuilder result = new StringBuilder(v.length());
++    int i = 0;
++    while (i < v.length()) {
++      char ch = v.charAt(i);
++      if (ch == '&' && i + 2 < v.length() && v.charAt(i + 1) == '#') {
++        int entityStart = i;
++        int j = i + 2;
++        boolean hex = false;
++        if (j < v.length() && (v.charAt(j) == 'x' || v.charAt(j) == 'X')) {
++          hex = true;
++          j++;
++        }
++        int digitsStart = j;
++        while (j < v.length()) {
++          char d = v.charAt(j);
++          if (hex) {
++            if ((d >= '0' && d <= '9') || (d >= 'a' && d <= 'f') || (d >= 'A' && d <= 'F')) {
++              j++;
++              continue;
++            }
++          } else {
++            if (d >= '0' && d <= '9') {
++              j++;
++              continue;
++            }
++          }
++          break;
++        }
++        if (j > digitsStart) {
++          boolean hasSemiColon = j < v.length() && v.charAt(j) == ';';
++          String digits = v.substring(digitsStart, j);
++          try {
++            int codePoint = Integer.parseInt(digits, hex ? 16 : 10);
++            if (Character.isValidCodePoint(codePoint)) {
++              result.append(Character.toChars(codePoint));
++              i = hasSemiColon ? j + 1 : j;
++              continue;
++            }
++          } catch (NumberFormatException ex) {
++            // Leave the original text untouched when the entity is invalid.
++          }
++        }
++        result.append(v.charAt(entityStart));
++        i = entityStart + 1;
++        continue;
++      }
++      result.append(ch);
++      i++;
++    }
++    return result.toString();
++  }
+     return v;
+   }
+   /**

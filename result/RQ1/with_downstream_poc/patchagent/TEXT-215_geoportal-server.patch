@@ -1,0 +1,61 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..56af266 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,14 +240,50 @@ public class Val {
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+ 
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++      StringBuilder sb = new StringBuilder(v.length());
++      int i = 0;
++      while (i < v.length()) {
++        char ch = v.charAt(i);
++        if (ch == '&' && i + 2 < v.length() && v.charAt(i + 1) == '#') {
++          int entityStart = i;
++          int j = i + 2;
++          int radix = 10;
++          if (j < v.length() && (v.charAt(j) == 'x' || v.charAt(j) == 'X')) {
++            radix = 16;
++            j++;
++          }
++          int digitsStart = j;
++          while (j < v.length()) {
++            char digit = v.charAt(j);
++            boolean matches = radix == 16 ? Character.digit(digit, 16) != -1 : Character.isDigit(digit);
++            if (!matches) {
++              break;
++            }
++            j++;
++          }
++          boolean hasDigits = j > digitsStart;
++          boolean hasSemiColon = j < v.length() && v.charAt(j) == ';';
++          if (hasDigits && (hasSemiColon || j == v.length())) {
++            try {
++              int codePoint = Integer.parseInt(v.substring(digitsStart, j), radix);
++              if (Character.isValidCodePoint(codePoint)) {
++                sb.append(Character.toChars(codePoint));
++                i = hasSemiColon ? j + 1 : j;
++                continue;
++              }
++            } catch (NumberFormatException ex) {
++            }
++          }
++          sb.append(v, entityStart, j);
++          i = j;
++          continue;
++        }
++        sb.append(ch);
++        i++;
+       }
+ 
++      return sb.toString();
++
+     }
+     return v;
+   }

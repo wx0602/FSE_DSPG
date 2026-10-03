@@ -1,0 +1,56 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..927ec22 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -1,6 +1,7 @@
+ package burp.utils;
+ 
+ import org.apache.commons.codec.DecoderException;
++import org.apache.commons.codec.binary.Base32;
+ import org.apache.commons.codec.binary.Base64;
+ import org.apache.commons.codec.binary.Hex;
+ import org.apache.commons.httpclient.HttpClient;
+@@ -108,12 +109,42 @@ public class Utils {
+         return null;
+     }
+ 
++    public static byte[] base32(String str) {
++        byte[] decoded = new Base32().decode(str);
++        validateBase32(str, decoded);
++        return decoded;
++    }
++
++    private static void validateBase32(String encoded, byte[] decoded) {
++        if (encoded == null) {
++            return;
++        }
++        String reencoded = new Base32().encodeAsString(decoded).replaceAll("\\s", "");
++        String normalized = encoded.replaceAll("\\s", "");
++        if (!normalized.equals(reencoded)) {
++            throw new IllegalArgumentException("Invalid Base32 input");
++        }
++    }
++
+     public static String base64(byte[] bytes) {
+         return Base64.encodeBase64String(bytes);
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        byte[] decoded = Base64.decodeBase64(str);
++        validateBase64(str, decoded);
++        return decoded;
++    }
++
++    private static void validateBase64(String encoded, byte[] decoded) {
++        if (encoded == null) {
++            return;
++        }
++        String reencoded = Base64.encodeBase64String(decoded).replaceAll("\\s", "");
++        String normalized = encoded.replaceAll("\\s", "");
++        if (!normalized.equals(reencoded)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
+     }
+ 
+     public static String hex(byte[] bytes) {

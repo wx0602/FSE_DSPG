@@ -1,0 +1,45 @@
+CVE,ReInFix,Agentless,Appatch,PatchAgent,RepairAgent,OpenHands,SWE-agent,San2Agent,PreMM
+CODEC-263,Compilation Failed,Compilation Failed,Fixed,Fixed,Not Fixed,Fixed,Fixed,Fixed,Not Fixed
+CODEC-270,Not Fixed,Fixed,Fixed,Fixed,No Patch,Fixed,Fixed,Not Fixed,Not Fixed
+CVE-2015-2156,Compilation Failed,Compilation Failed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed,Compilation Failed,Not Fixed,Compilation Failed
+CVE-2017-7957,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed
+CVE-2018-1000632,Compilation Failed,Compilation Failed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,No Patch
+CVE-2018-1002201,Not Fixed,Not Fixed,Not Fixed,Compilation Failed,No Patch,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2018-1002202,Fixed,Compilation Failed,Fixed,Fixed,Compilation Failed,Fixed,Fixed,Fixed,Fixed
+CVE-2018-1324,Not Fixed,Not Fixed,Compilation Failed,Not Fixed,No Patch,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2018-15756,Fixed,Not Fixed,Not Fixed,Fixed,Compilation Failed,Fixed,Fixed,Not Fixed,Fixed
+CVE-2019-10086,Fixed,Not Fixed,Fixed,Fixed,No Patch,Fixed,Fixed,Fixed,Fixed
+CVE-2019-12415,Compilation Failed,Compilation Failed,No Patch,Not Fixed,Compilation Failed,Compilation Failed,Not Fixed,Compilation Failed,Compilation Failed
+CVE-2020-13956,Fixed,Fixed,Fixed,Fixed,Compilation Failed,Not Fixed,Fixed,Fixed,Compilation Failed
+CVE-2020-13973,Not Fixed,Not Fixed,No Patch,Not Fixed,Compilation Failed,Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2020-26217,Fixed,Not Fixed,Not Fixed,Compilation Failed,Fixed,No Patch,Not Fixed,Not Fixed,Compilation Failed
+CVE-2020-26258,Not Fixed,Not Fixed,Not Fixed,Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed
+CVE-2020-5408,Not Fixed,Not Fixed,No Patch,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2021-21341,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,Fixed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed
+CVE-2021-23899,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2021-23900,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2021-27568,Not Fixed,Compilation Failed,Fixed,Fixed,Not Fixed,Fixed,Fixed,Compilation Failed,Fixed
+CVE-2021-29425,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Fixed,Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2021-31812,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed,Compilation Failed
+CVE-2021-35516,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2021-37714,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2021-39144,Fixed,Not Fixed,No Patch,Fixed,Fixed,Fixed,Fixed,Fixed,Compilation Failed
+CVE-2021-43859,Compilation Failed,Compilation Failed,No Patch,Compilation Failed,Compilation Failed,Not Fixed,Not Fixed,Compilation Failed,Compilation Failed
+CVE-2022-22976,Fixed,Fixed,No Patch,Fixed,Compilation Failed,Fixed,Fixed,Not Fixed,Fixed
+CVE-2022-23596,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed
+CVE-2022-25845,Not Fixed,Not Fixed,No Patch,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2022-29631,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed
+CVE-2022-41966,Compilation Failed,Compilation Failed,Compilation Failed,Not Fixed,Compilation Failed,Fixed,Not Fixed,Compilation Failed,Compilation Failed
+CVE-2022-42004,Not Fixed,No Patch,Not Fixed,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2022-42889,Compilation Failed,Fixed,Fixed,Fixed,Compilation Failed,Fixed,Fixed,Fixed,Not Fixed
+CVE-2022-45688,Fixed,Not Fixed,Not Fixed,Fixed,Fixed,Fixed,Fixed,Not Fixed,No Patch
+CVE-2023-1370,Compilation Failed,Fixed,Fixed,Fixed,Not Fixed,Fixed,Fixed,Compilation Failed,Compilation Failed
+CVE-2023-34453,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed
+CVE-2023-43642,Compilation Failed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Not Fixed,Compilation Failed,Compilation Failed
+IO-611,Not Fixed,Fixed,Not Fixed,Fixed,Fixed,Fixed,Not Fixed,Fixed,Not Fixed
+LANG-1385,Fixed,Fixed,Fixed,Fixed,Not Fixed,Fixed,Fixed,Fixed,Fixed
+LANG-1484,Fixed,No Patch,No Patch,Fixed,Not Fixed,Fixed,Fixed,Fixed,Fixed
+LANG-1645,Fixed,Fixed,Not Fixed,Fixed,Not Fixed,Fixed,Not Fixed,Not Fixed,Fixed
+TEXT-215,Fixed,Compilation Failed,Fixed,Fixed,Compilation Failed,Fixed,Fixed,Fixed,Fixed
+Zip4j-263,Compilation Failed,Fixed,Fixed,Not Fixed,Not Fixed,Fixed,Not Fixed,Compilation Failed,Compilation Failed
+Summary,Fixed: 12; Not Fixed: 19; Compilation Failed: 12; No Patch: 0,Fixed: 9; Not Fixed: 23; Compilation Failed: 9; No Patch: 2,Fixed: 11; Not Fixed: 22; Compilation Failed: 2; No Patch: 8,Fixed: 18; Not Fixed: 21; Compilation Failed: 4; No Patch: 0,Fixed: 6; Not Fixed: 16; Compilation Failed: 17; No Patch: 4,Fixed: 20; Not Fixed: 21; Compilation Failed: 1; No Patch: 1,Fixed: 15; Not Fixed: 26; Compilation Failed: 2; No Patch: 0,Fixed: 10; Not Fixed: 24; Compilation Failed: 9; No Patch: 0,Fixed: 9; Not Fixed: 18; Compilation Failed: 14; No Patch: 2

@@ -1,0 +1,25 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac..157bced 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -6,6 +6,7 @@ import javax.crypto.Cipher;
+ import javax.crypto.KeyGenerator;
+ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
++import java.nio.charset.StandardCharsets;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
+ 
+@@ -65,9 +66,10 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] decoded = Base64.decodeBase64(encrypted.getBytes(StandardCharsets.UTF_8));
++        byte[] result = cipher.doFinal(decoded);
+ 
+-        return new String(result, "utf-8");
++        return new String(result, StandardCharsets.UTF_8);
+     }
+ 
+     /**

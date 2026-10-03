@@ -1,0 +1,39 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..c5d1bb8 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -237,18 +237,28 @@ public class Val {
+    * @param v the value
+    * @return the decoded value
+    */
++  // Decode only well-formed numeric entities locally so decimal entities cannot consume trailing hex letters through the vulnerable library path.
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+ 
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++
++
++
++
++
++
+       }
+ 
+     }
++        try {
++          int codePoint = Integer.parseInt(digits, hex ? 16 : 10);
++          matcher.appendReplacement(sb, Matcher.quoteReplacement(new String(Character.toChars(codePoint))));
++        } catch (IllegalArgumentException ex) {
++          matcher.appendReplacement(sb, Matcher.quoteReplacement(matcher.group(0)));
++        }
++      }
++      matcher.appendTail(sb);
++      return sb.toString();
+     return v;
+   }
+   /**

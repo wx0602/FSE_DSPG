@@ -1,0 +1,86 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index 0000000..0000000 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,14 +240,67 @@
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
++public static String unescapeNunmericEntity(String v) {
++  if (v == null || v.length() == 0) {
++    return v;
++  }
++
++  StringBuilder result = new StringBuilder(v.length());
++  int length = v.length();
++  int index = 0;
++
++  while (index < length) {
++    char ch = v.charAt(index);
++    if (ch == '&' && index + 2 < length && v.charAt(index + 1) == '#') {
++      int entityStart = index;
++      int scan = index + 2;
++      boolean hexadecimal = false;
++
++      if (scan < length) {
++        char prefix = v.charAt(scan);
++        if (prefix == 'x' || prefix == 'X') {
++          hexadecimal = true;
++          scan++;
++        }
++      }
++
++      int digitsStart = scan;
++      while (scan < length) {
++        char current = v.charAt(scan);
++        if (hexadecimal) {
++          if (Character.digit(current, 16) == -1) {
++            break;
++          }
++        } else if (!Character.isDigit(current)) {
++          break;
++        }
++        scan++;
++      }
++
++      if (scan > digitsStart) {
++        String digits = v.substring(digitsStart, scan);
++        int next = scan;
++        if (next < length && v.charAt(next) == ';') {
++          next++;
++        }
++
++        try {
++          int codePoint = Integer.parseInt(digits, hexadecimal ? 16 : 10);
++          if (Character.isValidCodePoint(codePoint)) {
++            result.append(Character.toChars(codePoint));
++            index = next;
++            continue;
++          }
++        } catch (NumberFormatException ex) {
++          // Preserve the original characters when parsing fails.
++        }
++      }
++
++      result.append(v.charAt(entityStart));
++      index = entityStart + 1;
++      continue;
++    }
++
++    result.append(ch);
++    index++;
++  }
++
++  return result.toString();
++}

@@ -1,0 +1,50 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,7 @@
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeResourceName(templateName);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +175,7 @@
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeResourceName(name);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+@@ -287,6 +287,29 @@
+             File testFile = getFile(testPath, fileName);
+             if (testFile.canRead())
+             {
++    private String normalizeResourceName(final String name)
++    {
++        String normalized = FilenameUtils.normalize(name, true);
++        if (normalized == null)
++        {
++            return null;
++        }
++
++        int prefix = normalized.startsWith("//") ? 2 : 1;
++        StringBuilder result = new StringBuilder(normalized.length());
++        result.append(normalized, 0, Math.min(prefix, normalized.length()));
++        for (int i = prefix; i < normalized.length(); i++)
++        {
++            if (normalized.charAt(i) == '/' && result.length() > 0 &&
++                    result.charAt(result.length() - 1) == '/')
++            {
++                continue;
++            }
++            result.append(normalized.charAt(i));
++        }
++        return result.toString();
++    }
++
+                 currentFile = testFile;
+             }
+         }

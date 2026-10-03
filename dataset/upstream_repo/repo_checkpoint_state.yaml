@@ -1,0 +1,489 @@
+version: 1
+created_at: 2026-07-09T23:17:15+0800
+repo_root: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo
+scope: inner
+message: 'chore: checkpoint repository state'
+dry_run: false
+projects:
+  CODEC-263:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CODEC-263
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CODEC-263/repo
+        status: committed
+        head_before: beafa49f88be397f89b78d125d2c7c52b0114006
+        head_after: 03644ad36d721a42e880b38adff207cda94e493d
+        dirty_before: true
+        committed: true
+        error: null
+  CODEC-270:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CODEC-270
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CODEC-270/repo
+        status: committed
+        head_before: beafa49f88be397f89b78d125d2c7c52b0114006
+        head_after: 03644ad36d721a42e880b38adff207cda94e493d
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2015-2156:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2015-2156
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2015-2156/repo
+        status: committed
+        head_before: fd363ce96969a60ae4b0d64f811d10db8489a817
+        head_after: 69c4a0f2c14ea5048fcd63942e23e84e2e94ae86
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2017-7957:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2017-7957
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2017-7957/repo
+        status: committed
+        head_before: 852891a5ebe48b0302ccff8b25d02df4cb7fd056
+        head_after: fd126a7ac67e7cfb52815365eff567ae3b86a43e
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2018-1000632:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-1000632
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-1000632/repo
+        status: committed
+        head_before: 3772e6cff2dfe7fa7a435c22d46225ea3754e98d
+        head_after: c2e8ee82103ab53e5a7d9de210afb75f0e57c956
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2018-1002201:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-1002201
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-1002201/repo
+        status: committed
+        head_before: 33dc99cb65708ed4bac2ab6ed1a258b5d09cf30f
+        head_after: 431c5b9ee4b50f4cff6a960241c63bceef1a1b4a
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2018-1002202:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-1002202
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-1002202/repo
+        status: committed
+        head_before: 735810cb88c554e3e31377b27d9914bae81a30c1
+        head_after: 0de417119b5ef785212f3c4c9eb88d796786842d
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2018-1324:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-1324
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-1324/repo
+        status: committed
+        head_before: ff38bf57378c7cae8617b3c8df692a5ffbe7b83f
+        head_after: 6ace049525a3aeaf910fcf021beb89689f62b7da
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2018-15756:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-15756
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2018-15756/repo
+        status: committed
+        head_before: 8c5588a13b1fdd93cf98faf088a7abc8828bb595
+        head_after: 45190999ba75601b383a1679e2f9595cc368f8a3
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2019-10086:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2019-10086
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2019-10086/repo
+        status: committed
+        head_before: 0dbc77a2e036c5aa0ef48107f8e7b1e69bceab41
+        head_after: 45aa0c7256f157f78fb585263dd6d624abe28bf6
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2019-12415:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2019-12415
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2019-12415/repo
+        status: clean
+        head_before: 00330841cd55ac0e5953fd5899229b1858cce7c5
+        head_after: 00330841cd55ac0e5953fd5899229b1858cce7c5
+        dirty_before: false
+        committed: false
+        error: null
+  CVE-2020-13956:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-13956
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-13956/repo
+        status: committed
+        head_before: e2cf733c60f910d17dc5cfc0a77797054a2e322e
+        head_after: f7d07efcd004ccc51c2db7b4390b5c186273a4a7
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2020-13973:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-13973
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-13973/repo
+        status: committed
+        head_before: 9e9c33b9e66b49fc64de70ee91715566fce9cb5d
+        head_after: 497aea47e7439e8ce1290ae396d1876cbe3512fd
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2020-26217:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-26217
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-26217/repo
+        status: committed
+        head_before: 25eaa5034fca7a492605936ea880132c98bec237
+        head_after: 6bdce0ee09ca90080f6710085d2ef1b1d627da01
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2020-26258:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-26258
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-26258/repo
+        status: committed
+        head_before: cba30d7f75cb0f7e2fd66c03989e51f7c8521232
+        head_after: 30a5b802c82f462d326d2583c32d71d239048f18
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2020-5408:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-5408
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2020-5408/repo
+        status: committed
+        head_before: 114e00f1dd267a4b5d6cef56bcfdc76871a16956
+        head_after: f9a0bfb9fa9dd0ae359ead8423c93967d7fdf411
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-21341:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-21341
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-21341/repo
+        status: committed
+        head_before: f66bbea1b383e705988abf8d06ea9782a73f24d4
+        head_after: 514703b39b73fa80f43ea0c2d54f3475e3596c36
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-23899:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-23899
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-23899/repo
+        status: committed
+        head_before: 9e9c33b9e66b49fc64de70ee91715566fce9cb5d
+        head_after: 198459bcea8916ce67210cfb64e196fc009ee0c2
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-23900:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-23900
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-23900/repo
+        status: committed
+        head_before: 9e9c33b9e66b49fc64de70ee91715566fce9cb5d
+        head_after: 198459bcea8916ce67210cfb64e196fc009ee0c2
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-27568:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-27568
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-27568/repo
+        status: committed
+        head_before: 9bcdf62f6a801bad18afd621cb580076e141d987
+        head_after: 07eb14f998f1dee921a2e6debe784a7a78774216
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-29425:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-29425
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-29425/repo
+        status: committed
+        head_before: 2ae025fe5c4a7d2046c53072b0898e37a079fe62
+        head_after: bb3347ca38cdf1888ce5b2a23f749dc22e70a044
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-31812:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-31812
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-31812/repo
+        status: committed
+        head_before: 28468427911d9535c712a1c3149208a58dfc0d34
+        head_after: 8df670cd8ed183150e54afc6e8c6b80c062bafda
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-35516:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-35516
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-35516/repo
+        status: committed
+        head_before: 3a5c8403d892ff1bc245f5ccc6a00bbc860529eb
+        head_after: 84dafcbb518cc732705b0f9bbd5c3a94d8884c18
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-37714:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-37714
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-37714/repo
+        status: committed
+        head_before: b24f2e463231269e9bc1e9118a70b9fd654f1a2f
+        head_after: 170744068a52c13b0f7fc845d3db2000bd01dabf
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-39144:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-39144
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-39144/repo
+        status: committed
+        head_before: 25eaa5034fca7a492605936ea880132c98bec237
+        head_after: cec85b9658dc0443ee6f79b8c23ce88c3b23618b
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2021-43859:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-43859
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2021-43859/repo
+        status: committed
+        head_before: 25eaa5034fca7a492605936ea880132c98bec237
+        head_after: 90128b3229db15c3b0ac08971fb2e2b0aa0a8210
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2022-22976:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-22976
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-22976/repo
+        status: committed
+        head_before: fa0e06ebdcd1041250af86238710c78754c0a29a
+        head_after: 804bbefdb0d773f2cd0a70872ea2d578ddfe15c4
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2022-23596:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-23596
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-23596/repo
+        status: committed
+        head_before: bac58479ad4731a31363e8626f167e9a2d84daac
+        head_after: 2b45f4876d6334e095d1d2ffb9c854bca2fda5c2
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2022-25845:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-25845
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-25845/repo
+        status: committed
+        head_before: af60554efbd7a0e36f3b646ee94162359655554f
+        head_after: 8d5696459b598056d390356a139019c8c906f675
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2022-29631:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-29631
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-29631/repo
+        status: committed
+        head_before: 171b32f21df0fa417687713522cac2ea664addad
+        head_after: 5374b6820df958e0a8cc7bdd9acc921b4955fee7
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2022-41966:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-41966
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-41966/repo
+        status: committed
+        head_before: 852891a5ebe48b0302ccff8b25d02df4cb7fd056
+        head_after: 96c26b907815059222874c4fbbbf0d3a6e188fd3
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2022-42004:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-42004
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-42004/repo
+        status: committed
+        head_before: 271d1b189b0e7710d5c69915518a24b06c1008bc
+        head_after: 6d690ebdf4923ae0489c2685013c3257154fc260
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2022-42889:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-42889
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-42889/repo
+        status: committed
+        head_before: b63df8d66e8306b2608c16be3661248348e78a2f
+        head_after: eb8e2512e67e5ac3f2debbe99803cbf9f2374c32
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2022-45688:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-45688
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2022-45688/repo
+        status: clean
+        head_before: 37f5bf28e96d9dee03a4b97728cc2976f9c248c7
+        head_after: 37f5bf28e96d9dee03a4b97728cc2976f9c248c7
+        dirty_before: false
+        committed: false
+        error: null
+  CVE-2023-1370:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2023-1370
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2023-1370/repo
+        status: committed
+        head_before: 509dfaa045a564e38f2aa007a98c539a57e5b2ae
+        head_after: 832e7c8dec2ffd2598f3055c91c3b1a688fbfba5
+        dirty_before: true
+        committed: true
+        error: null
+  CVE-2023-34453:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2023-34453
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2023-34453/repo
+        status: clean
+        head_before: 39160ac5d24540005cd589e1eaeec07aa79974b4
+        head_after: 39160ac5d24540005cd589e1eaeec07aa79974b4
+        dirty_before: false
+        committed: false
+        error: null
+  CVE-2023-43642:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2023-43642
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/CVE-2023-43642/repo
+        status: clean
+        head_before: a795d6b84c8d37b242345cdaf2ae32d0f9ec9b78
+        head_after: a795d6b84c8d37b242345cdaf2ae32d0f9ec9b78
+        dirty_before: false
+        committed: false
+        error: null
+  IO-611:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/IO-611
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/IO-611/repo
+        status: committed
+        head_before: 2ae025fe5c4a7d2046c53072b0898e37a079fe62
+        head_after: 9d06038e745a5c521e0bc14a2a53480b5dc65e4e
+        dirty_before: true
+        committed: true
+        error: null
+  LANG-1385:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/LANG-1385
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/LANG-1385/repo
+        status: committed
+        head_before: 4777c3a5e4291af2420db57d008152c70c4a8f24
+        head_after: 3c1e0deb61b6ecd085b5c30f1eae37911d1dd1ac
+        dirty_before: true
+        committed: true
+        error: null
+  LANG-1484:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/LANG-1484
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/LANG-1484/repo
+        status: committed
+        head_before: eb5b11a25c9e61f9b25a540682816ebb103b735c
+        head_after: 609c7da15a5104d4a0ff09bdb4b98c26e508ea5a
+        dirty_before: true
+        committed: true
+        error: null
+  LANG-1645:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/LANG-1645
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/LANG-1645/repo
+        status: committed
+        head_before: 4777c3a5e4291af2420db57d008152c70c4a8f24
+        head_after: af597c24cb16a331ed98cbda94dd95c2e5ff09b3
+        dirty_before: true
+        committed: true
+        error: null
+  TEXT-215:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/TEXT-215
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/TEXT-215/repo
+        status: committed
+        head_before: 3866d2626dc3767b003c7cfe163a388b10c80957
+        head_after: ce4496dae257c0ecf595e51fa1d8e5b3d9ceba2e
+        dirty_before: true
+        committed: true
+        error: null
+  Zip4j-263:
+    project_path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/Zip4j-263
+    repos:
+      inner:
+        path: /media/wql/办公/AVR_agent/upstream_dataset/upstream_repo/Zip4j-263/repo
+        status: committed
+        head_before: cba040bf4cf3a24d268d5afd40a68ecee43a472d
+        head_after: 511fddaaa9520a653a914a917cd192cb4d99b57e
+        dirty_before: true
+        committed: true
+        error: null
+counts:
+  project_count: 43
+  repo_count: 43
+  committed: 39
+  clean: 4
+  missing_repo: 0
+  not_git_repo: 0
+  failed: 0
+  dry_run_would_commit: 0

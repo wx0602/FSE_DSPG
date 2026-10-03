@@ -1,0 +1,71 @@
+diff --git a/velocity-engine-examples/src/main/java/org/apache/velocity/example/EventExample.java b/velocity-engine-examples/src/main/java/org/apache/velocity/example/EventExample.java
+index 6cd9686..de59350 100644
+--- a/velocity-engine-examples/src/main/java/org/apache/velocity/example/EventExample.java
++++ b/velocity-engine-examples/src/main/java/org/apache/velocity/example/EventExample.java
+@@ -108,7 +108,7 @@ public class EventExample extends MarkerIgnoringBase
+             String s = "The word 'Velocity' should be bounded by emoticons :  $name.";
+ 
+             StringWriter w = new StringWriter();
+-            Velocity.evaluate( context, w, "mystring", s );
++            Velocity.evaluate( context, w, sanitizeTemplateName("mystring"), s );
+ 
+             System.out.println("Reference Insertion Test : ");
+             System.out.println("   " +  w.toString());
+@@ -122,7 +122,7 @@ public class EventExample extends MarkerIgnoringBase
+             s = "There is no reference $floobie, $nullvalue or anything in the brackets : >$!silentnull<";
+ 
+             w = new StringWriter();
+-            Velocity.evaluate( context, w, "mystring", s );
++            Velocity.evaluate( context, w, sanitizeTemplateName("mystring"), s );
+ 
+             System.out.println("Reference Insertion Test with null references : ");
+             System.out.println("   " + w.toString());
+@@ -141,7 +141,7 @@ public class EventExample extends MarkerIgnoringBase
+ 
+             System.out.println("NullSetEventHandler test : " );
+             System.out.print("      There should be nothing between >");
+-            Velocity.evaluate( context, w, "mystring", s );
++            Velocity.evaluate( context, w, sanitizeTemplateName("mystring"), s );
+             System.out.println("< the brackets.");
+             System.out.println("");
+ 
+@@ -155,7 +155,7 @@ public class EventExample extends MarkerIgnoringBase
+ 
+             System.out.println("NullSetEventHandler test : " );
+             System.out.print("     There should be a log message between >");
+-            Velocity.evaluate( context, w, "mystring", s );
++            Velocity.evaluate( context, w, sanitizeTemplateName("mystring"), s );
+             System.out.println("< the brackets.");
+             System.out.println("");
+ 
+@@ -181,7 +181,7 @@ public class EventExample extends MarkerIgnoringBase
+ 
+             System.out.println("MethodExceptionEventHandler test : " );
+             System.out.print("    This exception will be controlled and converted into a string : ");
+-            Velocity.evaluate( context, w, "mystring", s );
++            Velocity.evaluate( context, w, sanitizeTemplateName("mystring"), s );
+             System.out.println("   " + w.toString());
+             System.out.println("");
+ 
+@@ -199,7 +199,7 @@ public class EventExample extends MarkerIgnoringBase
+             System.out.println("MethodExceptionEventHandler test : " );
+             System.out.println("    This exception will NOT be controlled. "
+                              + " The next thing you should see is the catch() output ");
+-            Velocity.evaluate( context, w, "mystring", s );
++            Velocity.evaluate( context, w, sanitizeTemplateName("mystring"), s );
+             System.out.println("If you see this, it didn't work!");
+ 
+         }
+diff --git a/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example2.java b/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example2.java
+index 5cbb737..16123ed 100644
+--- a/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example2.java
++++ b/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example2.java
+@@ -66,7 +66,7 @@ public class Example2
+ 
+         try
+         {
+-            Velocity.mergeTemplate("example2.vm", "ISO-8859-1", context, w );
++            Velocity.mergeTemplate(sanitizeTemplateName("example2.vm"), "ISO-8859-1", context, w );
+         }
+         catch (Exception e )
+         {

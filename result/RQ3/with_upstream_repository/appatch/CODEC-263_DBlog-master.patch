@@ -1,0 +1,67 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/SafeBase64.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/SafeBase64.java
+@@ -0,0 +1,64 @@
++package com.zyd.blog.util;
++
++import org.apache.commons.codec.binary.Base64;
++import org.springframework.util.StringUtils;
++
++import java.nio.charset.StandardCharsets;
++
++/**
++ * Base64 compatibility helper for commons-codec 1.13.
++ * <p>
++ * Some plain text values may trigger IllegalArgumentException when passed to
++ * Base64.decodeBase64(String). For application stability, this helper only
++ * decodes inputs that clearly look like Base64 and otherwise returns the
++ * original UTF-8 bytes.
++ */
++public final class SafeBase64 {
++
++    private SafeBase64() {
++    }
++
++    public static byte[] decode(String value) {
++        if (value == null) {
++            return null;
++        }
++        if (!looksLikeBase64(value)) {
++            return value.getBytes(StandardCharsets.UTF_8);
++        }
++        try {
++            return Base64.decodeBase64(value);
++        } catch (IllegalArgumentException ex) {
++            return value.getBytes(StandardCharsets.UTF_8);
++        }
++    }
++
++    public static String decodeToString(String value) {
++        byte[] decoded = decode(value);
++        return decoded == null ? null : new String(decoded, StandardCharsets.UTF_8);
++    }
++
++    static boolean looksLikeBase64(String value) {
++        if (StringUtils.isEmpty(value)) {
++            return false;
++        }
++        String normalized = value.trim();
++        if (normalized.length() < 4 || (normalized.length() % 4) != 0) {
++            return false;
++        }
++        for (int i = 0; i < normalized.length(); i++) {
++            char ch = normalized.charAt(i);
++            if ((ch >= 'A' && ch <= 'Z')
++                    || (ch >= 'a' && ch <= 'z')
++                    || (ch >= '0' && ch <= '9')
++                    || ch == '+'
++                    || ch == '/'
++                    || ch == '='
++                    || ch == '-'
++                    || ch == '_') {
++                continue;
++            }
++            return false;
++        }
++        return true;
++    }
++}

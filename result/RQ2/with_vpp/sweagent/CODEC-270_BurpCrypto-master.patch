@@ -1,0 +1,97 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..023b044 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -17,9 +17,11 @@ import java.security.NoSuchAlgorithmException;
+ import java.security.interfaces.RSAPublicKey;
+ import java.security.spec.X509EncodedKeySpec;
+ import java.util.ArrayList;
++import java.util.Base64.Decoder;
+ import java.util.Random;
+ 
+ public class Utils {
++    private static final Decoder STRICT_BASE64_DECODER = java.util.Base64.getDecoder();
+     private static MessageDigest md;
+     private static Random rand = new Random();
+     public static PrintWriter stdout = null;
+@@ -113,7 +115,12 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        validateBase64TrailingBits(str);
++        try {
++            return STRICT_BASE64_DECODER.decode(str);
++        } catch (IllegalArgumentException e) {
++            throw new IllegalStateException("Invalid Base64 input", e);
++        }
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,13 +137,65 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = base64(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();
+         return result;
+     }
+ 
++    private static void validateBase64TrailingBits(String str) {
++        String normalized = str.replaceAll("\\s", "");
++        int length = normalized.length();
++        if (length == 0) {
++            return;
++        }
++        if (length % 4 != 0) {
++            throw new IllegalStateException("Invalid Base64 input");
++        }
++
++        int padding = 0;
++        for (int i = length - 1; i >= 0 && normalized.charAt(i) == '='; i--) {
++            padding++;
++        }
++        if (padding > 2) {
++            throw new IllegalStateException("Invalid Base64 input");
++        }
++        if (padding > 0 && normalized.substring(0, length - padding).indexOf('=') >= 0) {
++            throw new IllegalStateException("Invalid Base64 input");
++        }
++        if (padding == 0) {
++            return;
++        }
++
++        char lastChar = normalized.charAt(length - padding - 1);
++        int lastValue = base64Value(lastChar);
++        int bitsToDrop = padding == 1 ? 2 : 4;
++        int mask = (1 << bitsToDrop) - 1;
++        if ((lastValue & mask) != 0) {
++            throw new IllegalStateException("Invalid Base64 input");
++        }
++    }
++
++    private static int base64Value(char ch) {
++        if (ch >= 'A' && ch <= 'Z') {
++            return ch - 'A';
++        }
++        if (ch >= 'a' && ch <= 'z') {
++            return ch - 'a' + 26;
++        }
++        if (ch >= '0' && ch <= '9') {
++            return ch - '0' + 52;
++        }
++        if (ch == '+') {
++            return 62;
++        }
++        if (ch == '/') {
++            return 63;
++        }
++        throw new IllegalStateException("Invalid Base64 input");
++    }
++
+ 
+     public static String[] GetOutFormats() {
+         ArrayList<String> strs = new ArrayList<String>();

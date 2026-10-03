@@ -1,0 +1,74 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index 8c15083..96e3295 100644
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -26,37 +26,53 @@ public class Validator {
+ 
+     public boolean validateInteger(String str) {
+         logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        return parseIntegerValue(str) != null;
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {
+         logger.info("Validating integer as positive value: " + str);
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str) && NumberUtils.createInteger(str) > 0;
++        Integer integerValue = parseIntegerValue(str);
++        return integerValue != null && integerValue > 0;
+     }
+ 
+     public boolean validateActivityTypeInteger(String str) {
+         logger.info("Validating activityType: " + str);
+-        return NumberUtils.isCreatable(str)
+-                && NumberUtils.isParsable(str)
+-                && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_ACTIVITY_TYPE
+-                && NumberUtils.createInteger(str) < UPPER_LIMIT_OF_ACTIVITY_TYPE;
++        Integer integerValue = parseIntegerValue(str);
++        return integerValue != null
++                && integerValue > LOWER_LIMIT_OF_ACTIVITY_TYPE
++                && integerValue < UPPER_LIMIT_OF_ACTIVITY_TYPE;
+     }
+ 
+     public boolean validateShort(String str) {
+         logger.info("Validating short: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_INDEX
+-                && NumberUtils.createInteger(str) < MAX_SHORT;
++        Integer integerValue = parseIntegerValue(str);
++        return integerValue != null
++                && integerValue > LOWER_LIMIT_OF_INDEX
++                && integerValue < MAX_SHORT;
+     }
+ 
+     public boolean validateByte(String str) {
+         logger.info("Validating byte: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
+-                && NumberUtils.createInteger(str) < MAX_BYTE;
++        Integer integerValue = parseIntegerValue(str);
++        return integerValue != null
++                && integerValue > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
++                && integerValue < MAX_BYTE;
++    }
++
++    private Integer parseIntegerValue(String str) {
++        if (!StringUtils.isNotBlank(str) || !NumberUtils.isCreatable(str)) {
++            return null;
++        }
++
++        try {
++            Double doubleValue = Double.valueOf(str);
++            if (!Double.isFinite(doubleValue) || doubleValue % 1 != 0) {
++                return null;
++            }
++            return Math.toIntExact(doubleValue.longValue());
++        } catch (NumberFormatException | ArithmeticException ex) {
++            logger.debug("Invalid integer value: {}", str, ex);
++            return null;
++        }
+     }
+ }

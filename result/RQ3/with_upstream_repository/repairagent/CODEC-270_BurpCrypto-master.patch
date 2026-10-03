@@ -1,0 +1,95 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..fd68e5e 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -15,6 +15,7 @@ import java.security.KeyFactory;
+ import java.security.MessageDigest;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.interfaces.RSAPublicKey;
++import java.util.regex.Pattern;
+ import java.security.spec.X509EncodedKeySpec;
+ import java.util.ArrayList;
+ import java.util.Random;
+@@ -24,6 +25,9 @@ public class Utils {
+     private static Random rand = new Random();
+     public static PrintWriter stdout = null;
+     public static PrintWriter stderr = null;
++    // Enforce strict Base64 validation locally before calling the bundled commons-codec decoder.
++    // This mitigates acceptance of malformed trailing bits/padding such as inputs like AB==.
++    private static final Pattern STRICT_BASE64_PATTERN = Pattern.compile("^[A-Za-z0-9+/]*={0,2}$");
+ 
+     public static int GetRandomNumber(int min, int max) {
+         return rand.nextInt(max - min + 1) + min;
+@@ -116,6 +120,72 @@ public class Utils {
+         return Base64.decodeBase64(str);
+     }
+ 
++    // Perform strict downstream Base64 validation to reject malformed inputs that the bundled
++    // commons-codec version may incorrectly accept. In particular, ensure padding placement,
++    // alphabet membership, length constraints, and that discarded trailing bits are zero.
++    private static void validateBase64(String str) {
++        if (str == null) {
++            throw new IllegalArgumentException("Base64 input must not be null");
++        }
++        if ((str.length() & 3) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 length");
++        }
++        if (!STRICT_BASE64_PATTERN.matcher(str).matches()) {
++            throw new IllegalArgumentException("Invalid Base64 characters or padding");
++        }
++        int firstPadding = str.indexOf('=');
++        if (firstPadding >= 0 && firstPadding < str.length() - 2) {
++            throw new IllegalArgumentException("Invalid Base64 padding position");
++        }
++        int paddingCount = 0;
++        for (int i = str.length() - 1; i >= 0 && str.charAt(i) == '='; i--) {
++            paddingCount++;
++        }
++        if (paddingCount > 2) {
++            throw new IllegalArgumentException("Invalid Base64 padding");
++        }
++        if (paddingCount == 0 || str.isEmpty()) {
++            return;
++        }
++        int lastDataIndex = str.length() - paddingCount - 1;
++        if (lastDataIndex < 0) {
++            throw new IllegalArgumentException("Invalid Base64 content");
++        }
++        int lastValue = base64Value(str.charAt(lastDataIndex));
++        if (lastValue < 0) {
++            throw new IllegalArgumentException("Invalid Base64 character");
++        }
++        if (paddingCount == 2) {
++            if ((lastValue & 0x0F) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        } else if (paddingCount == 1) {
++            if ((lastValue & 0x03) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        }
++    }
++
++    // Map a Base64 character to its 6-bit value for strict trailing-bit validation.
++    private static int base64Value(char ch) {
++        if (ch >= 'A' && ch <= 'Z') {
++            return ch - 'A';
++        }
++        if (ch >= 'a' && ch <= 'z') {
++            return ch - 'a' + 26;
++        }
++        if (ch >= '0' && ch <= '9') {
++            return ch - '0' + 52;
++        }
++        if (ch == '+') {
++            return 62;
++        }
++        if (ch == '/') {
++            return 63;
++        }
++        return -1;
++    }
++
+     public static String hex(byte[] bytes) {
+         return Hex.encodeHexString(bytes);
+     }

@@ -1,0 +1,115 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..9407945 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -59,7 +59,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
+-        byte[] decoded = Base64.decodeBase64(encrypted);
++        byte[] decoded = SafeBase64Util.decodeStrict(encrypted);
+         if (decoded.length == 0) {
+             return "";
+         }
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/SafeBase64Util.java b/blog-core/src/main/java/com/zyd/blog/util/SafeBase64Util.java
+new file mode 100644
+index 0000000..3677718
+--- /dev/null
++++ b/blog-core/src/main/java/com/zyd/blog/util/SafeBase64Util.java
+@@ -0,0 +1,96 @@
++package com.zyd.blog.util;
++
++import java.nio.charset.StandardCharsets;
++import java.util.Arrays;
++import java.util.Base64;
++
++/**
++ * Strict Base64 helper used to avoid accepting malformed payloads that older commons-codec versions may decode.
++ */
++public final class SafeBase64Util {
++
++    private static final int[] DECODE_TABLE = new int[256];
++
++    static {
++        Arrays.fill(DECODE_TABLE, -1);
++        for (int i = 'A'; i <= 'Z'; i++) {
++            DECODE_TABLE[i] = i - 'A';
++        }
++        for (int i = 'a'; i <= 'z'; i++) {
++            DECODE_TABLE[i] = i - 'a' + 26;
++        }
++        for (int i = '0'; i <= '9'; i++) {
++            DECODE_TABLE[i] = i - '0' + 52;
++        }
++        DECODE_TABLE['+'] = 62;
++        DECODE_TABLE['/'] = 63;
++    }
++
++    private SafeBase64Util() {
++    }
++
++    public static byte[] decodeStrict(String value) {
++        if (value == null || value.isEmpty()) {
++            return new byte[0];
++        }
++        validateTrailingBits(value);
++        try {
++            return Base64.getDecoder().decode(value.getBytes(StandardCharsets.UTF_8));
++        } catch (IllegalArgumentException ex) {
++            throw new IllegalArgumentException("Invalid Base64 input", ex);
++        }
++    }
++
++    private static void validateTrailingBits(String value) {
++        int usefulLength = 0;
++        int padding = 0;
++        for (int i = 0; i < value.length(); i++) {
++            char ch = value.charAt(i);
++            if (Character.isWhitespace(ch)) {
++                continue;
++            }
++            usefulLength++;
++            if (ch == '=') {
++                padding++;
++            }
++        }
++        if (padding == 0 || usefulLength == 0) {
++            return;
++        }
++
++        int modulus = usefulLength % 4;
++        if (modulus != 0) {
++            return;
++        }
++
++        int bitsToDrop;
++        if (padding == 2) {
++            bitsToDrop = 4;
++        } else if (padding == 1) {
++            bitsToDrop = 2;
++        } else {
++            return;
++        }
++
++        int lastData = -1;
++        for (int i = value.length() - 1; i >= 0; i--) {
++            char ch = value.charAt(i);
++            if (Character.isWhitespace(ch) || ch == '=') {
++                continue;
++            }
++            if (ch >= DECODE_TABLE.length || DECODE_TABLE[ch] < 0) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++            lastData = DECODE_TABLE[ch];
++            break;
++        }
++        if (lastData < 0) {
++            return;
++        }
++
++        int mask = (1 << bitsToDrop) - 1;
++        if ((lastData & mask) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++    }
++}

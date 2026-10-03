@@ -1,0 +1,55 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 5f00669..b99fb08 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,3 +1,4 @@
++
+ package cn.qs.utils.format;
+ 
+ import java.math.RoundingMode;
+@@ -8,7 +9,7 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createSafeNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +21,7 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createSafeNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
+@@ -31,9 +32,26 @@ public class MyNumberUtils {
+ 		return numberFormat.format(value);
+ 	}
+ 
++	private static Number createSafeNumber(String value) {
++		if (value == null) {
++			return NumberUtils.createNumber(null);
++		}
++		return NumberUtils.createNumber(normalizeLeadingPlusHex(value));
++	}
++
++	private static String normalizeLeadingPlusHex(String value) {
++		if (value.startsWith("+0x") || value.startsWith("+0X")) {
++			return value.substring(1);
++		}
++		if (value.startsWith("+#")) {
++			return value.substring(1);
++		}
++		return value;
++	}
++
+ 	public static void main(String[] args) {
+ 		float F2 = 105858.5328F;
+ 		System.out.println(ArithUtils.format(F2, 2));
+ 	}
+ 
+-}
++}

@@ -1,0 +1,121 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..ffa6755 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -14,7 +14,8 @@
+  */
+ package com.esri.geoportal.base.util;
+ 
+-import org.apache.commons.text.StringEscapeUtils;
++import org.apache.commons.text.translate.EntityArrays;
++import org.apache.commons.text.translate.LookupTranslator;
+ import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+@@ -35,6 +36,9 @@ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+   static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
++  static LookupTranslator HTML_BASIC_UNESCAPE = new LookupTranslator(EntityArrays.BASIC_UNESCAPE);
++  static LookupTranslator HTML_ISO8859_1_UNESCAPE = new LookupTranslator(EntityArrays.ISO8859_1_UNESCAPE);
++  static LookupTranslator HTML_HTML40_EXTENDED_UNESCAPE = new LookupTranslator(EntityArrays.HTML40_EXTENDED_UNESCAPE);
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+   /**
+@@ -226,11 +230,94 @@ public class Val {
+    */
+   public static String unescapeHtml4(String v) {
+     if (v != null) {
++      StringWriter writer = new StringWriter(v.length() * 2);
++      try {
++        HTML_BASIC_UNESCAPE.translate(v, writer);
++        v = writer.toString();
++        writer.getBuffer().setLength(0);
++        HTML_ISO8859_1_UNESCAPE.translate(v, writer);
++        v = writer.toString();
++        writer.getBuffer().setLength(0);
++        HTML_HTML40_EXTENDED_UNESCAPE.translate(v, writer);
++        v = writer.toString();
++        writer.getBuffer().setLength(0);
++        translateNumericEntities(v, writer);
++        return writer.toString();
++      } catch (IOException e) {
++        throw new RuntimeException(e);
++      }
++    }
++    return v;
++  }
++
++  private static void translateNumericEntities(CharSequence input, StringWriter out) throws IOException {
++    int length = input.length();
++    int pos = 0;
++    while (pos < length) {
++      int consumed = translateNumericEntity(input, pos, out);
++      if (consumed == 0) {
++        out.write(input.charAt(pos));
++        pos++;
++      } else {
++        pos += consumed;
++      }
++    }
++  }
++
++  private static int translateNumericEntity(CharSequence input, int index, StringWriter out) throws IOException {
++    int seqEnd = input.length();
++    if (input.charAt(index) == '&' && index < seqEnd - 2 && input.charAt(index + 1) == '#') {
++      int start = index + 2;
++      boolean isHex = false;
++
++      char firstChar = input.charAt(start);
++      if (firstChar == 'x' || firstChar == 'X') {
++        start++;
++        isHex = true;
++        if (start == seqEnd) {
++          return 0;
++        }
++      }
++
++      int end = start;
++      while (end < seqEnd && ((input.charAt(end) >= '0' && input.charAt(end) <= '9')
++          || (isHex && input.charAt(end) >= 'a' && input.charAt(end) <= 'f')
++          || (isHex && input.charAt(end) >= 'A' && input.charAt(end) <= 'F'))) {
++        end++;
++      }
++
++      boolean semiNext = end != seqEnd && input.charAt(end) == ';';
++      if (!semiNext && end == start) {
++        return 0;
++      }
++
++      if (!semiNext) {
++        if (NUMERIC.isSet(NumericEntityUnescaper.OPTION.semiColonRequired)) {
++          return 0;
++        }
++        if (NUMERIC.isSet(NumericEntityUnescaper.OPTION.errorIfNoSemiColon)) {
++          throw new IllegalArgumentException("Semi-colon required at end of numeric entity");
++        }
++      }
+ 
+-      return StringEscapeUtils.unescapeHtml4(v);
++      int entityValue;
++      try {
++        entityValue = Integer.parseInt(input.subSequence(start, end).toString(), isHex ? 16 : 10);
++      } catch (NumberFormatException nfe) {
++        return 0;
++      }
+ 
++      if (entityValue > 0xFFFF) {
++        char[] chrs = Character.toChars(entityValue);
++        out.write(chrs[0]);
++        out.write(chrs[1]);
++      } else {
++        out.write(entityValue);
++      }
++
++      return 2 + end - start + (isHex ? 1 : 0) + (semiNext ? 1 : 0);
+     }
+-    return v;
++    return 0;
+   }
+   /**
+    * decodes an eNunmericEntity value.

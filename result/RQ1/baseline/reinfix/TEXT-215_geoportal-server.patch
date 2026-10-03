@@ -1,0 +1,33 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index 0000000..0000000 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,14 +240,14 @@
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
++public static String unescapeNunmericEntity(String v) {
++    if (v != null) {
++
++      try {
++        StringWriter writer = new StringWriter(v.length() * 2);
++        XML_NUMERIC_UNESCAPER.translate(v, writer);
++        return writer.toString();
++      } catch (IOException var3) {
++        throw new RuntimeException(var3);
++      }
++
++    }
++    return v;
++  }

@@ -1,0 +1,51 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,9 +32,9 @@
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
++  static Pattern numericEntityPattern = Pattern.compile("&#(x[0-9A-Fa-f]+|[0-9]+);?");
+ 
+   /**
+    * Converts a string to a boolean.
+@@ -239,15 +238,20 @@
+    */
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
++      Matcher matcher = numericEntityPattern.matcher(v);
++      StringBuffer sb = new StringBuffer(v.length());
++      while (matcher.find()) {
++        String entity = matcher.group(0);
++        String decoded;
++        if (matcher.group(1).startsWith("x")) {
++          decoded = Character.toString((char) Integer.parseInt(matcher.group(1).substring(1), 16));
++        } else {
++          decoded = Character.toString((char) Integer.parseInt(matcher.group(1), 10));
++        }
++        matcher.appendReplacement(sb, Matcher.quoteReplacement(decoded));
++      }
++      matcher.appendTail(sb);
++      return sb.toString();
+     }
+     return v;
+   }

@@ -1,0 +1,44 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..9df206c 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,9 +113,39 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
++        if (str == null) {
++            return null;
++        }
++        validateStrictBase64(str);
+         return Base64.decodeBase64(str);
+     }
+ 
++    private static void validateStrictBase64(String value) {
++        String normalized = value.trim();
++        if (normalized.isEmpty()) {
++            return;
++        }
++
++        if ((normalized.length() % 4) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input length");
++        }
++
++        int padIndex = normalized.indexOf('=');
++        if (padIndex >= 0) {
++            for (int i = padIndex; i < normalized.length(); i++) {
++                if (normalized.charAt(i) != '=') {
++                    throw new IllegalArgumentException("Invalid Base64 padding");
++                }
++            }
++        }
++
++        byte[] decoded = Base64.decodeBase64(normalized);
++        String canonical = Base64.encodeBase64String(decoded).trim();
++        if (!normalized.equals(canonical)) {
++            throw new IllegalArgumentException("Invalid Base64 trailing bits");
++        }
++    }
++
+     public static String hex(byte[] bytes) {
+         return Hex.encodeHexString(bytes);
+     }

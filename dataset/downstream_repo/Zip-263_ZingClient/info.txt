@@ -1,0 +1,3 @@
+null
+ZingClient.zing.client.file.ZFile
+<init>

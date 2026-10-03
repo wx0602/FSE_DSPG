@@ -1,0 +1,48 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -3,6 +3,7 @@
+ import java.math.BigDecimal;
+ import java.math.BigInteger;
+ import java.text.DecimalFormat;
++import java.util.regex.Pattern;
+ 
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+@@ -115,8 +116,36 @@
+ 	 * @return Number 转换后的Number值。
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+-	public static Number createNumber(String str)    {
++	public static Number createNumber(String str) {
++		if (str == null) {
++			return null;
++		}
++		if (str.length() == 0) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		if (!isSafeNumberCandidate(str)) {
++			throw new NumberFormatException(str + " is not a valid number");
++		}
+ 		return NumberUtils.createNumber(str);
++	}
++
++	private static boolean isSafeNumberCandidate(String str) {
++		char last = str.charAt(str.length() - 1);
++		if (last == 'l' || last == 'L' || last == 'f' || last == 'F' || last == 'd' || last == 'D') {
++			if (str.length() == 1) {
++				return false;
++			}
++			return !isJustTypeQualifier(str);
++		}
++		return true;
++	}
++
++	private static boolean isJustTypeQualifier(String str) {
++		if (str.length() != 1) {
++			return false;
++		}
++		char c = str.charAt(0);
++		return c == 'l' || c == 'L' || c == 'f' || c == 'F' || c == 'd' || c == 'D';
+ 	}
+ 	
+ 	

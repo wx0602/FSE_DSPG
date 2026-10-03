@@ -1,0 +1,39 @@
+diff --git a/repo/src/main/java/org/apache/commons/codec/binary/Base64.java b/repo/src/main/java/org/apache/commons/codec/binary/Base64.java
+index f515b51..ae6dd2b 100644
+--- a/repo/src/main/java/org/apache/commons/codec/binary/Base64.java
++++ b/repo/src/main/java/org/apache/commons/codec/binary/Base64.java
+@@ -469,12 +469,10 @@ public class Base64 extends BaseNCodec {
+                     // TODO not currently tested; perhaps it is impossible?
+                     break;
+                 case 2 : // 12 bits = 8 + 4
+-                    validateCharacter(4, context);
+                     context.ibitWorkArea = context.ibitWorkArea >> 4; // dump the extra 4 bits
+                     buffer[context.pos++] = (byte) ((context.ibitWorkArea) & MASK_8BITS);
+                     break;
+                 case 3 : // 18 bits = 8 + 8 + 2
+-                    validateCharacter(2, context);
+                     context.ibitWorkArea = context.ibitWorkArea >> 2; // dump 2 bits
+                     buffer[context.pos++] = (byte) ((context.ibitWorkArea >> 8) & MASK_8BITS);
+                     buffer[context.pos++] = (byte) ((context.ibitWorkArea) & MASK_8BITS);
+@@ -783,21 +781,4 @@ public class Base64 extends BaseNCodec {
+         return octet >= 0 && octet < decodeTable.length && decodeTable[octet] != -1;
+     }
+ 
+-    /**
+-     * <p>
+-     * Validates whether the character is possible in the context of the set of possible base 64 values.
+-     * </p>
+-     *
+-     * @param numBits number of least significant bits to check
+-     * @param context the context to be used
+-     *
+-     * @throws IllegalArgumentException if the bits being checked contain any non-zero value
+-     */
+-    private long validateCharacter(final int numBitsToDrop, final Context context) {
+-        if ((context.ibitWorkArea & numBitsToDrop) != 0) {
+-        throw new IllegalArgumentException(
+-            "Last encoded character (before the paddings if any) is a valid base 64 alphabet but not a possible value");
+-        }
+-        return context.ibitWorkArea >> numBitsToDrop;
+-    }
+ }

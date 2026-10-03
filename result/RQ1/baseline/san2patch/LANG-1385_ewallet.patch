@@ -1,0 +1,36 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -116,7 +116,32 @@
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
++		if (str == null) {
++			throw new NumberFormatException("null");
++		}
++		String value = str.trim();
++		if (value.length() == 0) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		if (value.length() == 1) {
++			char ch = value.charAt(0);
++			if (ch == 'L' || ch == 'l' || ch == 'F' || ch == 'f' || ch == 'D' || ch == 'd') {
++				throw new NumberFormatException(value + " is not a valid number");
++			}
++		}
++		if (value.length() == 2 && (value.charAt(0) == '+' || value.charAt(0) == '-')) {
++			char ch = value.charAt(1);
++			if (ch == 'L' || ch == 'l' || ch == 'F' || ch == 'f' || ch == 'D' || ch == 'd') {
++				throw new NumberFormatException(value + " is not a valid number");
++			}
++		}
++		try {
++			return NumberUtils.createNumber(value);
++		} catch (StringIndexOutOfBoundsException ex) {
++			NumberFormatException nfe = new NumberFormatException(value + " is not a valid number");
++			nfe.initCause(ex);
++			throw nfe;
++		}
+ 	}
+ 	
+ 	

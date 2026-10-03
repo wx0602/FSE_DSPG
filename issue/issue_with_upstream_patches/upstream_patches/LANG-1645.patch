@@ -1,0 +1,24 @@
+diff --git a/repo/src/main/java/org/apache/commons/lang3/math/NumberUtils.java b/repo/src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+index 7b3f739..80d7bdb 100644
+--- a/repo/src/main/java/org/apache/commons/lang3/math/NumberUtils.java
++++ b/repo/src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+@@ -456,7 +456,7 @@ public class NumberUtils {
+             throw new NumberFormatException("A blank string is not a valid number");
+         }
+         // Need to deal with all possible hex prefixes here
+-        final String[] hex_prefixes = {"0x", "0X", "-0x", "-0X", "#", "-#"};
++        final String[] hex_prefixes = {"0x", "0X", "-0x", "-0X", "+0x", "+0X", "#", "-#", "+#"};
+         int pfxLen = 0;
+         for(final String pfx : hex_prefixes) {
+             if (str.startsWith(pfx)) {
+@@ -758,8 +758,8 @@ public class NumberUtils {
+         int pos = 0; // offset within string
+         int radix = 10;
+         boolean negate = false; // need to negate later?
+-        if (str.startsWith("-")) {
+-            negate = true;
++        if (str.startsWith("-") || str.startsWith("+")) {
++            negate = str.startsWith("-");
+             pos = 1;
+         }
+         if (str.startsWith("0x", pos) || str.startsWith("0X", pos)) { // hex

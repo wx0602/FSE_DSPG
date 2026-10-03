@@ -1,0 +1,83 @@
+diff --git a/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java b/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java
+index ee2b65a..701b024 100644
+--- a/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java
++++ b/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java
+@@ -25,6 +25,8 @@ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
+ import org.springframework.context.annotation.DependsOn;
+ import org.springframework.core.annotation.Order;
++import org.apache.shiro.subject.SubjectContext;
++import org.apache.shiro.web.util.WebUtils;
+ 
+ import javax.crypto.KeyGenerator;
+ import javax.crypto.SecretKey;
+@@ -233,6 +235,69 @@ public class ShiroConfig {
+         return cookieRememberMeManager;
+     }
+ 
++    /**
++     * Downstream mitigation for lenient Base64 handling in the remember-me cookie path.
++     * Reject malformed encodings with non-zero discarded trailing bits before Shiro decodes them.
++     */
++    public static class StrictCookieRememberMeManager extends CookieRememberMeManager {
++
++        private static final String BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
++
++        @Override
++        protected byte[] getRememberedSerializedIdentity(SubjectContext subjectContext) {
++            if (WebUtils.isHttp(subjectContext)) {
++                String base64 = getCookie().readValue(WebUtils.getHttpRequest(subjectContext), WebUtils.getHttpResponse(subjectContext));
++                if (base64 != null && !"deleteMe".equals(base64)) {
++                    validateBase64RememberMe(base64);
++                }
++            }
++            return super.getRememberedSerializedIdentity(subjectContext);
++        }
++
++        private void validateBase64RememberMe(String value) {
++            String candidate = value.trim();
++            int length = candidate.length();
++            if (length == 0 || (length % 4) != 0) {
++                throw new IllegalArgumentException("Invalid rememberMe cookie encoding");
++            }
++
++            int firstPadding = candidate.indexOf('=');
++            if (firstPadding >= 0 && firstPadding < length - 2) {
++                for (int i = firstPadding; i < length; i++) {
++                    if (candidate.charAt(i) != '=') {
++                        throw new IllegalArgumentException("Invalid rememberMe cookie encoding");
++                    }
++                }
++            }
++
++            int padding = 0;
++            if (candidate.endsWith("==")) {
++                padding = 2;
++            } else if (candidate.endsWith("=")) {
++                padding = 1;
++            } else if (firstPadding >= 0) {
++                throw new IllegalArgumentException("Invalid rememberMe cookie encoding");
++            }
++
++            for (int i = 0; i < length - padding; i++) {
++                if (BASE64_ALPHABET.indexOf(candidate.charAt(i)) < 0) {
++                    throw new IllegalArgumentException("Invalid rememberMe cookie encoding");
++                }
++            }
++
++            if (padding > 0) {
++                int lastChar = BASE64_ALPHABET.indexOf(candidate.charAt(length - padding - 1));
++                if (lastChar < 0) {
++                    throw new IllegalArgumentException("Invalid rememberMe cookie encoding");
++                }
++                int discardedBitsMask = padding == 2 ? 0x0F : 0x03;
++                if ((lastChar & discardedBitsMask) != 0) {
++                    throw new IllegalArgumentException("Invalid rememberMe cookie encoding");
++                }
++            }
++        }
++    }
++
+     /**
+      * 解决 shiro 反序列化漏洞
+      *

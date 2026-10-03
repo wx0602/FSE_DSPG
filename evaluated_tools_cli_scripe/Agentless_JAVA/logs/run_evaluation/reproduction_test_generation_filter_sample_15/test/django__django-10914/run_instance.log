@@ -1,0 +1,24 @@
+2025-08-21 08:14:11,501 - INFO - Environment image sweb.env.x86_64.2baaea72acc974f6c02079:latest found for django__django-10914
+Building instance image sweb.eval.x86_64.django__django-10914:latest for django__django-10914
+2025-08-21 08:14:11,503 - INFO - Image sweb.eval.x86_64.django__django-10914:latest already exists, skipping build.
+2025-08-21 08:14:11,503 - INFO - Creating container for django__django-10914...
+2025-08-21 08:14:11,563 - INFO - Container for django__django-10914 created: f8f5713183095905964022090b3646ff55c5cb06ad287998cf67fa573c5d2c09
+2025-08-21 08:14:11,896 - INFO - Container for django__django-10914 started: f8f5713183095905964022090b3646ff55c5cb06ad287998cf67fa573c5d2c09
+2025-08-21 08:14:11,897 - INFO - Intermediate patch for django__django-10914 written to logs/run_evaluation/reproduction_test_generation_filter_sample_15/test/django__django-10914/patch.diff, now applying to container...
+2025-08-21 08:14:12,190 - INFO - Failed to apply patch to container, trying again...
+2025-08-21 08:14:12,267 - INFO - >>>>> Applied Patch:
+patching file this_is_invisible.py
+
+2025-08-21 08:14:12,966 - INFO - Git diff before:
+
+2025-08-21 08:14:12,966 - INFO - Eval script for django__django-10914 written to logs/run_evaluation/reproduction_test_generation_filter_sample_15/test/django__django-10914/eval.sh; copying to container...
+2025-08-21 08:14:18,981 - INFO - Test runtime: 5.84 seconds
+2025-08-21 08:14:18,982 - INFO - Test output for django__django-10914 written to logs/run_evaluation/reproduction_test_generation_filter_sample_15/test/django__django-10914/test_output.txt
+2025-08-21 08:14:19,055 - INFO - Git diff after:
+
+2025-08-21 08:14:19,055 - INFO - Grading answer for django__django-10914...
+2025-08-21 08:14:19,058 - INFO - report: {'django__django-10914': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': True, 'tests_status': {'FAIL_TO_PASS': {'success': [], 'failure': []}, 'PASS_TO_PASS': {'success': [], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-10914: resolved: True
+2025-08-21 08:14:19,058 - INFO - Attempting to stop container sweb.eval.django__django-10914.reproduction_test_generation_filter_sample_15...
+2025-08-21 08:14:34,399 - INFO - Attempting to remove container sweb.eval.django__django-10914.reproduction_test_generation_filter_sample_15...
+2025-08-21 08:14:34,407 - INFO - Container sweb.eval.django__django-10914.reproduction_test_generation_filter_sample_15 removed.

@@ -1,0 +1,21 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -31,6 +31,17 @@
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(salt, encryptPassword);
++        if (encryptPassword == null || encryptPassword.trim().isEmpty()) {
++            throw new IllegalArgumentException("encryptPassword must not be null or empty");
++        }
++        String normalized = encryptPassword.trim();
++        if (!normalized.matches("^[A-Za-z0-9+/]*={0,2}$") || (normalized.length() % 4 != 0)) {
++            throw new IllegalArgumentException("encryptPassword is not valid Base64");
++        }
++        byte[] decoded = java.util.Base64.getDecoder().decode(normalized);
++        if (!normalized.equals(java.util.Base64.getEncoder().encodeToString(decoded))) {
++            throw new IllegalArgumentException("encryptPassword is not canonical Base64");
++        }
++        return AesUtil.decrypt(salt, normalized);
+     }
+ }

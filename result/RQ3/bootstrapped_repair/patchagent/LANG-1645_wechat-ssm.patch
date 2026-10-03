@@ -1,0 +1,36 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..5e9eb77 100755
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -8,7 +8,7 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +20,21 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createNumber(value), scale);
++	}
++
++	private static Number createNumber(String value) {
++		return NumberUtils.createNumber(normalizePositiveHexNumber(value));
++	}
++
++	private static String normalizePositiveHexNumber(String value) {
++		if (value == null || value.length() < 3 || value.charAt(0) != '+') {
++			return value;
++		}
++		if (value.startsWith("+0x") || value.startsWith("+0X") || value.startsWith("+#")) {
++			return value.substring(1);
++		}
++		return value;
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {

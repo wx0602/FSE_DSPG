@@ -1,0 +1,37 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -242,19 +242,27 @@
+    */
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+-
+       try {
+         StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
++        NumericEntityUnescaper unescaper = new NumericEntityUnescaper();
++        StringBuffer buffer = new StringBuffer(v);
++        int offset = 0;
++        while (offset < buffer.length()) {
++          int consumed = unescaper.translate(buffer, offset, writer);
++          if (consumed == 0) {
++            writer.write(buffer.charAt(offset));
++            offset++;
++          } else {
++            offset += consumed;
++          }
++        }
+         return writer.toString();
+       } catch (IOException var3) {
+         throw new RuntimeException(var3);
+       }
+-
+-    }
+-    return v;
+-  }
+-  /**
++    }
++    return v;
++  }  /**
+    * decodes an octal value.
+    * @param v the value
+    * @return the decoded value

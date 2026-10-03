@@ -1,0 +1,4 @@
+@Test(timeout = 4000)
+public void test13()  throws Throwable  {
+    String string0 = MyNumberUtils.toFixedDecimal("0", (-283));
+}

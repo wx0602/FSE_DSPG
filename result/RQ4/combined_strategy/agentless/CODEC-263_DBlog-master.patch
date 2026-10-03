@@ -1,0 +1,23 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 8dd2e42..c529dac 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -64,8 +64,17 @@ public class AesUtil {
+         //使用密钥初始化，设置为解密模式
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
++        // Decode untrusted input defensively. Commons Codec 1.13 can throw
++        // IllegalArgumentException for malformed final Base64 characters.
++        final byte[] decoded;
++        try {
++            decoded = Base64.decodeBase64(encrypted);
++        } catch (IllegalArgumentException e) {
++            return null;
++        }
++
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(decoded);
+ 
+         return new String(result, "utf-8");
+     }

@@ -1,0 +1,89 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -3,6 +3,8 @@
+ import java.math.BigDecimal;
+ import java.math.BigInteger;
+ import java.text.DecimalFormat;
++import java.util.regex.Matcher;
++import java.util.regex.Pattern;
+ 
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+@@ -12,6 +14,10 @@
+  * 这里面的有些方法引用apache.commons.lang-2.3.math里的NumberUtils类
+  */
+ public class NumberUtil {
++
++	private static final Pattern POSITIVE_HEX_PREFIX =
++			Pattern.compile("^\\+(0[xX]|#)([0-9a-fA-F]+)$");
++
+ 	   
+ 	/**
+ 	 * 构造函数
+@@ -59,6 +65,11 @@
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static BigInteger createBigInteger(String str)  {
++		String normalized = normalizePositiveHexNumber(str);
++		if (normalized != null) {
++			Matcher matcher = POSITIVE_HEX_PREFIX.matcher(normalized);
++			return new BigInteger(matcher.group(2), 16);
++		}
+ 		return NumberUtils.createBigInteger(str);
+ 	}
+ 	
+@@ -116,6 +127,10 @@
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
++		String normalized = normalizePositiveHexNumber(str);
++		if (normalized != null) {
++			return createPositiveHexNumber(normalized);
++		}
+ 		return NumberUtils.createNumber(str);
+ 	}
+ 	
+@@ -624,4 +639,43 @@
+ 		}
+ 		return strPrice;
+ 	}
++
++	private static String normalizePositiveHexNumber(String str) {
++		if (str == null) {
++			return null;
++		}
++		Matcher matcher = POSITIVE_HEX_PREFIX.matcher(str);
++		if (matcher.matches()) {
++			return str;
++		}
++		return null;
++	}
++
++	private static Number createPositiveHexNumber(String str) {
++		Matcher matcher = POSITIVE_HEX_PREFIX.matcher(str);
++		if (!matcher.matches()) {
++			return NumberUtils.createNumber(str);
++		}
++		String digits = matcher.group(2);
++		int hexDigits = digits.length();
++		if (hexDigits > 16) {
++			return new BigInteger(digits, 16);
++		}
++		if (hexDigits == 16 && isSignificantHexDigit(digits.charAt(0), '7')) {
++			return new BigInteger(digits, 16);
++		}
++		if (hexDigits > 8) {
++			return Long.valueOf(Long.parseLong(digits, 16));
++		}
++		if (hexDigits == 8 && isSignificantHexDigit(digits.charAt(0), '7')) {
++			return Long.valueOf(Long.parseLong(digits, 16));
++		}
++		return Integer.valueOf(Integer.parseInt(digits, 16));
++	}
++
++	private static boolean isSignificantHexDigit(char digit, char maxPositiveDigit) {
++		char upperDigit = Character.toUpperCase(digit);
++		char upperMax = Character.toUpperCase(maxPositiveDigit);
++		return upperDigit > upperMax;
++	}
+ }

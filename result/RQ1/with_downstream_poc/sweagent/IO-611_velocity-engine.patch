@@ -1,0 +1,75 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..2514bab 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeTemplatePath(templateName, true);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +175,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeTemplatePath(name, false);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+@@ -258,6 +258,27 @@ private void closeQuiet(final InputStream is)
+         }
+     }
+ 
++    /**
++     * Mitigates commons-io 2.6 normalize() leaving repeated separators after a prefix.
++     */
++    protected static String normalizeTemplatePath(final String path, final boolean unixSeparator)
++    {
++        if (path == null)
++        {
++            return null;
++        }
++
++        String normalized = FilenameUtils.normalize(path, unixSeparator);
++        if (normalized == null)
++        {
++            return null;
++        }
++
++        String normalizedSeparators = normalized.replace('\\', '/');
++        String collapsed = normalizedSeparators.replaceAll("(?<=.)/{2,}", "/");
++        return unixSeparator ? collapsed : collapsed.replace('/', File.separatorChar);
++    }
++
+     /**
+      * How to keep track of all the modified times
+      * across the paths.  Note that a file might have
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a55270..1c10262 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.IOException;
+@@ -184,11 +183,7 @@ public Reader getResourceReader( String source, String encoding )
+         {
+             throw new ResourceNotFoundException("Need to have a resource!");
+         }
+-        System.out.println("we get"+result);
+-
+-        String normalizedPath = FilenameUtils.normalize( source, true );
+-
+-        System.out.println("we make"+normalizedPath);
++        String normalizedPath = FileResourceLoader.normalizeTemplatePath(source, true);
+ 
+         if ( normalizedPath == null || normalizedPath.length() == 0 )
+         {

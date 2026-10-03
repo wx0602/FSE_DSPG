@@ -1,0 +1,40 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac..740509c 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -65,7 +65,7 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(Base64.decodeBase64(normalizeBase64(encrypted)));
+ 
+         return new String(result, "utf-8");
+     }
+@@ -92,4 +92,26 @@ public class AesUtil {
+         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
+     }
+ 
++    private static String normalizeBase64(String value) {
++        if (value == null) {
++            return null;
++        }
++        String normalized = value.trim();
++        if (normalized.length() == 0) {
++            return normalized;
++        }
++        int paddingIndex = normalized.indexOf('=');
++        if (paddingIndex >= 0) {
++            normalized = normalized.substring(0, paddingIndex);
++        }
++        int remainder = normalized.length() % 4;
++        if (remainder == 1) {
++            throw new IllegalArgumentException("Invalid Base64 input length");
++        }
++        if (remainder == 0) {
++            return normalized;
++        }
++        return normalized + (remainder == 2 ? "==" : "=");
++    }
++
+ }

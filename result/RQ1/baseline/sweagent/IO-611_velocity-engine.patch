@@ -1,0 +1,97 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..5898ce7 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -40,6 +40,7 @@
+ import java.util.List;
+ import java.util.ListIterator;
+ import java.util.Map;
++import java.util.regex.Pattern;
+ 
+ /**
+  * A loader for templates stored on the file system.  Treats the template
+@@ -53,6 +54,14 @@
+  */
+ public class FileResourceLoader extends ResourceLoader
+ {
++    /**
++     * Rejects malformed paths with repeated leading separators (for example
++     * //foo//./bar or \\foo\\.\\bar) before delegating to commons-io normalization.
++     * Those inputs are ambiguously interpreted by affected commons-io versions
++     * and are not valid Velocity template resource names.
++     */
++    private static final Pattern UNSAFE_TEMPLATE_NAME = Pattern.compile("^[\\/]{2,}.*");
++
+     /**
+      * The paths to search for templates.
+      */
+@@ -112,17 +121,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
+-        if ( template == null || template.length() == 0 )
+-        {
+-            String msg = "File resource error: argument " + template +
+-                    " contains .. and may be trying to access " +
+-                    "content outside of template root.  Rejected.";
+-
+-            log.error("FileResourceLoader: {}", msg);
+-
+-            throw new ResourceNotFoundException ( msg );
+-        }
++        String template = normalizeTemplateName(templateName);
+ 
+         int size = paths.size();
+         for (String path : paths)
+@@ -175,8 +174,11 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
+-        if (name == null || name.length() == 0)
++        try
++        {
++            name = normalizeTemplateName(name);
++        }
++        catch (ResourceNotFoundException e)
+         {
+             return false;
+         }
+@@ -258,6 +260,36 @@ private void closeQuiet(final InputStream is)
+         }
+     }
+ 
++    /**
++     * Apply a defensive validation layer before using commons-io path normalization.
++     * This prevents malformed resource names with repeated leading separators from
++     * reaching vulnerable normalization/resolution behavior in older commons-io versions.
++     */
++    private String normalizeTemplateName(String templateName)
++        throws ResourceNotFoundException
++    {
++        if (UNSAFE_TEMPLATE_NAME.matcher(templateName).matches())
++        {
++            String msg = "File resource error: argument " + templateName +
++                    " uses an unsafe resource path prefix. Rejected.";
++            log.error("FileResourceLoader: {}", msg);
++            throw new ResourceNotFoundException(msg);
++        }
++
++        String template = FilenameUtils.normalize(templateName, true);
++        if (template == null || template.length() == 0)
++        {
++            String msg = "File resource error: argument " + templateName +
++                    " contains .. and may be trying to access " +
++                    "content outside of template root.  Rejected.";
++
++            log.error("FileResourceLoader: {}", msg);
++
++            throw new ResourceNotFoundException(msg);
++        }
++        return template;
++    }
++
+     /**
+      * How to keep track of all the modified times
+      * across the paths.  Note that a file might have

@@ -1,0 +1,238 @@
+diff --git a/src/main/java/soj/biclique/TopologyArgs.java b/src/main/java/soj/biclique/TopologyArgs.java
+index af18e66..8072175 100644
+--- a/src/main/java/soj/biclique/TopologyArgs.java
++++ b/src/main/java/soj/biclique/TopologyArgs.java
+@@ -4,16 +4,14 @@ import java.io.PrintStream;
+ import java.io.Serializable;
+ import java.util.List;
+ 
+-//import static org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+ import org.kohsuke.args4j.Argument;
+ import org.kohsuke.args4j.CmdLineException;
+ import org.kohsuke.args4j.CmdLineParser;
+ import org.kohsuke.args4j.Option;
+ import org.slf4j.Logger;
+ 
+-//import static org.apache.storm.shade.org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+-import static org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+ import static org.slf4j.LoggerFactory.getLogger;
++import static soj.util.SafeFilenameUtils.normalizeNoEndSeparator;
+ 
+ import static com.google.common.base.Preconditions.checkState;
+ import com.google.common.collect.ImmutableList;
+diff --git a/src/main/java/soj/util/FileReader.java b/src/main/java/soj/util/FileReader.java
+index 2b6246f..42b96ad 100644
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -6,11 +6,10 @@ import java.io.IOException;
+ import java.util.List;
+ import java.util.regex.Pattern;
+ 
+-//import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+-import static org.apache.commons.io.FilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
++import static soj.util.SafeFilenameUtils.normalize;
+ 
+ import com.google.common.base.Splitter;
+ import static com.google.common.base.Charsets.UTF_8;
+diff --git a/src/main/java/soj/util/FileWriter.java b/src/main/java/soj/util/FileWriter.java
+index e97f0bc..31545f1 100644
+--- a/src/main/java/soj/util/FileWriter.java
++++ b/src/main/java/soj/util/FileWriter.java
+@@ -6,13 +6,11 @@ import java.io.FileNotFoundException;
+ import java.io.IOException;
+ import java.io.PrintStream;
+ 
+-//import static org.apache.commons.io.FilenameUtils.getFullPath;
+-//import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+ import static org.apache.commons.io.FilenameUtils.getFullPath;
+-import static org.apache.commons.io.FilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
++import static soj.util.SafeFilenameUtils.normalize;
+ 
+ import static com.google.common.base.Charsets.UTF_8;
+ import static com.google.common.io.Files.newWriter;
+diff --git a/src/main/java/soj/util/SafeFilenameUtils.java b/src/main/java/soj/util/SafeFilenameUtils.java
+new file mode 100644
+index 0000000..020071f
+--- /dev/null
++++ b/src/main/java/soj/util/SafeFilenameUtils.java
+@@ -0,0 +1,174 @@
++package soj.util;
++
++import java.util.ArrayDeque;
++import java.util.Deque;
++
++public final class SafeFilenameUtils {
++    private static final char UNIX_SEPARATOR = '/';
++    private static final char WINDOWS_SEPARATOR = '\\';
++
++    private SafeFilenameUtils() {
++    }
++
++    public static String normalize(String filename) {
++        return normalize(filename, inferSeparator(filename), true);
++    }
++
++    public static String normalize(String filename, boolean unixSeparator) {
++        return normalize(filename, unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR, true);
++    }
++
++    public static String normalizeNoEndSeparator(String filename) {
++        return normalize(filename, inferSeparator(filename), false);
++    }
++
++    private static String normalize(String filename, char separator, boolean keepEndSeparator) {
++        if (filename == null) {
++            return null;
++        }
++        if (filename.isEmpty()) {
++            return filename;
++        }
++
++        String sanitized = filename.replace("\u0000", "");
++        if (sanitized.isEmpty()) {
++            return sanitized;
++        }
++
++        char otherSeparator = separator == UNIX_SEPARATOR ? WINDOWS_SEPARATOR : UNIX_SEPARATOR;
++        sanitized = sanitized.replace(otherSeparator, separator);
++
++        PrefixInfo prefixInfo = parsePrefix(sanitized, separator);
++        if (!prefixInfo.valid) {
++            return null;
++        }
++
++        boolean hadTrailingSeparator = sanitized.length() > prefixInfo.prefix.length()
++                && sanitized.charAt(sanitized.length() - 1) == separator;
++
++        Deque<String> segments = new ArrayDeque<>();
++        int index = prefixInfo.prefix.length();
++        while (index < sanitized.length()) {
++            int next = sanitized.indexOf(separator, index);
++            if (next < 0) {
++                next = sanitized.length();
++            }
++            String segment = sanitized.substring(index, next);
++            if (segment.isEmpty() || ".".equals(segment)) {
++                // Skip duplicate separators and current directory segments.
++            } else if ("..".equals(segment)) {
++                if (segments.isEmpty()) {
++                    return null;
++                }
++                segments.removeLast();
++            } else {
++                segments.addLast(segment);
++            }
++            index = next + 1;
++        }
++
++        StringBuilder normalized = new StringBuilder(prefixInfo.prefix);
++        boolean prefixEndsWithSeparator = normalized.length() > 0
++                && normalized.charAt(normalized.length() - 1) == separator;
++        boolean firstSegment = true;
++        for (String segment : segments) {
++            if (!firstSegment && prefixEndsWithSeparator) {
++                normalized.append(separator);
++            }
++            normalized.append(segment);
++            firstSegment = false;
++        }
++
++        if (normalized.length() == 0 && !prefixInfo.absolute && segments.isEmpty()) {
++            return "";
++        }
++
++        if (hadTrailingSeparator && keepEndSeparator) {
++            if (normalized.length() == 0 || normalized.charAt(normalized.length() - 1) != separator) {
++                normalized.append(separator);
++            }
++        } else if (!keepEndSeparator && normalized.length() > prefixInfo.prefix.length()
++                && normalized.charAt(normalized.length() - 1) == separator) {
++            normalized.setLength(normalized.length() - 1);
++        }
++
++        return normalized.toString();
++    }
++
++    private static char inferSeparator(String filename) {
++        if (filename != null && filename.indexOf(UNIX_SEPARATOR) >= 0) {
++            return UNIX_SEPARATOR;
++        }
++        if (filename != null && filename.indexOf(WINDOWS_SEPARATOR) >= 0) {
++            return WINDOWS_SEPARATOR;
++        }
++        return UNIX_SEPARATOR;
++    }
++
++    private static PrefixInfo parsePrefix(String filename, char separator) {
++        int length = filename.length();
++        if (length == 0) {
++            return new PrefixInfo(true, false, "");
++        }
++
++        char first = filename.charAt(0);
++        if (first == ':') {
++            return PrefixInfo.invalid();
++        }
++
++        if (first == '~') {
++            int end = 1;
++            while (end < length && filename.charAt(end) != separator) {
++                end++;
++            }
++            String prefix = filename.substring(0, end);
++            if (end < length) {
++                prefix += separator;
++            }
++            return new PrefixInfo(true, true, prefix);
++        }
++
++        if (length >= 2 && filename.charAt(1) == ':') {
++            char drive = Character.toUpperCase(first);
++            if (drive < 'A' || drive > 'Z') {
++                return PrefixInfo.invalid();
++            }
++            if (length >= 3 && filename.charAt(2) == separator) {
++                return new PrefixInfo(true, true, "" + first + ':' + separator);
++            }
++            return new PrefixInfo(true, false, "" + first + ':');
++        }
++
++        if (length >= 2 && first == separator && filename.charAt(1) == separator) {
++            int hostStart = 2;
++            int hostEnd = filename.indexOf(separator, hostStart);
++            if (hostEnd <= hostStart) {
++                return PrefixInfo.invalid();
++            }
++            String host = filename.substring(hostStart, hostEnd);
++            return new PrefixInfo(true, true, "" + separator + separator + host + separator);
++        }
++
++        if (first == separator) {
++            return new PrefixInfo(true, true, String.valueOf(separator));
++        }
++
++        return new PrefixInfo(true, false, "");
++    }
++
++    private static final class PrefixInfo {
++        private final boolean valid;
++        private final boolean absolute;
++        private final String prefix;
++
++        private PrefixInfo(boolean valid, boolean absolute, String prefix) {
++            this.valid = valid;
++            this.absolute = absolute;
++            this.prefix = prefix;
++        }
++
++        private static PrefixInfo invalid() {
++            return new PrefixInfo(false, false, "");
++        }
++    }
++}

@@ -1,0 +1,102 @@
+--- a/src/main/java/burp/aes/AesUtil.java
++++ b/src/main/java/burp/aes/AesUtil.java
+@@ -30,15 +30,93 @@
+         return Utils.encode(encrypted, config.OutFormat);
+     }
+ 
+-    public String decrypt(String cipherText) {
+-        try {
+-            byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
+-            return new String(decrypted, "UTF-8");
+-        } catch (UnsupportedEncodingException e) {
+-            throw fail(e);
++public String decrypt(String cipherText) {
++    try {
++        if (cipherText == null) {
++            throw fail(new IllegalArgumentException("cipherText must not be null"));
++        }
++
++        String normalized = cipherText.trim();
++        if (normalized.length() == 0) {
++            throw fail(new IllegalArgumentException("cipherText must not be empty"));
++        }
++
++        if (!isStrictBase64(normalized)) {
++            throw fail(new IllegalArgumentException("Invalid Base64 ciphertext"));
++        }
++
++        byte[] decoded = Utils.base64(normalized);
++        byte[] decrypted = crypto.decrypt(decoded);
++        return new String(decrypted, "UTF-8");
++    } catch (UnsupportedEncodingException e) {
++        throw fail(e);
++    }
++}
++
++private boolean isStrictBase64(String value) {
++    int length = value.length();
++    if ((length & 3) != 0) {
++        return false;
++    }
++
++    int padding = 0;
++    if (length > 0 && value.charAt(length - 1) == '=') {
++        padding++;
++        if (length > 1 && value.charAt(length - 2) == '=') {
++            padding++;
+         }
+     }
+ 
++    for (int i = 0; i < length - padding; i++) {
++        char c = value.charAt(i);
++        boolean upper = c >= 'A' && c <= 'Z';
++        boolean lower = c >= 'a' && c <= 'z';
++        boolean digit = c >= '0' && c <= '9';
++        boolean symbol = c == '+' || c == '/';
++        if (!(upper || lower || digit || symbol)) {
++            return false;
++        }
++    }
++
++    for (int i = length - padding; i < length; i++) {
++        if (i >= 0 && value.charAt(i) != '=') {
++            return false;
++        }
++    }
++
++    if (padding == 1) {
++        int bits = decodeBase64Char(value.charAt(length - 2));
++        if (bits < 0 || (bits & 0x03) != 0) {
++            return false;
++        }
++    } else if (padding == 2) {
++        int bits = decodeBase64Char(value.charAt(length - 3));
++        if (bits < 0 || (bits & 0x0F) != 0) {
++            return false;
++        }
++    }
++
++    return true;
++}
++
++private int decodeBase64Char(char c) {
++    if (c >= 'A' && c <= 'Z') {
++        return c - 'A';
++    }
++    if (c >= 'a' && c <= 'z') {
++        return c - 'a' + 26;
++    }
++    if (c >= '0' && c <= '9') {
++        return c - '0' + 52;
++    }
++    if (c == '+') {
++        return 62;
++    }
++    if (c == '/') {
++        return 63;
++    }
++    return -1;
++}
+     private IllegalStateException fail(Exception e) {
+         return new IllegalStateException(e);
+     }

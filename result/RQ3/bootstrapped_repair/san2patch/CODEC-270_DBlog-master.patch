@@ -1,0 +1,16 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -31,6 +31,13 @@
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
++        // Reject non-canonical Base64 so discarded trailing bits must be zero.
++        String normalizedPassword = encryptPassword.replaceAll("\\s+", "");
++        byte[] decodedPassword = org.apache.commons.codec.binary.Base64.decodeBase64(encryptPassword);
++        String canonicalPassword = org.apache.commons.codec.binary.Base64.encodeBase64String(decodedPassword);
++        if (!normalizedPassword.equals(canonicalPassword)) {
++            throw new IllegalArgumentException("Invalid Base64 ciphertext");
++        }
+         return AesUtil.decrypt(salt, encryptPassword);
+     }
+ }

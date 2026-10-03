@@ -1,0 +1,109 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..3d1ec5e 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,5 +1,6 @@
+ package cn.qs.utils.format;
+ 
++import java.math.BigInteger;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
+@@ -7,33 +8,75 @@ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
+-	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
+-	}
++        public static String toFixedDecimal(String value, int scale) {
++                return toFixedDecimal(createNumberCompat(value), scale);
++        }
+ 
+-	public static String toFixedDecimal(Number value, int scale) {
+-		NumberFormat numberFormat = NumberFormat.getInstance();
+-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+-		numberFormat.setMaximumFractionDigits(scale);
++        public static String toFixedDecimal(Number value, int scale) {
++                NumberFormat numberFormat = NumberFormat.getInstance();
++                numberFormat.setRoundingMode(RoundingMode.HALF_UP);
++                numberFormat.setMaximumFractionDigits(scale);
+ 
+-		return numberFormat.format(value);
+-	}
++                return numberFormat.format(value);
++        }
+ 
+-	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
+-	}
++        public static String toFixedDecimalWithPercent(String value, int scale) {
++                return toFixedDecimalWithPercent(createNumberCompat(value), scale);
++        }
+ 
+-	public static String toFixedDecimalWithPercent(Number value, int scale) {
+-		NumberFormat numberFormat = NumberFormat.getPercentInstance();
+-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+-		numberFormat.setMaximumFractionDigits(scale);
++        private static Number createNumberCompat(String value) {
++                if (value == null) {
++                        return null;
++                }
++                if (!value.startsWith("+0x") && !value.startsWith("+0X") && !value.startsWith("+#")) {
++                        return NumberUtils.createNumber(value);
++                }
+ 
+-		return numberFormat.format(value);
+-	}
++                int prefixLength = value.startsWith("+#") ? 2 : 3;
++                int firstSignificantDigitIndex = prefixLength;
++                while (firstSignificantDigitIndex < value.length()
++                                && value.charAt(firstSignificantDigitIndex) == '0') {
++                        firstSignificantDigitIndex++;
++                }
+ 
+-	public static void main(String[] args) {
+-		float F2 = 105858.5328F;
+-		System.out.println(ArithUtils.format(F2, 2));
+-	}
++                int hexDigits = value.length() - firstSignificantDigitIndex;
++                char firstSignificantDigit = hexDigits > 0 ? value.charAt(firstSignificantDigitIndex) : '0';
++                if (hexDigits > 16 || (hexDigits == 16 && firstSignificantDigit > '7')) {
++                        return createBigIntegerCompat(value);
++                }
++                if (hexDigits > 8 || (hexDigits == 8 && firstSignificantDigit > '7')) {
++                        return NumberUtils.createLong(value);
++                }
++                return NumberUtils.createInteger(value);
++        }
++
++        private static BigInteger createBigIntegerCompat(String value) {
++                int pos = 1;
++                int radix = 10;
++                if (value.startsWith("0x", pos) || value.startsWith("0X", pos)) {
++                        radix = 16;
++                        pos += 2;
++                } else if (value.startsWith("#", pos)) {
++                        radix = 16;
++                        pos++;
++                } else if (value.startsWith("0", pos) && value.length() > pos + 1) {
++                        radix = 8;
++                        pos++;
++                }
++                return new BigInteger(value.substring(pos), radix);
++        }
++
++        public static String toFixedDecimalWithPercent(Number value, int scale) {
++                NumberFormat numberFormat = NumberFormat.getPercentInstance();
++                numberFormat.setRoundingMode(RoundingMode.HALF_UP);
++                numberFormat.setMaximumFractionDigits(scale);
++
++                return numberFormat.format(value);
++        }
++
++        public static void main(String[] args) {
++                float F2 = 105858.5328F;
++                System.out.println(ArithUtils.format(F2, 2));
++        }
+ 
+ }

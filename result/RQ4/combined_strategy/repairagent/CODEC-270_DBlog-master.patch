@@ -1,0 +1,23 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..d093c67 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -59,7 +59,17 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
+-        byte[] decoded = Base64.decodeBase64(encrypted);
++        if (encrypted == null || encrypted.length() == 0) {
++            throw new IllegalArgumentException("Base64 input must not be empty");
++        }
++        String normalizedEncrypted = encrypted.replaceAll("\\s", "");
++        byte[] decoded = Base64.decodeBase64(normalizedEncrypted);
++        if ((normalizedEncrypted.length() & 3) != 0 || !normalizedEncrypted.matches("[A-Za-z0-9+/]*={0,2}")) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        if (!Base64.encodeBase64String(decoded).equals(normalizedEncrypted)) {
++            throw new IllegalArgumentException("Invalid non-canonical Base64 input");
++        }
+         if (decoded.length == 0) {
+             return "";
+         }

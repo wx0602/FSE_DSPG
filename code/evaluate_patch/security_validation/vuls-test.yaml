@@ -1,0 +1,335 @@
+tasks:
+  - target_id: CODEC-263_DBlog-master
+    module: blog-core
+    Dtest: PasswordUtil_ESTest
+    poc_string: IllegalArgumentException
+
+  - target_id: CODEC-270_BurpCrypto-master
+    module: .
+    Dtest: AesUtil_ESTest
+    poc_string: NullPointerException
+
+  - target_id: CODEC-270_DBlog-master 
+    module: blog-core
+    Dtest: PasswordUtil_ESTest
+    poc_string: "run: 1, Failures: 0, Errors: 0, Skipped: 0"
+
+  - target_id: CVE-2015-2156_webbit
+    module: .
+    Dtest: HttpRequestWrapperCookieVulTest
+    poc_string: ===
+    poc_cmd: "Name: aaa, Value: bbb;ccc=ddd"
+
+  - target_id: CVE-2017-7957_cqrs-lottery-master
+    module: cqrs-example
+    Dtest: XStreamEventSerializer_ESTest
+    poc_string: ===
+    poc_cmd: "A fatal error has been detected by the Java Runtime Environment"
+
+  - target_id: CVE-2017-7957_rpki-commons
+    module: .
+    Dtest: CVE_2017_7957_Test
+    poc_string: "CannotResolveClassException: void"
+
+  - target_id: CVE-2017-7957_source
+    module: .
+    Dtest: XMLConfig_ESTest
+    poc_string: ===
+    poc_cmd: "A fatal error has been detected by the Java Runtime Environment"
+
+  - target_id: CVE-2018-1000632_tcpser4j
+    module: .
+    Dtest: CVE_2018_1000632_Test
+    poc_string: "CVE-2018-1000632 detected"
+
+  - target_id: CVE-2018-1002201_elasticsearch-maven-plugin
+    module: .
+    Dtest: CVE_2018_1002201_Test
+    poc_string: "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"
+
+  - target_id: CVE-2018-1002201_neo
+    module: .
+    Dtest: CVE_2018_1002201_Test
+    poc_string: ===
+    poc_file: /tmp/pwned_in_tmp.txt
+
+  - target_id: CVE-2018-1002202_brigen-base
+    module: .
+    Dtest: ZipDelegaterZip4j_ESTest
+    poc_string: "CVE-2018-1002202 detected"
+
+  - target_id: CVE-2018-1324_common-util
+    module: .
+    Dtest: ZipUtils_ESTest
+    poc_string: "timed out"
+
+  - target_id: CVE-2018-15756_mirage
+    module: mirage-core
+    Dtest: CVE_2018_15756_Test
+    poc_string: "Execution finished successfully"
+
+  - target_id: CVE-2019-10086_bean-query
+    module: .
+    Dtest: CVE_2019_10086_Testcase2
+    poc_string: "AssertionError:"
+
+  - target_id: CVE-2019-12415_PoiSamples
+    module: .
+    Dtest: CVE_2019_12415_Test
+    poc_string: ===
+    poc_cmd: "Received request from POI"
+
+  - target_id: CVE-2019-12415_poi-examples
+    module: .
+    Dtest: CustomXMLMapping_Test
+    poc_string: "Received HTTP request"
+
+  - target_id: CVE-2020-13956_crawler-jsoup-maven
+    module: .
+    Dtest: CSDNLoginApater_ESTest
+    poc_string: ===
+    poc_cmd: "Enabled protocols"
+
+  - target_id: CVE-2020-13956_wechat-ssm
+    module: .
+    Dtest: HttpUtils_ESTest
+    poc_string: "expected:<null> but was"
+
+  - target_id: CVE-2020-26217_cqrs-lottery-master
+    module: cqrs-example
+    Dtest: XStreamEventSerializer_ESTest
+    poc_string: ===
+    poc_file: ./wqlwql
+
+  - target_id: CVE-2020-26217_source
+    module: .
+    Dtest: XMLConfig_ESTest
+    poc_string: "CVE-2020-26217 Detected"
+
+  - target_id: CVE-2020-26258_cqrs-lottery-master
+    module: cqrs-example
+    Dtest: CVE_2020_26258_ComparisonTest
+    poc_string: ClassCastException
+
+  - target_id: CVE-2021-21341_cqrs-lottery-master
+    module: cqrs-example
+    Dtest: CVE_2021_21341_Test
+    poc_string: ClassCastException
+
+  - target_id: CVE-2021-21341_source
+    module: .
+    Dtest: CVE_2021_21341_PoC_Test
+    poc_string: ===
+    poc_cmd: ClassCastException
+
+  - target_id: CVE-2021-23899_OmegaTester
+    module: .
+    Dtest: CVE_2021_23899_Test
+    poc_string: ===
+    poc_cmd: "No escaping found for script tags"
+
+  - target_id: CVE-2021-23899_json-sanitizer
+    module: .
+    Dtest: JsonSanitizer_ESTest
+    poc_string: ===
+    poc_cmd: 'x<\/script><script>alert'
+
+  - target_id: CVE-2021-23900_OmegaTester
+    module: .
+    Dtest: CVE_2021_23900_Test
+    poc_string: "ArrayIndexOutOfBoundsException"
+
+  - target_id: CVE-2021-27568_json-configuration
+    module: .
+    Dtest: JsonConfigurationTest
+    poc_string: NumberFormatException
+
+  - target_id: CVE-2021-29425_FastJoin
+    module: .
+    Dtest: FileReader_ESTest
+    poc_string: "FileReader read parent file via improper path. payload"
+
+  - target_id: CVE-2021-31812_Framework-Mobile
+    module: .
+    Dtest: Pdf_ESTest
+    poc_string: StackOverflowError
+    
+  - target_id: CVE-2021-31812_PDFConvert14
+    module: .
+    Dtest: CVE_2021_31812_ESTest
+    poc_string: VULNERABLE BEHAVIOR
+
+  - target_id: CVE-2021-35516_JavaUtils-master
+    module: .
+    Dtest: ZipPwdUtil_ESTest
+    poc_string: timed out
+
+  - target_id: CVE-2021-37714_phoenix_interface
+    module: .
+    Dtest: InterfaceAPI_ESTest
+    poc_string: timed out
+
+  - target_id: CVE-2021-37714_pickaxe
+    module: .
+    Dtest: Scraper_ESTest
+    poc_string: timed out
+    
+  - target_id: CVE-2021-39144_cqrs-lottery-master
+    module: cqrs-example
+    Dtest: CVE_2021_39144_Test
+    poc_string: ConversionException
+
+  - target_id: CVE-2021-39144_source
+    module: .
+    Dtest: XMLConfig_ESTest
+    poc_string: CannotResolveClassException
+
+  - target_id: CVE-2021-43859_rpki-commons
+    module: .
+    Dtest: CVE_2021_43859_Test
+    poc_string: ClassCastException
+
+
+  - target_id: CVE-2022-22976_RuoYi-Vue-Multi-Tenant
+    module: ./multi-tenant-server
+    Dtest: CVE_2022_22976_Test
+    poc_string: Integer Overflow
+
+  - target_id: CVE-2022-22976_gerenciador-viagens
+    module: .
+    Dtest: CVE_2022_22976_Test
+    poc_string: Integer Overflow
+
+  - target_id: CVE-2022-25845_base-starter
+    module: .
+    Dtest: ReadDataPoCTest
+    poc_string: ===
+    poc_file: ./wqlwql
+
+  - target_id: CVE-2022-25845_geek_framework
+    module: .
+    Dtest: DownstreamFastjsonCVE25845Test
+    poc_string: ===
+    poc_file: ./wqlwql
+
+  - target_id: CVE-2022-29631_ucloud-java-sdk
+    module: .
+    Dtest: CrlfInjectionPocTest
+    poc_string: ===
+    poc_file: ./temp_download_file.txt
+
+  - target_id: CVE-2022-41966_cqrs-lottery-master
+    module: cqrs-example
+    Dtest: XStreamEventSerializer_ESTest
+    poc_string: StackOverflowError
+
+  - target_id: CVE-2022-41966_source
+    module: .
+    Dtest: XMLConfig_ESTest
+    poc_string: StackOverflowError
+
+  - target_id: CVE-2022-42004_serritor
+    module: .
+    Dtest: CVE_2022_42004_DownstreamTest
+    poc_string: StackOverflowError
+
+  - target_id: CVE-2022-42004_vsqdeveloper-serritor
+    module: .
+    Dtest: CVE_2022_42004_DownstreamTest
+    poc_string: StackOverflowError
+
+  - target_id: CVE-2022-42889_java
+    module: .
+    Dtest: SearchController_ESTest
+    poc_string: 'SECURITY ERROR: HTTP GET triggered via url lookup'
+
+  - target_id: CVE-2022-45688_base-starter
+    module: .
+    Dtest: XMLUtil_ESTest
+    poc_string: StackOverflowError
+
+  - target_id: CVE-2022-45688_virtress
+    module: .
+    Dtest: Converter_ESTest
+    poc_string: StackOverflowError
+
+  - target_id: CVE-2023-1370_axon-server-se
+    module: ./axonserver
+    Dtest: CVE_2023_1370_Testcase3
+    poc_string: ===
+    poc_cmd: StackOverflowError
+
+  - target_id: CVE-2023-1370_microservice-with-jwt-and-microprofile
+    module: .
+    Dtest: TokenUtil_ESTest
+    poc_string: StackOverflowError
+
+  - target_id: CVE-2023-34453_UltraPlaytime
+    module: .
+    Dtest: CVE202334453PoCTest
+    poc_string: 'NegativeArraySizeException'
+
+  - target_id: CVE-2023-43642_flow
+    module: .
+    Dtest: CVE_2023_43642_Testcase2Test
+    poc_string: ===
+    poc_cmd: 'Expected wrapOut to throw IllegalArgumentException for oversized block size'
+
+  - target_id: IO-611_FastJoin
+    module: .
+    Dtest: FileReader_ESTest
+    poc_string: 'ComparisonFailure'
+
+  - target_id: IO-611_velocity-engine
+    module: ./velocity-engine-core
+    Dtest: FileResourceLoader_ESTest
+    poc_string: 'ResourceNotFoundException'
+
+  - target_id: LANG-1385_ewallet
+    module: wallet-base
+    Dtest: NumberUtil_ESTest
+    poc_string:  numberUtil_createNumber_L_shouldThrowNumberFormatException_in_fixed_version
+
+  - target_id: LANG-1385_wechat-ssm
+    module: .
+    Dtest: MyNumberUtils_ESTest
+    poc_string:  StringIndexOutOfBoundsException
+
+  - target_id: LANG-1484_jjdz7-drony-refactor
+    module: Web
+    Dtest: Validator_ESTest
+    poc_string:  AssertionFailedError
+    
+  - target_id: LANG-1645_ewallet
+    module: wallet-base
+    Dtest: NumberUtil_ESTest
+    poc_string: NumberFormatException
+    
+  - target_id: LANG-1645_wechat-ssm
+    module: .
+    Dtest: MyNumberUtils_ESTest
+    poc_string: +0xf is not a valid number
+
+  - target_id: TEXT-215_geoportal-esri
+    module: ./geoportal
+    Dtest: Val_TEXT215_Test
+    poc_string: ===
+    poc_cmd: '&#106'
+
+  - target_id: TEXT-215_geoportal-server
+    module: ./geoportal
+    Dtest: Val_TEXT215_Test
+    poc_string: ===
+    poc_cmd: '&#106'
+
+  - target_id: Zip-263_CarStoreApi
+    module: ./account/account-web
+    Dtest: ZipUtil_ESTest
+    poc_string: NullPointerException
+
+  - target_id: Zip-263_ZingClient
+    module: .
+    Dtest: ZFile_ESTest
+    poc_string: NullPointerException
+
+

@@ -1,0 +1,56 @@
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -27,21 +27,41 @@
+     private final BufferedReader _reader;
+     private final Splitter _splitter;
+ 
+-    public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
+-        System.out.println(_filename);
+-        _reader = getReader();
++public FileReader(String filename, String splitPunc) throws Exception {
++    _filename = safeNormalize(filename);
++    System.out.println(_filename);
++    _reader = getReader();
+ 
+-        String splitePattern;
+-        if (splitPunc == null || splitPunc.trim().isEmpty()) {
+-            splitePattern = DEFAULT_SPLIT_PATTERN;
+-        }
+-        else {
+-            splitePattern = splitPunc.trim() + "\\s+";
+-        }
+-        _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++    String splitePattern;
++    if (splitPunc == null || splitPunc.trim().isEmpty()) {
++        splitePattern = DEFAULT_SPLIT_PATTERN;
++    }
++    else {
++        splitePattern = splitPunc.trim() + "\\s+";
++    }
++    _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++}
++
++private static String safeNormalize(String filename) {
++    String normalized = normalize(filename);
++    if (normalized == null) {
++        return null;
+     }
+ 
++    boolean isUncPath = normalized.startsWith("//") || normalized.startsWith("\\\\");
++    String prefix = "";
++    String remainder = normalized;
++
++    if (isUncPath) {
++        prefix = normalized.substring(0, 2);
++        remainder = normalized.substring(2);
++    }
++
++    remainder = remainder.replace('\\', '/');
++    remainder = remainder.replaceAll("/{2,}", "/");
++
++    return prefix + remainder;
++}
+     private BufferedReader getReader() throws Exception {
+         if (_filename == null || _filename.isEmpty()) {
+             LOG.debug("No input file is specified");

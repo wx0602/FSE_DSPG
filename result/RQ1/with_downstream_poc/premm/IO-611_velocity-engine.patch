@@ -1,0 +1,171 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -95,76 +95,101 @@
+      *         in the file template path.
+      * @since 2.0
+      */
+-    public Reader getResourceReader(String templateName, String encoding)
+-            throws ResourceNotFoundException
++public Reader getResourceReader(String templateName, String encoding)
++        throws ResourceNotFoundException
++{
++    /*
++     * Make sure we have a valid templateName.
++     */
++    if (org.apache.commons.lang3.StringUtils.isEmpty(templateName))
+     {
+         /*
+-         * Make sure we have a valid templateName.
++         * If we don't get a properly formed templateName then
++         * there's not much we can do. So we'll forget about
++         * trying to search any more paths for the template.
+          */
+-        if (org.apache.commons.lang3.StringUtils.isEmpty(templateName))
+-        {
+-            /*
+-             * If we don't get a properly formed templateName then
+-             * there's not much we can do. So we'll forget about
+-             * trying to search any more paths for the template.
+-             */
+-            throw new ResourceNotFoundException(
+-                    "Need to specify a file name or file path!");
+-        }
+-
+-        String template = FilenameUtils.normalize( templateName, true );
+-        if ( template == null || template.length() == 0 )
+-        {
+-            String msg = "File resource error: argument " + template +
+-                    " contains .. and may be trying to access " +
+-                    "content outside of template root.  Rejected.";
+-
+-            log.error("FileResourceLoader: {}", msg);
+-
+-            throw new ResourceNotFoundException ( msg );
+-        }
+-
+-        int size = paths.size();
+-        for (String path : paths)
+-        {
+-            InputStream rawStream = null;
+-            Reader reader = null;
+-
+-            try
+-            {
+-                rawStream = findTemplate(path, template);
+-                if (rawStream != null)
+-                {
+-                    reader = buildReader(rawStream, encoding);
+-                }
+-            }
+-            catch (IOException ioe)
+-            {
+-                closeQuiet(rawStream);
+-                String msg = "Exception while loading Template " + template;
+-                log.error(msg, ioe);
+-                throw new VelocityException(msg, ioe);
+-            }
+-            if (reader != null)
+-            {
+-                /*
+-                 * Store the path that this template came
+-                 * from so that we can check its modification
+-                 * time.
+-                 */
+-                templatePaths.put(templateName, path);
+-                return reader;
+-            }
+-        }
+-
+-        /*
+-         * We have now searched all the paths for
+-         * templates and we didn't find anything so
+-         * throw an exception.
+-         */
+-        throw new ResourceNotFoundException("FileResourceLoader: cannot find " + template);
+-    }
+-
++        throw new ResourceNotFoundException(
++                "Need to specify a file name or file path!");
++    }
++
++    String template = FilenameUtils.normalize(templateName, true);
++    if (template == null || template.length() == 0)
++    {
++        String msg = "File resource error: argument " + templateName +
++                " contains .. and may be trying to access " +
++                "content outside of template root.  Rejected.";
++
++        log.error("FileResourceLoader: {}", msg);
++
++        throw new ResourceNotFoundException(msg);
++    }
++
++    /*
++     * FilenameUtils.normalize in the bundled commons-lang version does not
++     * correctly sanitize repeated slashes after a UNC/network-style prefix.
++     * Collapse those duplicate separators explicitly so path traversal checks
++     * and template lookups operate on a canonical path.
++     */
++    if (template.startsWith("//"))
++    {
++        int prefixEnd = 2;
++        int nextSlash = template.indexOf('/', prefixEnd);
++        if (nextSlash > prefixEnd)
++        {
++            String prefix = template.substring(0, nextSlash);
++            String remainder = template.substring(nextSlash).replaceAll("/{2,}", "/");
++            template = prefix + remainder;
++        }
++        else
++        {
++            template = template.replaceAll("/{2,}", "/");
++        }
++    }
++    else
++    {
++        template = template.replaceAll("/{2,}", "/");
++    }
++
++    int size = paths.size();
++    for (String path : paths)
++    {
++        InputStream rawStream = null;
++        Reader reader = null;
++
++        try
++        {
++            rawStream = findTemplate(path, template);
++            if (rawStream != null)
++            {
++                reader = buildReader(rawStream, encoding);
++            }
++        }
++        catch (IOException ioe)
++        {
++            closeQuiet(rawStream);
++            String msg = "Exception while loading Template " + template;
++            log.error(msg, ioe);
++            throw new VelocityException(msg, ioe);
++        }
++        if (reader != null)
++        {
++            /*
++             * Store the path that this template came
++             * from so that we can check its modification
++             * time.
++             */
++            templatePaths.put(templateName, path);
++            return reader;
++        }
++    }
++
++    /*
++     * We have now searched all the paths for
++     * templates and we didn't find anything so
++     * throw an exception.
++     */
++    throw new ResourceNotFoundException("FileResourceLoader: cannot find " + template);
++}
+     /**
+      * Overrides superclass for better performance.
+      * @since 1.6

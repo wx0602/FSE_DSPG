@@ -1,0 +1,93 @@
+diff --git a/blog-admin/src/main/java/com/zyd/blog/core/shiro/credentials/CredentialsMatcher.java b/blog-admin/src/main/java/com/zyd/blog/core/shiro/credentials/CredentialsMatcher.java
+index 63a33f6..db4eaf7 100644
+--- a/blog-admin/src/main/java/com/zyd/blog/core/shiro/credentials/CredentialsMatcher.java
++++ b/blog-admin/src/main/java/com/zyd/blog/core/shiro/credentials/CredentialsMatcher.java
+@@ -27,7 +27,6 @@ public class CredentialsMatcher extends SimpleCredentialsMatcher {
+         try {
+             dbPassword = PasswordUtil.decrypt(dbPassword, utoken.getUsername());
+         } catch (Exception e) {
+-            e.printStackTrace();
+             return false;
+         }
+         //进行密码的比对
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac..9e45cb8 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -6,8 +6,10 @@ import javax.crypto.Cipher;
+ import javax.crypto.KeyGenerator;
+ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
++import java.nio.charset.StandardCharsets;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
++import java.util.regex.Pattern;
+ 
+ /**
+  *
+@@ -20,6 +22,7 @@ import java.security.SecureRandom;
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final Pattern BASE64_PATTERN = Pattern.compile("^[A-Za-z0-9+/]*={0,2}$");
+ 
+     /**
+      * AES加密
+@@ -32,18 +35,10 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String encrypt(String passwd, String content) throws Exception {
+-        // 创建密码器
+         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+-
+-        byte[] byteContent = content.getBytes("utf-8");
+-
+-        // 初始化为加密模式的密码器
++        byte[] byteContent = content.getBytes(StandardCharsets.UTF_8);
+         cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(passwd));
+-
+-        // 加密
+         byte[] result = cipher.doFinal(byteContent);
+-
+-        //通过Base64转码返回
+         return Base64.encodeBase64String(result);
+     }
+ 
+@@ -58,16 +53,31 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
+-        //实例化
+-        Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
++        if (!isSafeBase64Ciphertext(encrypted)) {
++            throw new IllegalArgumentException("Invalid encrypted payload");
++        }
+ 
+-        //使用密钥初始化，设置为解密模式
++        Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+-        //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] decoded;
++        try {
++            decoded = Base64.decodeBase64(encrypted);
++        } catch (IllegalArgumentException e) {
++            throw new IllegalArgumentException("Invalid encrypted payload", e);
++        }
++        byte[] result = cipher.doFinal(decoded);
++        return new String(result, StandardCharsets.UTF_8);
++    }
+ 
+-        return new String(result, "utf-8");
++    private static boolean isSafeBase64Ciphertext(String encrypted) {
++        if (encrypted == null || encrypted.isEmpty()) {
++            return false;
++        }
++        if ((encrypted.length() & 3) != 0) {
++            return false;
++        }
++        return BASE64_PATTERN.matcher(encrypted).matches();
+     }
+ 
+     /**

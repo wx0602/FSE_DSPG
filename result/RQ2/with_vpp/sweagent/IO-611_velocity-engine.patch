@@ -1,0 +1,68 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..11dfc0e 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeTemplatePath(templateName, true);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +175,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeTemplatePath(name, false);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+@@ -243,6 +243,45 @@ private InputStream findTemplate(final String path, final String template)
+         }
+     }
+ 
++
++    private String normalizeTemplatePath(final String templateName, final boolean unixSeparator)
++    {
++        return FilenameUtils.normalize(collapseDuplicateSeparators(templateName), unixSeparator);
++    }
++
++    /**
++     * Commons IO 2.6 does not collapse repeated separators that appear after a prefix,
++     * so sanitize those before delegating to FilenameUtils.normalize(...).
++     */
++    private String collapseDuplicateSeparators(final String path)
++    {
++        if (path == null || path.length() < 2)
++        {
++            return path;
++        }
++
++        StringBuilder sanitized = new StringBuilder(path.length());
++        char previous = 0;
++
++        for (int i = 0; i < path.length(); i++)
++        {
++            char current = path.charAt(i);
++            if (isFileSeparator(current) && isFileSeparator(previous))
++            {
++                continue;
++            }
++            sanitized.append(current);
++            previous = current;
++        }
++
++        return sanitized.toString();
++    }
++
++    private boolean isFileSeparator(final char candidate)
++    {
++        return candidate == '/' || candidate == '\\';
++    }
++
+     private void closeQuiet(final InputStream is)
+     {
+         if (is != null)

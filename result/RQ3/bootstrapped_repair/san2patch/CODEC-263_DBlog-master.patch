@@ -1,0 +1,16 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -31,6 +31,12 @@
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(Md5Util.MD5(salt + CommonConst.ZYD_SECURITY_KEY), encryptPassword);
++        String key = Md5Util.MD5(salt + CommonConst.ZYD_SECURITY_KEY);
++        try {
++            return AesUtil.decrypt(key, encryptPassword);
++        } catch (IllegalArgumentException e) {
++            // Invalid ciphertext must fail closed instead of escaping as an unchecked exception.
++            return null;
++        }
+     }
+ }

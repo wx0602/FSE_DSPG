@@ -1,0 +1,69 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..8fd08c6 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -7,33 +7,40 @@ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
+-	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
+-	}
+-
+-	public static String toFixedDecimal(Number value, int scale) {
+-		NumberFormat numberFormat = NumberFormat.getInstance();
+-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+-		numberFormat.setMaximumFractionDigits(scale);
+-
+-		return numberFormat.format(value);
+-	}
++public static String toFixedDecimal(String value, int scale) {
++return toFixedDecimal(createSafeNumber(value), scale);
++}
+ 
+-	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
+-	}
++public static String toFixedDecimal(Number value, int scale) {
++NumberFormat numberFormat = NumberFormat.getInstance();
++numberFormat.setRoundingMode(RoundingMode.HALF_UP);
++numberFormat.setMaximumFractionDigits(scale);
++return numberFormat.format(value);
++}
+ 
+-	public static String toFixedDecimalWithPercent(Number value, int scale) {
+-		NumberFormat numberFormat = NumberFormat.getPercentInstance();
+-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+-		numberFormat.setMaximumFractionDigits(scale);
++public static String toFixedDecimalWithPercent(String value, int scale) {
++return toFixedDecimalWithPercent(createSafeNumber(value), scale);
++}
+ 
+-		return numberFormat.format(value);
+-	}
++public static String toFixedDecimalWithPercent(Number value, int scale) {
++NumberFormat numberFormat = NumberFormat.getPercentInstance();
++numberFormat.setRoundingMode(RoundingMode.HALF_UP);
++numberFormat.setMaximumFractionDigits(scale);
++return numberFormat.format(value);
++}
+ 
+-	public static void main(String[] args) {
+-		float F2 = 105858.5328F;
+-		System.out.println(ArithUtils.format(F2, 2));
+-	}
++static Number createSafeNumber(String value) {
++if (value != null && value.length() == 1) {
++char ch = value.charAt(0);
++if (ch == 'l' || ch == 'L' || ch == 'f' || ch == 'F' || ch == 'd' || ch == 'D') {
++throw new NumberFormatException(value + " is not a valid number.");
++}
++}
++return NumberUtils.createNumber(value);
++}
+ 
++public static void main(String[] args) {
++float F2 = 105858.5328F;
++System.out.println(ArithUtils.format(F2, 2));
++}
+ }

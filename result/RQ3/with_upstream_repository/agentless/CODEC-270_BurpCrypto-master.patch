@@ -1,0 +1,12 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index 9ec5f33..01f9ea4 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,6 +113,7 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
++        validateBase64Strict(str);
+         return Base64.decodeBase64(str);
+     }
+ 

@@ -1,0 +1,59 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -20,6 +20,7 @@
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final String BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+ 
+     /**
+      * AES加密
+@@ -65,9 +66,47 @@
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(decodeBase64(encrypted));
+ 
+         return new String(result, "utf-8");
++    }
++
++    private static byte[] decodeBase64(final String value) {
++        try {
++            return Base64.decodeBase64(value);
++        } catch (IllegalArgumentException e) {
++            String normalized = normalizeBase64(value);
++            if (normalized.equals(value)) {
++                throw e;
++            }
++            return Base64.decodeBase64(normalized);
++        }
++    }
++
++    private static String normalizeBase64(final String value) {
++        if (value == null) {
++            return null;
++        }
++        int end = value.length();
++        while (end > 0 && value.charAt(end - 1) == '=') {
++            end--;
++        }
++        int modulus = end % 4;
++        if (modulus != 2 && modulus != 3) {
++            return value;
++        }
++        int last = end - 1;
++        int decoded = BASE64_ALPHABET.indexOf(value.charAt(last));
++        if (decoded < 0) {
++            return value;
++        }
++        int mask = modulus == 2 ? 0x30 : 0x3c;
++        StringBuilder normalized = new StringBuilder(value);
++        normalized.setCharAt(last, BASE64_ALPHABET.charAt(decoded & mask));
++        while (normalized.length() % 4 != 0) {
++            normalized.append('=');
++        }
++        return normalized.toString();
+     }
+ 
+     /**

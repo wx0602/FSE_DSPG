@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980" role="img" aria-label="上下游修复率差异哑铃图">
+<rect width="1600" height="980" fill="#FFFFFF"/>
+<text x="245.0" y="62.0" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="40" font-weight="700" fill="#172033">上下游修复率差异（哑铃图）</text>
+<text x="245.0" y="108.0" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="23" font-weight="400" fill="#657187">点越靠右表示修复率越高；Δ = 上游 − 下游</text>
+<circle cx="1170" cy="67" r="9" fill="#2F6BFF"/>
+<text x="1190.0" y="75.0" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="400" fill="#172033">上游</text>
+<circle cx="1330" cy="67" r="9" fill="#F26B5B"/>
+<text x="1350.0" y="75.0" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="400" fill="#172033">下游</text>
+<line x1="245.0" y1="190" x2="245.0" y2="885" stroke="#DCE3EC" stroke-width="1"/>
+<text x="245.0" y="172.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="400" fill="#657187">0%</text>
+<line x1="391.2" y1="190" x2="391.2" y2="885" stroke="#DCE3EC" stroke-width="1"/>
+<text x="391.2" y="172.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="400" fill="#657187">10%</text>
+<line x1="537.5" y1="190" x2="537.5" y2="885" stroke="#DCE3EC" stroke-width="1"/>
+<text x="537.5" y="172.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="400" fill="#657187">20%</text>
+<line x1="683.8" y1="190" x2="683.8" y2="885" stroke="#DCE3EC" stroke-width="1"/>
+<text x="683.8" y="172.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="400" fill="#657187">30%</text>
+<line x1="830.0" y1="190" x2="830.0" y2="885" stroke="#DCE3EC" stroke-width="1"/>
+<text x="830.0" y="172.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="400" fill="#657187">40%</text>
+<line x1="976.2" y1="190" x2="976.2" y2="885" stroke="#DCE3EC" stroke-width="1"/>
+<text x="976.2" y="172.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="400" fill="#657187">50%</text>
+<line x1="1122.5" y1="190" x2="1122.5" y2="885" stroke="#DCE3EC" stroke-width="1"/>
+<text x="1122.5" y="172.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="400" fill="#657187">60%</text>
+<line x1="1268.8" y1="190" x2="1268.8" y2="885" stroke="#DCE3EC" stroke-width="1"/>
+<text x="1268.8" y="172.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="400" fill="#657187">70%</text>
+<line x1="1415.0" y1="190" x2="1415.0" y2="885" stroke="#DCE3EC" stroke-width="1"/>
+<text x="1415.0" y="172.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="400" fill="#657187">80%</text>
+<line x1="939.7" y1="224.8" x2="1201.7" y2="224.8" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="1201.7" cy="224.8" r="13" fill="#F26B5B"/>
+<circle cx="939.7" cy="224.8" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="232.8" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="500" fill="#172033">OpenHands</text>
+<text x="1443.0" y="232.8" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#F26B5B">Δ -17.9 pp</text>
+<line x1="793.4" y1="294.2" x2="1006.7" y2="294.2" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="1006.7" cy="294.2" r="13" fill="#F26B5B"/>
+<circle cx="793.4" cy="294.2" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="302.2" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="500" fill="#172033">SWE-agent</text>
+<text x="1443.0" y="302.2" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#F26B5B">Δ -14.6 pp</text>
+<line x1="464.4" y1="363.8" x2="665.5" y2="363.8" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="665.5" cy="363.8" r="13" fill="#F26B5B"/>
+<circle cx="464.4" cy="363.8" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="371.8" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="500" fill="#172033">RepairAgent</text>
+<text x="1443.0" y="371.8" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#F26B5B">Δ -13.7 pp</text>
+<line x1="574.1" y1="433.2" x2="750.8" y2="433.2" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="750.8" cy="433.2" r="13" fill="#F26B5B"/>
+<circle cx="574.1" cy="433.2" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="441.2" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="500" fill="#172033">Agentless</text>
+<text x="1443.0" y="441.2" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#F26B5B">Δ -12.1 pp</text>
+<line x1="574.1" y1="502.8" x2="732.5" y2="502.8" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="732.5" cy="502.8" r="13" fill="#F26B5B"/>
+<circle cx="574.1" cy="502.8" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="510.8" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="500" fill="#172033">PreMM</text>
+<text x="1443.0" y="510.8" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#F26B5B">Δ -10.8 pp</text>
+<line x1="610.6" y1="572.2" x2="714.2" y2="572.2" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="714.2" cy="572.2" r="13" fill="#F26B5B"/>
+<circle cx="610.6" cy="572.2" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="580.2" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="500" fill="#172033">San2Patch</text>
+<text x="1443.0" y="580.2" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#F26B5B">Δ -7.1 pp</text>
+<line x1="647.2" y1="641.8" x2="744.7" y2="641.8" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="744.7" cy="641.8" r="13" fill="#F26B5B"/>
+<circle cx="647.2" cy="641.8" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="649.8" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="500" fill="#172033">Appatch</text>
+<text x="1443.0" y="649.8" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#F26B5B">Δ -6.7 pp</text>
+<line x1="610.6" y1="711.2" x2="683.8" y2="711.2" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="610.6" cy="711.2" r="13" fill="#F26B5B"/>
+<circle cx="683.8" cy="711.2" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="719.2" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="500" fill="#172033">ReInFix</text>
+<text x="1443.0" y="719.2" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#2F6BFF">Δ +5.0 pp</text>
+<line x1="781.2" y1="780.8" x2="903.1" y2="780.8" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="781.2" cy="780.8" r="13" fill="#F26B5B"/>
+<circle cx="903.1" cy="780.8" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="788.8" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="500" fill="#172033">PatchAgent</text>
+<text x="1443.0" y="788.8" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#2F6BFF">Δ +8.3 pp</text>
+<rect x="35" y="818.5" width="1530" height="63.5" rx="10" fill="#F3F6FA"/>
+<line x1="687.8" y1="850.2" x2="800.9" y2="850.2" stroke="#AAB4C3" stroke-width="6" stroke-linecap="round"/>
+<circle cx="800.9" cy="850.2" r="13" fill="#F26B5B"/>
+<circle cx="687.8" cy="850.2" r="13" fill="#2F6BFF"/>
+<text x="220.0" y="858.2" text-anchor="end" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="22" font-weight="700" fill="#172033">总体</text>
+<text x="1443.0" y="858.2" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="20" font-weight="700" fill="#F26B5B">Δ -7.7 pp</text>
+<text x="830.0" y="945.0" text-anchor="middle" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="25" font-weight="600" fill="#172033">修复率</text>
+<text x="40.0" y="945.0" text-anchor="start" font-family="Noto Sans CJK SC, Noto Sans CJK JP, Microsoft YaHei, sans-serif" font-size="18" font-weight="400" fill="#657187">共同漏洞、按 CVE 等权</text>
+</svg>

@@ -1,0 +1,23 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -58,10 +58,16 @@
+ 	 * @return BigInteger 转换后的BigInteger值。
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+-	public static BigInteger createBigInteger(String str)  {
+-		return NumberUtils.createBigInteger(str);
+-	}
+-	
++public static BigInteger createBigInteger(String str)  {
++	if (str == null) {
++		return NumberUtils.createBigInteger(null);
++	}
++	String value = str;
++	if (value.startsWith("+")) {
++		value = value.substring(1);
++	}
++	return NumberUtils.createBigInteger(value);
++}	
+ 	/**
+ 	 * 把String转换为Double值，引用org.apache.commons.lang.NumberUtils.createDouble(String str)方法。<br>
+ 	 * 假如String值为null将返回null。<br>

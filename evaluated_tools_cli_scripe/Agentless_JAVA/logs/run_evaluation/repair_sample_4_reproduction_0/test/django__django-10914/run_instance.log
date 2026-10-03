@@ -1,0 +1,48 @@
+2025-08-23 19:37:22,807 - INFO - Environment image sweb.env.x86_64.2baaea72acc974f6c02079:latest found for django__django-10914
+Building instance image sweb.eval.x86_64.django__django-10914:latest for django__django-10914
+2025-08-23 19:37:22,809 - INFO - Image sweb.eval.x86_64.django__django-10914:latest already exists, skipping build.
+2025-08-23 19:37:22,809 - INFO - Creating container for django__django-10914...
+2025-08-23 19:37:23,028 - INFO - Container for django__django-10914 created: c63d538ad447257837536db82a1bc9ef0d3bb4a47ba6f031957452623b266bda
+2025-08-23 19:37:23,353 - INFO - Container for django__django-10914 started: c63d538ad447257837536db82a1bc9ef0d3bb4a47ba6f031957452623b266bda
+2025-08-23 19:37:23,354 - INFO - Intermediate patch for django__django-10914 written to logs/run_evaluation/repair_sample_4_reproduction_0/test/django__django-10914/patch.diff, now applying to container...
+2025-08-23 19:37:23,587 - INFO - Failed to apply patch to container, trying again...
+2025-08-23 19:37:23,653 - INFO - >>>>> Applied Patch:
+patching file django/conf/global_settings.py
+
+2025-08-23 19:37:24,380 - INFO - Git diff before:
+diff --git a/django/conf/global_settings.py b/django/conf/global_settings.py
+index acee9887d2..bdeec80610 100644
+--- a/django/conf/global_settings.py
++++ b/django/conf/global_settings.py
+@@ -304,7 +304,7 @@ FILE_UPLOAD_TEMP_DIR = None
+ 
+ # The numeric mode to set newly-uploaded files to. The value should be a mode
+ # you'd pass directly to os.chmod; see https://docs.python.org/library/os.html#files-and-directories.
+-FILE_UPLOAD_PERMISSIONS = None
++FILE_UPLOAD_PERMISSIONS = 0o644
+ 
+ # The numeric mode to assign to newly-created directories, when uploading files.
+ # The value should be a mode as you'd pass to os.chmod;
+2025-08-23 19:37:24,380 - INFO - Eval script for django__django-10914 written to logs/run_evaluation/repair_sample_4_reproduction_0/test/django__django-10914/eval.sh; copying to container...
+2025-08-23 19:37:38,745 - INFO - Test runtime: 14.21 seconds
+2025-08-23 19:37:38,745 - INFO - Test output for django__django-10914 written to logs/run_evaluation/repair_sample_4_reproduction_0/test/django__django-10914/test_output.txt
+2025-08-23 19:37:38,826 - INFO - Git diff after:
+diff --git a/django/conf/global_settings.py b/django/conf/global_settings.py
+index acee9887d2..bdeec80610 100644
+--- a/django/conf/global_settings.py
++++ b/django/conf/global_settings.py
+@@ -304,7 +304,7 @@ FILE_UPLOAD_TEMP_DIR = None
+ 
+ # The numeric mode to set newly-uploaded files to. The value should be a mode
+ # you'd pass directly to os.chmod; see https://docs.python.org/library/os.html#files-and-directories.
+-FILE_UPLOAD_PERMISSIONS = None
++FILE_UPLOAD_PERMISSIONS = 0o644
+ 
+ # The numeric mode to assign to newly-created directories, when uploading files.
+ # The value should be a mode as you'd pass to os.chmod;
+2025-08-23 19:37:38,826 - INFO - Grading answer for django__django-10914...
+2025-08-23 19:37:38,828 - INFO - report: {'django__django-10914': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': True, 'tests_status': {'FAIL_TO_PASS': {'success': [], 'failure': []}, 'PASS_TO_PASS': {'success': [], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-10914: resolved: True
+2025-08-23 19:37:38,828 - INFO - Attempting to stop container sweb.eval.django__django-10914.repair_sample_4_reproduction_0...
+2025-08-23 19:37:54,299 - INFO - Attempting to remove container sweb.eval.django__django-10914.repair_sample_4_reproduction_0...
+2025-08-23 19:37:54,310 - INFO - Container sweb.eval.django__django-10914.repair_sample_4_reproduction_0 removed.

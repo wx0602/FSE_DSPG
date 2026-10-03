@@ -1,0 +1,80 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..0362ab3 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,7 +32,6 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+@@ -240,17 +238,53 @@ public class Val {
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+ 
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++      StringBuilder sb = new StringBuilder(v.length());
++      int i = 0;
++      while (i < v.length()) {
++        char ch = v.charAt(i);
++        if (ch == '&' && i + 2 < v.length() && v.charAt(i + 1) == '#') {
++          int start = i + 2;
++          boolean isHex = false;
++          if (start < v.length() && (v.charAt(start) == 'x' || v.charAt(start) == 'X')) {
++            isHex = true;
++            start++;
++          }
++          int end = start;
++          while (end < v.length() && isEntityDigit(v.charAt(end), isHex)) {
++            end++;
++          }
++          if (end > start) {
++            boolean hasSemiColon = end < v.length() && v.charAt(end) == ';';
++            int next = hasSemiColon ? end + 1 : end;
++            try {
++              int codePoint = Integer.parseInt(v.substring(start, end), isHex ? 16 : 10);
++              if (Character.isValidCodePoint(codePoint)) {
++                sb.append(Character.toChars(codePoint));
++                i = next;
++                continue;
++              }
++            } catch (NumberFormatException ex) {
++            }
++          }
++        }
++        sb.append(ch);
++        i++;
+       }
++      return sb.toString();
+ 
+     }
+     return v;
+   }
++
++  private static boolean isEntityDigit(char ch, boolean isHex) {
++    if (ch >= '0' && ch <= '9') {
++      return true;
++    }
++    if (isHex) {
++      return (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
++    }
++    return false;
++  }
+   /**
+    * decodes an octal value.
+    * @param v the value

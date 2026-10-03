@@ -1,0 +1,59 @@
+--- a/src/main/java/burp/aes/AesUtil.java
++++ b/src/main/java/burp/aes/AesUtil.java
+@@ -32,6 +32,56 @@
+ 
+     public String decrypt(String cipherText) {
+         try {
++            if (cipherText == null) {
++                throw fail(new IllegalArgumentException("cipherText must not be null"));
++            }
++            int length = cipherText.length();
++            if (length == 0 || (length % 4) != 0) {
++                throw fail(new IllegalArgumentException("Invalid Base64 ciphertext"));
++            }
++            int padding = 0;
++            if (length >= 1 && cipherText.charAt(length - 1) == '=') {
++                padding++;
++            }
++            if (length >= 2 && cipherText.charAt(length - 2) == '=') {
++                padding++;
++            }
++            if (padding > 2) {
++                throw fail(new IllegalArgumentException("Invalid Base64 padding"));
++            }
++            for (int i = 0; i < length - padding; i++) {
++                char c = cipherText.charAt(i);
++                boolean ok = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '+' || c == '/';
++                if (!ok) {
++                    throw fail(new IllegalArgumentException("Invalid Base64 character"));
++                }
++            }
++            for (int i = length - padding; i < length; i++) {
++                if (i >= 0 && cipherText.charAt(i) != '=') {
++                    throw fail(new IllegalArgumentException("Invalid Base64 padding placement"));
++                }
++            }
++            if (padding == 1) {
++                char c = cipherText.charAt(length - 2);
++                int value = c >= 'A' && c <= 'Z' ? c - 'A'
++                        : c >= 'a' && c <= 'z' ? c - 'a' + 26
++                        : c >= '0' && c <= '9' ? c - '0' + 52
++                        : c == '+' ? 62
++                        : c == '/' ? 63 : -1;
++                if (value < 0 || (value & 0x03) != 0) {
++                    throw fail(new IllegalArgumentException("Non-canonical Base64 ciphertext"));
++                }
++            } else if (padding == 2) {
++                char c = cipherText.charAt(length - 3);
++                int value = c >= 'A' && c <= 'Z' ? c - 'A'
++                        : c >= 'a' && c <= 'z' ? c - 'a' + 26
++                        : c >= '0' && c <= '9' ? c - '0' + 52
++                        : c == '+' ? 62
++                        : c == '/' ? 63 : -1;
++                if (value < 0 || (value & 0x0f) != 0) {
++                    throw fail(new IllegalArgumentException("Non-canonical Base64 ciphertext"));
++                }
++            }
+             byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
+             return new String(decrypted, "UTF-8");
+         } catch (UnsupportedEncodingException e) {

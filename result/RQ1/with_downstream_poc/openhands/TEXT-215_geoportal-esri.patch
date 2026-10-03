@@ -1,0 +1,90 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a1318..027fafe 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,7 +32,6 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+@@ -241,18 +239,61 @@ public class Val {
+    * @return the decoded value
+    */
+   public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
++    if (v == null || v.indexOf("&#") < 0) {
++      return v;
++    }
+ 
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++    StringBuilder out = new StringBuilder(v.length());
++    int i = 0;
++    while (i < v.length()) {
++      int entityStart = v.indexOf("&#", i);
++      if (entityStart < 0) {
++        out.append(v, i, v.length());
++        break;
+       }
+ 
++      out.append(v, i, entityStart);
++      int cursor = entityStart + 2;
++      boolean hex = false;
++      if (cursor < v.length() && (v.charAt(cursor) == 'x' || v.charAt(cursor) == 'X')) {
++        hex = true;
++        cursor++;
++      }
++
++      int digitsStart = cursor;
++      while (cursor < v.length()) {
++        char ch = v.charAt(cursor);
++        if (hex ? Character.digit(ch, 16) >= 0 : Character.isDigit(ch)) {
++          cursor++;
++        } else {
++          break;
++        }
++      }
++
++      boolean hasSemiColon = cursor < v.length() && v.charAt(cursor) == ';';
++      if (cursor == digitsStart) {
++        out.append(v, entityStart, Math.min(v.length(), entityStart + 2));
++        i = entityStart + 2;
++        continue;
++      }
++
++      String digits = v.substring(digitsStart, cursor);
++      if (!hasSemiColon) {
++        out.append(v, entityStart, cursor);
++        i = cursor;
++        continue;
++      }
++
++      try {
++        int codePoint = Integer.parseInt(digits, hex ? 16 : 10);
++        out.append(Character.toChars(codePoint));
++        i = cursor + 1;
++      } catch (IllegalArgumentException e) {
++        out.append(v, entityStart, cursor + 1);
++        i = cursor + 1;
++      }
+     }
+-    return v;
++    return out.toString();
+   }
+   /**
+    * decodes an octal value.

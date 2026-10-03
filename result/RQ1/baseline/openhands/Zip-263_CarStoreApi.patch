@@ -1,0 +1,54 @@
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/FileUtils.java b/account/account-web/src/main/java/com/car/account/web/common/utils/FileUtils.java
+index 250011a..62a4b5e 100644
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/FileUtils.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/FileUtils.java
+@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
+ import java.io.*;
+ import java.nio.charset.Charset;
+ import java.util.Enumeration;
++import java.util.Objects;
+ import java.util.zip.ZipEntry;
+ import java.util.zip.ZipFile;
+ 
+@@ -126,7 +127,7 @@ public class FileUtils {
+             //创建保存目录
+             new File(savePath).mkdir();
+             //解决中文乱码问题
+-            zipFile = new ZipFile(path, Charset.forName("gbk"));
++            zipFile = new ZipFile(Objects.requireNonNull(path, "Zip source file path must not be null"), Charset.forName("gbk"));
+             Enumeration<?> entries = zipFile.entries();
+             while (entries.hasMoreElements()) {
+                 byte buf[] = new byte[buffer];
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+index c139567..4faf8aa 100644
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -14,6 +14,7 @@ import java.io.*;
+ import java.util.ArrayList;
+ import java.util.Enumeration;
+ import java.util.List;
++import java.util.Objects;
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+ 
+@@ -120,9 +121,9 @@ public class ZipUtil {
+         try {
+             //解决中文乱码问题
+             if (osName.toUpperCase().contains("WINDOWS")) {
+-                zipFile = new ZipFile(sourceFiles, "gbk");
++                zipFile = new ZipFile(Objects.requireNonNull(sourceFiles, "Zip source file path must not be null"), "gbk");
+             } else {
+-                zipFile = new ZipFile(sourceFiles, "UTF8");
++                zipFile = new ZipFile(Objects.requireNonNull(sourceFiles, "Zip source file path must not be null"), "UTF8");
+             }
+             Enumeration<?> entries = zipFile.getEntries();
+             while (entries.hasMoreElements()) {
+@@ -266,7 +267,7 @@ public class ZipUtil {
+      * @throws ZipException 压缩异常
+      */
+     public static void compressFile(File sourceFile, File zip) throws ZipException {
+-        net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
++        net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(Objects.requireNonNull(zip, "Zip target file must not be null"));
+         ZipParameters zipParameters = new ZipParameters();
+         //压缩方式
+         zipParameters.setCompressionMethod(CompressionMethod.DEFLATE);

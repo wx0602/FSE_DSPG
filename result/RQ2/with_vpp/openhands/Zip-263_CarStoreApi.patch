@@ -1,0 +1,44 @@
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+index c139567..04fd89e 100644
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -266,6 +266,13 @@ public class ZipUtil {
+      * @throws ZipException 压缩异常
+      */
+     public static void compressFile(File sourceFile, File zip) throws ZipException {
++        if (sourceFile == null) {
++            throw new IllegalArgumentException("sourceFile must not be null");
++        }
++        if (zip == null) {
++            throw new IllegalArgumentException("zip must not be null");
++        }
++
+         net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
+         ZipParameters zipParameters = new ZipParameters();
+         //压缩方式
+@@ -273,19 +280,18 @@ public class ZipUtil {
+         //压缩级别
+         zipParameters.setCompressionLevel(CompressionLevel.NORMAL);
+ 
+-        if(sourceFile.isDirectory()){
++        if (sourceFile.isDirectory()) {
+             File[] files = sourceFile.listFiles();
+-            if(files != null){
+-                for(File file : files){
+-                    if(file.isDirectory()){
++            if (files != null) {
++                for (File file : files) {
++                    if (file.isDirectory()) {
+                         zipFile.addFolder(file, zipParameters);
+-
+-                    }else{
++                    } else {
+                         zipFile.addFile(file, zipParameters);
+                     }
+                 }
+             }
+-        }else{
++        } else {
+             zipFile.addFile(sourceFile, zipParameters);
+         }
+     }

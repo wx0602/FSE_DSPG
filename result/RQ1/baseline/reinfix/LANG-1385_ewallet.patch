@@ -1,0 +1,18 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index 0000000..0000000 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -118,3 +118,10 @@
+-	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
+-	}
++public static Number createNumber(String str) {
++		if (str == null) {
++			return null;
++		}
++		String value = str.trim();
++		if (value.isEmpty()) {
++			return null;
++		}
++		return NumberUtils.createNumber(value);
++	}

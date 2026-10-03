@@ -1,0 +1,22 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index 0000000..0000000 100644
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -27,6 +27,11 @@
+-    public boolean validateInteger(String str) {
+-        logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
+-    }
++public boolean validateInteger(String str) {
++        logger.info("Validating integer: " + str);
++        System.out.println(str);
++        try {
++            Integer.parseInt(str);
++            return true;
++        } catch (NumberFormatException ex) {
++            System.out.println(false);
++            return false;
++        }
++    }

@@ -1,0 +1,41 @@
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/HttpServletResponseUtil.java b/account/account-web/src/main/java/com/car/account/web/common/utils/HttpServletResponseUtil.java
+index e6f7eb5..abc4492 100644
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/HttpServletResponseUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/HttpServletResponseUtil.java
+@@ -42,6 +42,10 @@ public class HttpServletResponseUtil {
+     public static void responseWriteZip(File zipFile, HttpServletResponse response, String fileName){
+         log.info("记录生成文件名：{}",fileName);
+         OutputStream os = null;
++        if (zipFile == null) {
++            log.error("压缩文件下载失败，zipFile为空，fileName:{}", fileName);
++            throw new BusinessException(ResEnum.DOWN_LOAD_FILE_ERROR.getValue(), ResEnum.DOWN_LOAD_FILE_ERROR.getDesc());
++        }
+         response.reset();
+         try {
+             response.setCharacterEncoding("UTF-8");
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+index 2100c52..f811532 100644
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -266,6 +266,7 @@ public class ZipUtil {
+      * @throws ZipException 压缩异常
+      */
+     public static void compressFile(File sourceFile, File zip) throws ZipException {
++        validateZipCompressionInput(sourceFile, zip);
+         net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
+         ZipParameters zipParameters = new ZipParameters();
+         //压缩方式
+@@ -290,4 +291,13 @@ public class ZipUtil {
+         }
+     }
+ 
++    private static void validateZipCompressionInput(File sourceFile, File zip) throws ZipException {
++        if (sourceFile == null) {
++            throw new ZipException("sourceFile must not be null");
++        }
++        if (zip == null) {
++            throw new ZipException("zip target file must not be null");
++        }
++    }
++
+ }

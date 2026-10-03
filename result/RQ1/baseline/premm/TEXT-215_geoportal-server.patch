@@ -1,0 +1,88 @@
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -237,21 +237,70 @@
+    * @param v the value
+    * @return the decoded value
+    */
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
+-  /**
++public static String unescapeNunmericEntity(String v) {
++  if (v == null) {
++    return null;
++  }
++
++  StringBuilder result = new StringBuilder(v.length());
++  int length = v.length();
++
++  for (int index = 0; index < length; index++) {
++    char current = v.charAt(index);
++
++    if (current == '&' && index + 2 < length && v.charAt(index + 1) == '#') {
++      int entityStart = index;
++      int parseIndex = index + 2;
++      boolean hexadecimal = false;
++
++      if (parseIndex < length && (v.charAt(parseIndex) == 'x' || v.charAt(parseIndex) == 'X')) {
++        hexadecimal = true;
++        parseIndex++;
++      }
++
++      int digitsStart = parseIndex;
++      while (parseIndex < length) {
++        char digit = v.charAt(parseIndex);
++        if (hexadecimal) {
++          if ((digit >= '0' && digit <= '9') || (digit >= 'a' && digit <= 'f') || (digit >= 'A' && digit <= 'F')) {
++            parseIndex++;
++            continue;
++          }
++        } else if (digit >= '0' && digit <= '9') {
++          parseIndex++;
++          continue;
++        }
++        break;
++      }
++
++      boolean hasDigits = parseIndex > digitsStart;
++      boolean hasSemicolon = parseIndex < length && v.charAt(parseIndex) == ';';
++
++      if (hasDigits) {
++        int entityEnd = hasSemicolon ? parseIndex + 1 : parseIndex;
++        String entityBody = v.substring(digitsStart, parseIndex);
++
++        try {
++          int codePoint = Integer.parseInt(entityBody, hexadecimal ? 16 : 10);
++          if (Character.isValidCodePoint(codePoint)) {
++            result.append(Character.toChars(codePoint));
++            index = entityEnd - 1;
++            continue;
++          }
++        } catch (IllegalArgumentException ex) {
++        }
++      }
++
++      result.append(v, entityStart, parseIndex);
++      index = parseIndex - 1;
++      continue;
++    }
++
++    result.append(current);
++  }
++
++  return result.toString();
++}  /**
+    * decodes an octal value.
+    * @param v the value
+    * @return the decoded value

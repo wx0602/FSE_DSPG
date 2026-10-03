@@ -1,0 +1,32 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d7..6b3323f 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -59,7 +59,17 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static BigInteger createBigInteger(String str)  {
+-		return NumberUtils.createBigInteger(str);
++		return NumberUtils.createBigInteger(normalizeLeadingPlusHexPrefix(str));
++	}
++	
++	private static String normalizeLeadingPlusHexPrefix(String str) {
++		if (str == null || str.length() < 4 || str.charAt(0) != '+') {
++			return str;
++		}
++		if (str.startsWith("+0x") || str.startsWith("+0X") || str.startsWith("+#")) {
++			return str.substring(1);
++		}
++		return str;
+ 	}
+ 	
+ 	/**
+@@ -116,7 +126,7 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
++		return NumberUtils.createNumber(normalizeLeadingPlusHexPrefix(str));
+ 	}
+ 	
+ 	

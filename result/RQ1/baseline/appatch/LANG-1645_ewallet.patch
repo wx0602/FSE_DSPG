@@ -1,0 +1,84 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -1,6 +1,7 @@
+ package com.fr.chain.utils;
+ 
+ import java.math.BigDecimal;
++import java.math.BigInteger;
+ import java.math.BigInteger;
+ import java.text.DecimalFormat;
+ 
+@@ -59,7 +60,7 @@
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static BigInteger createBigInteger(String str)  {
+-		return NumberUtils.createBigInteger(str);
++		return createBigIntegerCompat(str);
+ 	}
+ 	
+ 	/**
+@@ -116,7 +117,7 @@
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
++		return createNumberCompat(str);
+ 	}
+ 	
+ 	
+@@ -624,4 +625,55 @@
+ 		}
+ 		return strPrice;
+ 	}
++
++	private static Number createNumberCompat(String str) {
++		String normalized = normalizeLeadingPlusHex(str);
++		if (normalized != null && normalized != str) {
++			Number number = NumberUtils.createNumber(normalized);
++			if (isPositiveHex(normalized) && number instanceof BigInteger) {
++				return new BigInteger(str.substring(1 + hexPrefixLength(str)), 16);
++			}
++			return number;
++		}
++		return NumberUtils.createNumber(str);
++	}
++
++	private static BigInteger createBigIntegerCompat(String str) {
++		String normalized = normalizeLeadingPlusHex(str);
++		if (normalized == null || normalized == str) {
++			return NumberUtils.createBigInteger(str);
++		}
++		int prefixLength = hexPrefixLength(normalized);
++		if (prefixLength > 0) {
++			return new BigInteger(str.substring(1 + prefixLength), 16);
++		}
++		return NumberUtils.createBigInteger(normalized);
++	}
++
++	private static String normalizeLeadingPlusHex(String str) {
++		if (str == null || str.length() < 2 || str.charAt(0) != '+') {
++			return str;
++		}
++		if (hexPrefixLength(str.substring(1)) > 0) {
++			return str.substring(1);
++		}
++		return str;
++	}
++
++	private static boolean isPositiveHex(String str) {
++		return str != null && str.length() > 0 && str.charAt(0) != '-' && hexPrefixLength(str) > 0;
++	}
++
++	private static int hexPrefixLength(String str) {
++		if (str == null) {
++			return 0;
++		}
++		if (str.startsWith("0x") || str.startsWith("0X")) {
++			return 2;
++		}
++		if (str.startsWith("#")) {
++			return 1;
++		}
++		return 0;
++	}
+ }

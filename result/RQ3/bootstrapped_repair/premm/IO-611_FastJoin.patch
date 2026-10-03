@@ -1,0 +1,56 @@
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -27,21 +27,40 @@
+     private final BufferedReader _reader;
+     private final Splitter _splitter;
+ 
+-    public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
+-        System.out.println(_filename);
+-        _reader = getReader();
+-
+-        String splitePattern;
+-        if (splitPunc == null || splitPunc.trim().isEmpty()) {
+-            splitePattern = DEFAULT_SPLIT_PATTERN;
+-        }
+-        else {
+-            splitePattern = splitPunc.trim() + "\\s+";
+-        }
+-        _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++public FileReader(String filename, String splitPunc) throws Exception {
++    if (filename == null) {
++        throw new IllegalArgumentException("filename must not be null");
+     }
+ 
++    String normalized = normalize(filename);
++    if (normalized == null) {
++        throw new IllegalArgumentException("Invalid filename: " + filename);
++    }
++
++    String sanitized = normalized.replace('\\', '/');
++    int prefixLength = 0;
++    while (prefixLength < sanitized.length() && sanitized.charAt(prefixLength) == '/') {
++        prefixLength++;
++    }
++    if (prefixLength > 0 && prefixLength < sanitized.length()) {
++        String prefix = sanitized.substring(0, prefixLength);
++        String remainder = sanitized.substring(prefixLength).replaceAll("/{2,}", "/");
++        sanitized = prefix + remainder;
++    }
++
++    _filename = sanitized;
++    System.out.println(_filename);
++    _reader = getReader();
++
++    String splitePattern;
++    if (splitPunc == null || splitPunc.trim().isEmpty()) {
++        splitePattern = DEFAULT_SPLIT_PATTERN;
++    }
++    else {
++        splitePattern = splitPunc.trim() + "\\s+";
++    }
++    _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++}
+     private BufferedReader getReader() throws Exception {
+         if (_filename == null || _filename.isEmpty()) {
+             LOG.debug("No input file is specified");

@@ -1,0 +1,74 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..48ebd77 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -9,6 +9,9 @@ import javax.crypto.spec.SecretKeySpec;
+ import java.nio.charset.StandardCharsets;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
++import java.util.Arrays;
++import java.util.Objects;
++import java.util.regex.Pattern;
+ 
+ /**
+  *
+@@ -21,6 +24,7 @@ import java.security.SecureRandom;
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final Pattern BASE64_PATTERN = Pattern.compile("^[A-Za-z0-9+/]*={0,2}$");
+ 
+     /**
+      * AES加密
+@@ -59,12 +63,12 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
+-        byte[] decoded = Base64.decodeBase64(encrypted);
++        byte[] decoded = decodeBase64Strict(encrypted);
+         if (decoded.length == 0) {
+             return "";
+         }
+         if (decoded.length % 16 != 0) {
+-            return new String(decoded, StandardCharsets.UTF_8);
++            throw new IllegalArgumentException("Invalid AES ciphertext length");
+         }
+ 
+         //实例化
+@@ -79,6 +83,36 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static byte[] decodeBase64Strict(String encrypted) {
++        Objects.requireNonNull(encrypted, "encrypted");
++        if (encrypted.isEmpty()) {
++            return new byte[0];
++        }
++        if ((encrypted.length() & 3) != 0 || !BASE64_PATTERN.matcher(encrypted).matches()) {
++            throw new IllegalArgumentException("Invalid Base64 ciphertext");
++        }
++
++        int firstPadding = encrypted.indexOf('=');
++        if (firstPadding >= 0 && firstPadding < encrypted.length() - countPadding(encrypted)) {
++            throw new IllegalArgumentException("Invalid Base64 padding");
++        }
++
++        byte[] decoded = java.util.Base64.getDecoder().decode(encrypted);
++        String canonical = java.util.Base64.getEncoder().encodeToString(decoded);
++        if (!Arrays.equals(canonical.getBytes(StandardCharsets.US_ASCII), encrypted.getBytes(StandardCharsets.US_ASCII))) {
++            throw new IllegalArgumentException("Invalid Base64 trailing bits");
++        }
++        return decoded;
++    }
++
++    private static int countPadding(String encrypted) {
++        int padding = 0;
++        for (int i = encrypted.length() - 1; i >= 0 && encrypted.charAt(i) == '='; i--) {
++            padding++;
++        }
++        return padding;
++    }
++
+     /**
+      * 生成加密秘钥
+      *

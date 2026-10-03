@@ -1,0 +1,60 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..546d319 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -59,6 +59,9 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        if (!isStrictBase64(encrypted)) {
++            throw new IllegalArgumentException("Illegal base64 content");
++        }
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -79,6 +82,45 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static boolean isStrictBase64(String value) {
++        if (value == null || value.isEmpty() || value.length() % 4 != 0) {
++            return false;
++        }
++        int padding = 0;
++        for (int i = value.length() - 1; i >= 0 && value.charAt(i) == '='; i--) {
++            padding++;
++        }
++        if (padding > 2) {
++            return false;
++        }
++        int contentLength = value.length() - padding;
++        for (int i = 0; i < contentLength; i++) {
++            if (decodeBase64Char(value.charAt(i)) < 0) {
++                return false;
++            }
++        }
++        for (int i = contentLength; i < value.length(); i++) {
++            if (value.charAt(i) != '=') {
++                return false;
++            }
++        }
++        if (padding > 0 && contentLength > 0) {
++            int last = decodeBase64Char(value.charAt(contentLength - 1));
++            int mask = (1 << (padding * 2)) - 1;
++            if ((last & mask) != 0) {
++                return false;
++            }
++        }
++        return true;
++    }
++
++    private static int decodeBase64Char(char ch) {
++        if (ch >= 'A' && ch <= 'Z') return ch - 'A';
++        if (ch >= 'a' && ch <= 'z') return ch - 'a' + 26;
++        if (ch >= '0' && ch <= '9') return ch - '0' + 52;
++        return ch == '+' ? 62 : ch == '/' ? 63 : -1;
++    }
++
+     /**
+      * 生成加密秘钥
+      *

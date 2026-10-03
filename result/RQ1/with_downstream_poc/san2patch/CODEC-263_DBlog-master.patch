@@ -1,0 +1,17 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -31,6 +31,13 @@
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(Md5Util.MD5(salt + CommonConst.ZYD_SECURITY_KEY), encryptPassword);
++        if (encryptPassword == null || encryptPassword.trim().isEmpty()) {
++            return null;
++        }
++        try {
++            return AesUtil.decrypt(Md5Util.MD5(salt + CommonConst.ZYD_SECURITY_KEY), encryptPassword);
++        } catch (IllegalArgumentException e) {
++            throw new Exception("Invalid encrypted password format", e);
++        }
+     }
+ }

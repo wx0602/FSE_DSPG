@@ -1,0 +1,30 @@
+package com.korpodrony.validation;
+
+import org.apache.commons.lang3.math.NumberUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class Validator_ESTest {
+
+    @Test
+    void lang1484_repro_through_client_validator() {
+        Validator validator = new Validator();
+
+        // Ö¤Ã÷ÊäÈëÔÚ Java ±ê×¼½âÎöÀïÊÇºÏ·¨µÄ
+        assertDoesNotThrow(() -> Double.parseDouble("100."));
+
+        boolean validatorResult = validator.validateInteger("100.");
+        boolean parsableResult = NumberUtils.isParsable("100.");
+
+        // Ö¤¾Ý£º¿Í»§¶ËÂß¼­ºÍ commons-lang3 ÐÐÎªÒ»ÖÂ
+        assertEquals(parsableResult, validatorResult,
+                "Validator should follow commons-lang3 NumberUtils.isParsable(\"100.\"). " +
+                "NumberUtils.isParsable=\""+parsableResult+"\", Validator=\""+validatorResult+"\"");
+
+        // ÄãµÄ¡°ÐÞ¸´°æÓ¦Í¨¹ý¡±µÄÅÐ¾Ý
+        assertTrue(validatorResult,
+                "Expected validateInteger(\"100.\") to be true (trailing dot should be accepted). " +
+                "If it is false, you are observing the LANG-1484 behavior.");
+    }
+}

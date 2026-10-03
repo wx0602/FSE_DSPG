@@ -1,0 +1,20 @@
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -1,6 +1,7 @@
+ package ZingClient.zing.client.file;
+ 
+ import net.lingala.zip4j.ZipFile;
++import net.lingala.zip4j.exception.ZipException;
+ import net.lingala.zip4j.exception.ZipException;
+ import net.lingala.zip4j.io.inputstream.ZipInputStream;
+ import net.lingala.zip4j.model.FileHeader;
+@@ -25,6 +26,9 @@
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
++        if (file == null) {
++            throw new IllegalArgumentException("input zip file parameter is null");
++        }
+         this.file = new ZipFile(file);
+         this.password = password;
+         if (!this.file.isValidZipFile()) {

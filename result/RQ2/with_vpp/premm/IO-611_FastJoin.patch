@@ -1,0 +1,56 @@
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -27,21 +27,40 @@
+     private final BufferedReader _reader;
+     private final Splitter _splitter;
+ 
+-    public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
+-        System.out.println(_filename);
+-        _reader = getReader();
+-
+-        String splitePattern;
+-        if (splitPunc == null || splitPunc.trim().isEmpty()) {
+-            splitePattern = DEFAULT_SPLIT_PATTERN;
+-        }
+-        else {
+-            splitePattern = splitPunc.trim() + "\\s+";
+-        }
+-        _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++public FileReader(String filename, String splitPunc) throws Exception {
++    if (filename == null) {
++        throw new IllegalArgumentException("filename cannot be null");
+     }
+ 
++    String normalizedFilename = normalize(filename);
++    if (normalizedFilename == null) {
++        throw new IllegalArgumentException("Invalid filename: " + filename);
++    }
++
++    // Mitigate IO-611 behavior in older commons-io versions by collapsing
++    // repeated separators after any optional path prefix while preserving
++    // a legal network/share prefix such as //server or \\server.
++    String prefix = "";
++    String remainder = normalizedFilename;
++    if (remainder.startsWith("//") || remainder.startsWith("\\\\")) {
++        prefix = remainder.substring(0, 2);
++        remainder = remainder.substring(2);
++    }
++    remainder = remainder.replaceAll("[\\/]{2,}", "/");
++    _filename = prefix + remainder;
++
++    System.out.println(_filename);
++    _reader = getReader();
++
++    String splitePattern;
++    if (splitPunc == null || splitPunc.trim().isEmpty()) {
++        splitePattern = DEFAULT_SPLIT_PATTERN;
++    }
++    else {
++        splitePattern = splitPunc.trim() + "\\s+";
++    }
++    _splitter = Splitter.on(Pattern.compile(splitePattern)).trimResults();
++}
+     private BufferedReader getReader() throws Exception {
+         if (_filename == null || _filename.isEmpty()) {
+             LOG.debug("No input file is specified");

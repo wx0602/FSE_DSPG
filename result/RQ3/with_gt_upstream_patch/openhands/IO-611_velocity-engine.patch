@@ -1,0 +1,98 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..5419f72 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeTemplatePath(templateName, true);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +175,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeTemplatePath(name, false);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a55270..e7f8691 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -184,11 +184,7 @@ public Reader getResourceReader( String source, String encoding )
+         {
+             throw new ResourceNotFoundException("Need to have a resource!");
+         }
+-        System.out.println("we get"+result);
+-
+-        String normalizedPath = FilenameUtils.normalize( source, true );
+-
+-        System.out.println("we make"+normalizedPath);
++        String normalizedPath = normalizeTemplatePath(source, true);
+ 
+         if ( normalizedPath == null || normalizedPath.length() == 0 )
+         {
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourceLoader.java
+index 9a2d564..6b7c4de 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourceLoader.java
+@@ -1,5 +1,7 @@
+ package org.apache.velocity.runtime.resource.loader;
+ 
++import org.apache.commons.io.FilenameUtils;
++
+ /*
+  * Licensed to the Apache Software Foundation (ASF) under one
+  * or more contributor license agreements.  See the NOTICE file
+@@ -180,6 +182,46 @@ public String getClassName()
+         return className;
+     }
+ 
++    protected String normalizeTemplatePath(String path, boolean unixSeparator)
++    {
++        if (path == null)
++        {
++            return null;
++        }
++
++        String collapsed = collapseAdjacentSeparators(path, unixSeparator ? '/' : '\\');
++        return FilenameUtils.normalize(collapsed, unixSeparator);
++    }
++
++    private String collapseAdjacentSeparators(String path, char separator)
++    {
++        int prefixLength = FilenameUtils.getPrefixLength(path);
++        if (prefixLength < 0)
++        {
++            return path;
++        }
++
++        StringBuilder normalized = new StringBuilder(path.length());
++        normalized.append(path, 0, prefixLength);
++
++        int index = prefixLength != 0 ? prefixLength : 1;
++        if (prefixLength == 0 && !path.isEmpty())
++        {
++            normalized.append(path.charAt(0));
++        }
++
++        for (; index < path.length(); index++)
++        {
++            char current = path.charAt(index);
++            if (current == separator && normalized.charAt(normalized.length() - 1) == separator)
++            {
++                continue;
++            }
++            normalized.append(current);
++        }
++        return normalized.toString();
++    }
++
+     /**
+      * Set the caching state. If true, then this loader
+      * would like the Runtime to cache templates that

@@ -1,0 +1,70 @@
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -3,15 +3,19 @@
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
++import org.apache.commons.lang3.StringUtils;
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createSafeNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
++		if (value == null) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
+ 		NumberFormat numberFormat = NumberFormat.getInstance();
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+@@ -20,15 +24,45 @@
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createSafeNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
++		if (value == null) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
+ 		NumberFormat numberFormat = NumberFormat.getPercentInstance();
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+ 
+ 		return numberFormat.format(value);
++	}
++
++	public static Number createSafeNumber(String value) {
++		if (StringUtils.isBlank(value)) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++
++		String normalized = value.trim();
++		char lastChar = normalized.charAt(normalized.length() - 1);
++		if ((lastChar == 'l' || lastChar == 'L' || lastChar == 'f' || lastChar == 'F' || lastChar == 'd'
++				|| lastChar == 'D') && normalized.length() == 1) {
++			throw new NumberFormatException(normalized + " is not a valid number");
++		}
++
++		try {
++			return NumberUtils.createNumber(normalized);
++		} catch (StringIndexOutOfBoundsException ex) {
++			NumberFormatException numberFormatException = new NumberFormatException(
++					normalized + " is not a valid number");
++			numberFormatException.initCause(ex);
++			throw numberFormatException;
++		} catch (NullPointerException ex) {
++			NumberFormatException numberFormatException = new NumberFormatException(
++					normalized + " is not a valid number");
++			numberFormatException.initCause(ex);
++			throw numberFormatException;
++		}
+ 	}
+ 
+ 	public static void main(String[] args) {

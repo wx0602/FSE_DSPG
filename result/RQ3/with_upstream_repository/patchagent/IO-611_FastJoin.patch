@@ -1,0 +1,47 @@
+diff --git a/src/main/java/soj/biclique/TopologyArgs.java b/src/main/java/soj/biclique/TopologyArgs.java
+index af18e66..c06e87c 100755
+--- a/src/main/java/soj/biclique/TopologyArgs.java
++++ b/src/main/java/soj/biclique/TopologyArgs.java
+@@ -349,10 +349,40 @@ public class TopologyArgs implements Serializable
+         checkState(charsLength > 0, "length of chars must be positive");
+     }
+ 
++    private String sanitizeOutputDir(String path) {
++        String sanitized = path;
++        int start = 0;
++
++        if (sanitized.startsWith("//") || sanitized.startsWith("\\\\")) {
++            char sep = sanitized.charAt(0);
++            int first = 2;
++            while (first < sanitized.length() && sanitized.charAt(first) == sep) {
++                first++;
++            }
++            while (first < sanitized.length() && sanitized.charAt(first) != '/' && sanitized.charAt(first) != '\\') {
++                first++;
++            }
++            start = first;
++        }
++
++        StringBuilder builder = new StringBuilder(sanitized.length());
++        builder.append(sanitized, 0, start);
++        boolean lastWasSeparator = false;
++        for (int i = start; i < sanitized.length(); i++) {
++            char ch = sanitized.charAt(i);
++            boolean isSeparator = ch == '/' || ch == '\\';
++            if (!isSeparator || !lastWasSeparator) {
++                builder.append(ch);
++            }
++            lastWasSeparator = isSeparator;
++        }
++        return builder.toString();
++    }
++
+     private void deriveArgs() {
+         if (outputDir != null) {
+-            outputDir = normalizeNoEndSeparator(outputDir);
+-            if (outputDir.isEmpty()) {
++            outputDir = normalizeNoEndSeparator(sanitizeOutputDir(outputDir));
++            if (outputDir == null || outputDir.isEmpty()) {
+                 outputDir = ".";
+             }
+             else {

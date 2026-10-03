@@ -1,0 +1,143 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..4fbdf09 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,7 +32,6 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+@@ -221,14 +219,20 @@ public class Val {
+   }
+   /**
+    * decodes a html value.
++   *
++   * <p>Commons Text numeric entity decoding is vulnerable when optional semicolons are
++   * enabled for decimal entities that are immediately followed by hexadecimal letters.
++   * To mitigate this without upgrading the dependency, numeric entities are decoded with
++   * a local implementation that accepts only decimal digits for decimal entities and
++   * hexadecimal digits for hexadecimal entities. Named HTML entities are still delegated
++   * to Commons Text.
++   *
+    * @param v the value
+    * @return the decoded value
+    */
+   public static String unescapeHtml4(String v) {
+     if (v != null) {
+-
+-      return StringEscapeUtils.unescapeHtml4(v);
+-
++      return safeUnescapeHtml4(v);
+     }
+     return v;
+   }
+@@ -239,18 +243,91 @@ public class Val {
+    */
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
++      return unescapeNumericEntities(v, true);
++    }
++    return v;
++  }
+ 
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++  private static String safeUnescapeHtml4(String v) {
++    String unescaped = StringEscapeUtils.unescapeHtml4(v);
++    return unescapeNumericEntities(unescaped, true);
++  }
++
++  private static String unescapeNumericEntities(String input, boolean semiColonOptional) {
++    if (input == null || input.length() == 0) {
++      return input;
++    }
++
++    StringBuilder sb = new StringBuilder(input.length());
++    int i = 0;
++    while (i < input.length()) {
++      int consumed = translateNumericEntity(input, i, sb, semiColonOptional);
++      if (consumed > 0) {
++        i += consumed;
++      } else {
++        sb.append(input.charAt(i));
++        i++;
+       }
++    }
++    return sb.toString();
++  }
+ 
++  private static int translateNumericEntity(String input, int index, StringBuilder out, boolean semiColonOptional) {
++    int seqEnd = input.length();
++    if (input.charAt(index) != '&' || index >= seqEnd - 2 || input.charAt(index + 1) != '#') {
++      return 0;
+     }
+-    return v;
++
++    int start = index + 2;
++    boolean isHex = false;
++
++    char firstChar = input.charAt(start);
++    if (firstChar == 'x' || firstChar == 'X') {
++      start++;
++      isHex = true;
++      if (start == seqEnd) {
++        return 0;
++      }
++    }
++
++    int end = start;
++    while (end < seqEnd) {
++      char ch = input.charAt(end);
++      if (isHex ? isHexDigit(ch) : Character.isDigit(ch)) {
++        end++;
++      } else {
++        break;
++      }
++    }
++
++    if (end == start) {
++      return 0;
++    }
++
++    boolean semiNext = end < seqEnd && input.charAt(end) == ';';
++    if (!semiNext && !semiColonOptional) {
++      return 0;
++    }
++
++    try {
++      int entityValue = Integer.parseInt(input.substring(start, end), isHex ? 16 : 10);
++      appendCodePoint(out, entityValue);
++      return 2 + end - start + (isHex ? 1 : 0) + (semiNext ? 1 : 0);
++    } catch (IllegalArgumentException ex) {
++      return 0;
++    }
++  }
++
++  private static boolean isHexDigit(char ch) {
++    return ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'f' || ch >= 'A' && ch <= 'F';
+   }
++
++  private static void appendCodePoint(StringBuilder out, int codePoint) {
++    if (Character.isValidCodePoint(codePoint)) {
++      out.append(Character.toChars(codePoint));
++    }
++  }
++
+   /**
+    * decodes an octal value.
+    * @param v the value

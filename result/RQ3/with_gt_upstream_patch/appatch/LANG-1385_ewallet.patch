@@ -1,0 +1,77 @@
+--- a/wallet-base/src/main/java/com/fr/chain/utils/MBUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/MBUtil.java
+@@ -2,12 +2,21 @@
+ 
+ import java.math.BigDecimal;
+ 
++import org.apache.commons.lang3.StringUtils;
++
+ public class MBUtil {
+ 
+ 	public static BigDecimal toBigDec(String v) {
+-		if (v != null) {
++		if (StringUtils.isBlank(v)) {
++			return null;
++		}
++		String value = v.trim();
++		if (hasSuffixOnlyNumber(value)) {
++			return null;
++		}
++		if (value != null) {
+ 			try {
+-				Double db = Double.parseDouble(v);
++				Double db = Double.parseDouble(value);
+ 				return BigDecimal.valueOf(db);
+ 			} catch (NumberFormatException e) {
+ 			}
+@@ -16,21 +25,46 @@
+ 	}
+ 
+ 	public static Double toDbl(String v) {
+-		if (v != null) {
++		if (StringUtils.isBlank(v)) {
++			return null;
++		}
++		String value = v.trim();
++		if (hasSuffixOnlyNumber(value)) {
++			return null;
++		}
++		if (value != null) {
+ 			try {
+-				return Double.parseDouble(v);
++				return Double.parseDouble(value);
+ 			} catch (NumberFormatException e) {
+ 			}
+ 		}
+ 		return null;
+ 	}
+ 	public static Integer toInt(String v){
+-		if(v!=null){
++		if (StringUtils.isBlank(v)) {
++			return null;
++		}
++		String value = v.trim();
++		if (hasSuffixOnlyNumber(value)) {
++			return null;
++		}
++		if(value!=null){
+ 			try {
+-				return Integer.parseInt(v);
++				return Integer.parseInt(value);
+ 			} catch (NumberFormatException e) {
+ 			}
+ 		}
+ 		return null;
+ 	}
++
++	private static boolean hasSuffixOnlyNumber(String value) {
++		if (value.length() <= 1) {
++			return false;
++		}
++		char lastChar = value.charAt(value.length() - 1);
++		if (lastChar != 'l' && lastChar != 'L') {
++			return false;
++		}
++		return value.length() == 1 || StringUtils.isBlank(value.substring(0, value.length() - 1));
++	}
+ }

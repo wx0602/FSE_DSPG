@@ -1,0 +1,74 @@
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -3,15 +3,19 @@
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
++import org.apache.commons.lang3.StringUtils;
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(parseNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
++		if (value == null) {
++			throw new NumberFormatException("Number value must not be null");
++		}
+ 		NumberFormat numberFormat = NumberFormat.getInstance();
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+@@ -20,15 +24,49 @@
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(parseNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
++		if (value == null) {
++			throw new NumberFormatException("Number value must not be null");
++		}
+ 		NumberFormat numberFormat = NumberFormat.getPercentInstance();
+ 		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+ 		numberFormat.setMaximumFractionDigits(scale);
+ 
+ 		return numberFormat.format(value);
++	}
++
++	public static Number parseNumber(String value) {
++		String normalized = StringUtils.trimToNull(value);
++		if (normalized == null) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		if (normalized.length() == 1 && isTypeQualifier(normalized.charAt(0))) {
++			throw new NumberFormatException(normalized + " is not a valid number");
++		}
++		try {
++			return NumberUtils.createNumber(normalized);
++		} catch (StringIndexOutOfBoundsException ex) {
++			NumberFormatException numberFormatException = new NumberFormatException(normalized + " is not a valid number");
++			numberFormatException.initCause(ex);
++			throw numberFormatException;
++		}
++	}
++
++	private static boolean isTypeQualifier(char value) {
++		switch (value) {
++		case 'l':
++		case 'L':
++		case 'f':
++		case 'F':
++		case 'd':
++		case 'D':
++			return true;
++		default:
++			return false;
++		}
+ 	}
+ 
+ 	public static void main(String[] args) {

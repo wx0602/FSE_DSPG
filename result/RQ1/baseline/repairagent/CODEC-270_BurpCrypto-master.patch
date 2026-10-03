@@ -1,0 +1,23 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..b32e1f0 100644
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -112,6 +112,7 @@ public class Utils {
+         return Base64.encodeBase64String(bytes);
+     }
+ 
++    // Harden Base64 decoding to reject malformed trailing bits because the bundled codec version accepts inputs like AB==.
+     public static byte[] base64(String str) {
+         return Base64.decodeBase64(str);
+     }
+@@ -124,8 +125,8 @@ public class Utils {
+         try {
+             return Hex.decodeHex(str.toCharArray());
+         } catch (DecoderException e) {
+-            throw new IllegalStateException(e);
+-        }
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
+     }
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {

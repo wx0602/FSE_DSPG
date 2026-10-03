@@ -1,0 +1,63 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..568e229 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -36,6 +36,8 @@ public class Val {
+   static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
++  static Pattern OPTIONAL_DECIMAL_ENTITY_PATTERN = Pattern.compile("&#([0-9]+)(?!;)(?=[^0-9]|$)");
++  static Pattern OPTIONAL_HEX_ENTITY_PATTERN = Pattern.compile("&#([xX])([0-9A-Fa-f]{1,6})(?=($|[^0-9A-Fa-f;]))");
+ 
+   /**
+    * Converts a string to a boolean.
+@@ -226,12 +228,47 @@ public class Val {
+    */
+   public static String unescapeHtml4(String v) {
+     if (v != null) {
++      return StringEscapeUtils.unescapeHtml4(normalizeOptionalNumericEntities(v));
++    }
++    return v;
++  }
+ 
+-      return StringEscapeUtils.unescapeHtml4(v);
++  private static String normalizeOptionalNumericEntities(String v) {
++    String normalized = normalizeOptionalNumericEntities(v, OPTIONAL_HEX_ENTITY_PATTERN, true);
++    return normalizeOptionalNumericEntities(normalized, OPTIONAL_DECIMAL_ENTITY_PATTERN, false);
++  }
+ 
++  private static String normalizeOptionalNumericEntities(String v, Pattern pattern, boolean hexadecimal) {
++    Matcher matcher = pattern.matcher(v);
++    StringBuffer sb = new StringBuffer();
++    boolean changed = false;
++    while (matcher.find()) {
++      String replacement = matcher.group(0) + ";";
++      if (isValidNumericEntityValue(matcher, hexadecimal)) {
++        matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
++        changed = true;
++      }
+     }
+-    return v;
++    if (!changed) {
++      return v;
++    }
++    matcher.appendTail(sb);
++    return sb.toString();
+   }
++
++  private static boolean isValidNumericEntityValue(Matcher matcher, boolean hexadecimal) {
++    String number = hexadecimal ? matcher.group(2) : matcher.group(1);
++    if (number == null || number.length() == 0) {
++      return false;
++    }
++    try {
++      Integer.parseInt(number, hexadecimal ? 16 : 10);
++      return true;
++    } catch (NumberFormatException ex) {
++      return false;
++    }
++  }
++
+   /**
+    * decodes an eNunmericEntity value.
+    * @param v the value

@@ -1,0 +1,17 @@
+diff --git a/src/main/java/soj/biclique/TopologyArgs.java b/src/main/java/soj/biclique/TopologyArgs.java
+index af18e66..3966e29 100644
+--- a/src/main/java/soj/biclique/TopologyArgs.java
++++ b/src/main/java/soj/biclique/TopologyArgs.java
+@@ -1,3 +1,4 @@
++
+ package soj.biclique;
+ 
+ import java.io.PrintStream;
+@@ -19,6 +20,7 @@ import static com.google.common.base.Preconditions.checkState;
+ import com.google.common.collect.ImmutableList;
+ import static com.google.common.collect.Lists.newLinkedList;
+ 
++import java.io.File;
+ import soj.util.FileWriter;
+ import static soj.util.SchemaUtils.getFieldIdx;
+ import static soj.util.TimeUtils.getTimestamp;

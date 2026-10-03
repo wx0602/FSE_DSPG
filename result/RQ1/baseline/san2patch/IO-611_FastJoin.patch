@@ -1,0 +1,22 @@
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -28,7 +28,18 @@
+     private final Splitter _splitter;
+ 
+     public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
++        String normalized = normalize(filename);
++        if (normalized == null || normalized.trim().isEmpty()) {
++            throw new IllegalArgumentException("filename is blank");
++        }
++        normalized = normalized.replace('\\', '/');
++        if (normalized.startsWith("//")) {
++            normalized = "//" + normalized.substring(2).replaceAll("/+", "/");
++        }
++        else {
++            normalized = normalized.replaceAll("/+", "/");
++        }
++        _filename = normalized;
+         System.out.println(_filename);
+         _reader = getReader();
+ 

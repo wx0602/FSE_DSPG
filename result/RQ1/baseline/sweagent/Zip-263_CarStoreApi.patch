@@ -1,0 +1,32 @@
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+index c139567..d76e88f 100644
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
+ 
+ import java.io.*;
+ import java.util.ArrayList;
++import java.util.Objects;
+ import java.util.Enumeration;
+ import java.util.List;
+ import java.util.regex.Matcher;
+@@ -266,6 +267,9 @@ public class ZipUtil {
+      * @throws ZipException 压缩异常
+      */
+     public static void compressFile(File sourceFile, File zip) throws ZipException {
++        Objects.requireNonNull(sourceFile, "sourceFile must not be null");
++        Objects.requireNonNull(zip, "zip must not be null");
++
+         net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
+         ZipParameters zipParameters = new ZipParameters();
+         //压缩方式
+@@ -277,6 +281,9 @@ public class ZipUtil {
+             File[] files = sourceFile.listFiles();
+             if(files != null){
+                 for(File file : files){
++                    if(file == null){
++                        continue;
++                    }
+                     if(file.isDirectory()){
+                         zipFile.addFolder(file, zipParameters);
+ 

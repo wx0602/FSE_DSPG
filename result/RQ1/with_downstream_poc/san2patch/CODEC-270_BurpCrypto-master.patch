@@ -1,0 +1,16 @@
+--- a/src/main/java/burp/aes/AesUtil.java
++++ b/src/main/java/burp/aes/AesUtil.java
+@@ -32,7 +32,12 @@
+ 
+     public String decrypt(String cipherText) {
+         try {
+-            byte[] decrypted = crypto.decrypt(Utils.base64(cipherText));
++            byte[] cipherBytes = Utils.base64(cipherText);
++            String canonical = java.util.Base64.getEncoder().encodeToString(cipherBytes);
++            if (!canonical.equals(cipherText.replaceAll("\\s", ""))) {
++                throw fail(new IllegalArgumentException("Invalid Base64 input"));
++            }
++            byte[] decrypted = crypto.decrypt(cipherBytes);
+             return new String(decrypted, "UTF-8");
+         } catch (UnsupportedEncodingException e) {
+             throw fail(e);

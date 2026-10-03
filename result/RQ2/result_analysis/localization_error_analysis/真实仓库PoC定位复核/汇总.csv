@@ -1,0 +1,51 @@
+﻿方法,target_id,原仓库函数路径结论,人工复核依据,结论,baseline漏洞匹配数,补丁后漏洞匹配数,逐条报告
+agentless,CODEC-270_DBlog-master,真正定位到无关函数,PoC 只调用 blog-core 的 PasswordUtil.encrypt/decrypt；补丁改的是 blog-admin 的 CredentialsMatcher，测试路径不会实例化该类。,PoC支持疑似函数定位错误,3,3,agentless__CODEC-270_DBlog-master.md
+agentless,CVE-2017-7957_rpki-commons,真正定位到无关函数,PoC 直接构造 ParentIdentitySerializer 并调用 deserialize；补丁改 ProvisioningCmsObjectParser，二者不在该调用链。,PoC支持疑似函数定位错误,3,3,agentless__CVE-2017-7957_rpki-commons.md
+agentless,CVE-2019-10086_bean-query,定位到PoC相关函数,PoC 直接调用 BeanPropertyMatcher.matches；此补丁修改 BeanPropertyMatcher。,PoC验证有效（非定位错误）,3,0,agentless__CVE-2019-10086_bean-query.md
+agentless,CVE-2020-13956_wechat-ssm,真正定位到无关函数,PoC 直接调用 HttpUtils 的静态 HTTP 方法；补丁仅改 WeixinAuthController.calback，PoC 不经过控制器。,PoC支持疑似函数定位错误,4,4,agentless__CVE-2020-13956_wechat-ssm.md
+agentless,CVE-2021-23900_OmegaTester,真正定位到无关函数,PoC 直接调用 HarConverter.toMyRequest；补丁仅改 ReqCtrl.importRequest，PoC 不经过 Web 控制器。,未验证,,,agentless__CVE-2021-23900_OmegaTester.md
+agentless,CVE-2021-43859_rpki-commons,真正定位到无关函数,PoC 直接调用 ParentIdentitySerializer.deserialize；补丁改 ProvisioningCmsObjectParser，属于另一条 provisioning payload 路径。,未验证,,,agentless__CVE-2021-43859_rpki-commons.md
+agentless,CVE-2023-43642_flow,真正定位到无关函数,PoC 直接构造 SnappyCoder 并调用 wrapOut；补丁改 CompressStreamer，PoC 不会经过该 Streamer。,PoC支持疑似函数定位错误,5,5,agentless__CVE-2023-43642_flow.md
+agentless,IO-611_FastJoin,真正定位到无关函数,PoC 只构造 soj.util.FileReader；补丁改 TopologyArgs 和 FileWriter，均不在 FileReader 的测试调用路径。,未验证,,,agentless__IO-611_FastJoin.md
+appatch,CVE-2017-7957_rpki-commons,真正定位到无关函数,PoC 使用 ParentIdentitySerializer 的独立 XStream 初始化；补丁改 XStreamXmlSerializerBuilder，未被该 serializer 构造路径调用。,未验证,,,appatch__CVE-2017-7957_rpki-commons.md
+appatch,CVE-2020-13956_wechat-ssm,定位到PoC相关函数,PoC 直接调用 HttpUtils 的静态 HTTP 方法；此补丁修改 HttpUtils。,未验证,,,appatch__CVE-2020-13956_wechat-ssm.md
+appatch,CVE-2021-43859_rpki-commons,真正定位到无关函数,PoC 使用 ParentIdentitySerializer；补丁改 PayloadParser、ProvisioningPayloadXmlSerializer 等 payload 路径，不参与 ParentIdentitySerializer.deserialize。,PoC支持疑似函数定位错误,4,4,appatch__CVE-2021-43859_rpki-commons.md
+openhands,CVE-2020-13956_wechat-ssm,定位到PoC相关函数,PoC 直接调用 HttpUtils 的静态 HTTP 方法；此补丁修改 HttpUtils。,PoC支持疑似函数定位错误,4,4,openhands__CVE-2020-13956_wechat-ssm.md
+patchagent,CVE-2020-13956_wechat-ssm,定位到PoC相关函数,PoC 直接调用 HttpUtils 的静态 HTTP 方法；此补丁修改 HttpUtils。,未验证,,,patchagent__CVE-2020-13956_wechat-ssm.md
+patchagent,CVE-2021-43859_rpki-commons,定位到PoC相关函数,PoC 的 ParentIdentitySerializer 继承 IdentitySerializer；此补丁修改父类的 XStream 初始化链。,PoC支持疑似函数定位错误,4,4,patchagent__CVE-2021-43859_rpki-commons.md
+premm,CODEC-263_DBlog-master,定位到PoC相关函数,PoC 直接调用 PasswordUtil；补丁也修改 PasswordUtil，属于被测函数。,未验证,,,premm__CODEC-263_DBlog-master.md
+premm,CODEC-270_BurpCrypto-master,定位到PoC相关函数,PoC 直接调用 AesUtil；补丁也修改 AesUtil，属于被测函数。,未验证,,,premm__CODEC-270_BurpCrypto-master.md
+premm,CODEC-270_DBlog-master,定位到PoC相关函数,PoC 直接调用 PasswordUtil；此补丁修改 PasswordUtil，属于被测函数。,PoC验证有效（非定位错误）,3,0,premm__CODEC-270_DBlog-master.md
+premm,CVE-2015-2156_webbit,定位到PoC相关函数,PoC 直接测试 HttpRequestWrapper 的 Cookie 行为；补丁也修改 HttpRequestWrapper。,未验证,,,premm__CVE-2015-2156_webbit.md
+premm,CVE-2018-1002201_elasticsearch-maven-plugin,定位到PoC相关函数,PoC 通过反射调用 ResolveElasticsearchStep；补丁也修改该类。,PoC验证有效（非定位错误）,3,0,premm__CVE-2018-1002201_elasticsearch-maven-plugin.md
+premm,CVE-2019-10086_bean-query,真正定位到无关函数,PoC 调用 BeanPropertyMatcher.matches，内部走 DefaultNullValuePropertyValueGetter.getProperty；补丁改 PropertySelector，PoC 未构造或调用该 selector。,PoC支持疑似函数定位错误,3,3,premm__CVE-2019-10086_bean-query.md
+premm,CVE-2020-13956_crawler-jsoup-maven,真正定位到无关函数,PoC 调用 CSDNLoginApater.getText/getRedirectLocation/setCookieStore；补丁只修改 main 中的登录流程，不会影响这些被测方法。,PoC支持疑似函数定位错误,2,2,premm__CVE-2020-13956_crawler-jsoup-maven.md
+premm,CVE-2020-13956_wechat-ssm,定位到PoC相关函数,PoC 直接调用 HttpUtils 的静态 HTTP 方法；此补丁修改 HttpUtils。,未验证,,,premm__CVE-2020-13956_wechat-ssm.md
+premm,CVE-2021-23899_OmegaTester,定位到PoC相关函数,PoC 直接调用 HarConverter.toMyRequest；补丁也修改该方法。,PoC支持疑似函数定位错误,2,2,premm__CVE-2021-23899_OmegaTester.md
+premm,CVE-2021-23900_OmegaTester,定位到PoC相关函数,PoC 直接调用 HarConverter.toMyRequest；补丁也修改该方法。,PoC验证有效（非定位错误）,4,0,premm__CVE-2021-23900_OmegaTester.md
+premm,CVE-2022-29631_ucloud-java-sdk,定位到PoC相关函数,PoC 调用 UFile.getFile，后者调用 HttpRequestUtil；此补丁修改该下游 HTTP 请求构造路径。,PoC验证有效（非定位错误）,1,0,premm__CVE-2022-29631_ucloud-java-sdk.md
+reinfix,CODEC-263_DBlog-master,定位到PoC相关函数,PoC 直接调用 PasswordUtil；补丁也修改 PasswordUtil，属于被测函数。,PoC验证有效（非定位错误）,4,0,reinfix__CODEC-263_DBlog-master.md
+reinfix,CODEC-270_BurpCrypto-master,定位到PoC相关函数,PoC 直接调用 AesUtil；补丁也修改 AesUtil，属于被测函数。,未验证,,,reinfix__CODEC-270_BurpCrypto-master.md
+reinfix,CODEC-270_DBlog-master,定位到PoC相关函数,PoC 直接调用 PasswordUtil；此补丁修改 PasswordUtil，属于被测函数。,PoC验证有效（非定位错误）,3,0,reinfix__CODEC-270_DBlog-master.md
+reinfix,CVE-2015-2156_webbit,定位到PoC相关函数,PoC 直接测试 HttpRequestWrapper 的 Cookie 行为；补丁也修改 HttpRequestWrapper。,未验证,,,reinfix__CVE-2015-2156_webbit.md
+reinfix,CVE-2018-1002201_elasticsearch-maven-plugin,定位到PoC相关函数,PoC 通过反射调用 ResolveElasticsearchStep；补丁也修改该类。,PoC验证有效（非定位错误）,3,0,reinfix__CVE-2018-1002201_elasticsearch-maven-plugin.md
+reinfix,CVE-2019-10086_bean-query,真正定位到无关函数,PoC 调用 BeanPropertyMatcher.matches，内部走 DefaultNullValuePropertyValueGetter.getProperty；补丁改 PropertySelector，PoC 未构造或调用该 selector。,PoC支持疑似函数定位错误,3,3,reinfix__CVE-2019-10086_bean-query.md
+reinfix,CVE-2020-13956_crawler-jsoup-maven,真正定位到无关函数,PoC 调用 CSDNLoginApater.getText/getRedirectLocation/setCookieStore；补丁只修改 main 中的登录流程，不会影响这些被测方法。,未验证,,,reinfix__CVE-2020-13956_crawler-jsoup-maven.md
+reinfix,CVE-2020-13956_wechat-ssm,定位到PoC相关函数,PoC 直接调用 HttpUtils 的静态 HTTP 方法；此补丁修改 HttpUtils。,未验证,,,reinfix__CVE-2020-13956_wechat-ssm.md
+reinfix,CVE-2021-23899_OmegaTester,定位到PoC相关函数,PoC 直接调用 HarConverter.toMyRequest；补丁也修改该方法。,未验证,,,reinfix__CVE-2021-23899_OmegaTester.md
+reinfix,CVE-2021-23900_OmegaTester,定位到PoC相关函数,PoC 直接调用 HarConverter.toMyRequest；补丁也修改该方法。,PoC验证有效（非定位错误）,4,0,reinfix__CVE-2021-23900_OmegaTester.md
+reinfix,CVE-2022-29631_ucloud-java-sdk,定位到PoC相关函数,PoC 调用 UFile.getFile，后者调用 HttpRequestUtil；此补丁修改该下游 HTTP 请求构造路径。,未验证,,,reinfix__CVE-2022-29631_ucloud-java-sdk.md
+repairagent,CVE-2021-43859_rpki-commons,定位到PoC相关函数,PoC 的 ParentIdentitySerializer 继承 IdentitySerializer；此补丁修改父类的 XStream 初始化链。,PoC支持疑似函数定位错误,4,4,repairagent__CVE-2021-43859_rpki-commons.md
+san2patch,CODEC-263_DBlog-master,定位到PoC相关函数,PoC 直接调用 PasswordUtil；补丁也修改 PasswordUtil，属于被测函数。,PoC验证有效（非定位错误）,4,0,san2patch__CODEC-263_DBlog-master.md
+san2patch,CODEC-270_BurpCrypto-master,定位到PoC相关函数,PoC 直接调用 AesUtil；补丁也修改 AesUtil，属于被测函数。,PoC验证有效（非定位错误）,4,0,san2patch__CODEC-270_BurpCrypto-master.md
+san2patch,CODEC-270_DBlog-master,定位到PoC相关函数,PoC 直接调用 PasswordUtil；此补丁修改 PasswordUtil，属于被测函数。,PoC验证有效（非定位错误）,3,0,san2patch__CODEC-270_DBlog-master.md
+san2patch,CVE-2015-2156_webbit,定位到PoC相关函数,PoC 直接测试 HttpRequestWrapper 的 Cookie 行为；补丁也修改 HttpRequestWrapper。,PoC验证有效（非定位错误）,1,0,san2patch__CVE-2015-2156_webbit.md
+san2patch,CVE-2018-1002201_elasticsearch-maven-plugin,定位到PoC相关函数,PoC 通过反射调用 ResolveElasticsearchStep；补丁也修改该类。,PoC验证有效（非定位错误）,3,0,san2patch__CVE-2018-1002201_elasticsearch-maven-plugin.md
+san2patch,CVE-2019-10086_bean-query,真正定位到无关函数,PoC 调用 BeanPropertyMatcher.matches，内部走 DefaultNullValuePropertyValueGetter.getProperty；补丁改 PropertySelector，PoC 未构造或调用该 selector。,PoC支持疑似函数定位错误,3,3,san2patch__CVE-2019-10086_bean-query.md
+san2patch,CVE-2020-13956_wechat-ssm,定位到PoC相关函数,PoC 直接调用 HttpUtils 的静态 HTTP 方法；此补丁修改 HttpUtils。,PoC支持疑似函数定位错误,4,4,san2patch__CVE-2020-13956_wechat-ssm.md
+san2patch,CVE-2021-23899_OmegaTester,定位到PoC相关函数,PoC 直接调用 HarConverter.toMyRequest；补丁也修改该方法。,PoC支持疑似函数定位错误,2,2,san2patch__CVE-2021-23899_OmegaTester.md
+san2patch,CVE-2021-23900_OmegaTester,定位到PoC相关函数,PoC 直接调用 HarConverter.toMyRequest；补丁也修改该方法。,PoC验证有效（非定位错误）,4,0,san2patch__CVE-2021-23900_OmegaTester.md
+san2patch,CVE-2022-29631_ucloud-java-sdk,定位到PoC相关函数,PoC 调用 UFile.getFile，后者调用 HttpRequestUtil；此补丁修改该下游 HTTP 请求构造路径。,PoC验证有效（非定位错误）,1,0,san2patch__CVE-2022-29631_ucloud-java-sdk.md
+sweagent,CVE-2020-13956_wechat-ssm,定位到PoC相关函数,PoC 直接调用 HttpUtils 的静态 HTTP 方法；此补丁修改 HttpUtils。,PoC支持疑似函数定位错误,4,4,sweagent__CVE-2020-13956_wechat-ssm.md
+sweagent,CVE-2021-43859_rpki-commons,定位到PoC相关函数,PoC 的 ParentIdentitySerializer 继承 IdentitySerializer；此补丁修改父类的 XStream 初始化链。,PoC支持疑似函数定位错误,4,4,sweagent__CVE-2021-43859_rpki-commons.md
+sweagent,CVE-2022-29631_ucloud-java-sdk,真正定位到无关函数,PoC 调用 UFile.getFile，后者使用 HttpRequestUtil；补丁只新增 SafeHttpRequestBuilder，原仓库没有调用该新类。,PoC支持疑似函数定位错误,1,1,sweagent__CVE-2022-29631_ucloud-java-sdk.md

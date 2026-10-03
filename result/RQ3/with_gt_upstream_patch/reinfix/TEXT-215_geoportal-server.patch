@@ -1,0 +1,91 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index 0000000..0000000 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -240,14 +240,72 @@
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
++public static String unescapeNunmericEntity(String v) {
++    if (v == null) {
++      return null;
++    }
++
++    StringBuilder result = new StringBuilder(v.length());
++    int length = v.length();
++
++    for (int i = 0; i < length; i++) {
++      char ch = v.charAt(i);
++      if (ch == '&' && i + 2 < length && v.charAt(i + 1) == '#') {
++        int start = i + 2;
++        boolean isHex = false;
++
++        if (start < length && (v.charAt(start) == 'x' || v.charAt(start) == 'X')) {
++          isHex = true;
++          start++;
++        }
++
++        if (start >= length) {
++          result.append(ch);
++          continue;
++        }
++
++        int end = start;
++        while (end < length) {
++          char entityChar = v.charAt(end);
++          if (isHex) {
++            if ((entityChar >= '0' && entityChar <= '9')
++                || (entityChar >= 'a' && entityChar <= 'f')
++                || (entityChar >= 'A' && entityChar <= 'F')) {
++              end++;
++              continue;
++            }
++          } else if (entityChar >= '0' && entityChar <= '9') {
++            end++;
++            continue;
++          }
++          break;
++        }
++
++        if (end == start) {
++          result.append(ch);
++          continue;
++        }
++
++        boolean semiColonPresent = end < length && v.charAt(end) == ';';
++        String entityBody = v.substring(start, end);
++
++        try {
++          int entityValue = Integer.parseInt(entityBody, isHex ? 16 : 10);
++          if (!Character.isValidCodePoint(entityValue)) {
++            result.append(v, i, semiColonPresent ? end + 1 : end);
++            i = (semiColonPresent ? end + 1 : end) - 1;
++            continue;
++          }
++
++          result.append(Character.toChars(entityValue));
++          i = (semiColonPresent ? end + 1 : end) - 1;
++          continue;
++        } catch (NumberFormatException ex) {
++          result.append(v, i, semiColonPresent ? end + 1 : end);
++          i = (semiColonPresent ? end + 1 : end) - 1;
++          continue;
++        }
++      }
++
++      result.append(ch);
++    }
++
++    return result.toString();
++  }

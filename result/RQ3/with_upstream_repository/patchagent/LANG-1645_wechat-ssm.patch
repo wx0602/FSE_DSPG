@@ -1,0 +1,81 @@
+diff --git a/src/main/java/cn/qs/controller/AbstractController.java b/src/main/java/cn/qs/controller/AbstractController.java
+index b9c5cee..7bc84e5 100755
+--- a/src/main/java/cn/qs/controller/AbstractController.java
++++ b/src/main/java/cn/qs/controller/AbstractController.java
+@@ -90,11 +90,11 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 	public Page<T> page(@RequestParam Map condition, HttpServletRequest request) {
+ 		int pageNum = 1;
+ 		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
+-			pageNum = MapUtils.getInteger(condition, "pageNum");
++			pageNum = getInteger(condition, "pageNum", pageNum);
+ 		}
+ 		int pageSize = DefaultValue.PAGE_SIZE;
+ 		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
+-			pageSize = MapUtils.getInteger(condition, "pageSize");
++			pageSize = getInteger(condition, "pageSize", pageSize);
+ 		}
+ 
+ 		condition.put("pageNum", pageNum - 1);
+@@ -125,11 +125,11 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 	public JSONResultUtil<Page<T>> pageJSON(@RequestBody Map condition) throws InterruptedException {
+ 		int pageNum = 1;
+ 		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
+-			pageNum = MapUtils.getInteger(condition, "pageNum");
++			pageNum = getInteger(condition, "pageNum", pageNum);
+ 		}
+ 		int pageSize = DefaultValue.PAGE_SIZE;
+ 		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
+-			pageSize = MapUtils.getInteger(condition, "pageSize");
++			pageSize = getInteger(condition, "pageSize", pageSize);
+ 		}
+ 
+ 		condition.put("pageNum", pageNum - 1);
+@@ -158,11 +158,11 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 	public JSONResultUtil<PageInfo<T>> pageJSON2(@RequestBody(required = false) Map condition) {
+ 		int pageNum = 1;
+ 		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
+-			pageNum = MapUtils.getInteger(condition, "pageNum");
++			pageNum = getInteger(condition, "pageNum", pageNum);
+ 		}
+ 		int pageSize = DefaultValue.PAGE_SIZE;
+ 		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
+-			pageSize = MapUtils.getInteger(condition, "pageSize");
++			pageSize = getInteger(condition, "pageSize", pageSize);
+ 		}
+ 
+ 		// 开始分页
+@@ -190,11 +190,11 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 	public PageInfo<T> page2(@RequestParam Map<String, Object> condition, HttpServletRequest request) {
+ 		int pageNum = 1;
+ 		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
+-			pageNum = MapUtils.getInteger(condition, "pageNum");
++			pageNum = getInteger(condition, "pageNum", pageNum);
+ 		}
+ 		int pageSize = DefaultValue.PAGE_SIZE;
+ 		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
+-			pageSize = MapUtils.getInteger(condition, "pageSize");
++			pageSize = getInteger(condition, "pageSize", pageSize);
+ 		}
+ 
+ 		// 开始分页
+@@ -248,5 +248,20 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 		map.addAttribute("bean", bean);
+ 		return getViewPath("detail");
+ 	}
++
++	private int getInteger(Map condition, String key, int defaultValue) {
++		Object value = condition == null ? null : condition.get(key);
++		if (value == null) {
++			return defaultValue;
++		}
++		if (value instanceof Number) {
++			return ((Number) value).intValue();
++		}
++		String stringValue = String.valueOf(value);
++		if (stringValue.startsWith("+0x") || stringValue.startsWith("+0X")) {
++			stringValue = stringValue.substring(1);
++		}
++		return Integer.decode(stringValue);
++	}
+ 	
+ }

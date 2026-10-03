@@ -1,0 +1,67 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index 8c15083..ca69d6b 100644
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -6,6 +6,7 @@ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ 
+ import javax.enterprise.context.RequestScoped;
++import java.util.regex.Pattern;
+ 
+ @RequestScoped
+ public class Validator {
+@@ -16,6 +17,7 @@ public class Validator {
+     private static final int LOWER_LIMIT_OF_ACTIVITY_TYPE = 0;
+     private static final int UPPER_LIMIT_OF_ACTIVITY_TYPE = 4;
+     private static final int LOWER_LIMIT_OF_LENGTH_IN_QUARTERS = 0;
++    private static final Pattern PARSABLE_NUMBER = Pattern.compile("-?(?:\\d+|\\d+\\.\\d*|\\.\\d+)");
+ 
+     Logger logger = LoggerFactory.getLogger("com.korpodrony.validation");
+ 
+@@ -26,20 +28,18 @@ public class Validator {
+ 
+     public boolean validateInteger(String str) {
+         logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        return NumberUtils.isCreatable(str) && isParsableNumber(str);
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {
+         logger.info("Validating integer as positive value: " + str);
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str) && NumberUtils.createInteger(str) > 0;
++        return NumberUtils.isCreatable(str) && isParsableNumber(str) && NumberUtils.createInteger(str) > 0;
+     }
+ 
+     public boolean validateActivityTypeInteger(String str) {
+         logger.info("Validating activityType: " + str);
+         return NumberUtils.isCreatable(str)
+-                && NumberUtils.isParsable(str)
++                && isParsableNumber(str)
+                 && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_ACTIVITY_TYPE
+                 && NumberUtils.createInteger(str) < UPPER_LIMIT_OF_ACTIVITY_TYPE;
+     }
+@@ -47,7 +47,7 @@ public class Validator {
+     public boolean validateShort(String str) {
+         logger.info("Validating short: " + str);
+         return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
++                isParsableNumber(str) &&
+                 NumberUtils.createInteger(str) > LOWER_LIMIT_OF_INDEX
+                 && NumberUtils.createInteger(str) < MAX_SHORT;
+     }
+@@ -55,8 +55,12 @@ public class Validator {
+     public boolean validateByte(String str) {
+         logger.info("Validating byte: " + str);
+         return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
++                isParsableNumber(str) &&
+                 NumberUtils.createInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
+                 && NumberUtils.createInteger(str) < MAX_BYTE;
+     }
++
++    private boolean isParsableNumber(String str) {
++        return str != null && PARSABLE_NUMBER.matcher(str).matches();
++    }
+ }

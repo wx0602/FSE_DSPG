@@ -1,0 +1,32 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d7..0ccdc47 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -116,11 +116,24 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
++		if (hasEmptyNumericPortionWithTypeSuffix(str)) {
++			throw new NumberFormatException(str + " is not a valid number.");
++		}
+ 		return NumberUtils.createNumber(str);
+ 	}
+-	
+-	
+-	
++
++	private static boolean hasEmptyNumericPortionWithTypeSuffix(String str) {
++		if (str == null || str.length() < 1) {
++			return false;
++		}
++		char lastChar = str.charAt(str.length() - 1);
++		if (lastChar != 'l' && lastChar != 'L') {
++			return false;
++		}
++		String numeric = str.substring(0, str.length() - 1);
++		return numeric.length() == 0 || "-".equals(numeric) || "+".equals(numeric);
++	}
++
+ 	/**
+ 	 * 检查字符串中的字符是否为数字，引用org.apache.commons.lang.NumberUtils.isDigits(String str)方法。<br>
+ 	 * null或""将返回false。<br>

@@ -1,0 +1,61 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8..3f19f08 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -3,12 +3,13 @@ package cn.qs.utils.format;
+ import java.math.RoundingMode;
+ import java.text.NumberFormat;
+ 
++import org.apache.commons.lang3.StringUtils;
+ import org.apache.commons.lang3.math.NumberUtils;
+ 
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createSafeNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +21,7 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createSafeNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {
+@@ -31,6 +32,32 @@ public class MyNumberUtils {
+ 		return numberFormat.format(value);
+ 	}
+ 
++	private static Number createSafeNumber(String value) {
++		String normalizedValue = StringUtils.trimToNull(value);
++		if (normalizedValue == null) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		if (hasOnlyTypeSuffix(normalizedValue)) {
++			throw new NumberFormatException(normalizedValue + " is not a valid number");
++		}
++		try {
++			return NumberUtils.createNumber(normalizedValue);
++		} catch (StringIndexOutOfBoundsException ex) {
++			NumberFormatException numberFormatException = new NumberFormatException(
++					normalizedValue + " is not a valid number");
++			numberFormatException.initCause(ex);
++			throw numberFormatException;
++		}
++	}
++
++	private static boolean hasOnlyTypeSuffix(String value) {
++		if (value.length() != 1) {
++			return false;
++		}
++		char ch = value.charAt(0);
++		return ch == 'l' || ch == 'L' || ch == 'f' || ch == 'F' || ch == 'd' || ch == 'D';
++	}
++
+ 	public static void main(String[] args) {
+ 		float F2 = 105858.5328F;
+ 		System.out.println(ArithUtils.format(F2, 2));

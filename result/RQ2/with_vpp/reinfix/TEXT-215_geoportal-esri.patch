@@ -1,0 +1,84 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index 0000000..0000000 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -243,14 +243,65 @@
+-  public static String unescapeNunmericEntity(String v) {
+-    if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
+-    }
+-    return v;
+-  }
++public static String unescapeNunmericEntity(String v) {
++    if (v == null) {
++      return v;
++    }
++
++    StringBuilder result = new StringBuilder(v.length());
++    int length = v.length();
++    int i = 0;
++
++    while (i < length) {
++      char ch = v.charAt(i);
++      if (ch == '&' && i + 2 < length && v.charAt(i + 1) == '#') {
++        int start = i;
++        int index = i + 2;
++        boolean hex = false;
++
++        if (index < length) {
++          char radixMarker = v.charAt(index);
++          if (radixMarker == 'x' || radixMarker == 'X') {
++            hex = true;
++            index++;
++          }
++        }
++
++        int digitsStart = index;
++        while (index < length) {
++          char digit = v.charAt(index);
++          if (hex) {
++            if (Character.digit(digit, 16) == -1) {
++              break;
++            }
++          } else {
++            if (!Character.isDigit(digit)) {
++              break;
++            }
++          }
++          index++;
++        }
++
++        if (index > digitsStart) {
++          String entityValue = v.substring(digitsStart, index);
++          try {
++            int codePoint = Integer.parseInt(entityValue, hex ? 16 : 10);
++            result.append(Character.toChars(codePoint));
++            if (index < length && v.charAt(index) == ';') {
++              index++;
++            }
++            i = index;
++            continue;
++          } catch (IllegalArgumentException ex) {
++            // Leave the original sequence unchanged when the parsed value is invalid.
++          }
++        }
++
++        result.append(v, start, Math.min(index == digitsStart ? start + 2 : index, length));
++        i = (index == digitsStart ? start + 2 : index);
++        continue;
++      }
++
++      result.append(ch);
++      i++;
++    }
++
++    return result.toString();
++  }

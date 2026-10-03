@@ -1,0 +1,25 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 0000000..0000000 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -22,3 +22,17 @@
+-	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
+-	}
++public static String toFixedDecimalWithPercent(String value, int scale) {
++		String normalized = value == null ? null : value.trim();
++		if (normalized == null || normalized.length() == 0) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		boolean hasDigit = false;
++		for (int i = 0; i < normalized.length(); i++) {
++			if (Character.isDigit(normalized.charAt(i))) {
++				hasDigit = true;
++				break;
++			}
++		}
++		if (!hasDigit) {
++			throw new NumberFormatException(normalized + " is not a valid number");
++		}
++		return toFixedDecimalWithPercent(NumberUtils.createNumber(normalized), scale);
++	}

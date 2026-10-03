@@ -1,0 +1,62 @@
+canvas {
+    position: fixed;
+    top: 0;
+    background-color: #3c3c3c;
+    z-index: -500 !important;
+}
+
+.to-un-assign, .to-assign{
+     cursor: pointer;
+}
+
+.limited-height{
+    max-height: 30rem;
+    margin-bottom: 0.5rem;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.container {
+    z-index: 100;
+    position: relative;
+    background-color: #fff;
+    box-sizing: border-box;
+    border-radius: 1rem;
+}
+
+.banner {
+    display: block;
+    height: 7rem;
+    color: #FFf;
+    font-size: 4rem;
+    text-align: center;
+    background-color: rgba(156, 159, 255, 0.3);
+    margin: 0;
+    box-sizing: border-box;
+    font-style: italic;
+}
+
+.btn-group {
+    display: flex;
+}
+
+.warning-message {
+    color: red;
+}
+
+.errors {
+    border: solid 5px red !important;
+}
+
+.type-error {
+    color: crimson;
+    font-weight: 800;
+}
+
+.name {
+    color: black;
+}
+
+.card-img-top {
+    height: 18rem;
+}

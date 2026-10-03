@@ -1,0 +1,46 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea2..721b804 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -1,6 +1,6 @@
+ package com.zyd.blog.util;
+ 
+-import org.apache.commons.codec.binary.Base64;
++import java.util.Base64;
+ 
+ import javax.crypto.Cipher;
+ import javax.crypto.KeyGenerator;
+@@ -45,7 +45,7 @@ public class AesUtil {
+         byte[] result = cipher.doFinal(byteContent);
+ 
+         //通过Base64转码返回
+-        return Base64.encodeBase64String(result);
++        return Base64.getEncoder().encodeToString(result);
+     }
+ 
+     /**
+@@ -59,7 +59,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
+-        byte[] decoded = Base64.decodeBase64(encrypted);
++        byte[] decoded = decodeBase64Strict(encrypted);
+         if (decoded.length == 0) {
+             return "";
+         }
+@@ -79,6 +79,15 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static byte[] decodeBase64Strict(String encrypted) {
++        byte[] decoded = Base64.getDecoder().decode(encrypted);
++        String canonical = Base64.getEncoder().encodeToString(decoded);
++        if (!canonical.equals(encrypted)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        return decoded;
++    }
++
+     /**
+      * 生成加密秘钥
+      *

@@ -1,0 +1,18 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -30,7 +30,12 @@
+      * @return
+      * @throws Exception
+      */
+-    public static String decrypt(String encryptPassword, String salt) throws Exception {
+-        return AesUtil.decrypt(salt, encryptPassword);
++public static String decrypt(String encryptPassword, String salt) throws Exception {
++    if (encryptPassword == null) {
++        return null;
+     }
+-}
++    if (salt == null) {
++        throw new IllegalArgumentException("salt must not be null");
++    }
++    return AesUtil.decrypt(salt, encryptPassword);
++}}

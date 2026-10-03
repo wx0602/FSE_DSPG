@@ -1,0 +1,71 @@
+--- a/src/main/java/soj/util/SafeFilenameUtils.java
++++ b/src/main/java/soj/util/SafeFilenameUtils.java
+@@ -0,0 +1,26 @@
++package soj.util;
++
++import org.apache.commons.io.FilenameUtils;
++
++public final class SafeFilenameUtils {
++    private SafeFilenameUtils() {
++    }
++
++    public static String normalize(String filename) {
++        String normalized = FilenameUtils.normalize(filename);
++        if (normalized == null) {
++            return null;
++        }
++        int prefix = normalized.startsWith("//") ? 2
++                : (normalized.startsWith("/") ? 1 : 0);
++        StringBuilder result = new StringBuilder(normalized.length());
++        for (int i = 0; i < normalized.length(); i++) {
++            if (i >= prefix && i > 0 && normalized.charAt(i) == '/'
++                    && normalized.charAt(i - 1) == '/') {
++                continue;
++            }
++            result.append(normalized.charAt(i));
++        }
++        return result.toString();
++    }
++}
+--- a/src/main/java/soj/biclique/TopologyArgs.java
++++ b/src/main/java/soj/biclique/TopologyArgs.java
+@@ -12,7 +12,7 @@
+ import org.slf4j.Logger;
+ 
+ //import static org.apache.storm.shade.org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+-import static org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
++import soj.util.SafeFilenameUtils;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import static com.google.common.base.Preconditions.checkState;
+@@ -351,7 +351,7 @@
+ 
+     private void deriveArgs() {
+         if (outputDir != null) {
+-            outputDir = normalizeNoEndSeparator(outputDir);
++            outputDir = SafeFilenameUtils.normalize(outputDir);
+             if (outputDir.isEmpty()) {
+                 outputDir = ".";
+             }
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -9,7 +9,7 @@
+ //import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+-import static org.apache.commons.io.FilenameUtils.normalize;
++import static soj.util.SafeFilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import com.google.common.base.Splitter;
+--- a/src/main/java/soj/util/FileWriter.java
++++ b/src/main/java/soj/util/FileWriter.java
+@@ -11,7 +11,7 @@
+ import org.slf4j.Logger;
+ 
+ import static org.apache.commons.io.FilenameUtils.getFullPath;
+-import static org.apache.commons.io.FilenameUtils.normalize;
++import static soj.util.SafeFilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import static com.google.common.base.Charsets.UTF_8;

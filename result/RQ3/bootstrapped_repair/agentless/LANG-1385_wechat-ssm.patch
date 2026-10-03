@@ -1,0 +1,25 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 5f00669..6256c12 100644
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -1,3 +1,4 @@
++
+ package cn.qs.utils.format;
+ 
+ import java.math.RoundingMode;
+@@ -8,6 +9,9 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
++		if (value == null || value.isEmpty()) {
++			throw new NumberFormatException("Empty input string");
++		}
+ 		return toFixedDecimal(NumberUtils.createNumber(value), scale);
+ 	}
+ 
+@@ -36,4 +40,4 @@ public class MyNumberUtils {
+ 		System.out.println(ArithUtils.format(F2, 2));
+ 	}
+ 
+-}
++}

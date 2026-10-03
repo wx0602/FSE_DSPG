@@ -1,0 +1,9 @@
+defaults:
+  model_name: gpt-4o
+  deployment_image: python:3.12
+cases:
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/CVE-2021-29425/FastJoin
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/63_issues_2_track/CVE-2021-29425_FastJoin.md
+- repo_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/resource/CVE-2022-45688/base-starter
+  problem_statement_path: /home/user/AVR_JAVA_STUDY/VESTA_resource/issue/63_issues_2_track/CVE-2022-45688_base-starter.md
+

@@ -1,0 +1,103 @@
+diff --git a/src/main/java/cn/qs/controller/AbstractController.java b/src/main/java/cn/qs/controller/AbstractController.java
+index b9c5cee..bb2fd05 100755
+--- a/src/main/java/cn/qs/controller/AbstractController.java
++++ b/src/main/java/cn/qs/controller/AbstractController.java
+@@ -61,6 +61,18 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 		return getViewBasePath() + "/" + path;
+ 	}
+ 
++	private int getIntParameter(Map condition, String key, int defaultValue) {
++		String value = MapUtils.getString(condition, key);
++		if (StringUtils.isBlank(value)) {
++			return defaultValue;
++		}
++		try {
++			return Integer.parseInt(value.trim());
++		} catch (NumberFormatException e) {
++			return defaultValue;
++		}
++	}
++
+ 	@RequestMapping("add")
+ 	public String add() {
+ 		return getViewPath("add");
+@@ -88,18 +100,11 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 	@RequestMapping("page")
+ 	@ResponseBody
+ 	public Page<T> page(@RequestParam Map condition, HttpServletRequest request) {
+-		int pageNum = 1;
+-		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
+-			pageNum = MapUtils.getInteger(condition, "pageNum");
+-		}
+-		int pageSize = DefaultValue.PAGE_SIZE;
+-		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
+-			pageSize = MapUtils.getInteger(condition, "pageSize");
+-		}
++		int pageNum = getIntParameter(condition, "pageNum", 1);
++		int pageSize = getIntParameter(condition, "pageSize", DefaultValue.PAGE_SIZE);
+ 
+ 		condition.put("pageNum", pageNum - 1);
+ 		condition.put("pageSize", pageSize);
+-
+ 		Page<T> pages = null;
+ 		// 开始分页
+ 		try {
+@@ -123,18 +128,11 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 	@RequestMapping("pageJSON")
+ 	@ResponseBody
+ 	public JSONResultUtil<Page<T>> pageJSON(@RequestBody Map condition) throws InterruptedException {
+-		int pageNum = 1;
+-		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
+-			pageNum = MapUtils.getInteger(condition, "pageNum");
+-		}
+-		int pageSize = DefaultValue.PAGE_SIZE;
+-		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
+-			pageSize = MapUtils.getInteger(condition, "pageSize");
+-		}
++		int pageNum = getIntParameter(condition, "pageNum", 1);
++		int pageSize = getIntParameter(condition, "pageSize", DefaultValue.PAGE_SIZE);
+ 
+ 		condition.put("pageNum", pageNum - 1);
+ 		condition.put("pageSize", pageSize);
+-
+ 		Page<T> pages = null;
+ 		// 开始分页
+ 		try {
+@@ -156,16 +154,9 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 	@RequestMapping("pageJSON2")
+ 	@ResponseBody
+ 	public JSONResultUtil<PageInfo<T>> pageJSON2(@RequestBody(required = false) Map condition) {
+-		int pageNum = 1;
+-		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
+-			pageNum = MapUtils.getInteger(condition, "pageNum");
+-		}
+-		int pageSize = DefaultValue.PAGE_SIZE;
+-		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
+-			pageSize = MapUtils.getInteger(condition, "pageSize");
+-		}
++		int pageNum = getIntParameter(condition, "pageNum", 1);
++		int pageSize = getIntParameter(condition, "pageSize", DefaultValue.PAGE_SIZE);
+ 
+-		// 开始分页
+ 		PageHelper.startPage(pageNum, pageSize);
+ 		List<T> users = new ArrayList<T>();
+ 		try {
+@@ -188,16 +179,9 @@ public abstract class AbstractController<T, E extends Serializable> {
+ 	@RequestMapping("page2")
+ 	@ResponseBody
+ 	public PageInfo<T> page2(@RequestParam Map<String, Object> condition, HttpServletRequest request) {
+-		int pageNum = 1;
+-		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
+-			pageNum = MapUtils.getInteger(condition, "pageNum");
+-		}
+-		int pageSize = DefaultValue.PAGE_SIZE;
+-		if (StringUtils.isNotBlank(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
+-			pageSize = MapUtils.getInteger(condition, "pageSize");
+-		}
++		int pageNum = getIntParameter(condition, "pageNum", 1);
++		int pageSize = getIntParameter(condition, "pageSize", DefaultValue.PAGE_SIZE);
+ 
+-		// 开始分页
+ 		PageHelper.startPage(pageNum, pageSize);
+ 		List<T> beans = new ArrayList<T>();
+ 		try {

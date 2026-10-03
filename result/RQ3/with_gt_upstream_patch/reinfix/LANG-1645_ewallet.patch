@@ -1,0 +1,19 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index 0000000..0000000 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -61,3 +61,11 @@
+-	public static BigInteger createBigInteger(String str)  {
+-		return NumberUtils.createBigInteger(str);
+-	}
++public static BigInteger createBigInteger(String str) {
++		if (str != null && str.startsWith("+")) {
++			if (str.startsWith("+0x") || str.startsWith("+0X")) {
++				return new BigInteger(str.substring(3), 16);
++			}
++			if (str.startsWith("+#")) {
++				return new BigInteger(str.substring(2), 16);
++			}
++		}
++		return NumberUtils.createBigInteger(str);
++	}

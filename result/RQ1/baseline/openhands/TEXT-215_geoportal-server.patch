@@ -1,0 +1,99 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830b..9535411 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -14,8 +14,6 @@
+  */
+ package com.esri.geoportal.base.util;
+ 
+-import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,9 +31,9 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
++  static Pattern htmlEntityPattern = Pattern.compile("&#(x[0-9A-Fa-f]+|X[0-9A-Fa-f]+|[0-9]+);?");
+ 
+   /**
+    * Converts a string to a boolean.
+@@ -226,9 +224,7 @@ public class Val {
+    */
+   public static String unescapeHtml4(String v) {
+     if (v != null) {
+-
+-      return StringEscapeUtils.unescapeHtml4(v);
+-
++      return unescapeHtml4Safely(v);
+     }
+     return v;
+   }
+@@ -239,15 +235,7 @@ public class Val {
+    */
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
++      return unescapeNumericEntitiesSafely(v);
+     }
+     return v;
+   }
+@@ -316,6 +304,46 @@ public class Val {
+     }
+     return v;
+   }
++  private static String unescapeHtml4Safely(String v) {
++    return unescapeNumericEntitiesSafely(v);
++  }
++
++  private static String unescapeNumericEntitiesSafely(String v) {
++    Matcher matcher = htmlEntityPattern.matcher(v);
++    StringBuffer sb = new StringBuffer();
++    while (matcher.find()) {
++      String entityBody = matcher.group(1);
++      String decoded = decodeNumericEntity(entityBody);
++      if (decoded == null) {
++        matcher.appendReplacement(sb, Matcher.quoteReplacement(matcher.group(0)));
++      } else {
++        matcher.appendReplacement(sb, Matcher.quoteReplacement(decoded));
++      }
++    }
++    matcher.appendTail(sb);
++    return sb.toString();
++  }
++
++  private static String decodeNumericEntity(String entityBody) {
++    boolean hex = entityBody.length() > 1 && (entityBody.charAt(0) == 'x' || entityBody.charAt(0) == 'X');
++    String digits = hex ? entityBody.substring(1) : entityBody;
++    if (digits.isEmpty()) {
++      return null;
++    }
++    if (!digits.matches(hex ? "[0-9A-Fa-f]+" : "[0-9]+")) {
++      return null;
++    }
++    try {
++      int codePoint = Integer.parseInt(digits, hex ? 16 : 10);
++      if (!Character.isValidCodePoint(codePoint)) {
++        return null;
++      }
++      return new String(Character.toChars(codePoint));
++    } catch (IllegalArgumentException ex) {
++      return null;
++    }
++  }
++
+   /**
+    * dencodes html and  octal values.
+    * @param v the value

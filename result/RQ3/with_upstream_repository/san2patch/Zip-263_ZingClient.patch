@@ -1,0 +1,41 @@
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -25,19 +25,27 @@
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
+-        this.file = new ZipFile(file);
+-        this.password = password;
+-        if (!this.file.isValidZipFile()) {
+-            throw new ZipException("文件无法读取,可能已经被损坏.");
++    if (file == null) {
++        throw new IllegalArgumentException("zip file must not be null");
++    }
++    this.file = new ZipFile(file);
++    this.password = password;
++    if (!this.file.isValidZipFile()) {
++        throw new ZipException("文件无法读取,可能已经被损坏.");
++    }
++    if (this.file.isEncrypted()) {
++        if (password == null) {
++            throw new ZipException("加密压缩文件缺少密码.");
+         }
+-        if (this.file.isEncrypted()) {
+-            this.file.setPassword(password.toCharArray());
+-        }
+-        FileHeader ad = this.file.getFileHeader("address.txt");
+-        FileHeader key = this.file.getFileHeader("private_key");
+-        this.zingAddress = IOUtils.toString(this.file.getInputStream(ad), "utf8");
+-        
++        this.file.setPassword(password.toCharArray());
+     }
++    FileHeader ad = this.file.getFileHeader("address.txt");
++    FileHeader key = this.file.getFileHeader("private_key");
++    if (ad == null) {
++        throw new ZipException("压缩文件缺少 address.txt.");
++    }
++    this.zingAddress = IOUtils.toString(this.file.getInputStream(ad), "utf8");
++}
+ 
+     public static void create(String name, String password) throws ZipException {
+         ZipFile zipFile = new ZipFile(name + ".zing", password.toCharArray());

@@ -1,0 +1,137 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a1318..fc641a1 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,10 +32,94 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
++  private static boolean isDecimalEntityChar(char c) {
++    return c >= '0' && c <= '9';
++  }
++
++  private static boolean isHexEntityChar(char c) {
++    return isDecimalEntityChar(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
++  }
++
++  private static String unescapeNumericHtmlEntities(String v, boolean semiColonOptional) {
++    if (v == null || v.length() == 0) {
++      return v;
++    }
++
++    StringBuilder sb = null;
++    int length = v.length();
++    int lastCopyIndex = 0;
++    int i = 0;
++
++    while (i < length - 2) {
++      if (v.charAt(i) == '&' && v.charAt(i + 1) == '#') {
++        int start = i + 2;
++        boolean isHex = false;
++
++        if (start < length) {
++          char firstChar = v.charAt(start);
++          if (firstChar == 'x' || firstChar == 'X') {
++            isHex = true;
++            start++;
++          }
++        }
++
++        if (start >= length) {
++          i++;
++          continue;
++        }
++
++        int end = start;
++        while (end < length && (isHex ? isHexEntityChar(v.charAt(end)) : isDecimalEntityChar(v.charAt(end)))) {
++          end++;
++        }
++
++        if (end == start) {
++          i++;
++          continue;
++        }
++
++        boolean semiNext = end < length && v.charAt(end) == ';';
++        if (!semiNext && !semiColonOptional) {
++          i++;
++          continue;
++        }
++
++        try {
++          int entityValue = Integer.parseInt(v.substring(start, end), isHex ? 16 : 10);
++          if (sb == null) {
++            sb = new StringBuilder(length);
++          }
++          if (lastCopyIndex < i) {
++            sb.append(v, lastCopyIndex, i);
++          }
++          if (entityValue > 0xFFFF) {
++            sb.append(Character.toChars(entityValue));
++          } else {
++            sb.append((char) entityValue);
++          }
++          i = end + (semiNext ? 1 : 0);
++          lastCopyIndex = i;
++          continue;
++        } catch (IllegalArgumentException ex) {
++          // Ignore malformed entities and continue scanning.
++        }
++      }
++      i++;
++    }
++
++    if (sb == null) {
++      return v;
++    }
++    if (lastCopyIndex < length) {
++      sb.append(v, lastCopyIndex, length);
++    }
++    return sb.toString();
++  }
++
++
+   /**
+    * Converts a string to a boolean.
+    * @param v the string
+@@ -229,9 +312,8 @@ public class Val {
+    */
+   public static String unescapeHtml4(String v) {
+     if (v != null) {
+-
+-      return StringEscapeUtils.unescapeHtml4(v);
+-
++      String unescaped = StringEscapeUtils.unescapeHtml4(v);
++      return unescapeNumericHtmlEntities(unescaped, false);
+     }
+     return v;
+   }
+@@ -242,15 +324,7 @@ public class Val {
+    */
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
+-      }
+-
++      return unescapeNumericHtmlEntities(v, true);
+     }
+     return v;
+   }

@@ -1,0 +1,23 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index a804a6d..12d7693 100755
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -25,12 +25,18 @@ public class ZFile {
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
++        if (file == null) {
++            throw new IllegalArgumentException("file must not be null");
++        }
+         this.file = new ZipFile(file);
+         this.password = password;
+         if (!this.file.isValidZipFile()) {
+             throw new ZipException("文件无法读取,可能已经被损坏.");
+         }
+         if (this.file.isEncrypted()) {
++            if (password == null) {
++                throw new IllegalArgumentException("password must not be null for encrypted zip files");
++            }
+             this.file.setPassword(password.toCharArray());
+         }
+         FileHeader ad = this.file.getFileHeader("address.txt");

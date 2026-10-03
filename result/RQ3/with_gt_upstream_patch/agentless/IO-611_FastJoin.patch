@@ -1,0 +1,48 @@
+diff --git a/src/main/java/soj/biclique/TopologyArgs.java b/src/main/java/soj/biclique/TopologyArgs.java
+index af18e66..264ecb3 100644
+--- a/src/main/java/soj/biclique/TopologyArgs.java
++++ b/src/main/java/soj/biclique/TopologyArgs.java
+@@ -19,6 +19,10 @@ import static com.google.common.base.Preconditions.checkState;
+ import com.google.common.collect.ImmutableList;
+ import static com.google.common.collect.Lists.newLinkedList;
+ 
++import java.util.regex.Pattern;
++
++import org.apache.commons.io.FilenameUtils;
++
+ import soj.util.FileWriter;
+ import static soj.util.SchemaUtils.getFieldIdx;
+ import static soj.util.TimeUtils.getTimestamp;
+@@ -28,9 +32,32 @@ public class TopologyArgs implements Serializable
+     private static final Logger LOG = getLogger(TopologyArgs.class);
+ 
+     private static final int SCREEN_WIDTH = 80;
++    private static final Pattern REPEATED_UNIX_SEPARATORS = Pattern.compile("(?<!^)/{2,}");
++    private static final Pattern REPEATED_WINDOWS_SEPARATORS = Pattern.compile("(?<!^)\\\\{2,}");
+ 
+     private final String _mainclassName;
+ 
++    /**
++     * Mitigation for IO-611_FastJoin / Commons IO FilenameUtils.normalize behavior.
++     *
++     * <p>This method first collapses repeated path separators after any leading
++     * prefix/root indicator and only then delegates to Commons IO normalization.
++     * This avoids relying on the vulnerable multiple-separator handling.</p>
++     *
++     * @param path raw path input
++     * @return safely normalized path, or null if the underlying normalizer rejects it
++     */
++    private static String safeNormalizePath(String path) {
++        if (path == null || path.isEmpty()) {
++            return path;
++        }
++
++        String sanitized = REPEATED_UNIX_SEPARATORS.matcher(path).replaceAll("/");
++        sanitized = REPEATED_WINDOWS_SEPARATORS.matcher(sanitized).replaceAll("\\\\");
++
++        return FilenameUtils.normalize(sanitized);
++    }
++
+     public TopologyArgs(String className) {
+         _mainclassName = className;
+     }

@@ -1,0 +1,62 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a1318..f0256e9 100644
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -253,6 +253,57 @@ public class Val {
+ 
+     }
+     return v;
++  // Parse numeric entities locally so decimal entities only consume decimal digits
++  // and hexadecimal entities only consume hexadecimal digits. This avoids the
++  // vulnerable optional-semicolon Commons Text behavior that can over-consume A-F.
++  private static String unescapeNumericEntitiesSafely(String v) {
++    StringBuilder out = new StringBuilder(v.length());
++    int i = 0;
++    while (i < v.length()) {
++      char ch = v.charAt(i);
++      if (ch == '&' && i + 2 < v.length() && v.charAt(i + 1) == '#') {
++        int entityStart = i;
++        int scan = i + 2;
++        boolean hexadecimal = false;
++        if (scan < v.length() && (v.charAt(scan) == 'x' || v.charAt(scan) == 'X')) {
++          hexadecimal = true;
++          scan++;
++        }
++        int digitsStart = scan;
++        while (scan < v.length()) {
++          char digit = v.charAt(scan);
++          if (hexadecimal) {
++            if (Character.digit(digit, 16) < 0) {
++              break;
++            }
++          } else if (!Character.isDigit(digit)) {
++            break;
++          }
++          scan++;
++        }
++        if (scan > digitsStart) {
++          boolean hasSemicolon = scan < v.length() && v.charAt(scan) == ';';
++          String entityBody = v.substring(digitsStart, scan);
++          try {
++            int codePoint = Integer.parseInt(entityBody, hexadecimal ? 16 : 10);
++            if (Character.isValidCodePoint(codePoint)) {
++              out.append(Character.toChars(codePoint));
++              i = hasSemicolon ? scan + 1 : scan;
++              continue;
++            }
++          } catch (NumberFormatException ex) {
++            // Leave malformed entities unchanged.
++          }
++        }
++        out.append(v.charAt(entityStart));
++        i = entityStart + 1;
++        continue;
++      }
++      out.append(ch);
++      i++;
++    }
++    return out.toString();
++  }
+   }
+   /**
+    * decodes an octal value.

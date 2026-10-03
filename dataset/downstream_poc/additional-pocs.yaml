@@ -1,0 +1,86 @@
+tasks:
+  - target_id: CODEC-270_BurpCrypto-master
+    module: .
+    Dtest:
+      - CODEC_270_DesDecrypt_ExtraPathRealPocTest
+      - CODEC_270_Sm4Decrypt_ExtraPathRealPocTest
+      - CODEC_270_StringKeyToByteKey_ExtraPathRealPocTest
+      - CODEC_270_GetBase64PublicKeyME_ExtraPathRealPocTest
+      - CODEC_270_ZucDecrypt_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: CVE-2015-2156_webbit
+    module: .
+    Dtest:
+      - CVE_2015_2156_NettyRequestCookieValue_ExtraPathRealPocTest
+      - CVE_2015_2156_WrapperCookieValue_ExtraPathRealPocTest
+      - CVE_2015_2156_WrapperCookieObject_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: CVE-2017-7957_rpki-commons
+    module: .
+    Dtest:
+      - CVE_2017_7957_ChildIdentityDeserialize_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: CVE-2018-1000632_tcpser4j
+    module: .
+    Dtest:
+      - CVE_2018_1000632_EntryWriteXmlString_ExtraPathRealPocTest
+      - CVE_2018_1000632_EventActionInfoWriteXmlString_ExtraPathRealPocTest
+      - CVE_2018_1000632_LineWriteXmlString_ExtraPathRealPocTest
+      - CVE_2018_1000632_ModemPoolWriteXmlString_ExtraPathRealPocTest
+      - CVE_2018_1000632_PhoneBookWriteXmlString_ExtraPathRealPocTest
+      - CVE_2018_1000632_SettingsWriteXmlString_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: CVE-2020-13956_crawler-jsoup-maven
+    module: .
+    Dtest:
+      - CVE_2020_13956_SendGet_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: CVE-2021-23899_OmegaTester
+    module: .
+    Dtest:
+      - CVE_2021_23899_BatchCtrlAdd_ExtraPathRealPocTest
+      - CVE_2021_23899_BatchCtrlUpdate_ExtraPathRealPocTest
+      - CVE_2021_23899_ReqCtrlSend_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: CVE-2021-23900_OmegaTester
+    module: .
+    Dtest:
+      - CVE_2021_23900_BatchCtrlAdd_ExtraPathRealPocTest
+      - CVE_2021_23900_BatchCtrlUpdate_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: CVE-2021-43859_rpki-commons
+    module: .
+    Dtest:
+      - CVE_2021_43859_ChildIdentityDeserialize_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: CVE-2022-25845_geek_framework
+    module: .
+    Dtest:
+      - CVE_2022_25845_GetIpInfo_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: LANG-1645_ewallet
+    module: wallet-base
+    Dtest:
+      - LANG_1645_CreateNumber_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: TEXT-215_geoportal-esri
+    module: geoportal
+    Dtest:
+      - TEXT_215_GeoportalEsri_UnescapeNumericEntity_ExtraPathRealPocTest
+    poc_exit: 0
+
+  - target_id: TEXT-215_geoportal-server
+    module: geoportal
+    Dtest:
+      - TEXT_215_GeoportalServer_UnescapeNumericEntity_ExtraPathRealPocTest
+    poc_exit: 0

@@ -1,0 +1,63 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a81..566b13d 100644
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -53,6 +53,36 @@
+  */
+ public class FileResourceLoader extends ResourceLoader
+ {
++    static String normalizeTemplateName(String name, boolean unixSeparator)
++    {
++        String normalized = FilenameUtils.normalize(name, unixSeparator);
++        if (normalized == null)
++        {
++            return null;
++        }
++
++        int prefixLength = FilenameUtils.getPrefixLength(normalized);
++        if (prefixLength < 0)
++        {
++            return null;
++        }
++
++        int start = prefixLength > 0 ? prefixLength : 1;
++        char separator = unixSeparator ? '/' : File.separatorChar;
++        StringBuilder sanitized = new StringBuilder(normalized.length());
++        for (int i = 0; i < normalized.length(); i++)
++        {
++            char ch = normalized.charAt(i);
++            if (i >= start && ch == separator && sanitized.length() > 0
++                && sanitized.charAt(sanitized.length() - 1) == separator)
++            {
++                continue;
++            }
++            sanitized.append(ch);
++        }
++        return sanitized.toString();
++    }
++
+     /**
+      * The paths to search for templates.
+      */
+@@ -112,10 +142,10 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeTemplateName(templateName, true);
+         if ( template == null || template.length() == 0 )
+         {
+-            String msg = "File resource error: argument " + template +
++            String msg = "File resource error: argument " + templateName +
+                     " contains .. and may be trying to access " +
+                     "content outside of template root.  Rejected.";
+ 
+@@ -175,7 +205,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeTemplateName(name, File.separatorChar == '/');
+         if (name == null || name.length() == 0)
+         {
+             return false;

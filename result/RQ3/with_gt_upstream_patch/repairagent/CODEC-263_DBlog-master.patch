@@ -1,0 +1,17 @@
+diff --git a/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java b/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java
+index ee2b65a..e9be85e 100644
+--- a/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java
++++ b/blog-admin/src/main/java/com/zyd/blog/core/config/ShiroConfig.java
+@@ -212,9 +212,11 @@ public class ShiroConfig {
+      */
+     public SimpleCookie rememberMeCookie() {
+         // 这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
++        // Mitigate vulnerable Base64 decoding of attacker-controlled rememberMe cookies by disabling persistence.
++        // Shiro may Base64-decode this cookie before authentication, so avoid accepting/storing long-lived payloads.
+         SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+         // 记住我cookie生效时间30天 ,单位秒。 注释掉，默认永久不过期 2018-07-15
+-        simpleCookie.setMaxAge(redisProperties.getExpire());
++        simpleCookie.setMaxAge(0);
+         return simpleCookie;
+     }
+ 

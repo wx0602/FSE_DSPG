@@ -1,0 +1,31 @@
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -7,8 +7,18 @@
+ 
+ public class MyNumberUtils {
+ 
++	private MyNumberUtils() {
++	}
++
++	private static Number parseNumber(String value) {
++		if (value == null || value.length() == 1) {
++			throw new NumberFormatException(String.valueOf(value) + " is not a valid number.");
++		}
++		return NumberUtils.createNumber(value);
++	}
++
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(parseNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +30,7 @@
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(parseNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {

@@ -1,0 +1,21 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d7..e759e17 100644
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -116,6 +116,16 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
++		if (str == null) {
++			return null;
++		}
++		if (str.trim().isEmpty()) {
++			throw new NumberFormatException("A blank string is not a valid number");
++		}
++		char lastChar = str.charAt(str.length() - 1);
++		if ((lastChar == 'l' || lastChar == 'L') && str.length() == 1) {
++			throw new NumberFormatException(str + " is not a valid number.");
++		}
+ 		return NumberUtils.createNumber(str);
+ 	}
+ 	

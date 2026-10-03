@@ -1,0 +1,27 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777..f95f268 100755
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,7 +113,12 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        byte[] decoded = Base64.decodeBase64(str);
++        String normalized = str.replaceAll("\\s", "");
++        if (!Base64.encodeBase64String(decoded).equals(normalized)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        return decoded;
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,7 +135,7 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = base64(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();

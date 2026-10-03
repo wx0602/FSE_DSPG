@@ -1,0 +1,82 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index 8c15083..21590d6 100644
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -26,37 +26,61 @@ public class Validator {
+ 
+     public boolean validateInteger(String str) {
+         logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        return isSafeParsableInteger(str);
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {
+         logger.info("Validating integer as positive value: " + str);
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str) && NumberUtils.createInteger(str) > 0;
++        return isSafeParsableInteger(str) && toInteger(str) > 0;
+     }
+ 
+     public boolean validateActivityTypeInteger(String str) {
+         logger.info("Validating activityType: " + str);
+-        return NumberUtils.isCreatable(str)
+-                && NumberUtils.isParsable(str)
+-                && NumberUtils.createInteger(str) > LOWER_LIMIT_OF_ACTIVITY_TYPE
+-                && NumberUtils.createInteger(str) < UPPER_LIMIT_OF_ACTIVITY_TYPE;
++        return isSafeParsableInteger(str)
++                && toInteger(str) > LOWER_LIMIT_OF_ACTIVITY_TYPE
++                && toInteger(str) < UPPER_LIMIT_OF_ACTIVITY_TYPE;
+     }
+ 
+     public boolean validateShort(String str) {
+         logger.info("Validating short: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_INDEX
+-                && NumberUtils.createInteger(str) < MAX_SHORT;
++        return isSafeParsableInteger(str)
++                && toInteger(str) > LOWER_LIMIT_OF_INDEX
++                && toInteger(str) < MAX_SHORT;
+     }
+ 
+     public boolean validateByte(String str) {
+         logger.info("Validating byte: " + str);
+-        return NumberUtils.isCreatable(str) &&
+-                NumberUtils.isParsable(str) &&
+-                NumberUtils.createInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
+-                && NumberUtils.createInteger(str) < MAX_BYTE;
++        return isSafeParsableInteger(str)
++                && toInteger(str) > LOWER_LIMIT_OF_LENGTH_IN_QUARTERS
++                && toInteger(str) < MAX_BYTE;
++    }
++
++    private boolean isSafeParsableInteger(String str) {
++        return NumberUtils.isCreatable(str)
++                && (NumberUtils.isParsable(str) || hasTrailingDecimalPoint(str))
++                && !hasDecimalDigits(str)
++                && !StringUtils.containsAny(str, 'e', 'E');
++    }
++
++    private boolean hasDecimalDigits(String str) {
++        final int decimalSeparatorIndex = StringUtils.indexOf(str, '.');
++        return decimalSeparatorIndex >= 0 && decimalSeparatorIndex < str.length() - 1;
++    }
++
++    private int toInteger(String str) {
++        return NumberUtils.createInteger(StringUtils.removeEnd(str, "."));
++    }
++
++    private boolean hasTrailingDecimalPoint(String str) {
++        return StringUtils.isNotEmpty(str)
++                && str.charAt(str.length() - 1) == '.'
++                && NumberUtils.isCreatable(str)
++                && isIntegerPrefix(str.substring(0, str.length() - 1));
++    }
++
++    private boolean isIntegerPrefix(String str) {
++        return StringUtils.isNotEmpty(str)
++                && (StringUtils.startsWith(str, "-") ? str.length() > 1 : true)
++                && StringUtils.isNumeric(StringUtils.removeStart(str, "-"));
+     }
+ }

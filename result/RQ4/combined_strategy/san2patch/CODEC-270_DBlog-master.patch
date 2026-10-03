@@ -1,0 +1,47 @@
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -31,6 +31,44 @@
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
++        if (encryptPassword == null || (encryptPassword.length() & 3) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        int len = encryptPassword.length();
++        int pad = 0;
++        if (len > 0 && encryptPassword.charAt(len - 1) == '=') {
++            pad++;
++            if (len > 1 && encryptPassword.charAt(len - 2) == '=') {
++                pad++;
++            }
++        }
++        if (pad > 2) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        for (int i = 0; i < len - pad; i++) {
++            char c = encryptPassword.charAt(i);
++            boolean ok = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '+' || c == '/';
++            if (!ok) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        for (int i = len - pad; i < len; i++) {
++            if (i >= 0 && encryptPassword.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
++        if (pad == 2) {
++            int v = alphabet.indexOf(encryptPassword.charAt(len - 3));
++            if (v < 0 || (v & 15) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        } else if (pad == 1) {
++            int v = alphabet.indexOf(encryptPassword.charAt(len - 2));
++            if (v < 0 || (v & 3) != 0) {
++                throw new IllegalArgumentException("Invalid Base64 trailing bits");
++            }
++        }
+         return AesUtil.decrypt(salt, encryptPassword);
+     }
+ }

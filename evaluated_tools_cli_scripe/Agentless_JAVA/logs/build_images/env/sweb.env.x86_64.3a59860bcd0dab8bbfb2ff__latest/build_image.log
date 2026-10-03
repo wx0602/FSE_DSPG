@@ -1,0 +1,532 @@
+2025-08-21 07:49:45,151 - INFO - Building image sweb.env.x86_64.3a59860bcd0dab8bbfb2ff:latest
+Using dockerfile:
+FROM --platform=linux/x86_64 sweb.base.x86_64:latest
+
+COPY ./setup_env.sh /root/
+RUN sed -i -e 's/\r$//' /root/setup_env.sh
+RUN chmod +x /root/setup_env.sh
+RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"
+
+WORKDIR /testbed/
+
+# Automatically activate the testbed environment
+RUN echo "source /opt/miniconda3/etc/profile.d/conda.sh && conda activate testbed" > /root/.bashrc
+
+Adding (1) setup scripts to image build repo
+2025-08-21 07:49:45,151 - INFO - [SETUP SCRIPT] setup_env.sh:
+#!/bin/bash
+set -euxo pipefail
+source /opt/miniconda3/bin/activate
+conda create -n testbed python=3.9 'numpy==1.19.2' 'scipy==1.5.2' 'cython==3.0.10' pytest 'pandas<2.0.0' 'matplotlib<3.9.0' setuptools pytest joblib threadpoolctl -y
+conda activate testbed
+python -m pip install cython setuptools numpy scipy
+
+2025-08-21 07:49:45,152 - INFO - Building docker image sweb.env.x86_64.3a59860bcd0dab8bbfb2ff:latest in logs/build_images/env/sweb.env.x86_64.3a59860bcd0dab8bbfb2ff__latest with platform linux/x86_64
+2025-08-21 07:49:45,167 - INFO - Step 1/7 : FROM --platform=linux/x86_64 sweb.base.x86_64:latest
+2025-08-21 07:49:45,167 - INFO - 
+2025-08-21 07:49:45,168 - INFO - ---> 5cca6898c8d9
+2025-08-21 07:49:45,168 - INFO - Step 2/7 : COPY ./setup_env.sh /root/
+2025-08-21 07:49:45,168 - INFO - 
+2025-08-21 07:49:45,238 - INFO - ---> edc7bc67b587
+2025-08-21 07:49:45,238 - INFO - Step 3/7 : RUN sed -i -e 's/\r$//' /root/setup_env.sh
+2025-08-21 07:49:45,238 - INFO - 
+2025-08-21 07:49:45,299 - INFO - ---> Running in 97a0858860be
+2025-08-21 07:49:45,643 - INFO - ---> Removed intermediate container 97a0858860be
+2025-08-21 07:49:45,643 - INFO - ---> 5f64c87b368a
+2025-08-21 07:49:45,643 - INFO - Step 4/7 : RUN chmod +x /root/setup_env.sh
+2025-08-21 07:49:45,643 - INFO - 
+2025-08-21 07:49:45,669 - INFO - ---> Running in bebf13078c75
+2025-08-21 07:49:46,225 - INFO - ---> Removed intermediate container bebf13078c75
+2025-08-21 07:49:46,226 - INFO - ---> 68824cfcbd09
+2025-08-21 07:49:46,226 - INFO - Step 5/7 : RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"
+2025-08-21 07:49:46,226 - INFO - 
+2025-08-21 07:49:46,266 - INFO - ---> Running in ac9656104c48
+2025-08-21 07:49:46,480 - INFO - + source /opt/miniconda3/bin/activate
+2025-08-21 07:49:46,482 - INFO - ++ _CONDA_ROOT=/opt/miniconda3
+++ . /opt/miniconda3/etc/profile.d/conda.sh
++++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
+2025-08-21 07:49:46,482 - INFO - +++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+2025-08-21 07:49:46,483 - INFO - +++ '[' -z '' ']'
++++ export CONDA_SHLVL=0
++++ CONDA_SHLVL=0
++++ '[' -n '' ']'
+2025-08-21 07:49:46,484 - INFO - +++++ dirname /opt/miniconda3/bin/conda
+2025-08-21 07:49:46,485 - INFO - ++++ dirname /opt/miniconda3/bin
+2025-08-21 07:49:46,486 - INFO - +++ PATH=/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export PATH
++++ '[' -z '' ']'
+2025-08-21 07:49:46,487 - INFO - +++ PS1=
+++ conda activate
+++ local cmd=activate
+++ case "$cmd" in
+++ __conda_activate activate
+++ '[' -n '' ']'
+++ local ask_conda
+2025-08-21 07:49:46,487 - INFO - +++ PS1=
++++ __conda_exe shell.posix activate
+2025-08-21 07:49:46,487 - INFO - +++ /opt/miniconda3/bin/conda shell.posix activate
+2025-08-21 07:49:46,636 - INFO - ++ ask_conda='PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
+++ eval 'PS1='\''(base) '\''
+export PATH='\''/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3'\''
+export CONDA_SHLVL='\''1'\''
+export CONDA_DEFAULT_ENV='\''base'\''
+export CONDA_PROMPT_MODIFIER='\''(base) '\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\'''
++++ PS1='(base) '
++++ export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++ export CONDA_PREFIX=/opt/miniconda3
++++ CONDA_PREFIX=/opt/miniconda3
++++ export CONDA_SHLVL=1
++++ CONDA_SHLVL=1
++++ export CONDA_DEFAULT_ENV=base
++++ CONDA_DEFAULT_ENV=base
++++ export 'CONDA_PROMPT_MODIFIER=(base) '
++++ CONDA_PROMPT_MODIFIER='(base) '
++++ export CONDA_EXE=/opt/miniconda3/bin/conda
++++ CONDA_EXE=/opt/miniconda3/bin/conda
++++ export _CE_M=
++++ _CE_M=
++++ export _CE_CONDA=
++++ _CE_CONDA=
++++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
++++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ __conda_hashr
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+2025-08-21 07:49:46,637 - INFO - + conda create -n testbed python=3.9 numpy==1.19.2 scipy==1.5.2 cython==3.0.10 pytest 'pandas<2.0.0' 'matplotlib<3.9.0' setuptools pytest joblib threadpoolctl -y
++ local cmd=create
++ case "$cmd" in
++ __conda_exe create -n testbed python=3.9 numpy==1.19.2 scipy==1.5.2 cython==3.0.10 pytest 'pandas<2.0.0' 'matplotlib<3.9.0' setuptools pytest joblib threadpoolctl -y
+2025-08-21 07:49:46,637 - INFO - + /opt/miniconda3/bin/conda create -n testbed python=3.9 numpy==1.19.2 scipy==1.5.2 cython==3.0.10 pytest 'pandas<2.0.0' 'matplotlib<3.9.0' setuptools pytest joblib threadpoolctl -y
+2025-08-21 07:49:47,165 - INFO - Channels:
+ - defaults
+ - conda-forge
+Platform: linux-64
+Collecting package metadata (repodata.json): ...working...
+2025-08-21 07:50:50,552 - INFO - done
+2025-08-21 07:50:50,552 - INFO - Solving environment: ...working...
+2025-08-21 07:51:04,072 - INFO - done
+2025-08-21 07:51:04,327 - INFO - ## Package Plan ##
+
+  environment location: /opt/miniconda3/envs/testbed
+
+  added / updated specs:
+    - cython==3.0.10
+    - joblib
+    - matplotlib[version='<3.9.0']
+    - numpy==1.19.2
+    - pandas[version='<2.0.0']
+    - pytest
+    - python=3.9
+    - scipy==1.5.2
+    - setuptools
+    - threadpoolctl
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    aom-3.6.0                  |       h6a678d5_0         2.8 MB
+    blas-1.0                   |         openblas          46 KB
+    bottleneck-1.4.2           |   py39ha9d4c09_0         126 KB
+    brotli-python-1.0.9        |   py39h6a678d5_9         357 KB
+    bzip2-1.0.8                |       h5eee18b_6         262 KB
+    ca-certificates-2025.7.15  |       h06a4308_0         126 KB
+    cairo-1.16.0               |       h44eff21_7         1.2 MB
+    contourpy-1.0.5            |   py39hdb19cb5_0         204 KB
+    cycler-0.11.0              |     pyhd3eb1b0_0          12 KB
+    cyrus-sasl-2.1.28          |       h1110e0f_3         242 KB
+    cython-3.0.10              |   py39h5eee18b_0         3.3 MB
+    dav1d-1.2.1                |       h5eee18b_0         823 KB
+    exceptiongroup-1.2.0       |   py39h06a4308_0          29 KB
+    expat-2.7.1                |       h6a678d5_0         182 KB
+    fontconfig-2.14.1          |       h55d465d_3         281 KB
+    fonttools-4.55.3           |   py39h5eee18b_0         2.4 MB
+    freetype-2.13.3            |       h4a9f257_0         686 KB
+    fribidi-1.0.10             |       h7b6447c_0         103 KB
+    graphite2-1.3.14           |       h295c915_1          97 KB
+    harfbuzz-10.2.0            |       hdfddeaa_1         2.3 MB
+    iniconfig-2.1.0            |   py39h06a4308_0          19 KB
+    joblib-1.5.1               |   py39h06a4308_0         625 KB
+    jpeg-9e                    |       h5eee18b_3         262 KB
+    kiwisolver-1.4.4           |   py39h6a678d5_0          76 KB
+    lcms2-2.16                 |       h92b89f2_1         269 KB
+    ld_impl_linux-64-2.40      |       h12ee557_0         710 KB
+    lerc-4.0.0                 |       h6a678d5_0         261 KB
+    libabseil-20250127.0       | cxx17_h6a678d5_0         1.3 MB
+    libavif-1.1.1              |       h5eee18b_0         144 KB
+    libcups-2.4.2              |       h252cb56_2         4.5 MB
+    libcurl-8.14.1             |       hc1efc7f_1         498 KB
+    libdeflate-1.22            |       h5eee18b_0          68 KB
+    libdrm-2.4.124             |       h5eee18b_0         320 KB
+    libegl-1.7.0               |       h5eee18b_2          44 KB
+    libevent-2.1.12            |       hdbd6064_1         453 KB
+    libffi-3.4.4               |       h6a678d5_1         141 KB
+    libgcc-15.1.0              |       h767d61c_4         805 KB  conda-forge
+    libgcc-ng-15.1.0           |       h69a702a_4          29 KB  conda-forge
+    libgfortran-ng-7.5.0       |      ha8ba4b0_17          22 KB
+    libgfortran4-7.5.0         |      ha8ba4b0_17         995 KB
+    libgfortran5-15.1.0        |       hcea5267_4         1.5 MB  conda-forge
+    libgl-1.7.0                |       h5eee18b_2         149 KB
+    libglib-2.84.2             |       h37c7471_0         1.7 MB
+    libglvnd-1.7.0             |       h5eee18b_2         140 KB
+    libglx-1.7.0               |       h5eee18b_2          87 KB
+    libgomp-15.1.0             |       h767d61c_4         437 KB  conda-forge
+    libiconv-1.16              |       h5eee18b_3         759 KB
+    libkrb5-1.21.3             |       h520c7b4_4         874 KB
+    libllvm15-15.0.7           |       he89c38a_4        35.4 MB
+    libopenblas-0.3.29         |       ha39b09d_0         6.5 MB
+    libpciaccess-0.18          |       h5eee18b_0          26 KB
+    libpng-1.6.39              |       h5eee18b_0         304 KB
+    libpq-17.4                 |       h02b6914_2         3.0 MB
+    libprotobuf-5.29.3         |       h3cdef7c_1         3.5 MB
+    libsodium-1.0.18           |       h7b6447c_0         244 KB
+    libssh2-1.11.1             |       h251f7ec_0         308 KB
+    libtiff-4.7.0              |       hde9077f_0         447 KB
+    libwebp-base-1.3.2         |       h5eee18b_1         425 KB
+    libxcb-1.17.0              |       h9b100fa_0         430 KB
+    libxkbcommon-1.9.1         |       h69220b7_0         732 KB
+    libxml2-2.13.8             |       hfdd30dd_0         739 KB
+    lmdb-0.9.31                |       hb25bd0a_0         469 KB
+    lz4-c-1.9.4                |       h6a678d5_1         156 KB
+    matplotlib-3.6.2           |   py39h06a4308_0           8 KB
+    matplotlib-base-3.6.2      |   py39h945d387_0         6.5 MB
+    mesalib-25.1.5             |       h31e3550_0         8.9 MB
+    mysql-8.4.0                |       h721767e_2        56.5 MB
+    ncurses-6.5                |       h7934f7d_0         1.1 MB
+    numexpr-2.8.4              |   py39hd2a5715_1         135 KB
+    numpy-1.19.2               |   py39hc896f84_1          10 KB
+    numpy-base-1.19.2          |   py39h21a3de8_1         4.2 MB
+    openjpeg-2.5.2             |       h0d4d230_1         373 KB
+    openldap-2.6.10            |       h8e75217_0         815 KB
+    openssl-3.0.17             |       h5eee18b_0         5.2 MB
+    packaging-25.0             |   py39h06a4308_0         172 KB
+    pandas-1.4.4               |   py39h6a678d5_0         9.8 MB
+    pcre2-10.42                |       hebb0a14_1         1.3 MB
+    pillow-11.3.0              |   py39hb1c3d2d_0         826 KB
+    pip-25.1                   |     pyhc872135_2         1.3 MB
+    pixman-0.46.4              |       h7934f7d_0         1.9 MB
+    pluggy-1.5.0               |   py39h06a4308_0          37 KB
+    pthread-stubs-0.3          |       h0ce48e5_1           5 KB
+    pygments-2.19.1            |   py39h06a4308_0         1.9 MB
+    pyparsing-3.2.0            |   py39h06a4308_0         421 KB
+    pyqt-6.7.1                 |   py39h8dad735_2         5.0 MB
+    pyqt6-sip-13.9.1           |   py39h6ce4db3_2          80 KB
+    pytest-8.4.1               |   py39h06a4308_0         1.1 MB
+    python-3.9.23              |       he99959a_0        24.7 MB
+    python-dateutil-2.9.0post0 |   py39h06a4308_2         279 KB
+    pytz-2025.2                |   py39h06a4308_0         228 KB
+    qtbase-6.7.3               |       h10a5587_4        11.9 MB
+    qtdeclarative-6.7.3        |       h7934f7d_1        16.2 MB
+    qtsvg-6.7.3                |       he4bddd1_1         291 KB
+    qttools-6.7.3              |       h5a8de97_1         6.6 MB
+    qtwebchannel-6.7.3         |       h7934f7d_1         153 KB
+    qtwebsockets-6.7.3         |       h7934f7d_1         135 KB
+    readline-8.3               |       hc2a1206_0         471 KB
+    scipy-1.5.2                |   py39hf56f3a7_0        14.7 MB
+    setuptools-78.1.1          |   py39h06a4308_0         1.7 MB
+    sip-6.10.0                 |   py39h6a678d5_0         563 KB
+    six-1.17.0                 |   py39h06a4308_0          31 KB
+    spirv-tools-2025.1         |       hdb19cb5_0         2.1 MB
+    sqlite-3.50.2              |       hb25bd0a_1         1.1 MB
+    threadpoolctl-3.5.0        |   py39h2f386ee_0          42 KB
+    tk-8.6.15                  |       h54e0aa7_0         3.4 MB
+    tomli-2.2.1                |   py39h06a4308_0          29 KB
+    tornado-6.5.1              |   py39h5eee18b_0         667 KB
+    tzdata-2025b               |       h04d1e81_0         116 KB
+    unicodedata2-15.1.0        |   py39h5eee18b_1         519 KB
+    wheel-0.45.1               |   py39h06a4308_0         114 KB
+    xcb-util-0.4.1             |       h5eee18b_2          19 KB
+    xcb-util-cursor-0.1.5      |       h5eee18b_0          19 KB
+    xcb-util-image-0.4.0       |       h5eee18b_2          23 KB
+    xcb-util-keysyms-0.4.1     |       h5eee18b_0          13 KB
+    xcb-util-renderutil-0.3.10 |       h5eee18b_0          16 KB
+    xcb-util-wm-0.4.2          |       h5eee18b_0          55 KB
+    xkeyboard-config-2.44      |       h5eee18b_0         411 KB
+    xorg-libice-1.1.2          |       h9b100fa_0          57 KB
+    xorg-libsm-1.2.6           |       h9b100fa_0          26 KB
+    xorg-libx11-1.8.12         |       h9b100fa_1         895 KB
+    xorg-libxau-1.0.12         |       h9b100fa_0          13 KB
+    xorg-libxdmcp-1.1.5        |       h9b100fa_0          19 KB
+    xorg-libxext-1.3.6         |       h9b100fa_0          49 KB
+    xorg-libxfixes-6.0.1       |       h9b100fa_0          18 KB
+    xorg-libxrandr-1.5.4       |       h9b100fa_0          28 KB
+    xorg-libxrender-0.9.12     |       h9b100fa_0          31 KB
+    xorg-libxshmfence-1.3.3    |       h9b100fa_0          11 KB
+    xorg-libxxf86vm-1.1.6      |       h9b100fa_0          16 KB
+    xorg-xorgproto-2024.1      |       h5eee18b_1         580 KB
+    xz-5.6.4                   |       h5eee18b_1         567 KB
+    zlib-1.2.13                |       h5eee18b_1         111 KB
+    zstd-1.5.6                 |       hc292b87_0         664 KB
+    ------------------------------------------------------------
+                                           Total:       282.1 MB
+
+The following NEW packages will be INSTALLED:
+
+  _libgcc_mutex      pkgs/main/linux-64::_libgcc_mutex-0.1-main 
+  _openmp_mutex      pkgs/main/linux-64::_openmp_mutex-5.1-1_gnu 
+  aom                pkgs/main/linux-64::aom-3.6.0-h6a678d5_0 
+  blas               pkgs/main/linux-64::blas-1.0-openblas 
+  bottleneck         pkgs/main/linux-64::bottleneck-1.4.2-py39ha9d4c09_0 
+  brotli-python      pkgs/main/linux-64::brotli-python-1.0.9-py39h6a678d5_9 
+  bzip2              pkgs/main/linux-64::bzip2-1.0.8-h5eee18b_6 
+  c-ares             pkgs/main/linux-64::c-ares-1.19.1-h5eee18b_0 
+  ca-certificates    pkgs/main/linux-64::ca-certificates-2025.7.15-h06a4308_0 
+  cairo              pkgs/main/linux-64::cairo-1.16.0-h44eff21_7 
+  contourpy          pkgs/main/linux-64::contourpy-1.0.5-py39hdb19cb5_0 
+  cycler             pkgs/main/noarch::cycler-0.11.0-pyhd3eb1b0_0 
+  cyrus-sasl         pkgs/main/linux-64::cyrus-sasl-2.1.28-h1110e0f_3 
+  cython             pkgs/main/linux-64::cython-3.0.10-py39h5eee18b_0 
+  dav1d              pkgs/main/linux-64::dav1d-1.2.1-h5eee18b_0 
+  exceptiongroup     pkgs/main/linux-64::exceptiongroup-1.2.0-py39h06a4308_0 
+  expat              pkgs/main/linux-64::expat-2.7.1-h6a678d5_0 
+  fontconfig         pkgs/main/linux-64::fontconfig-2.14.1-h55d465d_3 
+  fonttools          pkgs/main/linux-64::fonttools-4.55.3-py39h5eee18b_0 
+  freetype           pkgs/main/linux-64::freetype-2.13.3-h4a9f257_0 
+  fribidi            pkgs/main/linux-64::fribidi-1.0.10-h7b6447c_0 
+  graphite2          pkgs/main/linux-64::graphite2-1.3.14-h295c915_1 
+  harfbuzz           pkgs/main/linux-64::harfbuzz-10.2.0-hdfddeaa_1 
+  icu                pkgs/main/linux-64::icu-73.1-h6a678d5_0 
+  iniconfig          pkgs/main/linux-64::iniconfig-2.1.0-py39h06a4308_0 
+  joblib             pkgs/main/linux-64::joblib-1.5.1-py39h06a4308_0 
+  jpeg               pkgs/main/linux-64::jpeg-9e-h5eee18b_3 
+  kiwisolver         pkgs/main/linux-64::kiwisolver-1.4.4-py39h6a678d5_0 
+  lcms2              pkgs/main/linux-64::lcms2-2.16-h92b89f2_1 
+  ld_impl_linux-64   pkgs/main/linux-64::ld_impl_linux-64-2.40-h12ee557_0 
+  lerc               pkgs/main/linux-64::lerc-4.0.0-h6a678d5_0 
+  libabseil          pkgs/main/linux-64::libabseil-20250127.0-cxx17_h6a678d5_0 
+  libavif            pkgs/main/linux-64::libavif-1.1.1-h5eee18b_0 
+  libcups            pkgs/main/linux-64::libcups-2.4.2-h252cb56_2 
+  libcurl            pkgs/main/linux-64::libcurl-8.14.1-hc1efc7f_1 
+  libdeflate         pkgs/main/linux-64::libdeflate-1.22-h5eee18b_0 
+  libdrm             pkgs/main/linux-64::libdrm-2.4.124-h5eee18b_0 
+  libedit            pkgs/main/linux-64::libedit-3.1.20230828-h5eee18b_0 
+  libegl             pkgs/main/linux-64::libegl-1.7.0-h5eee18b_2 
+  libev              pkgs/main/linux-64::libev-4.33-h7f8727e_1 
+  libevent           pkgs/main/linux-64::libevent-2.1.12-hdbd6064_1 
+  libffi             pkgs/main/linux-64::libffi-3.4.4-h6a678d5_1 
+  libgcc             conda-forge/linux-64::libgcc-15.1.0-h767d61c_4 
+  libgcc-ng          conda-forge/linux-64::libgcc-ng-15.1.0-h69a702a_4 
+  libgfortran-ng     pkgs/main/linux-64::libgfortran-ng-7.5.0-ha8ba4b0_17 
+  libgfortran4       pkgs/main/linux-64::libgfortran4-7.5.0-ha8ba4b0_17 
+  libgfortran5       conda-forge/linux-64::libgfortran5-15.1.0-hcea5267_4 
+  libgl              pkgs/main/linux-64::libgl-1.7.0-h5eee18b_2 
+  libglib            pkgs/main/linux-64::libglib-2.84.2-h37c7471_0 
+  libglvnd           pkgs/main/linux-64::libglvnd-1.7.0-h5eee18b_2 
+  libglx             pkgs/main/linux-64::libglx-1.7.0-h5eee18b_2 
+  libgomp            conda-forge/linux-64::libgomp-15.1.0-h767d61c_4 
+  libiconv           pkgs/main/linux-64::libiconv-1.16-h5eee18b_3 
+  libkrb5            pkgs/main/linux-64::libkrb5-1.21.3-h520c7b4_4 
+  libllvm15          pkgs/main/linux-64::libllvm15-15.0.7-he89c38a_4 
+  libnghttp2         pkgs/main/linux-64::libnghttp2-1.57.0-h2d74bed_0 
+  libopenblas        pkgs/main/linux-64::libopenblas-0.3.29-ha39b09d_0 
+  libpciaccess       pkgs/main/linux-64::libpciaccess-0.18-h5eee18b_0 
+  libpng             pkgs/main/linux-64::libpng-1.6.39-h5eee18b_0 
+  libpq              pkgs/main/linux-64::libpq-17.4-h02b6914_2 
+  libprotobuf        pkgs/main/linux-64::libprotobuf-5.29.3-h3cdef7c_1 
+  libsodium          pkgs/main/linux-64::libsodium-1.0.18-h7b6447c_0 
+  libssh2            pkgs/main/linux-64::libssh2-1.11.1-h251f7ec_0 
+  libstdcxx-ng       pkgs/main/linux-64::libstdcxx-ng-11.2.0-h1234567_1 
+  libtiff            pkgs/main/linux-64::libtiff-4.7.0-hde9077f_0 
+  libuuid            pkgs/main/linux-64::libuuid-1.41.5-h5eee18b_0 
+  libwebp-base       pkgs/main/linux-64::libwebp-base-1.3.2-h5eee18b_1 
+  libxcb             pkgs/main/linux-64::libxcb-1.17.0-h9b100fa_0 
+  libxkbcommon       pkgs/main/linux-64::libxkbcommon-1.9.1-h69220b7_0 
+  libxml2            pkgs/main/linux-64::libxml2-2.13.8-hfdd30dd_0 
+  lmdb               pkgs/main/linux-64::lmdb-0.9.31-hb25bd0a_0 
+  lz4-c              pkgs/main/linux-64::lz4-c-1.9.4-h6a678d5_1 
+  matplotlib         pkgs/main/linux-64::matplotlib-3.6.2-py39h06a4308_0 
+  matplotlib-base    pkgs/main/linux-64::matplotlib-base-3.6.2-py39h945d387_0 
+  mesalib            pkgs/main/linux-64::mesalib-25.1.5-h31e3550_0 
+  mysql              pkgs/main/linux-64::mysql-8.4.0-h721767e_2 
+  ncurses            pkgs/main/linux-64::ncurses-6.5-h7934f7d_0 
+  numexpr            pkgs/main/linux-64::numexpr-2.8.4-py39hd2a5715_1 
+  numpy              pkgs/main/linux-64::numpy-1.19.2-py39hc896f84_1 
+  numpy-base         pkgs/main/linux-64::numpy-base-1.19.2-py39h21a3de8_1 
+  openjpeg           pkgs/main/linux-64::openjpeg-2.5.2-h0d4d230_1 
+  openldap           pkgs/main/linux-64::openldap-2.6.10-h8e75217_0 
+  openssl            pkgs/main/linux-64::openssl-3.0.17-h5eee18b_0 
+  packaging          pkgs/main/linux-64::packaging-25.0-py39h06a4308_0 
+  pandas             pkgs/main/linux-64::pandas-1.4.4-py39h6a678d5_0 
+  pcre2              pkgs/main/linux-64::pcre2-10.42-hebb0a14_1 
+  pillow             pkgs/main/linux-64::pillow-11.3.0-py39hb1c3d2d_0 
+  pip                pkgs/main/noarch::pip-25.1-pyhc872135_2 
+  pixman             pkgs/main/linux-64::pixman-0.46.4-h7934f7d_0 
+  pluggy             pkgs/main/linux-64::pluggy-1.5.0-py39h06a4308_0 
+  pthread-stubs      pkgs/main/linux-64::pthread-stubs-0.3-h0ce48e5_1 
+  pygments           pkgs/main/linux-64::pygments-2.19.1-py39h06a4308_0 
+  pyparsing          pkgs/main/linux-64::pyparsing-3.2.0-py39h06a4308_0 
+  pyqt               pkgs/main/linux-64::pyqt-6.7.1-py39h8dad735_2 
+  pyqt6-sip          pkgs/main/linux-64::pyqt6-sip-13.9.1-py39h6ce4db3_2 
+  pytest             pkgs/main/linux-64::pytest-8.4.1-py39h06a4308_0 
+  python             pkgs/main/linux-64::python-3.9.23-he99959a_0 
+  python-dateutil    pkgs/main/linux-64::python-dateutil-2.9.0post0-py39h06a4308_2 
+  pytz               pkgs/main/linux-64::pytz-2025.2-py39h06a4308_0 
+  qtbase             pkgs/main/linux-64::qtbase-6.7.3-h10a5587_4 
+  qtdeclarative      pkgs/main/linux-64::qtdeclarative-6.7.3-h7934f7d_1 
+  qtsvg              pkgs/main/linux-64::qtsvg-6.7.3-he4bddd1_1 
+  qttools            pkgs/main/linux-64::qttools-6.7.3-h5a8de97_1 
+  qtwebchannel       pkgs/main/linux-64::qtwebchannel-6.7.3-h7934f7d_1 
+  qtwebsockets       pkgs/main/linux-64::qtwebsockets-6.7.3-h7934f7d_1 
+  readline           pkgs/main/linux-64::readline-8.3-hc2a1206_0 
+  scipy              pkgs/main/linux-64::scipy-1.5.2-py39hf56f3a7_0 
+  setuptools         pkgs/main/linux-64::setuptools-78.1.1-py39h06a4308_0 
+  sip                pkgs/main/linux-64::sip-6.10.0-py39h6a678d5_0 
+  six                pkgs/main/linux-64::six-1.17.0-py39h06a4308_0 
+  spirv-tools        pkgs/main/linux-64::spirv-tools-2025.1-hdb19cb5_0 
+  sqlite             pkgs/main/linux-64::sqlite-3.50.2-hb25bd0a_1 
+  threadpoolctl      pkgs/main/linux-64::threadpoolctl-3.5.0-py39h2f386ee_0 
+  tk                 pkgs/main/linux-64::tk-8.6.15-h54e0aa7_0 
+  tomli              pkgs/main/linux-64::tomli-2.2.1-py39h06a4308_0 
+  tornado            pkgs/main/linux-64::tornado-6.5.1-py39h5eee18b_0 
+  tzdata             pkgs/main/noarch::tzdata-2025b-h04d1e81_0 
+  unicodedata2       pkgs/main/linux-64::unicodedata2-15.1.0-py39h5eee18b_1 
+  wheel              pkgs/main/linux-64::wheel-0.45.1-py39h06a4308_0 
+  xcb-util           pkgs/main/linux-64::xcb-util-0.4.1-h5eee18b_2 
+  xcb-util-cursor    pkgs/main/linux-64::xcb-util-cursor-0.1.5-h5eee18b_0 
+  xcb-util-image     pkgs/main/linux-64::xcb-util-image-0.4.0-h5eee18b_2 
+  xcb-util-keysyms   pkgs/main/linux-64::xcb-util-keysyms-0.4.1-h5eee18b_0 
+  xcb-util-renderut~ pkgs/main/linux-64::xcb-util-renderutil-0.3.10-h5eee18b_0 
+  xcb-util-wm        pkgs/main/linux-64::xcb-util-wm-0.4.2-h5eee18b_0 
+  xkeyboard-config   pkgs/main/linux-64::xkeyboard-config-2.44-h5eee18b_0 
+  xorg-libice        pkgs/main/linux-64::xorg-libice-1.1.2-h9b100fa_0 
+  xorg-libsm         pkgs/main/linux-64::xorg-libsm-1.2.6-h9b100fa_0 
+  xorg-libx11        pkgs/main/linux-64::xorg-libx11-1.8.12-h9b100fa_1 
+  xorg-libxau        pkgs/main/linux-64::xorg-libxau-1.0.12-h9b100fa_0 
+  xorg-libxdmcp      pkgs/main/linux-64::xorg-libxdmcp-1.1.5-h9b100fa_0 
+  xorg-libxext       pkgs/main/linux-64::xorg-libxext-1.3.6-h9b100fa_0 
+  xorg-libxfixes     pkgs/main/linux-64::xorg-libxfixes-6.0.1-h9b100fa_0 
+  xorg-libxrandr     pkgs/main/linux-64::xorg-libxrandr-1.5.4-h9b100fa_0 
+  xorg-libxrender    pkgs/main/linux-64::xorg-libxrender-0.9.12-h9b100fa_0 
+  xorg-libxshmfence  pkgs/main/linux-64::xorg-libxshmfence-1.3.3-h9b100fa_0 
+  xorg-libxxf86vm    pkgs/main/linux-64::xorg-libxxf86vm-1.1.6-h9b100fa_0 
+  xorg-xorgproto     pkgs/main/linux-64::xorg-xorgproto-2024.1-h5eee18b_1 
+  xz                 pkgs/main/linux-64::xz-5.6.4-h5eee18b_1 
+  zlib               pkgs/main/linux-64::zlib-1.2.13-h5eee18b_1 
+  zstd               pkgs/main/linux-64::zstd-1.5.6-hc292b87_0
+2025-08-21 07:51:59,987 - INFO - Downloading and Extracting Packages: ...working... done
+Preparing transaction: ...working...
+2025-08-21 07:52:06,241 - INFO - done
+Verifying transaction: ...working...
+2025-08-21 07:52:14,089 - INFO - done
+2025-08-21 07:52:14,140 - INFO - Executing transaction: ...working...
+2025-08-21 07:53:04,155 - INFO - done
+2025-08-21 07:53:04,382 - INFO - #
+# To activate this environment, use
+#
+#     $ conda activate testbed
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+2025-08-21 07:53:04,604 - INFO - + conda activate testbed
++ local cmd=activate
++ case "$cmd" in
++ __conda_activate activate testbed
++ '[' -n '' ']'
++ local ask_conda
+2025-08-21 07:53:04,604 - INFO - ++ PS1='(base) '
+++ __conda_exe shell.posix activate testbed
+2025-08-21 07:53:04,605 - INFO - ++ /opt/miniconda3/bin/conda shell.posix activate testbed
+2025-08-21 07:53:04,705 - INFO - + ask_conda='PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\''
+. "/opt/miniconda3/envs/testbed/etc/conda/activate.d/activate.sh"
+. "/opt/miniconda3/envs/testbed/etc/conda/activate.d/libglib_activate.sh"'
++ eval 'PS1='\''(testbed) '\''
+export PATH='\''/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'\''
+export CONDA_PREFIX='\''/opt/miniconda3/envs/testbed'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_DEFAULT_ENV='\''testbed'\''
+export CONDA_PROMPT_MODIFIER='\''(testbed) '\''
+export CONDA_PREFIX_1='\''/opt/miniconda3'\''
+export CONDA_EXE='\''/opt/miniconda3/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/opt/miniconda3/bin/python'\''
+. "/opt/miniconda3/envs/testbed/etc/conda/activate.d/activate.sh"
+. "/opt/miniconda3/envs/testbed/etc/conda/activate.d/libglib_activate.sh"'
+++ PS1='(testbed) '
+++ export PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ PATH=/opt/miniconda3/envs/testbed/bin:/opt/miniconda3/condabin:/opt/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++ export CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ CONDA_PREFIX=/opt/miniconda3/envs/testbed
+++ export CONDA_SHLVL=2
+++ CONDA_SHLVL=2
+++ export CONDA_DEFAULT_ENV=testbed
+++ CONDA_DEFAULT_ENV=testbed
+++ export 'CONDA_PROMPT_MODIFIER=(testbed) '
+++ CONDA_PROMPT_MODIFIER='(testbed) '
+++ export CONDA_PREFIX_1=/opt/miniconda3
+++ CONDA_PREFIX_1=/opt/miniconda3
+++ export CONDA_EXE=/opt/miniconda3/bin/conda
+++ CONDA_EXE=/opt/miniconda3/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ CONDA_PYTHON_EXE=/opt/miniconda3/bin/python
+++ . /opt/miniconda3/envs/testbed/etc/conda/activate.d/activate.sh
++++ export __EGL_VENDOR_LIBRARY_DIRS=/opt/miniconda3/envs/testbed/share/glvnd/egl_vendor.d
++++ __EGL_VENDOR_LIBRARY_DIRS=/opt/miniconda3/envs/testbed/share/glvnd/egl_vendor.d
+++ . /opt/miniconda3/envs/testbed/etc/conda/activate.d/libglib_activate.sh
+2025-08-21 07:53:04,705 - INFO - +++ export GSETTINGS_SCHEMA_DIR_CONDA_BACKUP=
++++ GSETTINGS_SCHEMA_DIR_CONDA_BACKUP=
++++ export GSETTINGS_SCHEMA_DIR=/opt/miniconda3/envs/testbed/share/glib-2.0/schemas
++++ GSETTINGS_SCHEMA_DIR=/opt/miniconda3/envs/testbed/share/glib-2.0/schemas
++ __conda_hashr
+2025-08-21 07:53:04,706 - INFO - + '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r
++ python -m pip install cython setuptools numpy scipy
+2025-08-21 07:53:05,393 - INFO - Requirement already satisfied: cython in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (3.0.10)
+2025-08-21 07:53:05,394 - INFO - Requirement already satisfied: setuptools in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (78.1.1)
+Requirement already satisfied: numpy in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (1.19.2)
+Requirement already satisfied: scipy in /opt/miniconda3/envs/testbed/lib/python3.9/site-packages (1.5.2)
+2025-08-21 07:53:05,438 - INFO - WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+2025-08-21 07:55:02,877 - INFO - ---> Removed intermediate container ac9656104c48
+2025-08-21 07:55:02,877 - INFO - ---> 29c161b096e6
+2025-08-21 07:55:02,877 - INFO - Step 6/7 : WORKDIR /testbed/
+2025-08-21 07:55:02,877 - INFO - 
+2025-08-21 07:55:03,807 - INFO - ---> Running in 8852f40d56a3
+2025-08-21 07:55:03,855 - INFO - ---> Removed intermediate container 8852f40d56a3
+2025-08-21 07:55:03,855 - INFO - ---> 8db3c4d83f51
+2025-08-21 07:55:03,855 - INFO - Step 7/7 : RUN echo "source /opt/miniconda3/etc/profile.d/conda.sh && conda activate testbed" > /root/.bashrc
+2025-08-21 07:55:03,855 - INFO - 
+2025-08-21 07:55:03,892 - INFO - ---> Running in 963bb2f78a35
+2025-08-21 07:55:04,465 - INFO - ---> Removed intermediate container 963bb2f78a35
+2025-08-21 07:55:04,465 - INFO - ---> 3ec4a3feb0c8
+2025-08-21 07:55:04,465 - INFO - Successfully built 3ec4a3feb0c8
+2025-08-21 07:55:04,473 - INFO - Successfully tagged sweb.env.x86_64.3a59860bcd0dab8bbfb2ff:latest
+2025-08-21 07:55:04,474 - INFO - Image built successfully!

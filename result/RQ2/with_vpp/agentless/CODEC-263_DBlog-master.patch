@@ -1,0 +1,56 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 8dd2e42..7d348f2 100644
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -20,6 +20,7 @@ import java.security.SecureRandom;
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    private static final Pattern BASE64_PATTERN = Pattern.compile("^[A-Za-z0-9+/]*={0,2}$");
+ 
+     /**
+      * AES加密
+@@ -58,16 +59,34 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        if (!isValidBase64CipherText(encrypted)) {
++            throw new IllegalArgumentException("Invalid Base64 encrypted payload");
++        }
++
+         //实例化
+         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+ 
+         //使用密钥初始化，设置为解密模式
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+-        //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        try {
++            //执行操作
++            byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++            return new String(result, "utf-8");
++        } catch (IllegalArgumentException e) {
++            throw new IllegalArgumentException("Invalid Base64 encrypted payload", e);
++        }
++    }
+ 
+-        return new String(result, "utf-8");
++    private static boolean isValidBase64CipherText(String encrypted) {
++        if (encrypted == null) {
++            return false;
++        }
++        String value = encrypted.trim();
++        if (value.isEmpty() || (value.length() % 4) != 0) {
++            return false;
++        }
++        return BASE64_PATTERN.matcher(value).matches();
+     }
+ 
+     /**
+@@ -92,4 +111,4 @@ public class AesUtil {
+         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
+     }
+ 
+-}
++}

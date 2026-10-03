@@ -1,0 +1,98 @@
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -113,9 +113,94 @@
+         }
+ 
+         String template = FilenameUtils.normalize( templateName, true );
++        if ( template != null )
++        {
++            String unix = template.replace('\\', '/');
++            boolean unc = unix.startsWith("//");
++            StringBuilder normalized = new StringBuilder();
++            int index = 0;
++            if (unc)
++            {
++                normalized.append("//");
++                index = 2;
++            }
++            else if (unix.startsWith("/"))
++            {
++                normalized.append('/');
++                index = 1;
++            }
++
++            java.util.ArrayList<String> parts = new java.util.ArrayList<String>();
++            StringBuilder current = new StringBuilder();
++            for (int i = index; i < unix.length(); i++)
++            {
++                char ch = unix.charAt(i);
++                if (ch == '/')
++                {
++                    if (current.length() > 0)
++                    {
++                        String part = current.toString();
++                        if (".".equals(part))
++                        {
++                            // skip current directory markers
++                        }
++                        else if ("..".equals(part))
++                        {
++                            template = null;
++                            break;
++                        }
++                        else
++                        {
++                            parts.add(part);
++                        }
++                        current.setLength(0);
++                    }
++                }
++                else
++                {
++                    current.append(ch);
++                }
++            }
++            if (template != null && current.length() > 0)
++            {
++                String part = current.toString();
++                if (".".equals(part))
++                {
++                    // skip current directory markers
++                }
++                else if ("..".equals(part))
++                {
++                    template = null;
++                }
++                else
++                {
++                    parts.add(part);
++                }
++            }
++
++            if (template != null)
++            {
++                for (int i = 0; i < parts.size(); i++)
++                {
++                    if (normalized.length() > 0 && normalized.charAt(normalized.length() - 1) != '/')
++                    {
++                        normalized.append('/');
++                    }
++                    normalized.append(parts.get(i));
++                }
++                if (parts.isEmpty() && unc)
++                {
++                    template = null;
++                }
++                else
++                {
++                    template = normalized.toString();
++                }
++            }
++        }
+         if ( template == null || template.length() == 0 )
+         {
+-            String msg = "File resource error: argument " + template +
++            String msg = "File resource error: argument " + templateName +
+                     " contains .. and may be trying to access " +
+                     "content outside of template root.  Rejected.";
+ 

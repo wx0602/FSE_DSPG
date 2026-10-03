@@ -1,0 +1,369 @@
+diff --git a/wallet-gen-dao/src/main/java/com/fr/chain/property/db/entity/PropertyExample.java b/wallet-gen-dao/src/main/java/com/fr/chain/property/db/entity/PropertyExample.java
+index 177deb0..79938b7 100644
+--- a/wallet-gen-dao/src/main/java/com/fr/chain/property/db/entity/PropertyExample.java
++++ b/wallet-gen-dao/src/main/java/com/fr/chain/property/db/entity/PropertyExample.java
+@@ -1764,97 +1764,97 @@ public class PropertyExample {
+         }
+ 
+         public Criteria andPropertyIdLikeInsensitive(String value) {
+-            addCriterion("upper(PROPERTY_ID) like", value.toUpperCase(), "propertyId");
++            addCriterion("upper(PROPERTY_ID) like", safeUpperLikeValue(value), "propertyId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andOrderIdLikeInsensitive(String value) {
+-            addCriterion("upper(ORDER_ID) like", value.toUpperCase(), "orderId");
++            addCriterion("upper(ORDER_ID) like", safeUpperLikeValue(value), "orderId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andMerchantIdLikeInsensitive(String value) {
+-            addCriterion("upper(MERCHANT_ID) like", value.toUpperCase(), "merchantId");
++            addCriterion("upper(MERCHANT_ID) like", safeUpperLikeValue(value), "merchantId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andAppIdLikeInsensitive(String value) {
+-            addCriterion("upper(APP_ID) like", value.toUpperCase(), "appId");
++            addCriterion("upper(APP_ID) like", safeUpperLikeValue(value), "appId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andOpenIdLikeInsensitive(String value) {
+-            addCriterion("upper(OPEN_ID) like", value.toUpperCase(), "openId");
++            addCriterion("upper(OPEN_ID) like", safeUpperLikeValue(value), "openId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andProductIdLikeInsensitive(String value) {
+-            addCriterion("upper(PRODUCT_ID) like", value.toUpperCase(), "productId");
++            addCriterion("upper(PRODUCT_ID) like", safeUpperLikeValue(value), "productId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andPropertyTypeLikeInsensitive(String value) {
+-            addCriterion("upper(PROPERTY_TYPE) like", value.toUpperCase(), "propertyType");
++            addCriterion("upper(PROPERTY_TYPE) like", safeUpperLikeValue(value), "propertyType");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andAddressLikeInsensitive(String value) {
+-            addCriterion("upper(ADDRESS) like", value.toUpperCase(), "address");
++            addCriterion("upper(ADDRESS) like", safeUpperLikeValue(value), "address");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andOriginOpenidLikeInsensitive(String value) {
+-            addCriterion("upper(ORIGIN_OPENID) like", value.toUpperCase(), "originOpenid");
++            addCriterion("upper(ORIGIN_OPENID) like", safeUpperLikeValue(value), "originOpenid");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andIsSelfSupportLikeInsensitive(String value) {
+-            addCriterion("upper(IS_SELF_SUPPORT) like", value.toUpperCase(), "isSelfSupport");
++            addCriterion("upper(IS_SELF_SUPPORT) like", safeUpperLikeValue(value), "isSelfSupport");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andProductDescLikeInsensitive(String value) {
+-            addCriterion("upper(PRODUCT_DESC) like", value.toUpperCase(), "productDesc");
++            addCriterion("upper(PRODUCT_DESC) like", safeUpperLikeValue(value), "productDesc");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andIsDigitLikeInsensitive(String value) {
+-            addCriterion("upper(IS_DIGIT) like", value.toUpperCase(), "isDigit");
++            addCriterion("upper(IS_DIGIT) like", safeUpperLikeValue(value), "isDigit");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andSignTypeLikeInsensitive(String value) {
+-            addCriterion("upper(SIGN_TYPE) like", value.toUpperCase(), "signType");
++            addCriterion("upper(SIGN_TYPE) like", safeUpperLikeValue(value), "signType");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andPropertyNameLikeInsensitive(String value) {
+-            addCriterion("upper(PROPERTY_NAME) like", value.toUpperCase(), "propertyName");
++            addCriterion("upper(PROPERTY_NAME) like", safeUpperLikeValue(value), "propertyName");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andUnitLikeInsensitive(String value) {
+-            addCriterion("upper(UNIT) like", value.toUpperCase(), "unit");
++            addCriterion("upper(UNIT) like", safeUpperLikeValue(value), "unit");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andMinCountLikeInsensitive(String value) {
+-            addCriterion("upper(MIN_COUNT) like", value.toUpperCase(), "minCount");
++            addCriterion("upper(MIN_COUNT) like", safeUpperLikeValue(value), "minCount");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andCountLikeInsensitive(String value) {
+-            addCriterion("upper(COUNT) like", value.toUpperCase(), "count");
++            addCriterion("upper(COUNT) like", safeUpperLikeValue(value), "count");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andUrlLikeInsensitive(String value) {
+-            addCriterion("upper(URL) like", value.toUpperCase(), "url");
++            addCriterion("upper(URL) like", safeUpperLikeValue(value), "url");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andDescriptionLikeInsensitive(String value) {
+-            addCriterion("upper(DESCRIPTION) like", value.toUpperCase(), "description");
++            addCriterion("upper(DESCRIPTION) like", safeUpperLikeValue(value), "description");
+             return (Criteria) this;
+         }
+     }
+diff --git a/wallet-gen-dao/src/main/java/com/fr/chain/trade/db/entity/TradeFlowExample.java b/wallet-gen-dao/src/main/java/com/fr/chain/trade/db/entity/TradeFlowExample.java
+index 0a10b3d..4cd8574 100644
+--- a/wallet-gen-dao/src/main/java/com/fr/chain/trade/db/entity/TradeFlowExample.java
++++ b/wallet-gen-dao/src/main/java/com/fr/chain/trade/db/entity/TradeFlowExample.java
+@@ -1884,97 +1884,97 @@ public class TradeFlowExample {
+         }
+ 
+         public Criteria andFlowIdLikeInsensitive(String value) {
+-            addCriterion("upper(FLOW_ID) like", value.toUpperCase(), "flowId");
++            addCriterion("upper(FLOW_ID) like", safeUpperLikeValue(value), "flowId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andOrderIdLikeInsensitive(String value) {
+-            addCriterion("upper(ORDER_ID) like", value.toUpperCase(), "orderId");
++            addCriterion("upper(ORDER_ID) like", safeUpperLikeValue(value), "orderId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andMerchantIdLikeInsensitive(String value) {
+-            addCriterion("upper(MERCHANT_ID) like", value.toUpperCase(), "merchantId");
++            addCriterion("upper(MERCHANT_ID) like", safeUpperLikeValue(value), "merchantId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andAppIdLikeInsensitive(String value) {
+-            addCriterion("upper(APP_ID) like", value.toUpperCase(), "appId");
++            addCriterion("upper(APP_ID) like", safeUpperLikeValue(value), "appId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andOpenIdLikeInsensitive(String value) {
+-            addCriterion("upper(OPEN_ID) like", value.toUpperCase(), "openId");
++            addCriterion("upper(OPEN_ID) like", safeUpperLikeValue(value), "openId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andOriginOpenidLikeInsensitive(String value) {
+-            addCriterion("upper(ORIGIN_OPENID) like", value.toUpperCase(), "originOpenid");
++            addCriterion("upper(ORIGIN_OPENID) like", safeUpperLikeValue(value), "originOpenid");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andProductIdLikeInsensitive(String value) {
+-            addCriterion("upper(PRODUCT_ID) like", value.toUpperCase(), "productId");
++            addCriterion("upper(PRODUCT_ID) like", safeUpperLikeValue(value), "productId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andPropertyTypeLikeInsensitive(String value) {
+-            addCriterion("upper(PROPERTY_TYPE) like", value.toUpperCase(), "propertyType");
++            addCriterion("upper(PROPERTY_TYPE) like", safeUpperLikeValue(value), "propertyType");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andIsSelfSupportLikeInsensitive(String value) {
+-            addCriterion("upper(IS_SELF_SUPPORT) like", value.toUpperCase(), "isSelfSupport");
++            addCriterion("upper(IS_SELF_SUPPORT) like", safeUpperLikeValue(value), "isSelfSupport");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andProductDescLikeInsensitive(String value) {
+-            addCriterion("upper(PRODUCT_DESC) like", value.toUpperCase(), "productDesc");
++            addCriterion("upper(PRODUCT_DESC) like", safeUpperLikeValue(value), "productDesc");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andIsDigitLikeInsensitive(String value) {
+-            addCriterion("upper(IS_DIGIT) like", value.toUpperCase(), "isDigit");
++            addCriterion("upper(IS_DIGIT) like", safeUpperLikeValue(value), "isDigit");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andSigntypeLikeInsensitive(String value) {
+-            addCriterion("upper(SIGNTYPE) like", value.toUpperCase(), "signtype");
++            addCriterion("upper(SIGNTYPE) like", safeUpperLikeValue(value), "signtype");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andPropertyNameLikeInsensitive(String value) {
+-            addCriterion("upper(PROPERTY_NAME) like", value.toUpperCase(), "propertyName");
++            addCriterion("upper(PROPERTY_NAME) like", safeUpperLikeValue(value), "propertyName");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andUnitLikeInsensitive(String value) {
+-            addCriterion("upper(UNIT) like", value.toUpperCase(), "unit");
++            addCriterion("upper(UNIT) like", safeUpperLikeValue(value), "unit");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andMincountLikeInsensitive(String value) {
+-            addCriterion("upper(MINCOUNT) like", value.toUpperCase(), "mincount");
++            addCriterion("upper(MINCOUNT) like", safeUpperLikeValue(value), "mincount");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andCountLikeInsensitive(String value) {
+-            addCriterion("upper(COUNT) like", value.toUpperCase(), "count");
++            addCriterion("upper(COUNT) like", safeUpperLikeValue(value), "count");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andUrlLikeInsensitive(String value) {
+-            addCriterion("upper(URL) like", value.toUpperCase(), "url");
++            addCriterion("upper(URL) like", safeUpperLikeValue(value), "url");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andDescriptionLikeInsensitive(String value) {
+-            addCriterion("upper(DESCRIPTION) like", value.toUpperCase(), "description");
++            addCriterion("upper(DESCRIPTION) like", safeUpperLikeValue(value), "description");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andAddressLikeInsensitive(String value) {
+-            addCriterion("upper(ADDRESS) like", value.toUpperCase(), "address");
++            addCriterion("upper(ADDRESS) like", safeUpperLikeValue(value), "address");
+             return (Criteria) this;
+         }
+     }
+diff --git a/wallet-gen-dao/src/main/java/com/fr/chain/trade/db/entity/TradeOrderExample.java b/wallet-gen-dao/src/main/java/com/fr/chain/trade/db/entity/TradeOrderExample.java
+index 84a79b6..dbf8828 100644
+--- a/wallet-gen-dao/src/main/java/com/fr/chain/trade/db/entity/TradeOrderExample.java
++++ b/wallet-gen-dao/src/main/java/com/fr/chain/trade/db/entity/TradeOrderExample.java
+@@ -1954,102 +1954,102 @@ public class TradeOrderExample {
+         }
+ 
+         public Criteria andOrderIdLikeInsensitive(String value) {
+-            addCriterion("upper(ORDER_ID) like", value.toUpperCase(), "orderId");
++            addCriterion("upper(ORDER_ID) like", safeUpperLikeValue(value), "orderId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andMerchantIdLikeInsensitive(String value) {
+-            addCriterion("upper(MERCHANT_ID) like", value.toUpperCase(), "merchantId");
++            addCriterion("upper(MERCHANT_ID) like", safeUpperLikeValue(value), "merchantId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andAppIdLikeInsensitive(String value) {
+-            addCriterion("upper(APP_ID) like", value.toUpperCase(), "appId");
++            addCriterion("upper(APP_ID) like", safeUpperLikeValue(value), "appId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andOpenIdLikeInsensitive(String value) {
+-            addCriterion("upper(OPEN_ID) like", value.toUpperCase(), "openId");
++            addCriterion("upper(OPEN_ID) like", safeUpperLikeValue(value), "openId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andFromOpenIdLikeInsensitive(String value) {
+-            addCriterion("upper(FROM_OPEN_ID) like", value.toUpperCase(), "fromOpenId");
++            addCriterion("upper(FROM_OPEN_ID) like", safeUpperLikeValue(value), "fromOpenId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andToOpenIdLikeInsensitive(String value) {
+-            addCriterion("upper(TO_OPEN_ID) like", value.toUpperCase(), "toOpenId");
++            addCriterion("upper(TO_OPEN_ID) like", safeUpperLikeValue(value), "toOpenId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andOriginOpenidLikeInsensitive(String value) {
+-            addCriterion("upper(ORIGIN_OPENID) like", value.toUpperCase(), "originOpenid");
++            addCriterion("upper(ORIGIN_OPENID) like", safeUpperLikeValue(value), "originOpenid");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andProductIdLikeInsensitive(String value) {
+-            addCriterion("upper(PRODUCT_ID) like", value.toUpperCase(), "productId");
++            addCriterion("upper(PRODUCT_ID) like", safeUpperLikeValue(value), "productId");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andPropertyTypeLikeInsensitive(String value) {
+-            addCriterion("upper(PROPERTY_TYPE) like", value.toUpperCase(), "propertyType");
++            addCriterion("upper(PROPERTY_TYPE) like", safeUpperLikeValue(value), "propertyType");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andIsSelfSupportLikeInsensitive(String value) {
+-            addCriterion("upper(IS_SELF_SUPPORT) like", value.toUpperCase(), "isSelfSupport");
++            addCriterion("upper(IS_SELF_SUPPORT) like", safeUpperLikeValue(value), "isSelfSupport");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andProductDescLikeInsensitive(String value) {
+-            addCriterion("upper(PRODUCT_DESC) like", value.toUpperCase(), "productDesc");
++            addCriterion("upper(PRODUCT_DESC) like", safeUpperLikeValue(value), "productDesc");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andIsDigitLikeInsensitive(String value) {
+-            addCriterion("upper(IS_DIGIT) like", value.toUpperCase(), "isDigit");
++            addCriterion("upper(IS_DIGIT) like", safeUpperLikeValue(value), "isDigit");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andSigntypeLikeInsensitive(String value) {
+-            addCriterion("upper(SIGNTYPE) like", value.toUpperCase(), "signtype");
++            addCriterion("upper(SIGNTYPE) like", safeUpperLikeValue(value), "signtype");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andPropertyNameLikeInsensitive(String value) {
+-            addCriterion("upper(PROPERTY_NAME) like", value.toUpperCase(), "propertyName");
++            addCriterion("upper(PROPERTY_NAME) like", safeUpperLikeValue(value), "propertyName");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andUnitLikeInsensitive(String value) {
+-            addCriterion("upper(UNIT) like", value.toUpperCase(), "unit");
++            addCriterion("upper(UNIT) like", safeUpperLikeValue(value), "unit");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andMincountLikeInsensitive(String value) {
+-            addCriterion("upper(MINCOUNT) like", value.toUpperCase(), "mincount");
++            addCriterion("upper(MINCOUNT) like", safeUpperLikeValue(value), "mincount");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andCountLikeInsensitive(String value) {
+-            addCriterion("upper(COUNT) like", value.toUpperCase(), "count");
++            addCriterion("upper(COUNT) like", safeUpperLikeValue(value), "count");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andUrlLikeInsensitive(String value) {
+-            addCriterion("upper(URL) like", value.toUpperCase(), "url");
++            addCriterion("upper(URL) like", safeUpperLikeValue(value), "url");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andDescriptionLikeInsensitive(String value) {
+-            addCriterion("upper(DESCRIPTION) like", value.toUpperCase(), "description");
++            addCriterion("upper(DESCRIPTION) like", safeUpperLikeValue(value), "description");
+             return (Criteria) this;
+         }
+ 
+         public Criteria andAddressLikeInsensitive(String value) {
+-            addCriterion("upper(ADDRESS) like", value.toUpperCase(), "address");
++            addCriterion("upper(ADDRESS) like", safeUpperLikeValue(value), "address");
+             return (Criteria) this;
+         }
+     }
