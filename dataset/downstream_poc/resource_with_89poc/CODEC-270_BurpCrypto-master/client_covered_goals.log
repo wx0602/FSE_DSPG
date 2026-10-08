@@ -1,0 +1,6 @@
+burp.aes.AesUtil.<init>()V: root-Branch
+burp.aes.AesUtil.decrypt(Ljava/lang/String;)Ljava/lang/String;: root-Branch
+org.apache.commons.codec.binary.Base64.decodeBase64(Ljava/lang/String;)[B: root-Branch
+burp.aes.AesUtil.encrypt([B)Ljava/lang/String;: root-Branch
+burp.aes.AesUtil.fail(Ljava/lang/Exception;)Ljava/lang/IllegalStateException;: root-Branch
+burp.aes.AesUtil.setConfig(Lburp/aes/AesConfig;)V: root-Branch

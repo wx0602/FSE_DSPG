@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""统计“自生成上游补丁+漏洞链”相对其他实验独有的修复成功数。"""
+"""Count repair successes unique to "self-generated upstream patch + vulnerability chain" relative to the other experiments."""
 
 from __future__ import annotations
 
@@ -15,23 +15,23 @@ sys.path.insert(0, str(WORKSPACE_ROOT))
 from build_result_matrices import build_matrix, find_latest_pipeline
 
 
-MERGED_ROOT = ROOT / "poc合并"
-COMBINED = "带自生成上游补丁加漏洞链验证结果_矩阵.csv"
-SELF_GENERATED = "带自生成上游补丁验证结果_矩阵.csv"
-VULNERABILITY_CHAIN = "带漏洞链验证结果_矩阵.csv"
+MERGED_ROOT = ROOT / "poc_merged"
+COMBINED = "with_selfgen_upstream_patch_and_vuln_chain_matrix.csv"
+SELF_GENERATED = "with_selfgen_upstream_patch_matrix.csv"
+VULNERABILITY_CHAIN = "with_vuln_chain_validation_matrix.csv"
 
 CRITERIA = (
-    ("所有PoC都通过", "所有PoC都通过_AND"),
-    ("至少一个PoC通过（部分修复成功）", "至少一个PoC通过_OR"),
+    ("all_pocs_pass", "all_pocs_pass_AND"),
+    ("at_least_one_poc_pass_partial_success", "at_least_one_poc_pass_OR"),
 )
 
 OUTPUTS = (
     (
-        ROOT / "组合组有_但自生成上游补丁和漏洞链均无_各工具成功数.csv",
+        ROOT / "combined_has_but_selfgen_patch_and_vuln_chain_absent_success_counts.csv",
         "self_and_chain_absent",
     ),
     (
-        ROOT / "组合组有_但漏洞链和上游仓库均无_各工具成功数.csv",
+        ROOT / "combined_has_but_vuln_chain_and_repo_absent_success_counts.csv",
         "chain_and_repository_absent",
     ),
 )
@@ -41,12 +41,12 @@ def read_success_sets(path: Path) -> tuple[list[str], dict[str, set[str]]]:
     with path.open("r", encoding="utf-8-sig", newline="") as file:
         reader = csv.DictReader(file)
         if not reader.fieldnames or reader.fieldnames[0] != "target_id":
-            raise ValueError(f"CSV 第一列必须是 target_id：{path}")
+            raise ValueError(f"the first CSV column must be target_id: {path}")
         tools = list(reader.fieldnames[1:])
         rows = list(reader)
 
     if len(rows) != 63 or len(tools) != 9:
-        raise ValueError(f"矩阵不是 63×9：{path}")
+        raise ValueError(f"matrix is not 63x9: {path}")
     return tools, {
         tool: {row["target_id"] for row in rows if row[tool] == "success"}
         for tool in tools
@@ -55,10 +55,10 @@ def read_success_sets(path: Path) -> tuple[list[str], dict[str, set[str]]]:
 
 def read_upstream_repository_success_sets(
 ) -> tuple[list[str], dict[str, set[str]]]:
-    pipeline = find_latest_pipeline(WORKSPACE_ROOT / "带上游仓库验证结果")
+    pipeline = find_latest_pipeline(WORKSPACE_ROOT / "upstream_repo_validation")
     tools, targets, matrix = build_matrix(pipeline)
     if len(targets) != 63 or len(tools) != 9:
-        raise ValueError(f"上游仓库矩阵不是 63×9：{pipeline}")
+        raise ValueError(f"upstream repository matrix is not 63x9: {pipeline}")
     return tools, {
         tool: {target for target in targets if matrix[target][tool] == "success"}
         for tool in tools
@@ -77,7 +77,7 @@ def calculate() -> tuple[list[str], dict[str, dict[str, dict[str, int]]]]:
         self_tools, self_generated = read_success_sets(folder / SELF_GENERATED)
         chain_tools, chain = read_success_sets(folder / VULNERABILITY_CHAIN)
         if tools != self_tools or tools != chain_tools or tools != upstream_tools:
-            raise ValueError(f"工具列或顺序不一致：{criterion_folder}")
+            raise ValueError(f"tool columns or their order differ: {criterion_folder}")
 
         results["self_and_chain_absent"][criterion_label] = {
             tool: len(combined[tool] - self_generated[tool] - chain[tool])
@@ -97,12 +97,12 @@ def main() -> None:
     for output, result_key in OUTPUTS:
         with output.open("w", encoding="utf-8-sig", newline="") as file:
             writer = csv.writer(file)
-            writer.writerow(["工具名", *criterion_labels])
+            writer.writerow(["tool_name", *criterion_labels])
             for tool in tools:
                 writer.writerow(
                     [tool, *(results[result_key][label][tool] for label in criterion_labels)]
                 )
-        print(f"已生成：{output}")
+        print(f"Generated: {output}")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""整理“上游补丁失败，但其修复意图启发下游修复成功”的人工复核案例。"""
+"""Curate the manually reviewed cases where an upstream patch failed but its repair intent inspired a successful downstream repair."""
 
 from __future__ import annotations
 
@@ -12,12 +12,12 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 RESULT_ROOT = HERE.parent
 AVR_ROOT = RESULT_ROOT.parent
-OUTPUT = HERE / "自生成上游补丁启发下游修复成功案例"
+OUTPUT = HERE / "selfgen_patch_inspired_downstream_success_cases"
 
-UPSTREAM_CSV = RESULT_ROOT / "上下游修复对比/matched_cve_details.csv"
-BASE_MATRIX = HERE / "poc合并/所有PoC都通过/CVE 描述验证结果_矩阵.csv"
-SELF_MATRIX = HERE / "poc合并/所有PoC都通过/带自生成上游补丁验证结果_矩阵.csv"
-EXPERIMENT = RESULT_ROOT / "带自生成上游补丁验证结果"
+UPSTREAM_CSV = RESULT_ROOT / "upstream_downstream_comparison/matched_cve_details.csv"
+BASE_MATRIX = HERE / "poc_merged/all_pocs_pass/cve_description_validation_matrix.csv"
+SELF_MATRIX = HERE / "poc_merged/all_pocs_pass/with_selfgen_upstream_patch_matrix.csv"
+EXPERIMENT = RESULT_ROOT / "with_selfgen_upstream_patch_results"
 PIPELINE = EXPERIMENT / "nine_patch_validation_20260824_195016"
 
 CASES = (
@@ -28,17 +28,17 @@ CASES = (
         "cve": "CVE-2017-7957",
         "target": "CVE-2017-7957_cqrs-lottery-master",
         "up_status": "Not Fixed",
-        "base_status": "编译错误",
+        "base_status": "compile_error",
         "repo": AVR_ROOT / "upstream_dataset/upstream_repo_agentless/CVE-2017-7957/repo",
-        "patch": EXPERIMENT / "正则化的补丁/normalized_patches_agentless_20260821_214849/CVE-2017-7957_cqrs-lottery-master.patch",
+        "patch": EXPERIMENT / "normalized_patches/normalized_patches_agentless_20260821_214849/CVE-2017-7957_cqrs-lottery-master.patch",
         "baseline": PIPELINE / "baseline_run_01/summary.csv",
         "patched": PIPELINE / "01_normalized_patches_agentless_20260821_214849/patched/summary.csv",
-        "up_strategy": "在 XStream 的 Primitives.primitiveType 内部将 Void.TYPE 转为 null",
-        "down_strategy": "在应用的 XStreamEventSerializer 配置层显式 denyTypes(Void.TYPE)",
+        "Convert Void.TYPE to null inside XStream's Primitives.primitiveType"
+        "Explicitly denyTypes(Void.TYPE) at the application's XStreamEventSerializer configuration layer"
         "analysis": (
-            "上游补丁已经识别到危险点与 void/Void.TYPE 的类型解析有关，但在通用库的类型映射层"
-            "修改后仍被判定为 Not Fixed。下游没有照搬该实现，而是在项目的 XStream 初始化位置"
-            "直接拒绝 Void.TYPE，以更局部、更适合下游架构的方式实现了同一安全意图。"
+            "The upstream patch had already identified that the dangerous point concerns the type"
+            "resolution of void/Void.TYPE, but modifying the generic library's type-mapping layer still"
+            "left it Not Fixed. The downstream project did not copy that implementation; it rejected Void.TYPE directly at the project's XStream initialisation point, achieving the same security intent in a more local way that better fits the downstream architecture."
         ),
     },
     {
@@ -48,17 +48,17 @@ CASES = (
         "cve": "CVE-2018-15756",
         "target": "CVE-2018-15756_mirage",
         "up_status": "Not Fixed",
-        "base_status": "修复失败",
+        "base_status": "repair_failed",
         "repo": AVR_ROOT / "upstream_dataset/upstream_repo_appatch/CVE-2018-15756/repo",
-        "patch": EXPERIMENT / "正则化的补丁/normalized_patches_appatch_20260823_154146/CVE-2018-15756_mirage.patch",
+        "patch": EXPERIMENT / "normalized_patches/normalized_patches_appatch_20260823_154146/CVE-2018-15756_mirage.patch",
         "baseline": PIPELINE / "baseline_run_01/summary.csv",
         "patched": PIPELINE / "02_normalized_patches_appatch_20260823_154146/patched/summary.csv",
-        "up_strategy": "在 Spring ResourceHttpRequestHandler 中限制 HTTP Range 数量",
-        "down_strategy": "在 Mirage ResponseDelegate.file 的 Range 解析后执行项目级数量限制",
+        "Limit the number of HTTP Range headers in Spring's ResourceHttpRequestHandler"
+        "Apply a project-level limit after Range parsing in Mirage's ResponseDelegate.file"
         "analysis": (
-            "上游补丁正确指向恶意的过量 HTTP Range，但它修改的是 Spring 框架中的资源处理器，"
-            "验证结果仍为 Not Fixed。下游 Mirage 没有相同控制流，因此把限制 Range 数量的意图"
-            "迁移到 ResponseDelegate.file 边界，在本地解析后拒绝超过 100 个 Range 的请求。"
+            "The upstream patch correctly pointed at the malicious excessive HTTP Range, but it modified the resource handler inside the Spring framework, so the"
+            "validation result was still Not Fixed. Downstream Mirage has no such control flow, so the intent of limiting the number of Ranges was"
+            "migrated to the ResponseDelegate.file boundary, rejecting requests with more than 100 Ranges after local parsing."
         ),
     },
     {
@@ -68,17 +68,17 @@ CASES = (
         "cve": "CVE-2021-23899",
         "target": "CVE-2021-23899_json-sanitizer",
         "up_status": "Compilation Failed",
-        "base_status": "修复失败",
+        "base_status": "repair_failed",
         "repo": AVR_ROOT / "upstream_dataset/upstream_repo_reinfix/CVE-2021-23899/repo",
-        "patch": EXPERIMENT / "正则化的补丁/normalized_patches_reinfix_20260821_214849/CVE-2021-23899_json-sanitizer.patch",
+        "patch": EXPERIMENT / "normalized_patches/normalized_patches_reinfix_20260821_214849/CVE-2021-23899_json-sanitizer.patch",
         "baseline": PIPELINE / "baseline_run_01/summary.csv",
         "patched": PIPELINE / "06_normalized_patches_reinfix_20260821_214849/patched/summary.csv",
-        "up_strategy": "深入改写 JsonSanitizer 内部字符串状态机和转义逻辑",
-        "down_strategy": "保留库调用，在应用封装层后处理 script 与 CDATA 结束标记",
+        "Deeply rewrite the internal string state machine and escaping logic of JsonSanitizer"
+        "Keep the library call and post-process the script and CDATA closing markers in the application wrapper layer"
         "analysis": (
-            "上游补丁已聚焦于 script 和 CDATA 结束标记等嵌入上下文危险输出，但通过大幅改写"
-            " sanitizer 内部状态机来修复，最终导致 Compilation Failed。下游保留原有 sanitize"
-            " 调用，只在应用封装函数的输出端做针对性转义，从而避免侵入式改造并通过验证。"
+            "The upstream patch had already focused on dangerous embedded-context output such as script and CDATA closing markers, but it fixed the"
+            " issue by heavily rewriting the sanitizer's internal state machine, which ultimately resulted in Compilation Failed. The downstream fix keeps the original sanitize"
+            " call and applies targeted escaping only at the output end of the application wrapper function, avoiding an invasive rewrite and passing validation."
         ),
     },
 )
@@ -92,7 +92,7 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 def one_row(path: Path, target: str) -> dict[str, str]:
     selected = [row for row in read_csv(path) if row["target_id"] == target]
     if len(selected) != 1:
-        raise ValueError(f"{path}: {target} 的记录数为 {len(selected)}")
+        raise ValueError(f"{path}: expected exactly one record for {target}, found {len(selected)}")
     return selected[0]
 
 
@@ -103,7 +103,7 @@ def git_diff(repo: Path) -> bytes:
         stdout=subprocess.PIPE,
     )
     if not result.stdout:
-        raise ValueError(f"上游工作树没有可导出的补丁：{repo}")
+        raise ValueError(f"the upstream working tree has no exportable patch: {repo}")
     return result.stdout
 
 
@@ -124,82 +124,82 @@ def main() -> None:
         base_status = base[target][tool]
         self_status = self_matrix[target][tool]
         if up_status != case["up_status"]:
-            raise ValueError(f"{case['folder']}: 上游状态变为 {up_status}")
+            raise ValueError(f"{case['folder']}: upstream status changed to {up_status}")
         if base_status != case["base_status"]:
-            raise ValueError(f"{case['folder']}: 仅CVE描述状态变为 {base_status}")
+            raise ValueError(f"{case['folder']}: CVE-description-only status changed to {base_status}")
         if self_status != "success":
-            raise ValueError(f"{case['folder']}: 自生成上游补丁状态变为 {self_status}")
+            raise ValueError(f"{case['folder']}: self-generated-upstream-patch status changed to {self_status}")
 
         baseline = one_row(case["baseline"], target)
         patched = one_row(case["patched"], target)
         case_dir = OUTPUT / case["folder"]
         case_dir.mkdir(parents=True, exist_ok=True)
-        (case_dir / "上游失败补丁.patch").write_bytes(git_diff(case["repo"]))
-        shutil.copy2(case["patch"], case_dir / "下游成功补丁.patch")
+        (case_dir / "upstream_failed_patch.patch").write_bytes(git_diff(case["repo"]))
+        shutil.copy2(case["patch"], case_dir / "downstream_successful_patch.patch")
 
         analysis = f"""# {case['up_tool']} / {case['cve']} / {target}
 
-## 结果证据
+## Result evidence
 
-- 上游修复结果：{up_status}
-- 下游“仅 CVE 描述”结果：{base_status}
-- 下游“增加自生成上游补丁”结果：{self_status}（所有 PoC 都通过/AND 口径）
-- 下游验证：match_count {baseline['match_count']} -> {patched['match_count']}
-- 补丁后编译：{patched['compile_ok']}
-- PoC 特征：{patched['expected']}
+- Upstream repair result: {up_status}
+- Downstream "CVE description only" result: {base_status}
+- Downstream "with self-generated upstream patch" result: {self_status} (all PoCs pass / AND criterion)
+- Downstream validation: match_count {baseline['match_count']} -> {patched['match_count']}
+- Post-patch compilation: {patched['compile_ok']}
+- PoC signature: {patched['expected']}
 
-## 修复策略对比
+## Repair-strategy comparison
 
-- 上游策略：{case['up_strategy']}。
-- 下游策略：{case['down_strategy']}。
+- Upstream strategy: {case['up_strategy']}.
+- Downstream strategy: {case['down_strategy']}.
 
-## 结论
+## Conclusion
 
 {case['analysis']}
 
-## 随附材料
+## Accompanying material
 
-- 上游失败补丁.patch：从该工具的上游仓库工作树导出。
-- 下游成功补丁.patch：来自“带自生成上游补丁验证结果”的对应正则化补丁。
+- upstream_failed_patch.patch: exported from that tool's upstream repository working tree.
+- downstream_successful_patch.patch: the corresponding normalized patch from "with_selfgen_upstream_patch_results".
 """
-        (case_dir / "案例分析.md").write_text(analysis, encoding="utf-8")
+        (case_dir / "case_analysis.md").write_text(analysis, encoding="utf-8")
         summary.append(
             {
-                "编号": f"{number:02d}",
-                "工具": case["up_tool"],
+                "index": f"{number:02d}",
+                "tool": case["up_tool"],
                 "CVE": case["cve"],
                 "target_id": target,
-                "上游修复状态": up_status,
-                "仅CVE描述状态": base_status,
-                "增加自生成上游补丁状态": self_status,
+                "upstream_repair_status": up_status,
+                "cve_description_only_status": base_status,
+                "with_selfgen_upstream_patch_status": self_status,
                 "baseline_match_count": baseline["match_count"],
                 "patched_match_count": patched["match_count"],
-                "上游策略": case["up_strategy"],
-                "下游策略": case["down_strategy"],
+                "upstream_strategy": case["up_strategy"],
+                "downstream_strategy": case["down_strategy"],
             }
         )
 
-    with (OUTPUT / "案例汇总.csv").open("w", encoding="utf-8-sig", newline="") as handle:
+    with (OUTPUT / "case_summary.csv").open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(summary[0]))
         writer.writeheader()
         writer.writerows(summary)
 
-    readme = """# 自生成上游补丁失败、但启发下游修复成功的案例
+    readme = """# Cases where the self-generated upstream patch failed but inspired a successful downstream repair
 
-本目录收录 3 个经过代码级人工复核的案例。筛选条件：
+This directory collects 3 cases that were manually reviewed at the code level. Selection criteria:
 
-1. 同一工具在上游仓库的结果不是 Fixed。
-2. 同一工具在下游“增加自生成上游补丁”实验中为 success。
-3. 使用严格的“所有 PoC 都通过（AND）”口径。
-4. 人工比较后，上游尝试与下游成功补丁具有一致的安全意图，但修改落点或实现策略不同。
+1. The same tool's result on the upstream repository is not Fixed.
+2. The same tool is success in the downstream "with self-generated upstream patch" experiment.
+3. The strict "all PoCs pass (AND)" criterion is used.
+4. After manual comparison, the upstream attempt and the downstream successful patch share the same security intent, but differ in where or how the fix is applied.
 
-每个子目录包含上游失败补丁、下游成功补丁和案例分析。
+Each subdirectory contains the upstream failed patch, the downstream successful patch, and the case analysis.
 
-注意：这些案例支持“上游失败尝试仍可提供有用修复意图”的机制解释，但验证结果本身不能
-直接证明模型内部的“理解”过程。
+Note: these cases support the mechanistic explanation that "a failed upstream attempt can still provide useful repair intent", but the validation
+results themselves do not directly prove the model's internal "understanding" process.
 """
     (OUTPUT / "README.md").write_text(readme, encoding="utf-8")
-    print(f"已生成 {len(CASES)} 个案例：{OUTPUT}")
+    print(f"Generated {len(CASES)} cases: {OUTPUT}")
 
 
 if __name__ == "__main__":

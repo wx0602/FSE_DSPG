@@ -1,0 +1,79 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea28688a144e5693f3c5baae8228a312ab11..d0ad132dae730e98ab6a296e36756c9659342b61 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -59,6 +59,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        validateBase64(encrypted);
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -79,6 +80,66 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    /**
++     * commons-codec 1.13 does not reject non-zero bits in the unused part of
++     * the final Base64 character (for example, {@code AB==}).  Validate the
++     * input before handing it to that decoder so that different encodings
++     * cannot represent the same ciphertext.
++     */
++    private static void validateBase64(final String encoded) {
++        if (encoded == null) {
++            throw new IllegalArgumentException("Base64 value must not be null");
++        }
++
++        int length = 0;
++        int padding = 0;
++        int lastValue = -1;
++        boolean paddingStarted = false;
++        for (int i = 0; i < encoded.length(); i++) {
++            final char character = encoded.charAt(i);
++            if (character == ' ' || character == '\t' || character == '\r' || character == '\n') {
++                continue;
++            }
++            if (character == '=') {
++                paddingStarted = true;
++                padding++;
++                if (padding > 2) {
++                    throw new IllegalArgumentException("Invalid Base64 padding");
++                }
++                continue;
++            }
++            if (paddingStarted) {
++                throw new IllegalArgumentException("Invalid Base64 padding");
++            }
++            final int value;
++            if (character >= 'A' && character <= 'Z') {
++                value = character - 'A';
++            } else if (character >= 'a' && character <= 'z') {
++                value = character - 'a' + 26;
++            } else if (character >= '0' && character <= '9') {
++                value = character - '0' + 52;
++            } else if (character == '+' || character == '-') {
++                value = 62;
++            } else if (character == '/' || character == '_') {
++                value = 63;
++            } else {
++                throw new IllegalArgumentException("Invalid Base64 character");
++            }
++            lastValue = value;
++            length++;
++        }
++
++        if ((length + padding) % 4 == 1 || padding > 0 && (length + padding) % 4 != 0) {
++            throw new IllegalArgumentException("Invalid Base64 length");
++        }
++        // Padding is optional for Base64, so derive this from the number of
++        // data characters as well as the padded form.
++        final int droppedBits = length % 4 == 2 ? 4 : length % 4 == 3 ? 2 : 0;
++        if (droppedBits > 0 && (lastValue & ((1 << droppedBits) - 1)) != 0) {
++            throw new IllegalArgumentException("Non-zero trailing Base64 bits");
++        }
++    }
++
+     /**
+      * 生成加密秘钥
+      *

@@ -1,0 +1,63 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea28688a144e5693f3c5baae8228a312ab11..fc8a8b78d2832242697e1bf8f36c20608d2e5d19 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -59,6 +59,7 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        validateBase64TrailingBits(encrypted);
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -79,6 +80,50 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    /**
++     * Commons Codec 1.13 does not correctly mask the unused bits in the last
++     * Base64 character.  Check them before handing the value to that version
++     * of the decoder (the dependency is intentionally not upgraded here).
++     */
++    private static void validateBase64TrailingBits(final String value) {
++        int end = value.length();
++        while (end > 0 && Character.isWhitespace(value.charAt(end - 1))) {
++            end--;
++        }
++        while (end > 0 && value.charAt(end - 1) == '=') {
++            end--;
++        }
++        int significantLength = 0;
++        int last = -1;
++        for (int i = 0; i < end; i++) {
++            if (!Character.isWhitespace(value.charAt(i))) {
++                significantLength++;
++                last = value.charAt(i);
++            }
++        }
++        final int bitsToDrop;
++        if ((significantLength & 3) == 2) {
++            bitsToDrop = 4;
++        } else if ((significantLength & 3) == 3) {
++            bitsToDrop = 2;
++        } else {
++            return;
++        }
++        final int alphabetValue = base64Value(last);
++        if ((alphabetValue & ((1 << bitsToDrop) - 1)) != 0) {
++            throw new IllegalArgumentException("Base64 input has non-zero trailing bits");
++        }
++    }
++
++    private static int base64Value(final int character) {
++        if (character >= 'A' && character <= 'Z') return character - 'A';
++        if (character >= 'a' && character <= 'z') return character - 'a' + 26;
++        if (character >= '0' && character <= '9') return character - '0' + 52;
++        if (character == '+') return 62;
++        if (character == '/') return 63;
++        return 0;
++    }
++
+     /**
+      * 生成加密秘钥
+      *

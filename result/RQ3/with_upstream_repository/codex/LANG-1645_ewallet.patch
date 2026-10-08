@@ -1,0 +1,38 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d76aa34b14c755a1b9cc7005b4b1d5fe931..0f241f3ef42f948058f625a82d3998d74426dfa9 100755
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -59,7 +59,7 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static BigInteger createBigInteger(String str)  {
+-		return NumberUtils.createBigInteger(str);
++		return NumberUtils.createBigInteger(normalizePositiveHexPrefix(str));
+ 	}
+ 	
+ 	/**
+@@ -116,7 +116,23 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
++		return NumberUtils.createNumber(normalizePositiveHexPrefix(str));
++	}
++
++	/**
++	 * Commons Lang versions used by this application accept a leading '+' for
++	 * decimal values, but not for hexadecimal values.  Java's number syntax
++	 * permits that sign, so remove it before delegating only for the affected
++	 * hexadecimal form.  Do not trim or otherwise rewrite the input: the
++	 * delegate's validation and exception behaviour must remain unchanged.
++	 */
++	private static String normalizePositiveHexPrefix(String str) {
++		if (str != null && str.length() > 2 && str.charAt(0) == '+'
++				&& str.charAt(1) == '0'
++				&& (str.charAt(2) == 'x' || str.charAt(2) == 'X')) {
++			return str.substring(1);
++		}
++		return str;
+ 	}
+ 	
+ 	

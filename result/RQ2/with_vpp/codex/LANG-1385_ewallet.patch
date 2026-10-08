@@ -1,0 +1,29 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d76aa34b14c755a1b9cc7005b4b1d5fe931..0b79ae78e99822c5ad045ee81a6f0043743dfe32 100755
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -116,7 +116,23 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
++		// Commons Lang 3.7 throws StringIndexOutOfBoundsException for a
++		// type suffix without a value (for example, "L").  Keep the
++		// dependency version fixed, but enforce the documented conversion
++		// contract at this public boundary.
++		if (str != null && str.length() == 1
++				&& (str.charAt(0) == 'l' || str.charAt(0) == 'L'
++						|| str.charAt(0) == 'f' || str.charAt(0) == 'F'
++						|| str.charAt(0) == 'd' || str.charAt(0) == 'D')) {
++			throw new NumberFormatException("Invalid number: " + str);
++		}
++		try {
++			return NumberUtils.createNumber(str);
++		} catch (StringIndexOutOfBoundsException ex) {
++			// Do not expose the legacy implementation's internal exception
++			// for malformed numeric input.
++			throw new NumberFormatException("Invalid number: " + str);
++		}
+ 	}
+ 	
+ 	

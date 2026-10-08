@@ -1,0 +1,90 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a131857f1187ac1f0efa324d89d89e97f6d5cb..02f362516ed4055b2c73e020cedbd45c6ca1a2e1 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,7 +32,6 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+@@ -242,15 +240,61 @@ public class Val {
+    */
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+-
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++      // Do not delegate to the vulnerable Commons Text 1.7 numeric unescaper.
++      // Its optional-semicolon mode uses the hexadecimal character class for
++      // decimal entities, so "&#106a" is treated as one (invalid) entity and
++      // the javascript prefix remains escaped.  Keep optional semicolons, but
++      // consume only digits for decimal entities and hex digits for hex ones.
++      StringBuilder result = new StringBuilder(v.length());
++      for (int i = 0; i < v.length();) {
++        if (v.charAt(i) != '&' || i + 2 >= v.length() || v.charAt(i + 1) != '#') {
++          result.append(v.charAt(i++));
++          continue;
++        }
++        int start = i;
++        int cursor = i + 2;
++        boolean hexadecimal = cursor < v.length()
++            && (v.charAt(cursor) == 'x' || v.charAt(cursor) == 'X');
++        if (hexadecimal) cursor++;
++        int digitsStart = cursor;
++        while (cursor < v.length()) {
++          char c = v.charAt(cursor);
++          boolean digit = hexadecimal
++              ? (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')
++              : c >= '0' && c <= '9';
++          if (!digit) break;
++          cursor++;
++        }
++        if (cursor == digitsStart) {
++          result.append(v.charAt(i++));
++          continue;
++        }
++        boolean terminated = cursor < v.length() && v.charAt(cursor) == ';';
++        // An omitted terminator followed by an identifier character is
++        // ambiguous in HTML (and can turn an escaped javascript prefix into
++        // executable text). Leave the complete candidate untouched.
++        if (!terminated && cursor < v.length()
++            && (Character.isLetterOrDigit(v.charAt(cursor)) || v.charAt(cursor) == '_')) {
++          result.append(v, start, cursor + 1);
++          i = cursor + 1;
++          continue;
++        }
++        String digits = v.substring(digitsStart, cursor);
++        try {
++          int codePoint = Integer.parseInt(digits, hexadecimal ? 16 : 10);
++          if (Character.isValidCodePoint(codePoint)
++              && !(codePoint >= Character.MIN_SURROGATE && codePoint <= Character.MAX_SURROGATE)) {
++            result.appendCodePoint(codePoint);
++            i = terminated ? cursor + 1 : cursor;
++            continue;
++          }
++        } catch (NumberFormatException ignored) {
++          // Preserve malformed or overflowing entities verbatim.
++        }
++        result.append(v, start, terminated ? cursor + 1 : cursor);
++        i = terminated ? cursor + 1 : cursor;
+       }
+-
++      return result.toString();
+     }
+     return v;
+   }

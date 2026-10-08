@@ -1,0 +1,13 @@
+﻿target_id,agentless,appatch,openhands,patchagent,premm,reinfix,repairagent,san2patch,sweagent
+CODEC-270_BurpCrypto-master,compile_failed,repair_failed,success,success,repair_failed,repair_failed,repair_failed,repair_failed,success
+CVE-2015-2156_webbit,success,compile_failed,repair_failed,compile_failed,repair_failed,repair_failed,repair_failed,repair_failed,repair_failed
+CVE-2017-7957_rpki-commons,empty,compile_failed,repair_failed,repair_failed,repair_failed,compile_failed,repair_failed,repair_failed,repair_failed
+CVE-2018-1000632_tcpser4j,ERROR,repair_failed,success,ERROR,empty,compile_failed,ERROR,empty,success
+CVE-2020-13956_crawler-jsoup-maven,compile_failed,success,success,repair_failed,repair_failed,repair_failed,repair_failed,repair_failed,success
+CVE-2021-23899_OmegaTester,repair_failed,compile_failed,repair_failed,repair_failed,repair_failed,compile_failed,repair_failed,repair_failed,repair_failed
+CVE-2021-23900_OmegaTester,success,success,success,success,repair_failed,repair_failed,repair_failed,repair_failed,success
+CVE-2021-43859_rpki-commons,repair_failed,repair_failed,repair_failed,repair_failed,compile_failed,compile_failed,empty,repair_failed,repair_failed
+CVE-2022-25845_geek_framework,repair_failed,repair_failed,repair_failed,ERROR,repair_failed,repair_failed,ERROR,empty,repair_failed
+LANG-1645_ewallet,empty,success,success,success,repair_failed,repair_failed,empty,repair_failed,success
+TEXT-215_geoportal-esri,empty,repair_failed,repair_failed,empty,repair_failed,repair_failed,repair_failed,empty,success
+TEXT-215_geoportal-server,empty,success,success,compile_failed,repair_failed,success,compile_failed,empty,success

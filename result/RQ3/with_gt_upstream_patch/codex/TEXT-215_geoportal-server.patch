@@ -1,0 +1,64 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830bab6d62491ad7fad059ff3827701202998..3e515cb9489bb2b8c40931496b695dc559816421 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,7 +32,6 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+@@ -240,13 +238,37 @@ public class Val {
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
+ 
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++      StringBuilder result = new StringBuilder(v.length());
++      for (int i = 0; i < v.length();) {
++        if (v.charAt(i) != '&' || i + 2 >= v.length() || v.charAt(i + 1) != '#') {
++          result.append(v.charAt(i++));
++          continue;
++        }
++        int start = i + 2;
++        boolean hex = start < v.length() && (v.charAt(start) == 'x' || v.charAt(start) == 'X');
++        int digits = hex ? start + 1 : start;
++        int end = digits;
++        while (end < v.length()) {
++          char c = v.charAt(end);
++          boolean decimal = c >= '0' && c <= '9';
++          boolean hexadecimal = c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F';
++          if (!decimal && !(hex && hexadecimal)) break;
++          end++;
++        }
++        if (end == digits) {
++          result.append(v.charAt(i++));
++          continue;
++        }
++        boolean semicolon = end < v.length() && v.charAt(end) == ';';
++        try {
++          int codePoint = Integer.parseInt(v.substring(digits, end), hex ? 16 : 10);
++          result.appendCodePoint(codePoint);
++          i = end + (semicolon ? 1 : 0);
++        } catch (IllegalArgumentException ex) {
++          result.append(v.charAt(i++));
++        }
+       }
++      return result.toString();
+ 
+     }
+     return v;

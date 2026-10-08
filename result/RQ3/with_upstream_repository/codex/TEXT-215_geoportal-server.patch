@@ -1,0 +1,50 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830bab6d62491ad7fad059ff3827701202998..aa92529864b63f4f5cf5b4fb78b2446f746c055a 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -33,7 +33,9 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
++  // Require the delimiter so decimal entities cannot consume following
++  // hexadecimal-looking letters (CVE-2022-42889 / TEXT-215).
++  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonRequired);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+@@ -195,6 +197,9 @@ public class Val {
+    * @param date the date
+    * @return the formatted string
+    */
++  public static String toIso8601(Date date) {
++    return date == null ? null : date.toInstant().toString();
++  }
+ 
+   /**
+    * Trim a string.
+@@ -262,7 +267,7 @@ public class Val {
+       try {
+         StringWriter writer = new StringWriter(v.length() * 2);
+         OCTAL.translate(v, writer);
+-        // String out = writer.toString();
++        String out = writer.toString();
+         return writer.toString();
+       } catch (IOException var3) {
+         throw new RuntimeException(var3);
+@@ -300,14 +305,13 @@ public class Val {
+   Octal to Unicode is a special case for when an file gets read as ISO_8859_1
+    */
+   public static String unescapeOctalToUnicode(String v) {
+-    System.out.println("hhhhhh"+v);
+     if (v != null) {
+       try {
+         StringWriter writer = new StringWriter(v.length() * 2);
+         OCTAL.translate(v, writer);
+         byte[] c = writer.toString().getBytes(StandardCharsets.ISO_8859_1);
+         v = new String (c, StandardCharsets.UTF_8);
+-        
++
+         return v;
+       } catch (IOException var3) {
+         throw new RuntimeException(var3);

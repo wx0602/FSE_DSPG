@@ -1,0 +1,20 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d76aa34b14c755a1b9cc7005b4b1d5fe931..677d87bf6f1496a5729b3e559369f65bdd6ab04b 100755
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -116,6 +116,15 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
++		// commons-lang3 versions used by this project index the last character
++		// before validating it.  A one-character type suffix (for example "L")
++		// therefore throws StringIndexOutOfBoundsException instead of the
++		// documented NumberFormatException.  Reject such input at this boundary
++		// while retaining the library's handling of null and valid numbers.
++		if (str != null && str.length() == 1
++				&& !Character.isDigit(str.charAt(0)) && str.charAt(0) != '.') {
++			throw new NumberFormatException(str + " is not a valid number.");
++		}
+ 		return NumberUtils.createNumber(str);
+ 	}
+ 	

@@ -1,0 +1,75 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777f83eec54b5b3851af8952de52c0cd58ec..a964ef9483ad722d425b9303147dc713b2893ef7 100755
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -18,8 +18,10 @@ import java.security.interfaces.RSAPublicKey;
+ import java.security.spec.X509EncodedKeySpec;
+ import java.util.ArrayList;
+ import java.util.Random;
++import java.util.regex.Pattern;
+ 
+ public class Utils {
++    private static final Pattern BASE64_CHARS = Pattern.compile("[A-Za-z0-9+/]*={0,2}");
+     private static MessageDigest md;
+     private static Random rand = new Random();
+     public static PrintWriter stdout = null;
+@@ -113,7 +115,7 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        return decodeBase64Strict(str);
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,13 +132,49 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = decodeBase64Strict(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();
+         return result;
+     }
+ 
++    /**
++     * Decode Base64 while enforcing the zero padding bits required by RFC 4648.
++     * commons-codec 1.13 checks the wrong value for these bits (for example,
++     * it accepts "AB=="), so validation must happen before delegating to it.
++     */
++    private static byte[] decodeBase64Strict(String value) {
++        if (value == null) {
++            throw new IllegalArgumentException("Base64 value must not be null");
++        }
++
++        // Preserve the decoder's useful whitespace tolerance, but never allow
++        // whitespace to hide an invalid alphabet character or padding layout.
++        String encoded = value.replaceAll("\\s", "");
++        if (!BASE64_CHARS.matcher(encoded).matches() || encoded.length() % 4 == 1) {
++            throw new IllegalArgumentException("Invalid Base64 value");
++        }
++
++        int padding = encoded.endsWith("==") ? 2 : (encoded.endsWith("=") ? 1 : 0);
++        int dataLength = encoded.length() - padding;
++        int remainder = dataLength % 4;
++        if ((padding == 2 && remainder != 2) || (padding == 1 && remainder != 3)
++                || (padding == 0 && remainder == 1)) {
++            throw new IllegalArgumentException("Invalid Base64 padding");
++        }
++        int lastDataIndex = encoded.length() - padding - 1;
++        if (lastDataIndex >= 0) {
++            int last = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
++                    .indexOf(encoded.charAt(lastDataIndex));
++            int unusedBits = remainder == 2 ? 4 : (remainder == 3 ? 2 : 0);
++            if (unusedBits != 0 && (last & ((1 << unusedBits) - 1)) != 0) {
++                throw new IllegalArgumentException("Non-zero Base64 trailing bits");
++            }
++        }
++        return Base64.decodeBase64(encoded);
++    }
++
+ 
+     public static String[] GetOutFormats() {
+         ArrayList<String> strs = new ArrayList<String>();

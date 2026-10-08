@@ -1,0 +1,70 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea28688a144e5693f3c5baae8228a312ab11..dcd217dd8197c64bd52cb6865304f0d55a26b789 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -59,6 +59,10 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        // commons-codec 1.13 accepts non-zero trailing bits (for example
++        // "AB==").  Validate the encoded form before handing it to the
++        // pinned dependency so that alternate encodings cannot be accepted.
++        validateBase64(encrypted);
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -79,6 +83,54 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static void validateBase64(String value) {
++        if (value == null) {
++            throw new IllegalArgumentException("Base64 value must not be null");
++        }
++
++        int length = value.length();
++        int significant = 0;
++        int padding = 0;
++        int last = -1;
++        for (int i = 0; i < length; i++) {
++            char c = value.charAt(i);
++            if (Character.isWhitespace(c)) {
++                continue;
++            }
++            if (c == '=') {
++                padding++;
++                continue;
++            }
++            if (padding != 0 || base64Value(c) < 0) {
++                throw new IllegalArgumentException("Invalid Base64 value");
++            }
++            significant++;
++            last = base64Value(c);
++        }
++
++        int encodedLength = significant + padding;
++        if (encodedLength == 0) {
++            return;
++        }
++        if (encodedLength % 4 == 1 || padding > 2
++                || (padding != 0 && significant % 4 != 4 - padding)) {
++            throw new IllegalArgumentException("Invalid Base64 value");
++        }
++        int discardedBits = significant % 4 == 2 ? 4 : significant % 4 == 3 ? 2 : 0;
++        if (discardedBits != 0 && (last & ((1 << discardedBits) - 1)) != 0) {
++            throw new IllegalArgumentException("Non-zero trailing Base64 bits");
++        }
++    }
++
++    private static int base64Value(char c) {
++        if (c >= 'A' && c <= 'Z') return c - 'A';
++        if (c >= 'a' && c <= 'z') return c - 'a' + 26;
++        if (c >= '0' && c <= '9') return c - '0' + 52;
++        if (c == '+') return 62;
++        if (c == '/') return 63;
++        return -1;
++    }
++
+     /**
+      * 生成加密秘钥
+      *

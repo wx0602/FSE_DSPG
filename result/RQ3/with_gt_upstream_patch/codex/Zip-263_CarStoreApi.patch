@@ -1,0 +1,19 @@
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+index c13956745392a8a5fb22ed1f0e682a930f46acbb..9c91fcaa74e15554c7213118591dd5f5fa5c4985 100755
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -266,6 +266,9 @@ public class ZipUtil {
+      * @throws ZipException 压缩异常
+      */
+     public static void compressFile(File sourceFile, File zip) throws ZipException {
++        if (zip == null) {
++            throw new IllegalArgumentException("output zip file parameter is null");
++        }
+         net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
+         ZipParameters zipParameters = new ZipParameters();
+         //压缩方式
+@@ -291,4 +294,3 @@ public class ZipUtil {
+     }
+ 
+ }
+-

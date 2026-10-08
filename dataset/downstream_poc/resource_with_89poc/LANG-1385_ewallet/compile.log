@@ -1,0 +1,280 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] wallet                                                             [pom]
+[INFO] wallet-base                                                        [jar]
+[INFO] wallet-gen-dao                                                     [jar]
+[INFO] wallet-service                                                     [jar]
+[INFO] wallet-iface                                                       [war]
+[INFO] wallet-admin                                                       [war]
+[INFO] wallet-web-rest                                                    [war]
+[INFO] 
+[INFO] ------------------------< com.fr.chain:wallet >-------------------------
+[INFO] Building wallet 0.0.1-SNAPSHOT                                     [1/7]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ wallet ---
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ wallet ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/pom.xml to /home/wql/.m2/repository/com/fr/chain/wallet/0.0.1-SNAPSHOT/wallet-0.0.1-SNAPSHOT.pom
+[INFO] 
+[INFO] ----------------------< com.fr.chain:wallet-base >----------------------
+[INFO] Building wallet-base 0.0.1-SNAPSHOT                                [2/7]
+[INFO]   from wallet-base/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:compile (default-compile)'
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ wallet-base ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/target
+[INFO] 
+[INFO] --- build-helper:1.5:add-source (default) @ wallet-base ---
+[INFO] Source directory: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/src/gens/java added.
+[INFO] Source directory: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/src/main/java added.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ wallet-base ---
+[INFO] Copying 0 resource from src/gens/java to target/classes
+[INFO] Copying 0 resource from src/main/java to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.1:compile (default-compile) @ wallet-base ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 65 source files to /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/src/main/java/com/fr/chain/utils/DecryptUtil.java:[112,40] sun.misc.BASE64Decoder是内部专用 API, 可能会在未来发行版中删除
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/src/main/java/com/fr/chain/utils/DecryptUtil.java:[128,43] sun.misc.BASE64Encoder是内部专用 API, 可能会在未来发行版中删除
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/src/main/java/com/fr/chain/utils/StringEscapeUtil.java: 某些输入文件使用或覆盖了已过时的 API。
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/src/main/java/com/fr/chain/utils/StringEscapeUtil.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ wallet-base ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.1:testCompile (default-testCompile) @ wallet-base ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.4.3:test (default-test) @ wallet-base ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ wallet-base ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/target/wallet-base-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ wallet-base ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/pom.xml to /home/wql/.m2/repository/com/fr/chain/wallet-base/0.0.1-SNAPSHOT/wallet-base-0.0.1-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-base/target/wallet-base-0.0.1-SNAPSHOT.jar to /home/wql/.m2/repository/com/fr/chain/wallet-base/0.0.1-SNAPSHOT/wallet-base-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --------------------< com.fr.chain:wallet-gen-dao >---------------------
+[INFO] Building wallet-gen-dao 0.0.1-SNAPSHOT                             [3/7]
+[INFO]   from wallet-gen-dao/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:compile (default-compile)'
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ wallet-gen-dao ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-gen-dao/target
+[INFO] 
+[INFO] --- build-helper:1.5:add-source (default) @ wallet-gen-dao ---
+[INFO] Source directory: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-gen-dao/src/main/java added.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ wallet-gen-dao ---
+[INFO] Copying 4 resources from src/main/java to target/classes
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-gen-dao/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.1:compile (default-compile) @ wallet-gen-dao ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 42 source files to /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-gen-dao/target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ wallet-gen-dao ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.1:testCompile (default-testCompile) @ wallet-gen-dao ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.4.3:test (default-test) @ wallet-gen-dao ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ wallet-gen-dao ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-gen-dao/target/wallet-gen-dao-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ wallet-gen-dao ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-gen-dao/pom.xml to /home/wql/.m2/repository/com/fr/chain/wallet-gen-dao/0.0.1-SNAPSHOT/wallet-gen-dao-0.0.1-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-gen-dao/target/wallet-gen-dao-0.0.1-SNAPSHOT.jar to /home/wql/.m2/repository/com/fr/chain/wallet-gen-dao/0.0.1-SNAPSHOT/wallet-gen-dao-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --------------------< com.fr.chain:wallet-service >---------------------
+[INFO] Building wallet-service 0.0.1-SNAPSHOT                             [4/7]
+[INFO]   from wallet-service/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:compile (default-compile)'
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ wallet-service ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-service/target
+[INFO] 
+[INFO] --- build-helper:1.5:add-source (default) @ wallet-service ---
+[INFO] Source directory: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-service/src/main/java added.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ wallet-service ---
+[INFO] Copying 4 resources from src/main/java to target/classes
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-service/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.1:compile (default-compile) @ wallet-service ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 29 source files to /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-service/target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ wallet-service ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.1:testCompile (default-testCompile) @ wallet-service ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.4.3:test (default-test) @ wallet-service ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ wallet-service ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-service/target/wallet-service-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ wallet-service ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-service/pom.xml to /home/wql/.m2/repository/com/fr/chain/wallet-service/0.0.1-SNAPSHOT/wallet-service-0.0.1-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-service/target/wallet-service-0.0.1-SNAPSHOT.jar to /home/wql/.m2/repository/com/fr/chain/wallet-service/0.0.1-SNAPSHOT/wallet-service-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< com.fr.chain:wallet-iface >----------------------
+[INFO] Building wallet-iface 0.0.1-SNAPSHOT                               [5/7]
+[INFO]   from wallet-iface/pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:compile (default-compile)'
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ wallet-iface ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/target
+[INFO] 
+[INFO] --- build-helper:1.5:add-source (default) @ wallet-iface ---
+[INFO] Source directory: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/src/main/java added.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ wallet-iface ---
+[INFO] Copying 0 resource from src/main/java to target/classes
+[INFO] Copying 6 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.1:compile (default-compile) @ wallet-iface ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 38 source files to /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/src/main/java/com/fr/chain/common/HttpRequestor.java: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/src/main/java/com/fr/chain/common/HttpRequestor.java使用或覆盖了已过时的 API。
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/src/main/java/com/fr/chain/common/HttpRequestor.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/src/main/java/com/fr/chain/controller/trade/TradeOrderCtrl.java: 某些输入文件使用了未经检查或不安全的操作。
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/src/main/java/com/fr/chain/controller/trade/TradeOrderCtrl.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ wallet-iface ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.1:testCompile (default-testCompile) @ wallet-iface ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.4.3:test (default-test) @ wallet-iface ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- war:2.3:war (default-war) @ wallet-iface ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [wallet-iface] in [/media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/target/wallet-iface-0.0.1-SNAPSHOT]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/WebContent]
+[INFO] Webapp assembled in [721 msecs]
+[INFO] Building war: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/target/wallet-iface-0.0.1-SNAPSHOT.war
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ wallet-iface ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/pom.xml to /home/wql/.m2/repository/com/fr/chain/wallet-iface/0.0.1-SNAPSHOT/wallet-iface-0.0.1-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-iface/target/wallet-iface-0.0.1-SNAPSHOT.war to /home/wql/.m2/repository/com/fr/chain/wallet-iface/0.0.1-SNAPSHOT/wallet-iface-0.0.1-SNAPSHOT.war
+[INFO] 
+[INFO] ---------------------< com.fr.chain:wallet-admin >----------------------
+[INFO] Building wallet-admin 0.0.1-SNAPSHOT                               [6/7]
+[INFO]   from wallet-admin/pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:compile (default-compile)'
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ wallet-admin ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-admin/target
+[INFO] 
+[INFO] --- build-helper:1.5:add-source (default) @ wallet-admin ---
+[INFO] Source directory: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-admin/src/main/java added.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ wallet-admin ---
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-admin/src/main/java
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-admin/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.1:compile (default-compile) @ wallet-admin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ wallet-admin ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.1:testCompile (default-testCompile) @ wallet-admin ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.4.3:test (default-test) @ wallet-admin ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- war:2.3:war (default-war) @ wallet-admin ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [wallet-admin] in [/media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-admin/target/wallet-admin-0.0.1-SNAPSHOT]
+[INFO] Processing war project
+[INFO] Webapp assembled in [348 msecs]
+[INFO] Building war: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-admin/target/wallet-admin-0.0.1-SNAPSHOT.war
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ wallet-admin ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-admin/pom.xml to /home/wql/.m2/repository/com/fr/chain/wallet-admin/0.0.1-SNAPSHOT/wallet-admin-0.0.1-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-admin/target/wallet-admin-0.0.1-SNAPSHOT.war to /home/wql/.m2/repository/com/fr/chain/wallet-admin/0.0.1-SNAPSHOT/wallet-admin-0.0.1-SNAPSHOT.war
+[INFO] 
+[INFO] --------------------< com.fr.chain:wallet-web-rest >--------------------
+[INFO] Building wallet-web-rest 0.0.1-SNAPSHOT                            [7/7]
+[INFO]   from wallet-web-rest/pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:compile (default-compile)'
+[WARNING] Parameter 'sources' is unknown for plugin 'maven-compiler-plugin:3.1:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ wallet-web-rest ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-web-rest/target
+[INFO] 
+[INFO] --- build-helper:1.5:add-source (default) @ wallet-web-rest ---
+[INFO] Source directory: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-web-rest/src/main/java added.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ wallet-web-rest ---
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-web-rest/src/main/java
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-web-rest/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.1:compile (default-compile) @ wallet-web-rest ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ wallet-web-rest ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.1:testCompile (default-testCompile) @ wallet-web-rest ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.4.3:test (default-test) @ wallet-web-rest ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- war:2.3:war (default-war) @ wallet-web-rest ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [wallet-web-rest] in [/media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-web-rest/target/wallet-web-rest-0.0.1-SNAPSHOT]
+[INFO] Processing war project
+[INFO] Webapp assembled in [291 msecs]
+[INFO] Building war: /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-web-rest/target/wallet-web-rest-0.0.1-SNAPSHOT.war
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ wallet-web-rest ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-web-rest/pom.xml to /home/wql/.m2/repository/com/fr/chain/wallet-web-rest/0.0.1-SNAPSHOT/wallet-web-rest-0.0.1-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/LANG-1385_ewallet/wallet-web-rest/target/wallet-web-rest-0.0.1-SNAPSHOT.war to /home/wql/.m2/repository/com/fr/chain/wallet-web-rest/0.0.1-SNAPSHOT/wallet-web-rest-0.0.1-SNAPSHOT.war
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for wallet 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] wallet ............................................. SUCCESS [  0.237 s]
+[INFO] wallet-base ........................................ SUCCESS [  3.392 s]
+[INFO] wallet-gen-dao ..................................... SUCCESS [  1.599 s]
+[INFO] wallet-service ..................................... SUCCESS [  0.762 s]
+[INFO] wallet-iface ....................................... SUCCESS [  4.245 s]
+[INFO] wallet-admin ....................................... SUCCESS [  1.222 s]
+[INFO] wallet-web-rest .................................... SUCCESS [  0.969 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  12.568 s
+[INFO] Finished at: 2026-04-24T21:57:45+08:00
+[INFO] ------------------------------------------------------------------------

@@ -1,0 +1,79 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830bab6d62491ad7fad059ff3827701202998..9c253b14d9cbc4f2fb6fcb32fe1e3726bfd34c20 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -15,7 +15,6 @@
+ package com.esri.geoportal.base.util;
+ 
+ import org.apache.commons.text.StringEscapeUtils;
+-import org.apache.commons.text.translate.NumericEntityUnescaper;
+ import org.apache.commons.text.translate.OctalUnescaper;
+ import org.apache.commons.text.translate.UnicodeUnescaper;
+ 
+@@ -33,7 +32,6 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 
+@@ -239,15 +237,51 @@ public class Val {
+    */
+   public static String unescapeNunmericEntity(String v) {
+     if (v != null) {
++      // Do not delegate to NumericEntityUnescaper with semiColonOptional here.
++      // Older Commons Text versions may include trailing a-f characters when
++      // looking for a decimal entity (for example, treating "&#106a" as one
++      // entity).  Parse the two entity forms separately so that an optional
++      // semicolon can never change the radix or consume the following text.
++      StringBuilder result = new StringBuilder(v.length());
++      for (int i = 0; i < v.length();) {
++        if (v.charAt(i) != '&' || i + 2 >= v.length() || v.charAt(i + 1) != '#') {
++          result.append(v.charAt(i++));
++          continue;
++        }
+ 
+-      try {
+-        StringWriter writer = new StringWriter(v.length() * 2);
+-        NUMERIC.translate(v, writer);
+-        return writer.toString();
+-      } catch (IOException var3) {
+-        throw new RuntimeException(var3);
++        int start = i;
++        int digitStart = i + 2;
++        int radix = 10;
++        if (v.charAt(digitStart) == 'x' || v.charAt(digitStart) == 'X') {
++          radix = 16;
++          digitStart++;
++        }
++        int end = digitStart;
++        while (end < v.length()
++            && (radix == 10 ? Character.isDigit(v.charAt(end))
++                : Character.digit(v.charAt(end), radix) >= 0)) {
++          end++;
++        }
++        if (end == digitStart) {
++          result.append(v.charAt(i++));
++          continue;
++        }
++        boolean hasSemicolon = end < v.length() && v.charAt(end) == ';';
++        try {
++          int codePoint = Integer.parseInt(v.substring(digitStart, end), radix);
++          if (codePoint <= Character.MAX_CODE_POINT
++              && !(codePoint >= Character.MIN_SURROGATE && codePoint <= Character.MAX_SURROGATE)) {
++            result.appendCodePoint(codePoint);
++            i = hasSemicolon ? end + 1 : end;
++            continue;
++          }
++        } catch (NumberFormatException ignored) {
++          // Preserve an invalid/overflowing entity literally.
++        }
++        result.append(v, start, end);
++        i = end;
+       }
+-
++      return result.toString();
+     }
+     return v;
+   }

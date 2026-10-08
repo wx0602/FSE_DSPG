@@ -1,0 +1,986 @@
+{
+  "patch_source": "codex",
+  "source_experiment": "issue_with_upstream_repo",
+  "paper_setting": "RQ3/with_upstream_repository",
+  "project_count": 63,
+  "selected_patch_count": 63,
+  "missing_patch_count": 0,
+  "normalized_patch_count": 63,
+  "empty_after_normalize_count": 0,
+  "pom_projects": [],
+  "test_projects": [],
+  "missing_patch_projects": [],
+  "empty_after_normalize_projects": [],
+  "model_reasoning_counts": {
+    "gpt-5.6-luna/low": 63
+  },
+  "normalization": "Runner-exported production Java diffs; pom.xml and test paths excluded.",
+  "projects": {
+    "CODEC-263_DBlog-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1617,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T07:45:07Z",
+      "finished_at": "2026-10-07T07:48:10Z",
+      "sha256": "de361c5d05307dff982a032b8fac8ea183b035dd7742aa75b27b7d71c68dd013",
+      "diff_paths": [
+        "blog-core/src/main/java/com/zyd/blog/util/AesUtil.java"
+      ],
+      "normalized_patch": "CODEC-263_DBlog-master.patch",
+      "empty_after_normalize": false
+    },
+    "CODEC-270_BurpCrypto-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2953,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T07:48:10Z",
+      "finished_at": "2026-10-07T07:48:48Z",
+      "sha256": "65e5f330190ef89b038011ebc3e252720c52e01dfbf07dcdf71fd36907e8065e",
+      "diff_paths": [
+        "src/main/java/burp/utils/Utils.java"
+      ],
+      "normalized_patch": "CODEC-270_BurpCrypto-master.patch",
+      "empty_after_normalize": false
+    },
+    "CODEC-270_DBlog-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2733,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T07:48:48Z",
+      "finished_at": "2026-10-07T07:50:25Z",
+      "sha256": "38c40567edc335987e7b7ad3b2f09e9ee82d87d48e7c42aafef0d4c83019452d",
+      "diff_paths": [
+        "blog-core/src/main/java/com/zyd/blog/util/AesUtil.java"
+      ],
+      "normalized_patch": "CODEC-270_DBlog-master.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2015-2156_webbit": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3108,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T07:50:25Z",
+      "finished_at": "2026-10-07T07:52:06Z",
+      "sha256": "9cadfa331946be71a7131978352fe0c5758c1f91f5a6bcc4eb612f19e36bc9ec",
+      "diff_paths": [
+        "src/main/java/org/webbitserver/netty/NettyHttpResponse.java"
+      ],
+      "normalized_patch": "CVE-2015-2156_webbit.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2017-7957_cqrs-lottery-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1238,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T07:52:06Z",
+      "finished_at": "2026-10-07T07:53:27Z",
+      "sha256": "701b00256c57ef1807d2859a8f0cdbf9b9a4384f09ae50ee4116bce17e4e7df2",
+      "diff_paths": [
+        "cqrs-example/src/main/java/com/xebia/lottery/domain/eventstore/XStreamEventSerializer.java"
+      ],
+      "normalized_patch": "CVE-2017-7957_cqrs-lottery-master.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2017-7957_rpki-commons": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3374,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T07:53:27Z",
+      "finished_at": "2026-10-07T07:56:12Z",
+      "sha256": "96903c06053f18179123edd8f68b9be285e6d0f3a73519215e689aa896efbc42",
+      "diff_paths": [
+        "src/main/java/net/ripe/rpki/commons/provisioning/identity/IdentitySerializer.java",
+        "src/main/java/net/ripe/rpki/commons/xml/XStreamXmlSerializerBuilder.java"
+      ],
+      "normalized_patch": "CVE-2017-7957_rpki-commons.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2017-7957_source": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1496,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T07:56:14Z",
+      "finished_at": "2026-10-07T07:59:44Z",
+      "sha256": "81513073059c62504dce63c345f7eb80d6c7582bb41a6cddeefc306e45e0ee96",
+      "diff_paths": [
+        "src/common/plm/common/utils/XMLConfig.java"
+      ],
+      "normalized_patch": "CVE-2017-7957_source.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2018-1000632_tcpser4j": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 4026,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T07:59:45Z",
+      "finished_at": "2026-10-07T08:02:56Z",
+      "sha256": "3073a2b8bf038b1361479bb8b6b22ca4cca88d8f8b106ad10a9e007c0ba501de",
+      "diff_paths": [
+        "src/main/java/org/jbrain/tcpser4j/TCPSerial.java",
+        "src/main/java/org/jbrain/tcpser4j/XmlConfigSecurity.java"
+      ],
+      "normalized_patch": "CVE-2018-1000632_tcpser4j.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2018-1002201_elasticsearch-maven-plugin": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2914,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:02:57Z",
+      "finished_at": "2026-10-07T08:06:17Z",
+      "sha256": "23ea6fa6dac47b06b1126fce96309cdf96924dabcf76bc0495298b73dcc99600",
+      "diff_paths": [
+        "src/main/java/com/github/alexcojocaru/mojo/elasticsearch/v2/util/ArchiveUtil.java"
+      ],
+      "normalized_patch": "CVE-2018-1002201_elasticsearch-maven-plugin.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2018-1002201_neo": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3092,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:06:19Z",
+      "finished_at": "2026-10-07T08:09:30Z",
+      "sha256": "d8b38fb1e19e3e697e31eae0a189e57d04486df0da3f02f20a3ffabebfcdabea",
+      "diff_paths": [
+        "src/main/java/com/sangupta/neo/NeoUtils.java"
+      ],
+      "normalized_patch": "CVE-2018-1002201_neo.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2018-1002202_brigen-base": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3846,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:09:40Z",
+      "finished_at": "2026-10-07T08:11:12Z",
+      "sha256": "f91febd5bc8f0dca4bbdabb48622e3e218933680d606212216588dd46c766960",
+      "diff_paths": [
+        "src/main/java/com/brightgenerous/compress/zip/delegate/ZipDelegaterZip4j.java"
+      ],
+      "normalized_patch": "CVE-2018-1002202_brigen-base.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2018-1324_common-util": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2880,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:11:12Z",
+      "finished_at": "2026-10-07T08:11:56Z",
+      "sha256": "20dcdf4f2111bfeb603ea0ba2ab3de5d2a1ada5825371c2cd87ce2e7ce078a51",
+      "diff_paths": [
+        "src/main/java/com/github/t3t5u/common/util/ZipUtils.java"
+      ],
+      "normalized_patch": "CVE-2018-1324_common-util.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2018-15756_mirage": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2745,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:11:56Z",
+      "finished_at": "2026-10-07T08:12:31Z",
+      "sha256": "7184131f243d9c130f01b62e179cc4ff457aa2a3595b07a1d83b44b02ba34913",
+      "diff_paths": [
+        "mirage-core/src/main/java/com/github/sixddc/mirage/delegate/ResponseDelegate.java"
+      ],
+      "normalized_patch": "CVE-2018-15756_mirage.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2019-10086_bean-query": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3769,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:12:31Z",
+      "finished_at": "2026-10-07T08:13:46Z",
+      "sha256": "0ec661b96c9b5dce93e7409f63e803d1754a198f6fbb794e491c387de659c1f6",
+      "diff_paths": [
+        "src/main/java/cn/jimmyshi/beanquery/DefaultNullValuePropertyValueGetter.java",
+        "src/main/java/cn/jimmyshi/beanquery/SafePropertyUtils.java",
+        "src/main/java/cn/jimmyshi/beanquery/selectors/ClassSelector.java"
+      ],
+      "normalized_patch": "CVE-2019-10086_bean-query.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2019-12415_PoiSamples": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2157,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:14:41Z",
+      "finished_at": "2026-10-07T08:15:56Z",
+      "sha256": "cc74d64ff9e60c95a61261e9bdc03b28cbdd62b120584d5036e90534b986b403",
+      "diff_paths": [
+        "src/main/java/org/apache/poi/xssf/usermodel/examples/CustomXMLMapping.java"
+      ],
+      "normalized_patch": "CVE-2019-12415_PoiSamples.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2019-12415_poi-examples": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2264,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:13:46Z",
+      "finished_at": "2026-10-07T08:14:41Z",
+      "sha256": "44ddeb1b9e954db045562ee8342ab8c270bea5c186ad4d12c9ed7c15b84ee482",
+      "diff_paths": [
+        "src/main/java/poi/xssf/usermodel/examples/CustomXMLMapping.java"
+      ],
+      "normalized_patch": "CVE-2019-12415_poi-examples.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2020-13956_crawler-jsoup-maven": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 5322,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:15:56Z",
+      "finished_at": "2026-10-07T08:17:14Z",
+      "sha256": "26ef82fca33033c24c04fb9332b49d510a4e35782ba799da835ce50c4efe94f4",
+      "diff_paths": [
+        "src/main/java/com/datacrawler/common/util/HttpRequestValidator.java",
+        "src/main/java/com/datacrawler/common/util/HttpUtil.java",
+        "src/main/java/com/datacrawler/service/model/csdn/net/CSDNLoginApater.java"
+      ],
+      "normalized_patch": "CVE-2020-13956_crawler-jsoup-maven.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2020-13956_wechat-ssm": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3598,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:17:14Z",
+      "finished_at": "2026-10-07T08:18:28Z",
+      "sha256": "8ae0f558b51e007ac443bff2e78866b582dd0468c9fd1590b4daef51577a1a30",
+      "diff_paths": [
+        "src/main/java/cn/qs/utils/HttpUtils.java"
+      ],
+      "normalized_patch": "CVE-2020-13956_wechat-ssm.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2020-26217_cqrs-lottery-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1750,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:18:28Z",
+      "finished_at": "2026-10-07T08:19:09Z",
+      "sha256": "13ea5ee4689d17a49968b4adde2ebd9fbe3a1c4e3ccd2bb0e8828e73af0838d4",
+      "diff_paths": [
+        "cqrs-example/src/main/java/com/xebia/lottery/domain/eventstore/XStreamEventSerializer.java"
+      ],
+      "normalized_patch": "CVE-2020-26217_cqrs-lottery-master.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2020-26217_source": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2178,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:19:09Z",
+      "finished_at": "2026-10-07T08:20:39Z",
+      "sha256": "5fbffa418a075fdaff6a30ed0ebdcd25b224cefdfc69aa599ca7f987b64a8c7f",
+      "diff_paths": [
+        "src/common/plm/common/utils/XMLConfig.java"
+      ],
+      "normalized_patch": "CVE-2020-26217_source.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2020-26258_cqrs-lottery-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1806,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:20:39Z",
+      "finished_at": "2026-10-07T08:22:08Z",
+      "sha256": "74f9ad6fcabcd095076ff93d3b7fbe6f5b9caa62e32ab805896abdf01ed13e17",
+      "diff_paths": [
+        "cqrs-example/src/main/java/com/xebia/lottery/domain/eventstore/XStreamEventSerializer.java"
+      ],
+      "normalized_patch": "CVE-2020-26258_cqrs-lottery-master.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-21341_cqrs-lottery-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2765,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:22:08Z",
+      "finished_at": "2026-10-07T08:23:26Z",
+      "sha256": "6a65f0fdd366c14489c40543b6696b8c257772e69e7b77f79f2ec38b80f40bf6",
+      "diff_paths": [
+        "cqrs-example/src/main/java/com/xebia/lottery/domain/eventstore/XStreamEventSerializer.java"
+      ],
+      "normalized_patch": "CVE-2021-21341_cqrs-lottery-master.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-21341_source": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2047,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:23:26Z",
+      "finished_at": "2026-10-07T08:24:46Z",
+      "sha256": "a9a1ec0d2b8fd4c833766575919f70d129c537eebbd5a9c9621f54550db27083",
+      "diff_paths": [
+        "src/common/plm/common/utils/XMLConfig.java"
+      ],
+      "normalized_patch": "CVE-2021-21341_source.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-23899_OmegaTester": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1271,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:26:06Z",
+      "finished_at": "2026-10-07T08:27:14Z",
+      "sha256": "34dc185594a4a349cdfa13a53f88f3857cc70632fa58e9d415a9bfbf3ed73f3f",
+      "diff_paths": [
+        "src/main/java/com/haleywang/monitor/utils/JsonUtils.java"
+      ],
+      "normalized_patch": "CVE-2021-23899_OmegaTester.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-23899_json-sanitizer": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1700,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:24:46Z",
+      "finished_at": "2026-10-07T08:26:06Z",
+      "sha256": "4ba93c6acaa98f2d4376812f44af2b6634676e7ffd06ff5422ecaff9f5216237",
+      "diff_paths": [
+        "src/main/java/com/roytuts/json/sanitizer/JsonSanitizer.java"
+      ],
+      "normalized_patch": "CVE-2021-23899_json-sanitizer.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-23900_OmegaTester": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1038,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:27:14Z",
+      "finished_at": "2026-10-07T08:27:55Z",
+      "sha256": "60e45c2323039ff75bac043fe5ffb6e7bc45583f170569afe0f4e289c53507c2",
+      "diff_paths": [
+        "src/main/java/com/haleywang/monitor/utils/JsonUtils.java"
+      ],
+      "normalized_patch": "CVE-2021-23900_OmegaTester.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-27568_json-configuration": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1218,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:27:55Z",
+      "finished_at": "2026-10-07T08:29:07Z",
+      "sha256": "b0c3744d127810689c380b3e7c42ad8f4c24243f72b5079e850fa34bcd231eae",
+      "diff_paths": [
+        "src/main/java/com/dumptruckman/bukkit/configuration/json/JsonConfiguration.java"
+      ],
+      "normalized_patch": "CVE-2021-27568_json-configuration.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-29425_FastJoin": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3842,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:29:07Z",
+      "finished_at": "2026-10-07T08:29:50Z",
+      "sha256": "07672f3b42784b9f92d0f1a737eddbb896b0a8e38508c66ec60aff8098eb3594",
+      "diff_paths": [
+        "src/main/java/soj/util/FileReader.java",
+        "src/main/java/soj/util/FileWriter.java",
+        "src/main/java/soj/util/SafeFilenameUtils.java"
+      ],
+      "normalized_patch": "CVE-2021-29425_FastJoin.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-31812_Framework-Mobile": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3812,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:29:50Z",
+      "finished_at": "2026-10-07T08:31:39Z",
+      "sha256": "1c5e48cdf587281ad905873626a568fdfa6cf10bd28b72c6acc4c24d85b7de37",
+      "diff_paths": [
+        "src/main/java/grupopanqa/automacao/util/Pdf.java"
+      ],
+      "normalized_patch": "CVE-2021-31812_Framework-Mobile.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-31812_PDFConvert14": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3127,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:31:39Z",
+      "finished_at": "2026-10-07T08:32:54Z",
+      "sha256": "776415ad69cb9d245400adb3ffa88ebd10e7f799cd47ac6669aa4761c12686a7",
+      "diff_paths": [
+        "src/main/java/main.java"
+      ],
+      "normalized_patch": "CVE-2021-31812_PDFConvert14.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-35516_JavaUtils-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 5000,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:32:54Z",
+      "finished_at": "2026-10-07T08:33:42Z",
+      "sha256": "ab4f1163629147b0a242b5af14bd881255f70cb5adf3ec1cd103493823f25ce8",
+      "diff_paths": [
+        "src/main/java/com/zxiaofan/util/other/ZipPwdUtil.java"
+      ],
+      "normalized_patch": "CVE-2021-35516_JavaUtils-master.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-37714_phoenix_interface": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3872,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:33:42Z",
+      "finished_at": "2026-10-07T08:34:38Z",
+      "sha256": "903391ee09a2ad2b4b4abcd3a0b1680f8823a7812b8f4ad258a0e75a5675fd8b",
+      "diff_paths": [
+        "src/main/java/org/phoenix/api/action/InterfaceAPI.java"
+      ],
+      "normalized_patch": "CVE-2021-37714_phoenix_interface.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-37714_pickaxe": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3407,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:34:38Z",
+      "finished_at": "2026-10-07T08:35:25Z",
+      "sha256": "f0f1ed289b3d0d958314500e09153737cc8f4629219ee2da819ce0b2bcbd109e",
+      "diff_paths": [
+        "src/main/java/com/github/mautini/pickaxe/Scraper.java"
+      ],
+      "normalized_patch": "CVE-2021-37714_pickaxe.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-39144_cqrs-lottery-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1517,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:35:25Z",
+      "finished_at": "2026-10-07T08:36:35Z",
+      "sha256": "6c3c99a064c27c945e39aef336f758376db9aa432ae224fa495ab8900b3a7627",
+      "diff_paths": [
+        "cqrs-example/src/main/java/com/xebia/lottery/domain/eventstore/XStreamEventSerializer.java"
+      ],
+      "normalized_patch": "CVE-2021-39144_cqrs-lottery-master.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-39144_source": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2390,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:36:35Z",
+      "finished_at": "2026-10-07T08:38:01Z",
+      "sha256": "25ffceefaf0e8ef398a94e6a10ded5e7836d8726603dbbf50f5efe9c6de0e51f",
+      "diff_paths": [
+        "src/common/plm/common/utils/XMLConfig.java"
+      ],
+      "normalized_patch": "CVE-2021-39144_source.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2021-43859_rpki-commons": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 980,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:38:01Z",
+      "finished_at": "2026-10-07T08:38:43Z",
+      "sha256": "f12f1bf9fda3ddd1d927b6ae2e3982c698ef8919c61cd952213745676b28cc51",
+      "diff_paths": [
+        "src/main/java/net/ripe/rpki/commons/provisioning/identity/IdentitySerializer.java"
+      ],
+      "normalized_patch": "CVE-2021-43859_rpki-commons.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-22976_RuoYi-Vue-Multi-Tenant": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 4803,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:40:12Z",
+      "finished_at": "2026-10-07T08:41:15Z",
+      "sha256": "73c43dca191ce7e265f9bd451f5bf5c0390b66ff1ba32c716be1134a4b24dfb7",
+      "diff_paths": [
+        "multi-tenant-server/src/main/java/com/ruoyi/common/utils/SecurityUtils.java",
+        "multi-tenant-server/src/main/java/com/ruoyi/common/utils/security/SafeBCryptPasswordEncoder.java",
+        "multi-tenant-server/src/main/java/com/ruoyi/framework/config/SecurityConfig.java"
+      ],
+      "normalized_patch": "CVE-2022-22976_RuoYi-Vue-Multi-Tenant.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-22976_gerenciador-viagens": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3341,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:38:43Z",
+      "finished_at": "2026-10-07T08:40:12Z",
+      "sha256": "8c4a0ca1b8a7012a4a6ae15fe7675488b1b105dc07fc701112c90fb96ea3bed8",
+      "diff_paths": [
+        "src/main/java/com/montanha/security/config/WebSecurityConfig.java",
+        "src/main/java/com/montanha/utils/BoundedBCryptPasswordEncoder.java",
+        "src/main/java/com/montanha/utils/SenhaUtils.java"
+      ],
+      "normalized_patch": "CVE-2022-22976_gerenciador-viagens.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-25845_base-starter": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1471,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:41:15Z",
+      "finished_at": "2026-10-07T08:42:17Z",
+      "sha256": "d95a2910f4614fd214b9ef5ada39829e95f15f7f307c70147e257f4f04a6bbe3",
+      "diff_paths": [
+        "src/main/java/live/lumia/config/CoreAutoConfig.java"
+      ],
+      "normalized_patch": "CVE-2022-25845_base-starter.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-25845_geek_framework": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2835,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:42:17Z",
+      "finished_at": "2026-10-07T08:43:18Z",
+      "sha256": "945cea37e7098f816db5af061f65f81e1ba406e5063c205076f88daa7dbddd8c",
+      "diff_paths": [
+        "src/main/java/com/geekcattle/Application.java",
+        "src/main/java/com/geekcattle/util/FastJsonSafeMode.java",
+        "src/main/java/com/geekcattle/util/IpUtil.java",
+        "src/main/java/com/geekcattle/util/JsonUtil.java"
+      ],
+      "normalized_patch": "CVE-2022-25845_geek_framework.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-29631_ucloud-java-sdk": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 4033,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:43:18Z",
+      "finished_at": "2026-10-07T08:44:43Z",
+      "sha256": "3f860b8fe9624798880cc6544c68d082a2cfb6488f3e5eb438b61ba2cfda6fbd",
+      "diff_paths": [
+        "src/main/java/com/xiaoleilu/ucloud/ufile/UFile.java",
+        "src/main/java/com/xiaoleilu/ucloud/util/HttpRequestUtil.java"
+      ],
+      "normalized_patch": "CVE-2022-29631_ucloud-java-sdk.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-41966_cqrs-lottery-master": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3679,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:44:43Z",
+      "finished_at": "2026-10-07T08:45:42Z",
+      "sha256": "5e4671ddf093ac9f9c275b7743900b66e43e8a04cfd682d30ba11a5b711eaf79",
+      "diff_paths": [
+        "cqrs-example/src/main/java/com/xebia/lottery/domain/eventstore/XStreamEventSerializer.java"
+      ],
+      "normalized_patch": "CVE-2022-41966_cqrs-lottery-master.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-41966_source": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1771,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:45:42Z",
+      "finished_at": "2026-10-07T08:47:04Z",
+      "sha256": "e13cbc04225afeb389b745e88e66ed647da6b58f95df3e0dcbe19bf0b2cd4c9a",
+      "diff_paths": [
+        "src/common/plm/common/utils/XMLConfig.java"
+      ],
+      "normalized_patch": "CVE-2022-41966_source.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-42004_serritor": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 5107,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:47:04Z",
+      "finished_at": "2026-10-07T08:47:51Z",
+      "sha256": "052c20100d728783a9290ab822f3b9b5d9edae0a55006219f3c6d26a932f3d58",
+      "diff_paths": [
+        "src/main/java/com/github/peterbencze/serritor/api/helper/JsonReaderWriter.java"
+      ],
+      "normalized_patch": "CVE-2022-42004_serritor.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-42004_vsqdeveloper-serritor": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3818,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:47:51Z",
+      "finished_at": "2026-10-07T08:48:36Z",
+      "sha256": "34944c268d00c8fbd97ef99dd83d10b551ca324ed02b9ffb0db7d7880a516893",
+      "diff_paths": [
+        "src/main/java/com/github/peterbencze/serritor/api/helper/JsonReaderWriter.java"
+      ],
+      "normalized_patch": "CVE-2022-42004_vsqdeveloper-serritor.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-42889_java": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1334,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:48:36Z",
+      "finished_at": "2026-10-07T08:49:58Z",
+      "sha256": "1dbc950d7ccaaaa083133cb866d09dd0c065de21c98a9a58e8cffff81ccf2e0a",
+      "diff_paths": [
+        "src/main/java/com/flatt/text4shell/controller/SearchController.java"
+      ],
+      "normalized_patch": "CVE-2022-42889_java.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-45688_base-starter": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 3266,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:49:58Z",
+      "finished_at": "2026-10-07T08:51:57Z",
+      "sha256": "57ccbe12b0408972f947eea4897c20ebe41515bc71a52b449725b97c1805716b",
+      "diff_paths": [
+        "src/main/java/live/lumia/utils/XMLUtil.java"
+      ],
+      "normalized_patch": "CVE-2022-45688_base-starter.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2022-45688_virtress": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2275,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:51:57Z",
+      "finished_at": "2026-10-07T08:53:25Z",
+      "sha256": "6a0e7e66214e6d72a3650c664140bdc84fac80d127cdb2f374d2470db84cd022",
+      "diff_paths": [
+        "src/main/java/com/virtress/utils/Converter.java"
+      ],
+      "normalized_patch": "CVE-2022-45688_virtress.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2023-1370_axon-server-se": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2951,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:53:25Z",
+      "finished_at": "2026-10-07T08:54:30Z",
+      "sha256": "3e650dd8a4bd39125d0ce8310cb46a7e63721eda8204df78939abc8b5dc8dcda",
+      "diff_paths": [
+        "axonserver/src/main/java/io/axoniq/axonserver/localstorage/query/result/JsonNestingLimit.java",
+        "axonserver/src/main/java/io/axoniq/axonserver/localstorage/query/result/StringExpressionResult.java"
+      ],
+      "normalized_patch": "CVE-2023-1370_axon-server-se.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2023-1370_microservice-with-jwt-and-microprofile": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2989,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:54:30Z",
+      "finished_at": "2026-10-07T08:55:18Z",
+      "sha256": "efacb3b9144ed9a63381db29621d6edf34fd97168d376d6b161c11a1a0ee5289",
+      "diff_paths": [
+        "src/main/java/org/superbiz/moviefun/utils/TokenUtil.java"
+      ],
+      "normalized_patch": "CVE-2023-1370_microservice-with-jwt-and-microprofile.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2023-34453_UltraPlaytime": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2406,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:55:18Z",
+      "finished_at": "2026-10-07T08:55:57Z",
+      "sha256": "c565b9da505b3c52843e89448dc9c25c6adfa48eaa6d001da19727c0b45c6600",
+      "diff_paths": [
+        "src/main/java/net/pinodev/ultraplaytime/utils/RewardsUtils.java"
+      ],
+      "normalized_patch": "CVE-2023-34453_UltraPlaytime.patch",
+      "empty_after_normalize": false
+    },
+    "CVE-2023-43642_flow": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2486,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:55:57Z",
+      "finished_at": "2026-10-07T08:56:50Z",
+      "sha256": "06f9087735c37ab7248b4ee0ec41509c9e5691f70eadcec4ae8c295e0bb423f3",
+      "diff_paths": [
+        "src/main/java/com/lithium/flow/compress/SnappyCoder.java"
+      ],
+      "normalized_patch": "CVE-2023-43642_flow.patch",
+      "empty_after_normalize": false
+    },
+    "IO-611_FastJoin": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 4130,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:56:50Z",
+      "finished_at": "2026-10-07T08:57:29Z",
+      "sha256": "6fe69b4dd9cb9236e024247c9b2c52d6eceb5de7d8e041911dd2beab91feeed6",
+      "diff_paths": [
+        "src/main/java/soj/util/FilePathUtils.java",
+        "src/main/java/soj/util/FileReader.java",
+        "src/main/java/soj/util/FileWriter.java"
+      ],
+      "normalized_patch": "IO-611_FastJoin.patch",
+      "empty_after_normalize": false
+    },
+    "IO-611_velocity-engine": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 4452,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:57:29Z",
+      "finished_at": "2026-10-07T08:58:23Z",
+      "sha256": "128a5eca7a39e7207243fa25a9b899ef82ad19cb40f3be6d9c2e361a0fa81f02",
+      "diff_paths": [
+        "velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java",
+        "velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java",
+        "velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java"
+      ],
+      "normalized_patch": "IO-611_velocity-engine.patch",
+      "empty_after_normalize": false
+    },
+    "LANG-1385_ewallet": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1226,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:58:23Z",
+      "finished_at": "2026-10-07T08:58:57Z",
+      "sha256": "9612aa3dfedcb10b72f1a8263e634dddf346a064757723e5d1992faf910f2e53",
+      "diff_paths": [
+        "wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java"
+      ],
+      "normalized_patch": "LANG-1385_ewallet.patch",
+      "empty_after_normalize": false
+    },
+    "LANG-1385_wechat-ssm": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1662,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T08:58:57Z",
+      "finished_at": "2026-10-07T09:00:14Z",
+      "sha256": "ecca62f9a5ef042837cbd5c87a88b3a62f2e644ce7e983682dd212e36f31fd01",
+      "diff_paths": [
+        "src/main/java/cn/qs/utils/format/MyNumberUtils.java"
+      ],
+      "normalized_patch": "LANG-1385_wechat-ssm.patch",
+      "empty_after_normalize": false
+    },
+    "LANG-1484_jjdz7-drony-refactor": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2839,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T09:00:14Z",
+      "finished_at": "2026-10-07T09:01:46Z",
+      "sha256": "a616845e3045f1d35b71ca908bdd418d40c67c9c41c2ccdb518f80b84118461a",
+      "diff_paths": [
+        "Web/src/main/java/com.korpodrony/validation/Validator.java"
+      ],
+      "normalized_patch": "LANG-1484_jjdz7-drony-refactor.patch",
+      "empty_after_normalize": false
+    },
+    "LANG-1645_ewallet": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1670,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T11:08:57Z",
+      "finished_at": "2026-10-07T11:09:48Z",
+      "sha256": "370ca590ea9a92b1d23c409e7fae94fbcbe8e5b3b76c0d9d34e5bcf97c673fdf",
+      "diff_paths": [
+        "wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java"
+      ],
+      "normalized_patch": "LANG-1645_ewallet.patch",
+      "empty_after_normalize": false
+    },
+    "LANG-1645_wechat-ssm": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1709,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T11:09:48Z",
+      "finished_at": "2026-10-07T11:11:08Z",
+      "sha256": "71e8a7f95738bbeb805504f52a8f83d5e4cc3b0ff4a002d4ed3931f78a3ecb9c",
+      "diff_paths": [
+        "src/main/java/cn/qs/utils/format/MyNumberUtils.java"
+      ],
+      "normalized_patch": "LANG-1645_wechat-ssm.patch",
+      "empty_after_normalize": false
+    },
+    "TEXT-215_geoportal-esri": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1008,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T11:11:08Z",
+      "finished_at": "2026-10-07T11:12:52Z",
+      "sha256": "c584789e017c9195ba1ca79937caf0f867c62708f5bcc8c75c51f4eedb08c1e3",
+      "diff_paths": [
+        "geoportal/src/main/java/com/esri/geoportal/base/util/Val.java"
+      ],
+      "normalized_patch": "TEXT-215_geoportal-esri.patch",
+      "empty_after_normalize": false
+    },
+    "TEXT-215_geoportal-server": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 2214,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T11:12:52Z",
+      "finished_at": "2026-10-07T11:13:55Z",
+      "sha256": "be046c0a1aede6b83868e8b52a70cf32f8000da427cff16a388b0f16f303b766",
+      "diff_paths": [
+        "geoportal/src/main/java/com/esri/geoportal/base/util/Val.java"
+      ],
+      "normalized_patch": "TEXT-215_geoportal-server.patch",
+      "empty_after_normalize": false
+    },
+    "Zip-263_CarStoreApi": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 1321,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T11:13:55Z",
+      "finished_at": "2026-10-07T11:14:39Z",
+      "sha256": "8c53f9ed89133f9badb99a9a8508de46319cabb5a04b8c90339dde7b8bd4aad8",
+      "diff_paths": [
+        "account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java"
+      ],
+      "normalized_patch": "Zip-263_CarStoreApi.patch",
+      "empty_after_normalize": false
+    },
+    "Zip-263_ZingClient": {
+      "source_status": "patched",
+      "codex_exit": 0,
+      "patch_bytes": 663,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "started_at": "2026-10-07T11:14:39Z",
+      "finished_at": "2026-10-07T11:15:16Z",
+      "sha256": "fc390586046af56b4e747b3208788baa44ae571c70cb3a6c5baac45e3b9aa241",
+      "diff_paths": [
+        "src/main/java/zing/client/file/ZFile.java"
+      ],
+      "normalized_patch": "Zip-263_ZingClient.patch",
+      "empty_after_normalize": false
+    }
+  }
+}

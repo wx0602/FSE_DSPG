@@ -1,0 +1,109 @@
+diff --git a/src/main/java/soj/util/FileReader.java b/src/main/java/soj/util/FileReader.java
+index 2b6246f506b0dd65b0ef3cb8f34817c73f521bd6..b912933d6c2448e7b0d019f8e279a45849b57b1b 100755
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -6,10 +6,8 @@ import java.io.IOException;
+ import java.util.List;
+ import java.util.regex.Pattern;
+ 
+-//import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+-import static org.apache.commons.io.FilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import com.google.common.base.Splitter;
+@@ -28,7 +26,7 @@ public class FileReader
+     private final Splitter _splitter;
+ 
+     public FileReader(String filename, String splitPunc) throws Exception {
+-        _filename = normalize(filename);
++        _filename = SafeFilenameUtils.normalize(filename);
+         System.out.println(_filename);
+         _reader = getReader();
+ 
+@@ -79,4 +77,4 @@ public class FileReader
+     public String getFilename() {
+         return _filename;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/soj/util/FileWriter.java b/src/main/java/soj/util/FileWriter.java
+index e97f0bca82571674d8dbcd84fab6989eeab6aed8..072c8220b7bd269726178662f774df8aab42c402 100755
+--- a/src/main/java/soj/util/FileWriter.java
++++ b/src/main/java/soj/util/FileWriter.java
+@@ -7,11 +7,9 @@ import java.io.IOException;
+ import java.io.PrintStream;
+ 
+ //import static org.apache.commons.io.FilenameUtils.getFullPath;
+-//import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+ import static org.apache.commons.io.FilenameUtils.getFullPath;
+-import static org.apache.commons.io.FilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import static com.google.common.base.Charsets.UTF_8;
+@@ -37,12 +35,12 @@ public class FileWriter
+     }
+ 
+     public FileWriter(String filename, boolean overwrite) {
+-        _filename = normalize(filename);
++        _filename = SafeFilenameUtils.normalize(filename);
+         _writer = getWriter(overwrite);
+     }
+ 
+     public FileWriter(String filename) {
+-        _filename = normalize(filename);
++        _filename = SafeFilenameUtils.normalize(filename);
+         _writer = getWriter(false);
+     }
+ 
+@@ -77,7 +75,7 @@ public class FileWriter
+             filename += "." + suffix;
+         }
+ 
+-        return normalize(filename);
++        return SafeFilenameUtils.normalize(filename);
+     }
+ 
+     private BufferedWriter getWriter(boolean overwrite) {
+@@ -202,4 +200,4 @@ public class FileWriter
+         _printer = ps;
+         return this;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/soj/util/SafeFilenameUtils.java b/src/main/java/soj/util/SafeFilenameUtils.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..56cfe95f8d34f8874afd91d475146861c7fecc54
+--- /dev/null
++++ b/src/main/java/soj/util/SafeFilenameUtils.java
+@@ -0,0 +1,25 @@
++package soj.util;
++
++import java.io.File;
++import java.util.regex.Matcher;
++
++/**
++ * Filename normalization used at filesystem boundaries.
++ *
++ * Commons IO 2.5 can leave repeated separators in the result of normalize
++ * (for example, after a prefix).  Normalize those separators explicitly so
++ * the canonical path represented by the result is unambiguous.
++ */
++final class SafeFilenameUtils {
++    private SafeFilenameUtils() {
++    }
++
++    static String normalize(String filename) {
++        String normalized = org.apache.commons.io.FilenameUtils.normalize(filename);
++        if (normalized == null) {
++            return null;
++        }
++        return normalized.replaceAll("[/\\\\]+", Matcher.quoteReplacement(
++                File.separator));
++    }
++}

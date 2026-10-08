@@ -1,0 +1,14 @@
+@Test(timeout = 4000)
+  public void test103()  throws Throwable  {
+      // Undeclared exception!
+      try { 
+        NumberUtil.createNumber(".,monrRV^uZfCX$^S");
+        fail("Expecting exception: NumberFormatException");
+      
+      } catch(NumberFormatException e) {
+         //
+         // .,monrRV^uZfCX$^S is not a valid number.
+         //
+         verifyException("org.apache.commons.lang3.math.NumberUtils", e);
+      }
+  }

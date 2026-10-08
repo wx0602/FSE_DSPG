@@ -1,0 +1,128 @@
+diff --git a/src/main/java/soj/biclique/TopologyArgs.java b/src/main/java/soj/biclique/TopologyArgs.java
+index af18e66766cbe4c7922d9c517de69b0b250c26e9..796289b4c7789b946d86ca36108c72ef66321ae2 100755
+--- a/src/main/java/soj/biclique/TopologyArgs.java
++++ b/src/main/java/soj/biclique/TopologyArgs.java
+@@ -12,7 +12,7 @@ import org.kohsuke.args4j.Option;
+ import org.slf4j.Logger;
+ 
+ //import static org.apache.storm.shade.org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
+-import static org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator;
++import static soj.util.SafeFilenameUtils.normalizeNoEndSeparator;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import static com.google.common.base.Preconditions.checkState;
+@@ -464,4 +464,4 @@ public class TopologyArgs implements Serializable
+ 
+         return 0;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/soj/util/FileReader.java b/src/main/java/soj/util/FileReader.java
+index 2b6246f506b0dd65b0ef3cb8f34817c73f521bd6..14153a47379b852051f633b65f680f86b25cb02e 100755
+--- a/src/main/java/soj/util/FileReader.java
++++ b/src/main/java/soj/util/FileReader.java
+@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
+ //import static org.apache.commons.io.FilenameUtils.normalize;
+ import org.slf4j.Logger;
+ 
+-import static org.apache.commons.io.FilenameUtils.normalize;
++import static soj.util.SafeFilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import com.google.common.base.Splitter;
+@@ -79,4 +79,4 @@ public class FileReader
+     public String getFilename() {
+         return _filename;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/soj/util/FileWriter.java b/src/main/java/soj/util/FileWriter.java
+index e97f0bca82571674d8dbcd84fab6989eeab6aed8..2528f4028f6321d0c58c26e0065ef3b83e880c7a 100755
+--- a/src/main/java/soj/util/FileWriter.java
++++ b/src/main/java/soj/util/FileWriter.java
+@@ -11,7 +11,7 @@ import java.io.PrintStream;
+ import org.slf4j.Logger;
+ 
+ import static org.apache.commons.io.FilenameUtils.getFullPath;
+-import static org.apache.commons.io.FilenameUtils.normalize;
++import static soj.util.SafeFilenameUtils.normalize;
+ import static org.slf4j.LoggerFactory.getLogger;
+ 
+ import static com.google.common.base.Charsets.UTF_8;
+@@ -202,4 +202,4 @@ public class FileWriter
+         _printer = ps;
+         return this;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/soj/util/SafeFilenameUtils.java b/src/main/java/soj/util/SafeFilenameUtils.java
+new file mode 100755
+index 0000000000000000000000000000000000000000..90866ffe0d1b09b96bc493c99154b52a194b6cb2
+--- /dev/null
++++ b/src/main/java/soj/util/SafeFilenameUtils.java
+@@ -0,0 +1,62 @@
++package soj.util;
++
++import org.apache.commons.io.FilenameUtils;
++
++/**
++ * Boundary for the old Commons IO normalizer.
++ *
++ * Commons IO 2.5 can leave repeated separators after a path prefix.  Clean
++ * those separators before calling it so the affected implementation cannot
++ * produce an ambiguous path such as {@code //foo//bar}.
++ */
++public final class SafeFilenameUtils {
++    private SafeFilenameUtils() {
++    }
++
++    public static String normalize(String filename) {
++        return FilenameUtils.normalize(collapseSeparators(filename));
++    }
++
++    public static String normalizeNoEndSeparator(String filename) {
++        return FilenameUtils.normalizeNoEndSeparator(collapseSeparators(filename));
++    }
++
++    private static String collapseSeparators(String filename) {
++        if (filename == null || filename.length() < 2) {
++            return filename;
++        }
++
++        StringBuilder result = new StringBuilder(filename.length());
++        int index = 0;
++        int leadingSeparators = 0;
++        while (index < filename.length() && isSeparator(filename.charAt(index))) {
++            leadingSeparators++;
++            index++;
++        }
++        // Keep the two-character UNC/prefix form, but never more than two.
++        int prefixSeparators = Math.min(leadingSeparators, 2);
++        for (int i = 0; i < prefixSeparators; i++) {
++            result.append(filename.charAt(i));
++        }
++
++        boolean previousSeparator = prefixSeparators > 0;
++        for (; index < filename.length(); index++) {
++            char current = filename.charAt(index);
++            if (isSeparator(current)) {
++                if (!previousSeparator) {
++                    result.append(current);
++                }
++                previousSeparator = true;
++            }
++            else {
++                result.append(current);
++                previousSeparator = false;
++            }
++        }
++        return result.toString();
++    }
++
++    private static boolean isSeparator(char value) {
++        return value == '/' || value == '\\';
++    }
++}

@@ -1,0 +1,4 @@
+TARGET_CLASS,criterion,Coverage,Total_Goals,Covered_Goals
+soj.util.FileReader,LINE;BRANCH;VESTA,1.0,41,41
+soj.util.FileReader,LINE;BRANCH;VESTA,1.0,41,41
+soj.util.FileReader,LINE;BRANCH;REACHABILITY,0.33434650455927056,330,1

@@ -1,0 +1,35 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac46c725b401606f1dcc21f50e3041bd8a6..800eb49bb12c363a1be747cec92da9604675e223 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -8,6 +8,7 @@ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
++import java.util.Base64.Decoder;
+ 
+ /**
+  *
+@@ -20,6 +21,13 @@ import java.security.SecureRandom;
+ public class AesUtil {
+     private static final String KEY_ALGORITHM = "AES";
+     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
++    /*
++     * Commons Codec 1.13 rejects otherwise decodable, unpadded input when
++     * its final quantum contains an incomplete trailing character.  Keep the
++     * dependency at 1.13, but use the JDK decoder for untrusted ciphertext so
++     * that this input cannot trigger that exception in the vulnerable code.
++     */
++    private static final Decoder BASE64_DECODER = java.util.Base64.getDecoder();
+ 
+     /**
+      * AES加密
+@@ -65,7 +73,7 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(BASE64_DECODER.decode(encrypted));
+ 
+         return new String(result, "utf-8");
+     }

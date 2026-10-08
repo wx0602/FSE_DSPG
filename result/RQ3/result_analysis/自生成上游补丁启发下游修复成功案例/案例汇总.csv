@@ -1,4 +1,0 @@
-﻿编号,工具,CVE,target_id,上游修复状态,仅CVE描述状态,增加自生成上游补丁状态,baseline_match_count,patched_match_count,上游策略,下游策略
-01,Agentless,CVE-2017-7957,CVE-2017-7957_cqrs-lottery-master,Not Fixed,编译错误,success,1,0,在 XStream 的 Primitives.primitiveType 内部将 Void.TYPE 转为 null,在应用的 XStreamEventSerializer 配置层显式 denyTypes(Void.TYPE)
-02,Appatch,CVE-2018-15756,CVE-2018-15756_mirage,Not Fixed,修复失败,success,6,0,在 Spring ResourceHttpRequestHandler 中限制 HTTP Range 数量,在 Mirage ResponseDelegate.file 的 Range 解析后执行项目级数量限制
-03,ReInFix,CVE-2021-23899,CVE-2021-23899_json-sanitizer,Compilation Failed,修复失败,success,6,0,深入改写 JsonSanitizer 内部字符串状态机和转义逻辑,保留库调用，在应用封装层后处理 script 与 CDATA 结束标记

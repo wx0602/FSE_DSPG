@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="maven-antrun-" default="main">
+  <target name="main">
+    <copy file="/media/wql/办公/AVR_agent/more_poc/resource/TEXT-215_geoportal-esri/geoportal/target/geoportal.jar" tofile="/media/wql/办公/AVR_agent/more_poc/resource/TEXT-215_geoportal-esri/geoportal/target/geoportal/WEB-INF/lib/geoportal.jar" overwrite="true" />
+    <copy toDir="/media/wql/办公/AVR_agent/more_poc/resource/TEXT-215_geoportal-esri/geoportal/target/geoportal/viewer/widgets/GeoportalSearch/gs">
+      <fileset dir="../geoportal-search/src/main/resources/gs" />
+    </copy>
+  </target>
+</project>

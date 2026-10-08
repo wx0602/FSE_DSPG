@@ -1,0 +1,36 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d76aa34b14c755a1b9cc7005b4b1d5fe931..bb570d080636e134cd3e9301b929aacf3dd61f5e 100755
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -59,7 +59,7 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static BigInteger createBigInteger(String str)  {
+-		return NumberUtils.createBigInteger(str);
++		return NumberUtils.createBigInteger(removeLeadingPlusFromHex(str));
+ 	}
+ 	
+ 	/**
+@@ -116,7 +116,21 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
+-		return NumberUtils.createNumber(str);
++		return NumberUtils.createNumber(removeLeadingPlusFromHex(str));
++	}
++
++	/**
++	 * Older commons-lang3 releases accept a leading '+' for decimal numbers,
++	 * but reject it when the number uses a hexadecimal prefix.  Remove only
++	 * that prefix here; all other input is left untouched so the dependency's
++	 * existing validation and exception behaviour is retained.
++	 */
++	private static String removeLeadingPlusFromHex(String str) {
++		if (str != null && str.length() > 1 && str.charAt(0) == '+'
++				&& (str.startsWith("+0x") || str.startsWith("+0X") || str.startsWith("+#"))) {
++			return str.substring(1);
++		}
++		return str;
+ 	}
+ 	
+ 	

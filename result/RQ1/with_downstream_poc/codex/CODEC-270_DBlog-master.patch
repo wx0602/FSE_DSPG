@@ -1,0 +1,53 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 38c2ea28688a144e5693f3c5baae8228a312ab11..7aa8b1d4903a3fb52883f2494d9d3784d30251df 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -59,6 +59,10 @@ public class AesUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String passwd, String encrypted) throws Exception {
++        // Commons Codec 1.13 accepts non-zero bits which are discarded by
++        // the final Base64 character (for example, "AB==").  Validate the
++        // canonical representation before using that decoder.
++        validateBase64(encrypted);
+         byte[] decoded = Base64.decodeBase64(encrypted);
+         if (decoded.length == 0) {
+             return "";
+@@ -79,6 +83,37 @@ public class AesUtil {
+         return new String(result, StandardCharsets.UTF_8);
+     }
+ 
++    private static void validateBase64(String value) {
++        if (value == null || value.length() == 0) {
++            return;
++        }
++        if ((value.length() & 3) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        int padding = value.endsWith("==") ? 2 : (value.endsWith("=") ? 1 : 0);
++        int dataLength = value.length() - padding;
++        for (int i = 0; i < dataLength; i++) {
++            char c = value.charAt(i);
++            if (!isBase64Character(c)) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        for (int i = dataLength; i < value.length(); i++) {
++            if (value.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        if (dataLength == 0 || padding == 2 && (value.charAt(dataLength - 1) & 0x0f) != 0
++                || padding == 1 && (value.charAt(dataLength - 1) & 0x03) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 trailing bits");
++        }
++    }
++
++    private static boolean isBase64Character(char c) {
++        return c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z'
++                || c >= '0' && c <= '9' || c == '+' || c == '/';
++    }
++
+     /**
+      * 生成加密秘钥
+      *

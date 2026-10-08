@@ -1,0 +1,38 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8afc84c09db543dcc35b496e7833b0b80d..2ce1623c4cb74018ebcd7ca2340c27bbb532d4f3 100755
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -8,7 +8,23 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createNumber(value), scale);
++	}
++
++	/**
++	 * Commons Lang 3.4 accesses index zero of some one-character inputs while
++	 * parsing a type suffix (for example, "L").  Validate those inputs here so
++	 * callers receive the documented exception rather than an implementation
++	 * exception from the vulnerable dependency.
++	 */
++	private static Number createNumber(String value) {
++		if (value != null && value.length() == 1) {
++			char character = value.charAt(0);
++			if (!Character.isDigit(character) && character != '.') {
++				throw new NumberFormatException(value + " is not a valid number.");
++			}
++		}
++		return NumberUtils.createNumber(value);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +36,7 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {

@@ -1,0 +1,3 @@
++0xF
+cn.qs.utils.format.MyNumberUtils
+toFixedDecimal

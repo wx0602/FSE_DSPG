@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""读取各实验结果矩阵，生成 9 个工具修复成功数量的分组柱状图（SVG）。"""
+"""Read each experiment result matrix and draw a grouped bar chart (SVG) of repair-success counts for the 9 tools."""
 
 from __future__ import annotations
 
@@ -11,38 +11,38 @@ from pathlib import Path
 
 
 EXPERIMENTS = (
-    ("CVE 描述验证结果_矩阵.csv", "仅 CVE 描述", "#4C78A8"),
-    ("带漏洞链验证结果_矩阵.csv", "增加漏洞链", "#F58518"),
-    ("带上游补丁验证结果_矩阵.csv", "增加上游补丁", "#54A24B"),
+    ("cve_description_validation_matrix.csv", "CVE description only", "#4C78A8"),
+    ("with_vuln_chain_validation_matrix.csv", "+ vulnerability chain", "#F58518"),
+    ("with_upstream_patch_matrix.csv", "+ upstream patch", "#54A24B"),
     (
-        "带自生成上游补丁验证结果_矩阵.csv",
-        "增加自生成上游补丁",
+        "with_selfgen_upstream_patch_matrix.csv",
+        "+ self-generated upstream patch",
         "#B279A2",
     ),
     (
-        "带自生成上游补丁加漏洞链验证结果_矩阵.csv",
-        "自生成补丁 + 漏洞链",
+        "with_selfgen_upstream_patch_and_vuln_chain_matrix.csv",
+        "self-generated patch + vulnerability chain",
         "#72B7B2",
     ),
-    ("带PoC验证结果_矩阵.csv", "增加下游 PoC", "#E45756"),
+    ("with_poc_validation_matrix.csv", "+ downstream PoC", "#E45756"),
 )
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="绘制各组实验中 9 个工具的 success 数量分组柱状图"
+        description="Draw a grouped bar chart of success counts for the 9 tools in each experiment group"
     )
     parser.add_argument(
         "--root",
         type=Path,
         default=Path(__file__).resolve().parent,
-        help="矩阵 CSV 所在目录（默认：脚本所在目录）",
+        help="Directory containing the matrix CSVs (default: the script's directory)",
     )
     parser.add_argument(
         "--output",
         type=Path,
         default=None,
-        help="输出 SVG 路径（默认：root/各工具修复成功数量.svg）",
+        help="Output SVG path (default: root/success_counts_per_tool.svg)",
     )
     return parser.parse_args()
 
@@ -51,7 +51,7 @@ def read_success_counts(path: Path) -> tuple[list[str], dict[str, int]]:
     with path.open("r", encoding="utf-8-sig", newline="") as file:
         reader = csv.DictReader(file)
         if not reader.fieldnames or reader.fieldnames[0] != "target_id":
-            raise ValueError(f"CSV 第一列必须为 target_id：{path}")
+            raise ValueError(f"the first CSV column must be target_id: {path}")
         tools = reader.fieldnames[1:]
         counts = {tool: 0 for tool in tools}
         for row in reader:
@@ -113,7 +113,7 @@ def draw_chart(
         svg_text(
             width / 2,
             58,
-            f"9 个工具在{len(series)}组实验中的修复成功数量",
+            f"Repair-success counts for the 9 tools across {len(series)} experiment groups",
             size=36,
             weight="bold",
             fill="#222222",
@@ -121,7 +121,7 @@ def draw_chart(
         svg_text(
             width / 2,
             98,
-            "success：补丁编译成功且漏洞出现次数相较基线下降",
+            "success: the patch compiles and the vulnerability occurrence count drops versus the baseline",
             size=20,
             fill="#666666",
         ),
@@ -157,7 +157,7 @@ def draw_chart(
             svg_text(
                 35,
                 top + plot_height / 2,
-                "修复成功数量",
+                "Repair-success count",
                 size=25,
                 weight="bold",
                 transform=f"rotate(-90 35 {top + plot_height / 2:.1f})",
@@ -165,7 +165,7 @@ def draw_chart(
             svg_text(
                 left + plot_width / 2,
                 height - 28,
-                "工具",
+                "tool",
                 size=25,
                 weight="bold",
             ),
@@ -206,7 +206,7 @@ def draw_chart(
 def main() -> None:
     args = parse_args()
     root = args.root.resolve()
-    output = (args.output or root / "各工具修复成功数量.svg").resolve()
+    output = (args.output or root / "success_counts_per_tool.svg").resolve()
 
     tools: list[str] | None = None
     series: list[tuple[str, str, dict[str, int]]] = []
@@ -215,15 +215,15 @@ def main() -> None:
         if tools is None:
             tools = current_tools
         elif current_tools != tools:
-            raise ValueError(f"工具列或顺序不一致：{filename}")
+            raise ValueError(f"tool columns or their order differ: {filename}")
         series.append((label, color, counts))
 
     if not tools:
-        raise ValueError("矩阵中没有工具列")
+        raise ValueError("the matrix has no tool columns")
     draw_chart(output, tools, series)
-    print(f"已生成 {output}")
+    print(f"Generated {output}")
     for label, _, counts in series:
-        print(label + "：" + ", ".join(f"{tool}={counts[tool]}" for tool in tools))
+        print(label + ": " + ", ".join(f"{tool}={counts[tool]}" for tool in tools))
 
 
 if __name__ == "__main__":

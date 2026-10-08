@@ -1,0 +1,37 @@
+﻿<ArcGIS defaultAssembly="GeoportalSearch.dll" defaultNamespace="GeoportalSearch" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Users/kyle9645/AppData/Local/Programs/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
+  <AddInInfo id="{f8a3af36-62ae-41b9-ab28-b6242a7d3bed}" version="1.0" desktopVersion="2.2.12813">
+    <Name>GeoportalSearch</Name>
+    <Description>GeoportalSearch description</Description>
+    <Image>Images\AddinDesktop32.png</Image>
+    <Author>kyle9645</Author>
+    <Company>Acme</Company>
+    <Date>1/17/2019 1:22:34 PM, 2019</Date>
+    <Subject>Framework</Subject>
+    <!-- Note subject can be one or more of these topics:
+                    Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
+  </AddInInfo>
+  <modules>
+    <insertModule id="GeoportalSearch_Module" className="GeoportalModule" autoLoad="false" caption="Geoportal Module">
+      <tabs>
+        <tab id="GeoportalSearch_Tab1" caption="Geoportal">
+          <group refID="GeoportalSearch_Group1" />
+        </tab>
+      </tabs>
+      <groups>
+        <group id="GeoportalSearch_Group1" caption="Geoportal" appearsOnAddInTab="false">
+          <button refID="GeoportalSearch_GeoportalDockpane_ShowButton" size="large" />
+        </group>
+      </groups>
+      <controls>
+        <button id="GeoportalSearch_GeoportalDockpane_ShowButton" caption="Geoportal Search" className="GeoportalDockpane_ShowButton" loadOnClick="true" smallImage="Images\GenericButtonPurple16.png" largeImage="Images\GenericButtonPurple32.png">
+          <tooltip heading="Geoportal Search">Geoportal Search<disabledText /></tooltip>
+        </button>
+      </controls>
+      <dockPanes>
+        <dockPane id="GeoportalSearch_GeoportalDockpane" caption="Geoportal Search" className="GeoportalDockpaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
+          <content className="GeoportalDockpaneView" />
+        </dockPane>
+      </dockPanes>
+    </insertModule>
+  </modules>
+</ArcGIS>

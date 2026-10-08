@@ -1,0 +1,73 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777f83eec54b5b3851af8952de52c0cd58ec..b05a890f320a47a4f11c5553f168785a6d61351b 100755
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,7 +113,7 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        return decodeBase64Strict(str);
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,13 +130,58 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = decodeBase64Strict(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();
+         return result;
+     }
+ 
++    /**
++     * Decodes canonical Base64 while compensating for the permissive trailing
++     * bit handling in the pinned Commons Codec version.
++     */
++    private static byte[] decodeBase64Strict(String value) {
++        if (value == null || (value.length() & 3) == 1) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++        int padding = value.endsWith("==") ? 2 : value.endsWith("=") ? 1 : 0;
++        int contentLength = value.length() - padding;
++        for (int i = 0; i < contentLength; i++) {
++            if (base64Value(value.charAt(i)) < 0) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        for (int i = contentLength; i < value.length(); i++) {
++            if (value.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        int remainder = contentLength & 3;
++        if (padding == 2 && remainder != 2
++                || padding == 1 && remainder != 3
++                || padding == 0 && remainder == 0 && contentLength != 0) {
++            throw new IllegalArgumentException("Invalid Base64 padding");
++        }
++        if (remainder == 2 || remainder == 3) {
++            int last = base64Value(value.charAt(contentLength - 1));
++            int mask = (1 << (remainder == 2 ? 4 : 2)) - 1;
++            if ((last & mask) != 0) {
++                throw new IllegalArgumentException("Non-zero trailing Base64 bits");
++            }
++        }
++        return Base64.decodeBase64(value);
++    }
++
++    private static int base64Value(char c) {
++        if (c >= 'A' && c <= 'Z') return c - 'A';
++        if (c >= 'a' && c <= 'z') return c - 'a' + 26;
++        if (c >= '0' && c <= '9') return c - '0' + 52;
++        if (c == '+') return 62;
++        if (c == '/') return 63;
++        return -1;
++    }
++
+ 
+     public static String[] GetOutFormats() {
+         ArrayList<String> strs = new ArrayList<String>();

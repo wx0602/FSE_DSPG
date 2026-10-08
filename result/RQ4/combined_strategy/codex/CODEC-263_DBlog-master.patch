@@ -1,0 +1,39 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac46c725b401606f1dcc21f50e3041bd8a6..c246240762e6579396e0070bee1f46457eaa9225 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -6,6 +6,7 @@ import javax.crypto.Cipher;
+ import javax.crypto.KeyGenerator;
+ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
++import java.security.GeneralSecurityException;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
+ 
+@@ -65,11 +66,25 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(decodeCiphertext(encrypted));
+ 
+         return new String(result, "utf-8");
+     }
+ 
++    /**
++     * Decode ciphertext without allowing commons-codec 1.13's malformed
++     * trailing Base64 handling to escape as an unchecked exception.  Invalid
++     * remember-me/login data must fail authentication, rather than becoming a
++     * request-level error.
++     */
++    private static byte[] decodeCiphertext(String encrypted) throws GeneralSecurityException {
++        try {
++            return Base64.decodeBase64(encrypted);
++        } catch (IllegalArgumentException e) {
++            throw new GeneralSecurityException("Invalid Base64 ciphertext", e);
++        }
++    }
++
+     /**
+      * 生成加密秘钥
+      *

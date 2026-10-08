@@ -1,0 +1,15 @@
+diff --git a/src/main/java/zing/client/file/ZFile.java b/src/main/java/zing/client/file/ZFile.java
+index a804a6d54cd102b6553c44022519db3c0bcd3ac0..6d5d7a29350d091a771ec8b493332021b3a4d115 100755
+--- a/src/main/java/zing/client/file/ZFile.java
++++ b/src/main/java/zing/client/file/ZFile.java
+@@ -25,6 +25,10 @@ public class ZFile {
+     private ZipFile file;
+ 
+     public ZFile(File file, String password) throws IOException {
++        if (file == null) {
++            throw new IllegalArgumentException("input zip file parameter is null");
++        }
++
+         this.file = new ZipFile(file);
+         this.password = password;
+         if (!this.file.isValidZipFile()) {

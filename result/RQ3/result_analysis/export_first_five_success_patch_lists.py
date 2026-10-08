@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""导出前五组实验的 PoC 合并成功补丁名单。"""
+"""Export the PoC-merged successful-patch lists for the first five experiment groups."""
 
 from __future__ import annotations
 
@@ -8,25 +8,25 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent
-MERGED_ROOT = ROOT / "poc合并"
-OUTPUT_ROOT = ROOT / "前五组成功补丁名单"
+MERGED_ROOT = ROOT / "poc_merged"
+OUTPUT_ROOT = ROOT / "first_five_successful_patch_lists"
 
 EXPERIMENTS = (
-    ("CVE 描述验证结果_矩阵.csv", "1_仅CVE描述"),
-    ("带上游补丁验证结果_矩阵.csv", "2_增加上游补丁"),
-    ("带漏洞链验证结果_矩阵.csv", "3_增加漏洞链"),
-    ("带自生成上游补丁验证结果_矩阵.csv", "4_增加自生成上游补丁"),
+    ("cve_description_validation_matrix.csv", "1_cve_description_only"),
+    ("with_upstream_patch_matrix.csv", "2_with_upstream_patch"),
+    ("with_vuln_chain_validation_matrix.csv", "3_with_vuln_chain"),
+    ("with_selfgen_upstream_patch_matrix.csv", "4_with_selfgen_upstream_patch"),
     (
-        "带自生成上游补丁加漏洞链验证结果_矩阵.csv",
-        "5_自生成上游补丁加漏洞链",
+        "with_selfgen_upstream_patch_and_vuln_chain_matrix.csv",
+        "5_selfgen_upstream_patch_plus_vuln_chain",
     ),
 )
 
 CRITERIA = (
-    ("所有PoC都通过", "所有PoC都通过_AND_成功补丁名单.txt"),
+    ("all_pocs_pass", "all_pocs_pass_AND_successful_patch_list.txt"),
     (
-        "至少一个PoC通过（部分修复成功）",
-        "至少一个PoC通过_OR_成功补丁名单.txt",
+        "at_least_one_poc_pass_partial_success",
+        "at_least_one_poc_pass_OR_successful_patch_list.txt",
     ),
 )
 
@@ -35,12 +35,12 @@ def read_success_patches(path: Path) -> list[str]:
     with path.open("r", encoding="utf-8-sig", newline="") as file:
         reader = csv.DictReader(file)
         if not reader.fieldnames or reader.fieldnames[0] != "target_id":
-            raise ValueError(f"CSV 第一列必须是 target_id：{path}")
+            raise ValueError(f"the first CSV column must be target_id: {path}")
         tools = list(reader.fieldnames[1:])
         rows = list(reader)
 
     if len(rows) != 63 or len(tools) != 9:
-        raise ValueError(f"矩阵不是 63×9：{path}")
+        raise ValueError(f"matrix is not 63x9: {path}")
 
     patches = [
         f"{tool}__{row['target_id']}.patch"

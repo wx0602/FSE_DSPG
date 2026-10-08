@@ -1,0 +1,813 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.yanxin.car:account-web:jar:1.0-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 151, column 21
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] car-service                                                        [pom]
+[INFO] common                                                             [pom]
+[INFO] common-swagger                                                     [jar]
+[INFO] common-core                                                        [jar]
+[INFO] common-datasource                                                  [jar]
+[INFO] common-websocket                                                   [jar]
+[INFO] common-tx-client                                                   [jar]
+[INFO] eureka                                                             [jar]
+[INFO] manager                                                            [pom]
+[INFO] manager-client                                                     [jar]
+[INFO] gateway                                                            [jar]
+[INFO] manager-web                                                        [jar]
+[INFO] txManage                                                           [jar]
+[INFO] utility                                                            [pom]
+[INFO] utility-clients                                                    [jar]
+[INFO] order                                                              [pom]
+[INFO] order-client                                                       [jar]
+[INFO] utility-web                                                        [jar]
+[INFO] account                                                            [pom]
+[INFO] account-client                                                     [jar]
+[INFO] order-web                                                          [jar]
+[INFO] account-web                                                        [jar]
+[INFO] 
+[INFO] ---------------------< com.yanxin.car:car-service >---------------------
+[INFO] Building car-service 1.0-SNAPSHOT                                 [1/22]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[WARNING] Ignoring incompatible plugin version 4.0.0-beta-4: The plugin org.apache.maven.plugins:maven-compiler-plugin:4.0.0-beta-4 requires Maven version 4.0.0-rc-4
+[INFO] Latest version of plugin org.apache.maven.plugins:maven-compiler-plugin failed compatibility check
+[INFO] Looking for compatible RELEASE version of plugin org.apache.maven.plugins:maven-compiler-plugin
+[WARNING] Ignoring incompatible plugin version 4.0.0-beta-3: The plugin org.apache.maven.plugins:maven-compiler-plugin:4.0.0-beta-3 requires Maven version 4.0.0-rc-4
+[WARNING] Ignoring incompatible plugin version 4.0.0-beta-2: The plugin org.apache.maven.plugins:maven-compiler-plugin:4.0.0-beta-2 requires Maven version 4.0.0-rc-2
+[WARNING] Ignoring incompatible plugin version 4.0.0-beta-1: The plugin org.apache.maven.plugins:maven-compiler-plugin:4.0.0-beta-1 requires Maven version 4.0.0-beta-3
+[INFO] Selected plugin org.apache.maven.plugins:maven-compiler-plugin:3.15.0
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ car-service ---
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ car-service ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/pom.xml to /home/wql/.m2/repository/com/yanxin/car/car-service/1.0-SNAPSHOT/car-service-1.0-SNAPSHOT.pom
+[INFO] 
+[INFO] -----------------------< com.yanxin.car:common >------------------------
+[INFO] Building common 1.0-SNAPSHOT                                      [2/22]
+[INFO]   from common/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ common ---
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ common ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/pom.xml to /home/wql/.m2/repository/com/yanxin/car/common/1.0-SNAPSHOT/common-1.0-SNAPSHOT.pom
+[INFO] 
+[INFO] -------------------< com.yanxin.car:common-swagger >--------------------
+[INFO] Building common-swagger 1.0-SNAPSHOT                              [3/22]
+[INFO]   from common/common-swagger/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ common-swagger ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-swagger/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ common-swagger ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-swagger/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ common-swagger ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 2 source files with javac [debug target 1.8] to target/classes
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ common-swagger ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ common-swagger ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ common-swagger ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ common-swagger ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-swagger/target/common-swagger.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ common-swagger ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-swagger/pom.xml to /home/wql/.m2/repository/com/yanxin/car/common-swagger/1.0-SNAPSHOT/common-swagger-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-swagger/target/common-swagger.jar to /home/wql/.m2/repository/com/yanxin/car/common-swagger/1.0-SNAPSHOT/common-swagger-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< com.yanxin.car:common-core >---------------------
+[INFO] Building common-core 1.0-SNAPSHOT                                 [4/22]
+[INFO]   from common/common-core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ common-core ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-core/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ common-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-core/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ common-core ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 54 source files with javac [debug target 1.8] to target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-core/src/main/java/com/car/common/exception/BusinessException.java:[9,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-core/src/main/java/com/car/common/exception/MyExceptionHandler.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-core/src/main/java/com/car/common/exception/MyExceptionHandler.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ common-core ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ common-core ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ common-core ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ common-core ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-core/target/common-core.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ common-core ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-core/pom.xml to /home/wql/.m2/repository/com/yanxin/car/common-core/1.0-SNAPSHOT/common-core-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-core/target/common-core.jar to /home/wql/.m2/repository/com/yanxin/car/common-core/1.0-SNAPSHOT/common-core-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ------------------< com.yanxin.car:common-datasource >------------------
+[INFO] Building common-datasource 1.0-SNAPSHOT                           [5/22]
+[INFO]   from common/common-datasource/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ common-datasource ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-datasource/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ common-datasource ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-datasource/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ common-datasource ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 2 source files with javac [debug target 1.8] to target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-datasource/src/main/java/com/car/common/datasource/model/SysOperationLog.java:[10,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ common-datasource ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ common-datasource ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ common-datasource ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ common-datasource ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-datasource/target/common-datasource.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ common-datasource ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-datasource/pom.xml to /home/wql/.m2/repository/com/yanxin/car/common-datasource/1.0-SNAPSHOT/common-datasource-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-datasource/target/common-datasource.jar to /home/wql/.m2/repository/com/yanxin/car/common-datasource/1.0-SNAPSHOT/common-datasource-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ------------------< com.yanxin.car:common-websocket >-------------------
+[INFO] Building common-websocket 1.0-SNAPSHOT                            [6/22]
+[INFO]   from common/common-websocket/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ common-websocket ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-websocket/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ common-websocket ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-websocket/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ common-websocket ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 2 source files with javac [debug target 1.8] to target/classes
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ common-websocket ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ common-websocket ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ common-websocket ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ common-websocket ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-websocket/target/common-websocket.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ common-websocket ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-websocket/pom.xml to /home/wql/.m2/repository/com/yanxin/car/common-websocket/1.0-SNAPSHOT/common-websocket-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-websocket/target/common-websocket.jar to /home/wql/.m2/repository/com/yanxin/car/common-websocket/1.0-SNAPSHOT/common-websocket-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ------------------< com.yanxin.car:common-tx-client >-------------------
+[INFO] Building common-tx-client 1.0-SNAPSHOT                            [7/22]
+[INFO]   from common/common-tx-client/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ common-tx-client ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-tx-client/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ common-tx-client ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-tx-client/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ common-tx-client ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ common-tx-client ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ common-tx-client ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ common-tx-client ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ common-tx-client ---
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-tx-client/target/common-tx-client.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ common-tx-client ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-tx-client/pom.xml to /home/wql/.m2/repository/com/yanxin/car/common-tx-client/1.0-SNAPSHOT/common-tx-client-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/common/common-tx-client/target/common-tx-client.jar to /home/wql/.m2/repository/com/yanxin/car/common-tx-client/1.0-SNAPSHOT/common-tx-client-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] -----------------------< com.yanxin.car:eureka >------------------------
+[INFO] Building eureka 1.0-SNAPSHOT                                      [8/22]
+[INFO]   from eureka/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ eureka ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/eureka/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ eureka ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 5 resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ eureka ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 4 source files with javac [debug target 1.8] to target/classes
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ eureka ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ eureka ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ eureka ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ eureka ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/eureka/target/eureka.jar
+[INFO] 
+[INFO] --- spring-boot:2.1.3.RELEASE:repackage (default) @ eureka ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ eureka ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/eureka/pom.xml to /home/wql/.m2/repository/com/yanxin/car/eureka/1.0-SNAPSHOT/eureka-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/eureka/target/eureka.jar to /home/wql/.m2/repository/com/yanxin/car/eureka/1.0-SNAPSHOT/eureka-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] -----------------------< com.yanxin.car:manager >-----------------------
+[INFO] Building manager 1.0-SNAPSHOT                                     [9/22]
+[INFO]   from manager/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ manager ---
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ manager ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/pom.xml to /home/wql/.m2/repository/com/yanxin/car/manager/1.0-SNAPSHOT/manager-1.0-SNAPSHOT.pom
+[INFO] 
+[INFO] -------------------< com.yanxin.car:manager-client >--------------------
+[INFO] Building manager-client 1.0-SNAPSHOT                             [10/22]
+[INFO]   from manager/manager-client/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ manager-client ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ manager-client ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ manager-client ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 38 source files with javac [debug target 1.8] to target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/src/main/java/com/car/system/client/response/role/RoleDetailRes.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/src/main/java/com/car/system/client/request/log/QueryLogListReq.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/src/main/java/com/car/system/client/request/role/QueryRoleListReq.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/src/main/java/com/car/system/client/response/role/QueryRoleListRes.java:[11,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/src/main/java/com/car/system/client/response/role/SysRoleRes.java:[11,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/src/main/java/com/car/system/client/request/user/QueryUserListReq.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ manager-client ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ manager-client ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ manager-client ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ manager-client ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/target/manager-client.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ manager-client ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/pom.xml to /home/wql/.m2/repository/com/yanxin/car/manager-client/1.0-SNAPSHOT/manager-client-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-client/target/manager-client.jar to /home/wql/.m2/repository/com/yanxin/car/manager-client/1.0-SNAPSHOT/manager-client-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] -----------------------< com.yanxin.car:gateway >-----------------------
+[INFO] Building gateway 1.0-SNAPSHOT                                    [11/22]
+[INFO]   from gateway/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ gateway ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/gateway/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ gateway ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 5 resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ gateway ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 12 source files with javac [debug target 1.8] to target/classes
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ gateway ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ gateway ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ gateway ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ gateway ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/gateway/target/gateway.jar
+[INFO] 
+[INFO] --- spring-boot:2.1.3.RELEASE:repackage (default) @ gateway ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ gateway ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/gateway/pom.xml to /home/wql/.m2/repository/com/yanxin/car/gateway/1.0-SNAPSHOT/gateway-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/gateway/target/gateway.jar to /home/wql/.m2/repository/com/yanxin/car/gateway/1.0-SNAPSHOT/gateway-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< com.yanxin.car:manager-web >---------------------
+[INFO] Building manager-web 1.0-SNAPSHOT                                [12/22]
+[INFO]   from manager/manager-web/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ manager-web ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ manager-web ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 15 resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ manager-web ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 56 source files with javac [debug target 1.8] to target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/dto/SysMenuDto.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/SysMenuUrl.java:[9,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/SysRole.java:[10,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/SysArea.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/SysMenu.java:[9,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/SysUser.java:[10,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/SysUserRole.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/dto/SysRoleDto.java:[10,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/SysRoleMenuRel.java:[10,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/model/SysDict.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/controller/UserController.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/src/main/java/com/car/system/web/controller/UserController.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ manager-web ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ manager-web ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ manager-web ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ manager-web ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/target/manager.jar
+[INFO] 
+[INFO] --- spring-boot:2.1.3.RELEASE:repackage (default) @ manager-web ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ manager-web ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/pom.xml to /home/wql/.m2/repository/com/yanxin/car/manager-web/1.0-SNAPSHOT/manager-web-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/manager/manager-web/target/manager.jar to /home/wql/.m2/repository/com/yanxin/car/manager-web/1.0-SNAPSHOT/manager-web-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ----------------------< com.yanxin.car:txManage >-----------------------
+[INFO] Building txManage 1.0-SNAPSHOT                                   [13/22]
+[INFO]   from txManage/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ txManage ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/txManage/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ txManage ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 4 resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ txManage ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug target 1.8] to target/classes
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ txManage ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ txManage ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ txManage ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ txManage ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/txManage/target/tx-manage.jar
+[INFO] 
+[INFO] --- spring-boot:2.1.3.RELEASE:repackage (default) @ txManage ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ txManage ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/txManage/pom.xml to /home/wql/.m2/repository/com/yanxin/car/txManage/1.0-SNAPSHOT/txManage-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/txManage/target/tx-manage.jar to /home/wql/.m2/repository/com/yanxin/car/txManage/1.0-SNAPSHOT/txManage-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] -----------------------< com.yanxin.car:utility >-----------------------
+[INFO] Building utility 1.0-SNAPSHOT                                    [14/22]
+[INFO]   from utility/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ utility ---
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ utility ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/pom.xml to /home/wql/.m2/repository/com/yanxin/car/utility/1.0-SNAPSHOT/utility-1.0-SNAPSHOT.pom
+[INFO] 
+[INFO] -------------------< com.yanxin.car:utility-clients >-------------------
+[INFO] Building utility-clients 1.0-SNAPSHOT                            [15/22]
+[INFO]   from utility/utility-clients/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ utility-clients ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-clients/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ utility-clients ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-clients/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ utility-clients ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 24 source files with javac [debug target 1.8] to target/classes
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ utility-clients ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ utility-clients ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ utility-clients ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ utility-clients ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-clients/target/utility-clients.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ utility-clients ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-clients/pom.xml to /home/wql/.m2/repository/com/yanxin/car/utility-clients/1.0-SNAPSHOT/utility-clients-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-clients/target/utility-clients.jar to /home/wql/.m2/repository/com/yanxin/car/utility-clients/1.0-SNAPSHOT/utility-clients-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ------------------------< com.yanxin.car:order >------------------------
+[INFO] Building order 1.0-SNAPSHOT                                      [16/22]
+[INFO]   from order/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ order ---
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ order ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/pom.xml to /home/wql/.m2/repository/com/yanxin/car/order/1.0-SNAPSHOT/order-1.0-SNAPSHOT.pom
+[INFO] 
+[INFO] --------------------< com.yanxin.car:order-client >---------------------
+[INFO] Building order-client 1.0-SNAPSHOT                               [17/22]
+[INFO]   from order/order-client/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ order-client ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ order-client ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ order-client ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 159 source files with javac [debug target 1.8] to target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/response/order/score/QueryScoreInfoListRes.java:[17,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/score/QueryScoreListReq.java:[17,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/dtc/QueryDtcListReq.java:[17,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/driving/QueryOrderDrivingListReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/dtc/QueryDtcOrderListReq.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/course/QueryCourseListReq.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/comment/QueryCommentInfoListReq.java:[17,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/consult/QueryOrderConsultFrontListReq.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/consult/QueryOrderConsultListReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/response/order/goods/OrderGoodsFrontListRes.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/consult/QueryConsultListReq.java:[17,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/goods/QueryOrderGoodsListReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/response/technicianappointment/ShareTechnicianOrderInfoRes.java:[17,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/course/QueryCourseOrderListReq.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/groupbuy/QueryOrderGroupbuyListReq.java:[11,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/scene/QuerySceneOrderListReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/response/order/goods/OrderGoodsListRes.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/instance/QueryOrderCaseFrontListReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/course/QueryCourseParentListReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/response/technicianappointment/ShareTechnicianOrderRes.java:[21,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/instance/QueryOrderCaseListReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/technician/CaseForVehicleListRep.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/content/QueryContentListReq.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/order/goods/QueryOrderGoodsFrontListReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/technician/CaseForTechnicianListRep.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/maintain/QueryMaintainListReq.java:[18,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/src/main/java/com/car/order/client/request/technicianappointment/QueryShareTechnicianOrderReq.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ order-client ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ order-client ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ order-client ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ order-client ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/target/order-client.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ order-client ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/pom.xml to /home/wql/.m2/repository/com/yanxin/car/order-client/1.0-SNAPSHOT/order-client-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-client/target/order-client.jar to /home/wql/.m2/repository/com/yanxin/car/order-client/1.0-SNAPSHOT/order-client-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< com.yanxin.car:utility-web >---------------------
+[INFO] Building utility-web 1.0-SNAPSHOT                                [18/22]
+[INFO]   from utility/utility-web/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ utility-web ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ utility-web ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 8 resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ utility-web ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 53 source files with javac [debug target 1.8] to target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java:[19,16] sun.misc.BASE64Decoder是内部专用 API, 可能会在未来发行版中删除
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/model/Test.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/model/PayOrder.java:[11,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java:[19,16] sun.misc.BASE64Decoder是内部专用 API, 可能会在未来发行版中删除
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java:[19,16] sun.misc.BASE64Decoder是内部专用 API, 可能会在未来发行版中删除
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java:[19,16] sun.misc.BASE64Decoder是内部专用 API, 可能会在未来发行版中删除
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java:[169,13] sun.misc.BASE64Decoder是内部专用 API, 可能会在未来发行版中删除
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/service/impl/FileServiceImpl.java:[169,41] sun.misc.BASE64Decoder是内部专用 API, 可能会在未来发行版中删除
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/common/utils/AESUtils.java: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/common/utils/AESUtils.java使用或覆盖了已过时的 API。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/common/utils/AESUtils.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/service/impl/BaiduServiceImpl.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/src/main/java/com/car/utility/web/service/impl/BaiduServiceImpl.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ utility-web ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ utility-web ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ utility-web ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ utility-web ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/target/utility.jar
+[INFO] 
+[INFO] --- spring-boot:2.1.3.RELEASE:repackage (default) @ utility-web ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ utility-web ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/pom.xml to /home/wql/.m2/repository/com/yanxin/car/utility-web/1.0-SNAPSHOT/utility-web-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/utility/utility-web/target/utility.jar to /home/wql/.m2/repository/com/yanxin/car/utility-web/1.0-SNAPSHOT/utility-web-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] -----------------------< com.yanxin.car:account >-----------------------
+[INFO] Building account 1.0-SNAPSHOT                                    [19/22]
+[INFO]   from account/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ account ---
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ account ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/pom.xml to /home/wql/.m2/repository/com/yanxin/car/account/1.0-SNAPSHOT/account-1.0-SNAPSHOT.pom
+[INFO] 
+[INFO] -------------------< com.yanxin.car:account-client >--------------------
+[INFO] Building account-client 1.0-SNAPSHOT                             [20/22]
+[INFO]   from account/account-client/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ account-client ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ account-client ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ account-client ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 122 source files with javac [debug target 1.8] to target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/withdrawal/QueryWithdrawalListReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/response/goods/ext/StoreGoodsClassifyRes.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/contact/QueryContactListReq.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/technician/TechnicianListReq.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/addr/ModifyAddrReq.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/response/contact/ContactRes.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/store/QueryStoreTechnicianRelateListReq.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/response/profit/sub/ProfitStreamRes.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/vehicle/VehicleUserListReq.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/store/QueryAreaStoreListReq.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/goods/QueryStoreGoodsListReq.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/response/profit/AccountAmtRes.java:[17,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/response/goods/sub/GoodsClassifyRes.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/response/store/StoreCommentStaticsRes.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/goods/QueryGoodsListReq.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/technician/TechnicianAnswerReq.java:[12,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/store/AddStoreTechnicianRelateReq.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/store/QueryStoreListReq.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/goods/QueryGoodsClassifyReq.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/src/main/java/com/car/account/client/request/groupbuy/QueryGroupbuyListReq.java:[11,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ account-client ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ account-client ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ account-client ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ account-client ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/target/account-client.jar
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ account-client ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/pom.xml to /home/wql/.m2/repository/com/yanxin/car/account-client/1.0-SNAPSHOT/account-client-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-client/target/account-client.jar to /home/wql/.m2/repository/com/yanxin/car/account-client/1.0-SNAPSHOT/account-client-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ----------------------< com.yanxin.car:order-web >----------------------
+[INFO] Building order-web 1.0-SNAPSHOT                                  [21/22]
+[INFO]   from order/order-web/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ order-web ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ order-web ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 49 resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ order-web ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 177 source files with javac [debug target 1.8] to target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/dtc/DtcOrder.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/goods/Goods.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/scene/SceneOrder.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/consult/ConsultOrder.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/driving/OrderDriving.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/driving/AfterSaleImages.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/goods/OrderGoodsDetail.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/groupbuy/Groupbuy.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/consult/ConsultImages.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/goods/GoodsImages.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/maintain/Maintain.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/groupbuy/OrderGroupbuy.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/dtc/DtcContent.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/consult/ConsultDetail.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/course/Course.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/goods/OrderGoods.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/course/CourseOrder.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/dto/consult/ConsultDto.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/scene/SceneOrderServices.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/score/ScoreInfo.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/order/OrderInfo.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/consult/Consult.java:[17,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/groupbuy/GroupbuyGoods.java:[10,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/course/CourseParent.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/content/Content.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/dto/scene/SceneOrderDto.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/dtc/DtcOrderDetail.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/goods/GoodsDetail.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/sharetechnicianorder/ShareTechnicianOrder.java:[17,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/course/CourseOrderDetail.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/scene/SceneOrderTechnician.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/content/ContentResources.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/technician/cases/TechnicianProfit.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/instance/OrderCase.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/scene/SceneOrderDtcImages.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/course/CourseContent.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/comment/CommentInfo.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/dtc/Dtc.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/model/instance/OrderCaseDetail.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/service/content/impl/ContentServiceImpl.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/src/main/java/com/car/order/web/service/content/impl/ContentServiceImpl.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ order-web ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ order-web ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.18.1:test (default-test) @ order-web ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ order-web ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/target/order.jar
+[INFO] 
+[INFO] --- spring-boot:2.1.3.RELEASE:repackage (default) @ order-web ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ order-web ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/pom.xml to /home/wql/.m2/repository/com/yanxin/car/order-web/1.0-SNAPSHOT/order-web-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/order/order-web/target/order.jar to /home/wql/.m2/repository/com/yanxin/car/order-web/1.0-SNAPSHOT/order-web-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< com.yanxin.car:account-web >---------------------
+[INFO] Building account-web 1.0-SNAPSHOT                                [22/22]
+[INFO]   from account/account-web/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ account-web ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/target
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ account-web ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 36 resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ account-web ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 152 source files with javac [debug target 8] to target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/technician/TechnicianAccount.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/vehicle/VehicleConfig.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/contact/ContactMsg.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/groupbuy/GroupbuyGoods.java:[10,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/goods/GoodsParent.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/store/StoreBrand.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/technician/Technician.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/withdrawal/WithdrawalDetail.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/groupbuy/Groupbuy.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/technician/TechnicianStoreHistory.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/vehicle/Vehicle.java:[15,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/store/StoreAccount.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/vehicle/VehicleTesting.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/store/StoreImages.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/store/StoreUser.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/store/Store.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/technician/TechnicianBrand.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/vehicle/VehicleUser.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/withdrawal/Withdrawal.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/goods/GoodsDetail.java:[16,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/goods/GoodsImages.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/goods/Goods.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/technician/TechnicianCertificateImages.java:[13,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/model/store/StoreTechnicianRelate.java:[14,1] Generating equals/hashCode implementation but without a call to superclass, even though this class does not extend java.lang.Object. If this is intentional, add '@EqualsAndHashCode(callSuper=false)' to your type.
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/service/store/impl/StoreServiceImpl.java: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/service/store/impl/StoreServiceImpl.java使用了未经检查或不安全的操作。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/src/main/java/com/car/account/web/service/store/impl/StoreServiceImpl.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ account-web ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ account-web ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ account-web ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ account-web ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/target/account.jar
+[INFO] 
+[INFO] --- spring-boot:2.1.3.RELEASE:repackage (default) @ account-web ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ account-web ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/pom.xml to /home/wql/.m2/repository/com/yanxin/car/account-web/1.0-SNAPSHOT/account-web-1.0-SNAPSHOT.pom
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/Zip-263_CarStoreApi/account/account-web/target/account.jar to /home/wql/.m2/repository/com/yanxin/car/account-web/1.0-SNAPSHOT/account-web-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for car-service 1.0-SNAPSHOT:
+[INFO] 
+[INFO] car-service ........................................ SUCCESS [  0.292 s]
+[INFO] common ............................................. SUCCESS [  0.007 s]
+[INFO] common-swagger ..................................... SUCCESS [  2.086 s]
+[INFO] common-core ........................................ SUCCESS [  2.910 s]
+[INFO] common-datasource .................................. SUCCESS [  0.907 s]
+[INFO] common-websocket ................................... SUCCESS [  0.660 s]
+[INFO] common-tx-client ................................... SUCCESS [  0.079 s]
+[INFO] eureka ............................................. SUCCESS [  1.932 s]
+[INFO] manager ............................................ SUCCESS [  0.007 s]
+[INFO] manager-client ..................................... SUCCESS [  4.267 s]
+[INFO] gateway ............................................ SUCCESS [  3.076 s]
+[INFO] manager-web ........................................ SUCCESS [  4.853 s]
+[INFO] txManage ........................................... SUCCESS [  2.093 s]
+[INFO] utility ............................................ SUCCESS [  0.006 s]
+[INFO] utility-clients .................................... SUCCESS [  2.244 s]
+[INFO] order .............................................. SUCCESS [  0.008 s]
+[INFO] order-client ....................................... SUCCESS [ 17.105 s]
+[INFO] utility-web ........................................ SUCCESS [  6.342 s]
+[INFO] account ............................................ SUCCESS [  0.005 s]
+[INFO] account-client ..................................... SUCCESS [ 12.299 s]
+[INFO] order-web .......................................... SUCCESS [ 15.714 s]
+[INFO] account-web ........................................ SUCCESS [ 11.488 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:28 min
+[INFO] Finished at: 2026-04-24T22:00:04+08:00
+[INFO] ------------------------------------------------------------------------

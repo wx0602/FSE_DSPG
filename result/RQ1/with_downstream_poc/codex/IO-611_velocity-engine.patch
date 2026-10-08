@@ -1,0 +1,61 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a811a50a7702550a7e18081ef5fb380e81b3..4398eb0608f51383dec3c4cca511ad7c14c0e6ed 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeTemplateName(templateName);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +175,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeTemplateName(name);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+@@ -365,4 +365,38 @@ private File getFile(String path, String template)
+ 
+         return file;
+     }
++
++    /**
++     * Normalize a resource name after removing redundant separators.
++     *
++     * Commons IO 2.6 does not collapse repeated separators that occur after
++     * a path prefix (for example, //foo//./bar).  Besides producing an
++     * unexpected resource name, leaving those separators in place makes the
++     * result dependent on the platform's File handling.  Do this small piece
++     * of normalization before delegating to Commons IO, whose handling of
++     * dot segments and parent traversal is still required here.
++     */
++    private String normalizeTemplateName(String name)
++    {
++        StringBuilder compact = new StringBuilder(name.length());
++        boolean separator = false;
++        for (int i = 0; i < name.length(); i++)
++        {
++            char c = name.charAt(i);
++            if (c == '/' || c == '\\')
++            {
++                if (!separator)
++                {
++                    compact.append('/');
++                    separator = true;
++                }
++            }
++            else
++            {
++                compact.append(c);
++                separator = false;
++            }
++        }
++        return FilenameUtils.normalize(compact.toString(), true);
++    }
+ }

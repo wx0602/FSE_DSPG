@@ -1,0 +1,29 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8afc84c09db543dcc35b496e7833b0b80d..79f910320d865ad99e3731b5d4b5bfaf532fb265 100755
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -8,7 +8,23 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(NumberUtils.createNumber(normalizePositiveHex(value)), scale);
++	}
++
++	/**
++	 * Commons Lang's createNumber accepts a leading plus for decimal values,
++	 * but older versions reject it when it precedes a hexadecimal prefix. Keep
++	 * the dependency version unchanged and remove that redundant sign only for
++	 * hexadecimal input.
++	 */
++	private static String normalizePositiveHex(String value) {
++		if (value != null && value.length() > 1 && value.charAt(0) == '+') {
++			String unsigned = value.substring(1);
++			if (unsigned.startsWith("0x") || unsigned.startsWith("0X") || unsigned.startsWith("#")) {
++				return unsigned;
++			}
++		}
++		return value;
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {

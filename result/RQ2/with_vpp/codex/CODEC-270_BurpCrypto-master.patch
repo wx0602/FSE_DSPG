@@ -1,0 +1,93 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777f83eec54b5b3851af8952de52c0cd58ec..ae0bd382d84311614397f5eb638da629b4e4fa7b 100755
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -18,6 +18,7 @@ import java.security.interfaces.RSAPublicKey;
+ import java.security.spec.X509EncodedKeySpec;
+ import java.util.ArrayList;
+ import java.util.Random;
++import java.util.Base64.Decoder;
+ 
+ public class Utils {
+     private static MessageDigest md;
+@@ -113,7 +114,7 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        return Base64.decodeBase64(str);
++        return strictBase64Decode(str);
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -130,13 +131,70 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = strictBase64Decode(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();
+         return result;
+     }
+ 
++    /**
++     * Decode Base64 without accepting non-zero bits which are discarded by
++     * the final encoded character. Commons Codec 1.13 is intentionally kept
++     * as a dependency, so validation is performed at this application
++     * boundary rather than relying on its lenient decoder.
++     */
++    private static byte[] strictBase64Decode(String value) {
++        if (value == null) {
++            throw new IllegalArgumentException("Base64 value must not be null");
++        }
++        int length = value.length();
++        int padding = 0;
++        while (padding < length && value.charAt(length - padding - 1) == '=') {
++            padding++;
++        }
++        if (padding > 2 || (length % 4 == 1) || (padding > 0 && length % 4 != 0)) {
++            throw new IllegalArgumentException("Invalid Base64 length or padding");
++        }
++
++        int dataLength = length - padding;
++        for (int i = 0; i < dataLength; i++) {
++            char c = value.charAt(i);
++            if (!isBase64Character(c)) {
++                throw new IllegalArgumentException("Invalid Base64 character");
++            }
++        }
++        for (int i = dataLength; i < length; i++) {
++            if (value.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 padding");
++            }
++        }
++        int remainder = dataLength % 4;
++        if ((remainder == 2 && (base64Value(value.charAt(dataLength - 1)) & 0x0f) != 0)
++                || (remainder == 3 && (base64Value(value.charAt(dataLength - 1)) & 0x03) != 0)) {
++            throw new IllegalArgumentException("Non-zero trailing Base64 bits");
++        }
++        Decoder decoder = value.indexOf('-') >= 0 || value.indexOf('_') >= 0
++                ? java.util.Base64.getUrlDecoder() : java.util.Base64.getDecoder();
++        try {
++            return decoder.decode(value);
++        } catch (IllegalArgumentException e) {
++            throw new IllegalArgumentException("Invalid Base64 value", e);
++        }
++    }
++
++    private static boolean isBase64Character(char c) {
++        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
++                || (c >= '0' && c <= '9') || c == '+' || c == '/' || c == '-' || c == '_';
++    }
++
++    private static int base64Value(char c) {
++        if (c >= 'A' && c <= 'Z') return c - 'A';
++        if (c >= 'a' && c <= 'z') return c - 'a' + 26;
++        if (c >= '0' && c <= '9') return c - '0' + 52;
++        return c == '+' || c == '-' ? 62 : 63;
++    }
++
+ 
+     public static String[] GetOutFormats() {
+         ArrayList<String> strs = new ArrayList<String>();

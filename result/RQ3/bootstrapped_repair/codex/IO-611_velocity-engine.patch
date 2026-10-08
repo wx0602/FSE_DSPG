@@ -1,0 +1,110 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a811a50a7702550a7e18081ef5fb380e81b3..a4b1f1a1cf6bc3e035dadc936e0cc2e4145bc86e 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.File;
+@@ -112,7 +111,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = ResourcePathUtils.normalize( templateName, true );
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +174,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = ResourcePathUtils.normalize(name, false);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a552707053dc25670a2a158fadbef6c192e974e..74fe4898d19c32a10b2ad6cb17cdc13ab071fb6c 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.IOException;
+@@ -184,11 +183,7 @@ public Reader getResourceReader( String source, String encoding )
+         {
+             throw new ResourceNotFoundException("Need to have a resource!");
+         }
+-        System.out.println("we get"+result);
+-
+-        String normalizedPath = FilenameUtils.normalize( source, true );
+-
+-        System.out.println("we make"+normalizedPath);
++        String normalizedPath = ResourcePathUtils.normalize(source, true);
+ 
+         if ( normalizedPath == null || normalizedPath.length() == 0 )
+         {
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..3a0b2036f051f82368d7230f63e44e2ab36d2b52
+--- /dev/null
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java
+@@ -0,0 +1,49 @@
++package org.apache.velocity.runtime.resource.loader;
++
++import org.apache.commons.io.FilenameUtils;
++
++/**
++ * Path handling for resource names.
++ *
++ * Commons IO 2.6 can leave repeated separators behind when normalizing a
++ * path with a prefix.  Resource names are not UNC paths, so retaining that
++ * prefix would allow different spellings of the same resource to reach the
++ * lookup code.  Collapse separators after Commons IO has performed its
++ * traversal checks.
++ */
++final class ResourcePathUtils
++{
++    private ResourcePathUtils()
++    {
++    }
++
++    static String normalize(final String path, final boolean keepSeparator)
++    {
++        final String normalized = FilenameUtils.normalize(path, keepSeparator);
++        if (normalized == null)
++        {
++            return null;
++        }
++
++        final StringBuilder result = new StringBuilder(normalized.length());
++        boolean separator = false;
++        for (int i = 0; i < normalized.length(); i++)
++        {
++            final char character = normalized.charAt(i);
++            if (character == '/')
++            {
++                if (!separator)
++                {
++                    result.append(character);
++                }
++                separator = true;
++            }
++            else
++            {
++                result.append(character);
++                separator = false;
++            }
++        }
++        return result.toString();
++    }
++}

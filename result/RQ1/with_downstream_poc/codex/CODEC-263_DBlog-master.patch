@@ -1,0 +1,71 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+index 1c12446f3df7f0efa7e5dde262eaf560eb8eb9d4..36b91a5b3b77ccb15b90ab31877600e71b904808 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/PasswordUtil.java
+@@ -31,6 +31,66 @@ public class PasswordUtil {
+      * @throws Exception
+      */
+     public static String decrypt(String encryptPassword, String salt) throws Exception {
++        // commons-codec 1.13 throws an unchecked exception for a Base64 value
++        // whose final quantum contains non-zero unused bits (for example,
++        // "publishMessage").  This value is supplied from the database or a
++        // request, so validate it before passing it to the old codec version.
++        // Invalid credentials are handled by callers as an authentication
++        // failure; they must not be allowed to escape as a decoder error.
++        if (!isValidBase64(encryptPassword)) {
++            return null;
++        }
+         return AesUtil.decrypt(Md5Util.MD5(salt + CommonConst.ZYD_SECURITY_KEY), encryptPassword);
+     }
++
++    private static boolean isValidBase64(String value) {
++        if (value == null || value.length() == 0 || (value.length() & 3) == 1) {
++            return false;
++        }
++
++        int padding = 0;
++        int firstPadding = value.indexOf('=');
++        if (firstPadding >= 0) {
++            padding = value.length() - firstPadding;
++            if (padding > 2) {
++                return false;
++            }
++        }
++        for (int i = 0; i < value.length(); i++) {
++            char c = value.charAt(i);
++            if (c == '=') {
++                if (firstPadding < 0 || i < firstPadding) {
++                    return false;
++                }
++            } else {
++                if (firstPadding >= 0 && i > firstPadding || !isBase64Character(c)) {
++                    return false;
++                }
++            }
++        }
++
++        int dataLength = value.length() - padding;
++        if (padding > 0 && (value.length() & 3) != 0) {
++            return false;
++        }
++        if ((dataLength & 3) == 2) {
++            return (base64Value(value.charAt(dataLength - 1)) & 0x0f) == 0;
++        }
++        if ((dataLength & 3) == 3) {
++            return (base64Value(value.charAt(dataLength - 1)) & 0x03) == 0;
++        }
++        return true;
++    }
++
++    private static boolean isBase64Character(char c) {
++        return c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z'
++                || c >= '0' && c <= '9' || c == '+' || c == '/';
++    }
++
++    private static int base64Value(char c) {
++        if (c >= 'A' && c <= 'Z') return c - 'A';
++        if (c >= 'a' && c <= 'z') return c - 'a' + 26;
++        if (c >= '0' && c <= '9') return c - '0' + 52;
++        return c == '+' ? 62 : 63;
++    }
+ }

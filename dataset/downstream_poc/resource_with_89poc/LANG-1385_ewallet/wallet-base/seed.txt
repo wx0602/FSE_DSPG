@@ -1,0 +1,4 @@
+@Test(timeout = 4000)
+public void test150()  throws Throwable  {
+    Number number0 = NumberUtil.createNumber("-4.00");
+}

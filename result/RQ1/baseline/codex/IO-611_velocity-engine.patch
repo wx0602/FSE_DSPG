@@ -1,0 +1,112 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a811a50a7702550a7e18081ef5fb380e81b3..eb9bfc3c789c1a84da9d190ced8a4a95d9d2ef3f 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.File;
+@@ -112,7 +111,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = ResourceNameUtils.normalize( templateName, true );
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +174,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name =  ResourceNameUtils.normalize(name, false);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a552707053dc25670a2a158fadbef6c192e974e..331212606bbe48ab11c64a8682d7ad6103030176 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -25,7 +25,6 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
+ 
+ import java.io.IOException;
+@@ -186,7 +185,7 @@ public Reader getResourceReader( String source, String encoding )
+         }
+         System.out.println("we get"+result);
+ 
+-        String normalizedPath = FilenameUtils.normalize( source, true );
++        String normalizedPath = ResourceNameUtils.normalize( source, true );
+ 
+         System.out.println("we make"+normalizedPath);
+ 
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourceNameUtils.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourceNameUtils.java
+new file mode 100755
+index 0000000000000000000000000000000000000000..9fc0038d183a09731e881336b64311fd60c0499e
+--- /dev/null
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourceNameUtils.java
+@@ -0,0 +1,55 @@
++package org.apache.velocity.runtime.resource.loader;
++
++/*
++ * Licensed to the Apache Software Foundation (ASF) under one or more
++ * contributor license agreements.  See the NOTICE file distributed with
++ * this work for additional information regarding copyright ownership.
++ */
++
++import java.io.File;
++
++import org.apache.commons.io.FilenameUtils;
++
++/** Utilities for safely normalizing names supplied to resource loaders. */
++final class ResourceNameUtils
++{
++    private ResourceNameUtils()
++    {
++    }
++
++    /**
++     * Commons IO 2.6 can leave repeated separators in a normalized name.
++     * Collapse them after normalization so that a name cannot retain a
++     * different path spelling from the one described by the normalizer.
++     */
++    static String normalize(String name, boolean keepSeparator)
++    {
++        String normalized = FilenameUtils.normalize(name, keepSeparator);
++        if (normalized == null)
++        {
++            return null;
++        }
++
++        char separator = File.separatorChar;
++        StringBuilder result = new StringBuilder(normalized.length());
++        boolean separatorWritten = false;
++        for (int i = 0; i < normalized.length(); i++)
++        {
++            char current = normalized.charAt(i);
++            if (current == separator)
++            {
++                if (!separatorWritten)
++                {
++                    result.append(current);
++                    separatorWritten = true;
++                }
++            }
++            else
++            {
++                result.append(current);
++                separatorWritten = false;
++            }
++        }
++        return result.toString();
++    }
++}

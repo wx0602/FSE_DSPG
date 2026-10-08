@@ -1,0 +1,28 @@
+diff --git a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+index c13956745392a8a5fb22ed1f0e682a930f46acbb..7a91b19abb5f1e0ae20f7b495d2345fce156bb6b 100755
+--- a/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
++++ b/account/account-web/src/main/java/com/car/account/web/common/utils/ZipUtil.java
+@@ -14,6 +14,7 @@ import java.io.*;
+ import java.util.ArrayList;
+ import java.util.Enumeration;
+ import java.util.List;
++import java.util.Objects;
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+ 
+@@ -266,6 +267,10 @@ public class ZipUtil {
+      * @throws ZipException 压缩异常
+      */
+     public static void compressFile(File sourceFile, File zip) throws ZipException {
++        // zip4j 2.3.2 accepts a null File here and only fails later when the
++        // archive is used. Validate at the application boundary instead.
++        Objects.requireNonNull(sourceFile, "sourceFile must not be null");
++        Objects.requireNonNull(zip, "zip must not be null");
+         net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(zip);
+         ZipParameters zipParameters = new ZipParameters();
+         //压缩方式
+@@ -291,4 +296,3 @@ public class ZipUtil {
+     }
+ 
+ }
+-

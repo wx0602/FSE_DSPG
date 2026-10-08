@@ -1,0 +1,22 @@
+diff --git a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+index d4b42d76aa34b14c755a1b9cc7005b4b1d5fe931..d1b79c02cd5c48ea0116d1e09c641537cabd8d8d 100755
+--- a/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
++++ b/wallet-base/src/main/java/com/fr/chain/utils/NumberUtil.java
+@@ -116,6 +116,17 @@ public class NumberUtil {
+ 	 * @throws 如果String值不能被转换或null，将抛出NumberFormatException异常
+ 	 */
+ 	public static Number createNumber(String str)    {
++		/*
++		 * Commons Lang 3.4 accepts a leading '+' for decimal numbers, but
++		 * rejects it when the number is hexadecimal.  Keep the old library
++		 * version and remove the redundant sign only for that form; this
++		 * makes the input equivalent to the form the parser already supports.
++		 */
++		if (str != null && str.length() > 2 && str.charAt(0) == '+'
++				&& str.charAt(1) == '0'
++				&& (str.charAt(2) == 'x' || str.charAt(2) == 'X')) {
++			return NumberUtils.createNumber(str.substring(1));
++		}
+ 		return NumberUtils.createNumber(str);
+ 	}
+ 	

@@ -1,0 +1,80 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a811a50a7702550a7e18081ef5fb380e81b3..080308cef7cba0da04946e94010b850fdc89fcc4 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeResourceName(templateName, true);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +175,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeResourceName(name, false);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+@@ -200,6 +200,57 @@ public boolean resourceExists(String name)
+         return false;
+     }
+ 
++    /**
++     * FilenameUtils 2.6 does not remove repeated separators following a
++     * path prefix.  Normalize those separators before handing the name to
++     * the library.  Keep a leading double separator intact since it is a
++     * meaningful UNC/path prefix, but never allow duplicate separators in
++     * the remainder of a resource name.
++     */
++    private String normalizeResourceName(String name, boolean failOnAboveRoot)
++    {
++        StringBuilder collapsed = new StringBuilder(name.length());
++        int index = 0;
++        int leadingSeparators = 0;
++        while (index < name.length() && isSeparator(name.charAt(index)))
++        {
++            leadingSeparators++;
++            index++;
++        }
++        if (leadingSeparators > 0)
++        {
++            collapsed.append('/');
++            if (leadingSeparators > 1)
++            {
++                collapsed.append('/');
++            }
++        }
++        boolean separatorPending = false;
++        for (; index < name.length(); index++)
++        {
++            char character = name.charAt(index);
++            if (isSeparator(character))
++            {
++                separatorPending = true;
++            }
++            else
++            {
++                if (separatorPending)
++                {
++                    collapsed.append('/');
++                    separatorPending = false;
++                }
++                collapsed.append(character);
++            }
++        }
++        return FilenameUtils.normalize(collapsed.toString(), failOnAboveRoot);
++    }
++
++    private boolean isSeparator(char character)
++    {
++        return character == '/' || character == '\\';
++    }
++
+     /**
+      * Try to find a template given a normalized path.
+      *

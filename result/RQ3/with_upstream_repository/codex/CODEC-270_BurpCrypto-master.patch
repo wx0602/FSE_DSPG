@@ -1,0 +1,72 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777f83eec54b5b3851af8952de52c0cd58ec..b80c170e72abc957713ae8e2a0bbd3755590c543 100755
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,6 +113,7 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
++        validateBase64(str);
+         return Base64.decodeBase64(str);
+     }
+ 
+@@ -130,6 +131,7 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
++        validateBase64(base64Str);
+         byte[] decoded = Base64.decodeBase64(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+@@ -137,6 +139,51 @@ public class Utils {
+         return result;
+     }
+ 
++    /**
++     * Commons Codec 1.13 does not reject non-zero bits which are discarded
++     * from the last Base64 character (for example, AB==).  Validate those
++     * bits here rather than relying on the vulnerable decoder behavior.
++     */
++    private static void validateBase64(String value) {
++        if (value == null || value.length() == 0) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++
++        int length = value.length();
++        int padding = value.endsWith("==") ? 2 : (value.endsWith("=") ? 1 : 0);
++        int dataLength = length - padding;
++        if (dataLength == 0 || dataLength % 4 == 1 || (padding > 0 && length % 4 != 0)) {
++            throw new IllegalArgumentException("Invalid Base64 input");
++        }
++
++        for (int i = 0; i < dataLength; i++) {
++            if (base64Value(value.charAt(i)) < 0) {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++        for (int i = dataLength; i < length; i++) {
++            if (value.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 input");
++            }
++        }
++
++        int trailingBits = padding == 2 ? 4 : (padding == 1 ? 2 :
++                (dataLength % 4 == 2 ? 4 : (dataLength % 4 == 3 ? 2 : 0)));
++        if (trailingBits > 0 && (base64Value(value.charAt(dataLength - 1))
++                & ((1 << trailingBits) - 1)) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 input: non-zero trailing bits");
++        }
++    }
++
++    private static int base64Value(char c) {
++        if (c >= 'A' && c <= 'Z') return c - 'A';
++        if (c >= 'a' && c <= 'z') return c - 'a' + 26;
++        if (c >= '0' && c <= '9') return c - '0' + 52;
++        if (c == '+') return 62;
++        if (c == '/') return 63;
++        return -1;
++    }
++
+ 
+     public static String[] GetOutFormats() {
+         ArrayList<String> strs = new ArrayList<String>();

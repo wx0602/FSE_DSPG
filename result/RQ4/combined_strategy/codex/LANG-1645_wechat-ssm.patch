@@ -1,0 +1,35 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8afc84c09db543dcc35b496e7833b0b80d..ffedacde83776fafafee75e35dff4dc13e7e1406 100755
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -8,7 +8,7 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(createNumber(value), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +20,20 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(createNumber(value), scale);
++	}
++
++	/**
++	 * Commons Lang 3.12 accepts a leading '+' for decimal numbers, but does not
++	 * accept it when parsing hexadecimal numbers. Normalize that supported form
++	 * before delegating so both numeric entry points have consistent behavior.
++	 */
++	private static Number createNumber(String value) {
++		if (value != null && value.length() > 1 && value.charAt(0) == '+'
++				&& (value.startsWith("+0x") || value.startsWith("+0X") || value.startsWith("+#"))) {
++			return NumberUtils.createNumber(value.substring(1));
++		}
++		return NumberUtils.createNumber(value);
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {

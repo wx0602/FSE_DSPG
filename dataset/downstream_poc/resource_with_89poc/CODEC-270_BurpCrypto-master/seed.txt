@@ -1,0 +1,15 @@
+ @Test(timeout = 4000)
+  public void test0()  throws Throwable  {
+      ZUCUtil zUCUtil0 = new ZUCUtil();
+      // Undeclared exception!
+      try { 
+        zUCUtil0.decrypt("");
+        fail("Expecting exception: NullPointerException");
+      
+      } catch(NullPointerException e) {
+         //
+         // no message in exception (getMessage() returned null)
+         //
+         verifyException("burp.zuc.ZUCUtil", e);
+      }
+  }

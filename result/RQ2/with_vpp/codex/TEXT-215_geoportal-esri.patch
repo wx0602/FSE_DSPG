@@ -1,0 +1,20 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a131857f1187ac1f0efa324d89d89e97f6d5cb..ab67fbd46feae77a540146221fa8374f6efd192c 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -33,7 +33,14 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
++  /*
++   * Require the entity terminator.  Commons Text 1.7's optional-terminator
++   * parser consumes hexadecimal-looking letters after decimal entities (for
++   * example, it treats "&#106a" as one entity).  That can leave an encoded
++   * javascript scheme escaped and executable by a browser.  Keep the pinned
++   * library version, but do not enable its vulnerable parsing mode.
++   */
++  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonRequired);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 

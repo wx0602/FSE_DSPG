@@ -1,0 +1,17 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index fdf830bab6d62491ad7fad059ff3827701202998..da1f9de4f5a76a80bdb172e84508ac16dcebfe69 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -33,7 +33,11 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
++  // Require a semicolon so a decimal entity cannot consume a following
++  // hexadecimal-looking character (for example, "&#106avascript").
++  // This avoids the vulnerable optional-semicolon parsing behavior while
++  // retaining support for correctly terminated numeric entities.
++  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper();
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
+ 

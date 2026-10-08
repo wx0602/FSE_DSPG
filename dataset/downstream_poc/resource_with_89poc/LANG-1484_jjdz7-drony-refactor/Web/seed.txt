@@ -1,0 +1,6 @@
+  @Test(timeout = 4000)
+  public void test22()  throws Throwable  {
+      Validator validator0 = new Validator();
+      boolean boolean0 = validator0.validateInteger("");
+      assertFalse(boolean0);
+  }

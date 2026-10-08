@@ -1,0 +1,15 @@
+@Test(timeout = 4000)
+  public void test10()  throws Throwable  {
+      FileResourceLoader fileResourceLoader0 = new FileResourceLoader();
+      // Undeclared exception!
+      try { 
+        fileResourceLoader0.getResourceReader("5:.i?5)9Dlq*v:q3W", "");
+        fail("Expecting exception: NullPointerException");
+      
+      } catch(NullPointerException e) {
+         //
+         // no message in exception (getMessage() returned null)
+         //
+         verifyException("org.apache.velocity.runtime.resource.loader.FileResourceLoader", e);
+      }
+  }

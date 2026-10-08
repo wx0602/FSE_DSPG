@@ -1,0 +1,377 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Apache Velocity                                                    [pom]
+[INFO] Apache Velocity - Engine                                           [jar]
+[INFO] Apache Velocity Engine - Examples                                  [jar]
+[INFO] Apache Velocity - JSR 223 Scripting                                [jar]
+[INFO] Apache Velocity Custom Parser Example                              [jar]
+[INFO] 
+[INFO] -------------< org.apache.velocity:velocity-engine-parent >-------------
+[INFO] Building Apache Velocity 2.2-SNAPSHOT                              [1/5]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.1.0:clean (default-clean) @ velocity-engine-parent ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/target
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-bytecode-version) @ velocity-engine-parent ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-maven-version) @ velocity-engine-parent ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (ban-known-bad-maven-versions) @ velocity-engine-parent ---
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ velocity-engine-parent ---
+[INFO] 
+[INFO] --- site:3.7.1:attach-descriptor (attach-descriptor) @ velocity-engine-parent ---
+[INFO] No site descriptor found: nothing to attach.
+[INFO] 
+[INFO] --- install:2.5.2:install (default-install) @ velocity-engine-parent ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/pom.xml to /home/wql/.m2/repository/org/apache/velocity/velocity-engine-parent/2.2-SNAPSHOT/velocity-engine-parent-2.2-SNAPSHOT.pom
+[INFO] 
+[INFO] --------------< org.apache.velocity:velocity-engine-core >--------------
+[INFO] Building Apache Velocity - Engine 2.2-SNAPSHOT                     [2/5]
+[INFO]   from velocity-engine-core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] Parameter 'showWarning' is unknown for plugin 'maven-compiler-plugin:3.7.0:compile (default-compile)'
+[WARNING] Parameter 'showWarning' is unknown for plugin 'maven-compiler-plugin:3.7.0:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.1.0:clean (default-clean) @ velocity-engine-core ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-bytecode-version) @ velocity-engine-core ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-maven-version) @ velocity-engine-core ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (ban-known-bad-maven-versions) @ velocity-engine-core ---
+[INFO] 
+[INFO] --- resources:3.1.0:copy-resources (generate-parser-grammar) @ velocity-engine-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- javacc:2.6:jjtree-javacc (jjtree-javacc) @ velocity-engine-core ---
+Java Compiler Compiler Version 5.0 (Tree Builder)
+(type "jjtree" with no arguments for help)
+Reading from file /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target/parser/Parser.jjt . . .
+File "Node.java" does not exist.  Will create one.
+File "StandardParserTreeConstants.java" does not exist.  Will create one.
+File "StandardParserVisitor.java" does not exist.  Will create one.
+File "JJTStandardParserState.java" does not exist.  Will create one.
+Annotated grammar generated successfully in /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target/javacc-1777039043208/node/Parser.jj
+Java Compiler Compiler Version 5.0 (Parser Generator)
+(type "javacc" with no arguments for help)
+Reading from file /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target/javacc-1777039043208/node/Parser.jj . . .
+Note: UNICODE_INPUT option is specified. Please make sure you create the parser/lexer using a Reader with the correct character encoding.
+Warning: Choice conflict in [...] construct at line 1575, column 51.
+         Expansion nested within construct and expansion following construct
+         have common prefixes, one of which is: <TEXT>
+         Consider using a lookahead of 2 or more for nested expansion.
+Warning: Choice conflict in (...)* construct at line 2102, column 5.
+         Expansion nested within construct and expansion following construct
+         have common prefixes, one of which is: <WHITESPACE>
+         Consider using a lookahead of 2 or more for nested expansion.
+Warning: Choice conflict in (...)* construct at line 2482, column 5.
+         Expansion nested within construct and expansion following construct
+         have common prefixes, one of which is: <WHITESPACE>
+         Consider using a lookahead of 2 or more for nested expansion.
+Warning: Choice conflict in (...)* construct at line 2505, column 5.
+         Expansion nested within construct and expansion following construct
+         have common prefixes, one of which is: <WHITESPACE>
+         Consider using a lookahead of 2 or more for nested expansion.
+File "TokenMgrError.java" does not exist.  Will create one.
+File "ParseException.java" does not exist.  Will create one.
+File "Token.java" does not exist.  Will create one.
+File "CharStream.java" does not exist.  Will create one.
+Parser generated with 0 errors and 4 warnings.
+[INFO] Processed 1 grammar
+[INFO] 
+[INFO] --- replacer:1.5.3:replace (patch-parser-files) @ velocity-engine-core ---
+[INFO] Replacement run on 1 file.
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ velocity-engine-core ---
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ velocity-engine-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 2 resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- resources:3.1.0:copy-resources (expose-parser-grammar) @ velocity-engine-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- compiler:3.7.0:compile (default-compile) @ velocity-engine-core ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 218 source files to /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target/classes
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/util/DeprecationAwareExtProperties.java:[21,35] org.apache.velocity.runtime中的org.apache.velocity.runtime.DeprecatedRuntimeConstants已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/app/event/implement/EscapeJavaScriptReference.java:[3,32] org.apache.commons.lang3中的org.apache.commons.lang3.StringEscapeUtils已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/app/event/implement/EscapeHtmlReference.java:[3,32] org.apache.commons.lang3中的org.apache.commons.lang3.StringEscapeUtils已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/app/event/implement/EscapeXmlReference.java:[3,32] org.apache.commons.lang3中的org.apache.commons.lang3.StringEscapeUtils已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/runtime/RuntimeConstants.java:[32,43] org.apache.velocity.runtime中的org.apache.velocity.runtime.DeprecatedRuntimeConstants已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/runtime/VelocimacroFactory.java:[162,133] org.apache.velocity.runtime中的org.apache.velocity.runtime.DeprecatedRuntimeConstants已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/runtime/VelocimacroFactory.java:[162,159] org.apache.velocity.runtime.DeprecatedRuntimeConstants中的OLD_VM_LIBRARY_DEFAULT已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/runtime/VelocimacroFactory.java:[163,72] org.apache.velocity.runtime.DeprecatedRuntimeConstants中的OLD_VM_LIBRARY_DEFAULT已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/runtime/VelocimacroFactory.java:[165,53] org.apache.velocity.runtime.DeprecatedRuntimeConstants中的OLD_VM_LIBRARY_DEFAULT已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/runtime/VelocimacroFactory.java:[169,73] org.apache.velocity.runtime中的org.apache.velocity.runtime.DeprecatedRuntimeConstants已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/runtime/VelocimacroFactory.java:[169,99] org.apache.velocity.runtime.DeprecatedRuntimeConstants中的OLD_VM_LIBRARY_DEFAULT已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/runtime/directive/Include.java:[123,57] org.apache.velocity.runtime.RuntimeConstants中的ERRORMSG_START已过时
+[WARNING] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/runtime/directive/Include.java:[126,55] org.apache.velocity.runtime.RuntimeConstants中的ERRORMSG_END已过时
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/Template.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/src/main/java/org/apache/velocity/Template.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- bundle:3.5.0:manifest (bundle-manifest) @ velocity-engine-core ---
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ velocity-engine-core ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.7.0:testCompile (default-testCompile) @ velocity-engine-core ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.19.1:test (default-test) @ velocity-engine-core ---
+[WARNING]  Parameter 'systemProperties' is deprecated: Use systemPropertyVariables instead.
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.1.1:jar (default-jar) @ velocity-engine-core ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target/velocity-engine-core-2.2-SNAPSHOT.jar
+[INFO] 
+[INFO] --- site:3.7.1:attach-descriptor (attach-descriptor) @ velocity-engine-core ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] --- shade:3.2.1:shade (shade) @ velocity-engine-core ---
+[INFO] Excluding org.apache.commons:commons-lang3:jar:3.8.1 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.26 from the shaded jar.
+[INFO] Including commons-io:commons-io:jar:2.6 in the shaded jar.
+[INFO] Minimizing jar org.apache.velocity:velocity-engine-core:jar:2.2-SNAPSHOT
+[INFO] Minimized 420 -> 295 (70%)
+[INFO] Replacing original artifact with shaded artifact.
+[INFO] Replacing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target/velocity-engine-core-2.2-SNAPSHOT.jar with /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target/velocity-engine-core-2.2-SNAPSHOT-shaded.jar
+[INFO] Dependency-reduced POM written at: /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/dependency-reduced-pom.xml
+[INFO] 
+[INFO] --- surefire:2.19.1:test (integration-test) @ velocity-engine-core ---
+[WARNING]  Parameter 'systemProperties' is deprecated: Use systemPropertyVariables instead.
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- install:2.5.2:install (default-install) @ velocity-engine-core ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target/velocity-engine-core-2.2-SNAPSHOT.jar to /home/wql/.m2/repository/org/apache/velocity/velocity-engine-core/2.2-SNAPSHOT/velocity-engine-core-2.2-SNAPSHOT.jar
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/dependency-reduced-pom.xml to /home/wql/.m2/repository/org/apache/velocity/velocity-engine-core/2.2-SNAPSHOT/velocity-engine-core-2.2-SNAPSHOT.pom
+[INFO] 
+[INFO] ------------< org.apache.velocity:velocity-engine-examples >------------
+[INFO] Building Apache Velocity Engine - Examples 2.2-SNAPSHOT            [3/5]
+[INFO]   from velocity-engine-examples/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] Parameter 'showWarning' is unknown for plugin 'maven-compiler-plugin:3.7.0:compile (default-compile)'
+[WARNING] Parameter 'showWarning' is unknown for plugin 'maven-compiler-plugin:3.7.0:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.1.0:clean (default-clean) @ velocity-engine-examples ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-examples/target
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-bytecode-version) @ velocity-engine-examples ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-maven-version) @ velocity-engine-examples ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (ban-known-bad-maven-versions) @ velocity-engine-examples ---
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ velocity-engine-examples ---
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ velocity-engine-examples ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 6 resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.7.0:compile (default-compile) @ velocity-engine-examples ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 7 source files to /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-examples/target/classes
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-examples/src/main/java/org/apache/velocity/example/Example.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- bundle:3.5.0:manifest (bundle-manifest) @ velocity-engine-examples ---
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ velocity-engine-examples ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.7.0:testCompile (default-testCompile) @ velocity-engine-examples ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.22.0:test (default-test) @ velocity-engine-examples ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.1.1:jar (default-jar) @ velocity-engine-examples ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-examples/target/velocity-engine-examples-2.2-SNAPSHOT.jar
+[INFO] 
+[INFO] --- site:3.7.1:attach-descriptor (attach-descriptor) @ velocity-engine-examples ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] --- install:2.5.2:install (default-install) @ velocity-engine-examples ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-examples/target/velocity-engine-examples-2.2-SNAPSHOT.jar to /home/wql/.m2/repository/org/apache/velocity/velocity-engine-examples/2.2-SNAPSHOT/velocity-engine-examples-2.2-SNAPSHOT.jar
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-examples/pom.xml to /home/wql/.m2/repository/org/apache/velocity/velocity-engine-examples/2.2-SNAPSHOT/velocity-engine-examples-2.2-SNAPSHOT.pom
+[INFO] 
+[INFO] -----------< org.apache.velocity:velocity-engine-scripting >------------
+[INFO] Building Apache Velocity - JSR 223 Scripting 2.2-SNAPSHOT          [4/5]
+[INFO]   from velocity-engine-scripting/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] Parameter 'showWarning' is unknown for plugin 'maven-compiler-plugin:3.7.0:compile (default-compile)'
+[WARNING] Parameter 'showWarning' is unknown for plugin 'maven-compiler-plugin:3.7.0:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.1.0:clean (default-clean) @ velocity-engine-scripting ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-scripting/target
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-bytecode-version) @ velocity-engine-scripting ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-maven-version) @ velocity-engine-scripting ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (ban-known-bad-maven-versions) @ velocity-engine-scripting ---
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ velocity-engine-scripting ---
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ velocity-engine-scripting ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.7.0:compile (default-compile) @ velocity-engine-scripting ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-scripting/target/classes
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-scripting/src/main/java/org/apache/velocity/script/VelocityScriptEngineFactory.java: /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-scripting/src/main/java/org/apache/velocity/script/VelocityScriptEngineFactory.java使用了未经检查或不安全的操作。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-scripting/src/main/java/org/apache/velocity/script/VelocityScriptEngineFactory.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- bundle:3.5.0:manifest (bundle-manifest) @ velocity-engine-scripting ---
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ velocity-engine-scripting ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.7.0:testCompile (default-testCompile) @ velocity-engine-scripting ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.19.1:test (default-test) @ velocity-engine-scripting ---
+[WARNING]  Parameter 'systemProperties' is deprecated: Use systemPropertyVariables instead.
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.1.1:jar (default-jar) @ velocity-engine-scripting ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-scripting/target/velocity-engine-scripting-2.2-SNAPSHOT.jar
+[INFO] 
+[INFO] --- site:3.7.1:attach-descriptor (attach-descriptor) @ velocity-engine-scripting ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] --- surefire:2.19.1:test (integration-test) @ velocity-engine-scripting ---
+[WARNING]  Parameter 'systemProperties' is deprecated: Use systemPropertyVariables instead.
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- install:2.5.2:install (default-install) @ velocity-engine-scripting ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-scripting/target/velocity-engine-scripting-2.2-SNAPSHOT.jar to /home/wql/.m2/repository/org/apache/velocity/velocity-engine-scripting/2.2-SNAPSHOT/velocity-engine-scripting-2.2-SNAPSHOT.jar
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-scripting/pom.xml to /home/wql/.m2/repository/org/apache/velocity/velocity-engine-scripting/2.2-SNAPSHOT/velocity-engine-scripting-2.2-SNAPSHOT.pom
+[INFO] 
+[INFO] ---------< org.apache.velocity:velocity-custom-parser-example >---------
+[INFO] Building Apache Velocity Custom Parser Example 2.2-SNAPSHOT        [5/5]
+[INFO]   from velocity-custom-parser-example/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] Parameter 'showWarning' is unknown for plugin 'maven-compiler-plugin:3.7.0:compile (default-compile)'
+[WARNING] Parameter 'showWarning' is unknown for plugin 'maven-compiler-plugin:3.7.0:testCompile (default-testCompile)'
+[INFO] 
+[INFO] --- clean:3.1.0:clean (default-clean) @ velocity-custom-parser-example ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-bytecode-version) @ velocity-custom-parser-example ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (enforce-maven-version) @ velocity-custom-parser-example ---
+[INFO] 
+[INFO] --- enforcer:1.4.1:enforce (ban-known-bad-maven-versions) @ velocity-custom-parser-example ---
+[INFO] 
+[INFO] --- dependency:3.1.1:unpack (fetch-grammar-file) @ velocity-custom-parser-example ---
+[INFO] Configured Artifact: org.apache.velocity:velocity-engine-core:2.2-SNAPSHOT:jar
+[INFO] Unpacking /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-engine-core/target/velocity-engine-core-2.2-SNAPSHOT.jar to /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/grammar with includes "org/apache/velocity/runtime/parser/Parser.jjt" and excludes ""
+[INFO] 
+[INFO] --- resources:3.1.0:copy-resources (generate-parser-grammar) @ velocity-custom-parser-example ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- javacc:2.6:jjtree-javacc (jjtree-javacc) @ velocity-custom-parser-example ---
+Java Compiler Compiler Version 5.0 (Tree Builder)
+(type "jjtree" with no arguments for help)
+Reading from file /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/parser/org/apache/velocity/runtime/parser/Parser.jjt . . .
+File "Node.java" does not exist.  Will create one.
+File "CustomParserTreeConstants.java" does not exist.  Will create one.
+File "CustomParserVisitor.java" does not exist.  Will create one.
+File "JJTCustomParserState.java" does not exist.  Will create one.
+Annotated grammar generated successfully in /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/javacc-1777039051091/node/Parser.jj
+Java Compiler Compiler Version 5.0 (Parser Generator)
+(type "javacc" with no arguments for help)
+Reading from file /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/javacc-1777039051091/node/Parser.jj . . .
+Note: UNICODE_INPUT option is specified. Please make sure you create the parser/lexer using a Reader with the correct character encoding.
+Warning: Choice conflict in [...] construct at line 1575, column 51.
+         Expansion nested within construct and expansion following construct
+         have common prefixes, one of which is: <TEXT>
+         Consider using a lookahead of 2 or more for nested expansion.
+Warning: Choice conflict in (...)* construct at line 2102, column 5.
+         Expansion nested within construct and expansion following construct
+         have common prefixes, one of which is: <WHITESPACE>
+         Consider using a lookahead of 2 or more for nested expansion.
+Warning: Choice conflict in (...)* construct at line 2482, column 5.
+         Expansion nested within construct and expansion following construct
+         have common prefixes, one of which is: <WHITESPACE>
+         Consider using a lookahead of 2 or more for nested expansion.
+Warning: Choice conflict in (...)* construct at line 2505, column 5.
+         Expansion nested within construct and expansion following construct
+         have common prefixes, one of which is: <WHITESPACE>
+         Consider using a lookahead of 2 or more for nested expansion.
+File "TokenMgrError.java" does not exist.  Will create one.
+File "ParseException.java" does not exist.  Will create one.
+File "Token.java" does not exist.  Will create one.
+File "CharStream.java" does not exist.  Will create one.
+Parser generated with 0 errors and 4 warnings.
+[INFO] Processed 1 grammar
+[INFO] 
+[INFO] --- clean:3.1.0:clean (clean-extra-javacc) @ velocity-custom-parser-example ---
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/generated-sources/javacc (includes = [**/*.java], excludes = [**/*Custom*.java])
+[INFO] Deleting /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/generated-sources/jjtree (includes = [**/node/*.java], excludes = [**/node/*Custom*.java])
+[INFO] 
+[INFO] --- replacer:1.5.3:replace (patch-parser-files) @ velocity-custom-parser-example ---
+[INFO] Replacement run on 2 files.
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ velocity-custom-parser-example ---
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ velocity-custom-parser-example ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/src/main/resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.7.0:compile (default-compile) @ velocity-custom-parser-example ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 6 source files to /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/classes
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/generated-sources/javacc/org/apache/velocity/runtime/parser/custom/CustomParserTokenManager.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/generated-sources/javacc/org/apache/velocity/runtime/parser/custom/CustomParserTokenManager.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- bundle:3.5.0:manifest (bundle-manifest) @ velocity-custom-parser-example ---
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ velocity-custom-parser-example ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.7.0:testCompile (default-testCompile) @ velocity-custom-parser-example ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:2.19.1:test (default-test) @ velocity-custom-parser-example ---
+[WARNING]  Parameter 'systemProperties' is deprecated: Use systemPropertyVariables instead.
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.1.1:jar (default-jar) @ velocity-custom-parser-example ---
+[INFO] Building jar: /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/velocity-custom-parser-example-2.2-SNAPSHOT.jar
+[INFO] 
+[INFO] --- site:3.7.1:attach-descriptor (attach-descriptor) @ velocity-custom-parser-example ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] --- install:2.5.2:install (default-install) @ velocity-custom-parser-example ---
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/target/velocity-custom-parser-example-2.2-SNAPSHOT.jar to /home/wql/.m2/repository/org/apache/velocity/velocity-custom-parser-example/2.2-SNAPSHOT/velocity-custom-parser-example-2.2-SNAPSHOT.jar
+[INFO] Installing /media/wql/办公/AVR_agent/downstream_dataset/resource/IO-611_velocity-engine/velocity-custom-parser-example/pom.xml to /home/wql/.m2/repository/org/apache/velocity/velocity-custom-parser-example/2.2-SNAPSHOT/velocity-custom-parser-example-2.2-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Apache Velocity 2.2-SNAPSHOT:
+[INFO] 
+[INFO] Apache Velocity .................................... SUCCESS [  1.061 s]
+[INFO] Apache Velocity - Engine ........................... SUCCESS [  7.111 s]
+[INFO] Apache Velocity Engine - Examples .................. SUCCESS [  0.581 s]
+[INFO] Apache Velocity - JSR 223 Scripting ................ SUCCESS [  0.342 s]
+[INFO] Apache Velocity Custom Parser Example .............. SUCCESS [  1.314 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  10.555 s
+[INFO] Finished at: 2026-04-24T21:57:32+08:00
+[INFO] ------------------------------------------------------------------------

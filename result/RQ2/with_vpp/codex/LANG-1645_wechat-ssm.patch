@@ -1,0 +1,33 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8afc84c09db543dcc35b496e7833b0b80d..a5ce20eace1078f5edd1efb8aea00a2b9039acc5 100755
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -8,7 +8,7 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(NumberUtils.createNumber(normalizeLeadingPlus(value)), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +20,18 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(NumberUtils.createNumber(normalizeLeadingPlus(value)), scale);
++	}
++
++	/**
++	 * Commons Lang versions used by this application do not consistently accept
++	 * a leading '+' for hexadecimal numbers in createNumber().  Java's number
++	 * syntax does allow it, so remove only that optional prefix before handing
++	 * the value to the library.  Null is deliberately left unchanged so the
++	 * dependency retains its existing null-handling behavior.
++	 */
++	private static String normalizeLeadingPlus(String value) {
++		return value != null && value.startsWith("+") ? value.substring(1) : value;
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {

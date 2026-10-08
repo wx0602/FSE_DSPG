@@ -1,19 +1,19 @@
-# 三组修复失败、组合组修复成功的 case
+# Cases where three groups are repair_failed and the combined group repairs successfully
 
-## 结论
+## Conclusion
 
-严格口径下共找到 **9 个 `<工具, 补丁>` 对**。
+Under the strict criterion a total of **9 `<tool, patch>` pairs** were found.
 
-严格判定条件：
+Strict decision conditions:
 
-- `带漏洞链验证结果_矩阵.csv == 修复失败`
-- `CVE 描述验证结果_矩阵.csv == 修复失败`
-- `带自生成上游补丁验证结果_矩阵.csv == 修复失败`
-- `带自生成上游补丁加漏洞链验证结果_矩阵.csv == success`
+- `with_vuln_chain_validation_matrix.csv == repair_failed`
+- `cve_description_validation_matrix.csv == repair_failed`
+- `with_selfgen_upstream_patch_matrix.csv == repair_failed`
+- `with_selfgen_upstream_patch_and_vuln_chain_matrix.csv == success`
 
-四张矩阵均有 567 个相同的 `target_id × 工具` 键（63 个 target、9 个工具），因此不存在因缺行或缺工具造成的漏配。
+All four matrices have the same 567 `target_id × tool` keys (63 targets, 9 tools), so there are no missed pairings caused by missing rows or missing tools.
 
-## 所有严格口径 case
+## All strict-criterion cases
 
 1. `patchagent` × `CODEC-263_DBlog-master.patch`
 2. `repairagent` × `CODEC-263_DBlog-master.patch`
@@ -25,21 +25,21 @@
 8. `repairagent` × `CVE-2022-29631_ucloud-java-sdk.patch`
 9. `repairagent` × `CVE-2022-45688_virtress.patch`
 
-按工具统计：openhands 1 对、patchagent 1 对、premm 1 对、repairagent 5 对、sweagent 1 对。
+Counted by tool: openhands 1 pair, patchagent 1 pair, premm 1 pair, repairagent 5 pairs, sweagent 1 pair.
 
-详细的四组状态、成功补丁路径、SHA-256 和文件大小见 `所有case_严格口径.csv`；对应成功补丁已复制到 `成功补丁/`。
+The four-group states, successful-patch paths, SHA-256 and file sizes are in `all_cases_strict.csv`; the corresponding successful patches have been copied to `successful_patches/`.
 
-## 宽口径附录
+## Relaxed-criterion appendix
 
-如果把 `编译错误` 和 `empty` 也算作“没有修复成功”，则共 35 对。完整清单见 `附录_前三组均未success.csv`，其中用“是否也属于严格口径”标出了上述 9 对。
+If `compile_error` and `empty` are also counted as "not repaired successfully", there are 35 pairs in total. The complete list is in `appendix_first_three_groups_all_fail.csv`, where the 9 pairs above are marked with "also belongs to the strict criterion".
 
-## 数据来源与复现
+## Data sources and reproduction
 
-- `漏洞链`：`带漏洞链验证结果_矩阵.csv`
-- `CVE描述`：`CVE 描述验证结果_矩阵.csv`
-- `自生成上游补丁`：`带自生成上游补丁验证结果_矩阵.csv`
-- `自生成上游补丁加漏洞链`：`带自生成上游补丁加漏洞链验证结果_矩阵.csv`
+- `Vulnerability chain`: `with_vuln_chain_validation_matrix.csv`
+- `CVE description`: `cve_description_validation_matrix.csv`
+- `Self-generated upstream patch`: `with_selfgen_upstream_patch_matrix.csv`
+- `Self-generated upstream patch + vulnerability chain`: `with_selfgen_upstream_patch_and_vuln_chain_matrix.csv`
 
-组合实验采用最新的完整批次：`带自生成上游补丁加漏洞链验证结果/nine_patch_validation_20260830_202357/pipeline_summary.json`。
+The combined experiment uses the latest complete batch: `带自生成上游补丁加漏洞链验证结果/nine_patch_validation_20260830_202357/pipeline_summary.json`.
 
-在本目录执行 `python3 生成结果.py` 可重新计算清单并刷新补丁副本。脚本会校验四张矩阵的工具列和全部键完全一致。
+Running `python3 generate_results.py` in this directory recomputes the list and refreshes the patch copies. The script verifies that the tool columns and all keys of the four matrices are exactly identical.

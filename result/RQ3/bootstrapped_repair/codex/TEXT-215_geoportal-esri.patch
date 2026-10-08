@@ -1,0 +1,33 @@
+diff --git a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+index d8a131857f1187ac1f0efa324d89d89e97f6d5cb..e9c4a29d485aae30c3047e1ea6b3e77a2dff51b2 100755
+--- a/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
++++ b/geoportal/src/main/java/com/esri/geoportal/base/util/Val.java
+@@ -33,9 +33,14 @@ import java.util.regex.Pattern;
+  */
+ public class Val {
+   static OctalUnescaper OCTAL = new OctalUnescaper();
+-  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonOptional);
++  // Do not accept unterminated entities. Commons Text 1.7 has a parsing bug
++  // in the optional-semicolon mode which lets A-F characters be consumed as
++  // part of a decimal entity and then leaves the entity escaped.
++  static NumericEntityUnescaper NUMERIC = new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.semiColonRequired);
+   static UnicodeUnescaper UNICODE = new UnicodeUnescaper();
+   static Pattern octalPattern = Pattern.compile("\\\\[0-8]{2,3}");
++  private static final Pattern DECIMAL_ENTITY_BEFORE_HEX_LETTER =
++      Pattern.compile("&#([0-9]+)(?=[A-Fa-f])");
+ 
+   /**
+    * Converts a string to a boolean.
+@@ -230,7 +235,11 @@ public class Val {
+   public static String unescapeHtml4(String v) {
+     if (v != null) {
+ 
+-      return StringEscapeUtils.unescapeHtml4(v);
++      // Commons Text 1.7's HTML translator uses NumericEntityUnescaper in
++      // optional-semicolon mode. Terminate decimal entities before A-F so
++      // those letters cannot be incorrectly included in the number.
++      return StringEscapeUtils.unescapeHtml4(
++          DECIMAL_ENTITY_BEFORE_HEX_LETTER.matcher(v).replaceAll("&#$1;"));
+ 
+     }
+     return v;

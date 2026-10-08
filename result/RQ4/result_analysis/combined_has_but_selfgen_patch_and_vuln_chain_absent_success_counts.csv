@@ -1,0 +1,10 @@
+﻿tool_name,all_pocs_pass_AND,at_least_one_poc_pass_OR
+agentless,8,7
+appatch,3,3
+openhands,1,1
+patchagent,2,1
+premm,4,6
+reinfix,6,7
+repairagent,11,9
+san2patch,0,3
+sweagent,2,2

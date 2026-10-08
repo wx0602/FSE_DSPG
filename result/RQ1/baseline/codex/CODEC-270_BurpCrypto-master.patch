@@ -1,0 +1,40 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index d798d1a5ea49159271e7a22bd04a386adfe5e7c3..3e3fb9823a94da82518dacbd487ca675cb310fa6 100755
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -115,8 +115,7 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
+-        validateStrictBase64(str);
+-        return Base64.decodeBase64(str);
++        return decodeStrictBase64(str);
+     }
+ 
+     public static String hex(byte[] bytes) {
+@@ -133,14 +132,23 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        validateStrictBase64(base64Str);
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = decodeStrictBase64(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();
+         return result;
+     }
+ 
++    /**
++     * Commons Codec 1.13 accepts non-zero unused bits in the final Base64
++     * character. Keep the library for compatibility, but make all decoding
++     * go through the strict validation below first.
++     */
++    private static byte[] decodeStrictBase64(String value) {
++        validateStrictBase64(value);
++        return Base64.decodeBase64(value);
++    }
++
+     private static void validateStrictBase64(String value) {
+         if (value == null) {
+             throw new IllegalArgumentException("Base64 input cannot be null");

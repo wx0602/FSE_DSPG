@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""用 RQ1 真实 PoC 的修复失败修正 CVE 矩阵中的 success。"""
+"""Correct successes in the CVE matrix using repair failures from the RQ1 real-PoC matrix."""
 
 from __future__ import annotations
 
@@ -12,34 +12,34 @@ from pathlib import Path
 
 
 SUCCESS = "success"
-REPAIR_FAILED = "修复失败"
-VALID_RESULTS = {SUCCESS, "empty", "编译错误", REPAIR_FAILED}
+REPAIR_FAILED = "repair_failed"
+VALID_RESULTS = {SUCCESS, "empty", "compile_error", REPAIR_FAILED}
 
 
 def parse_args() -> argparse.Namespace:
     root = Path(__file__).resolve().parent
     parser = argparse.ArgumentParser(
         description=(
-            "当 CVE 矩阵为 success、RQ1 真实 PoC 矩阵为修复失败时，"
-            "将 CVE 状态改为修复失败"
+            "When the CVE matrix says success but the RQ1 real-PoC matrix says repair_failed, "
+            "set the CVE status to repair_failed"
         )
     )
     parser.add_argument(
         "--cve",
         type=Path,
-        default=root / "CVE 描述验证结果_矩阵.csv",
-        help="需要修正的 CVE 矩阵",
+        default=root / "cve_description_validation_matrix.csv",
+        help="CVE matrix to correct",
     )
     parser.add_argument(
         "--rq1",
         type=Path,
-        default=root / "RQ1真实PoC验证结果_矩阵.csv",
-        help="RQ1 真实 PoC 矩阵",
+        default=root / "rq1_real_poc_validation_matrix.csv",
+        help="RQ1 real-PoC matrix",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="只显示将要修改的单元格，不写文件",
+        help="Only show the cells that would change; do not write the file",
     )
     return parser.parse_args()
 
@@ -48,19 +48,19 @@ def read_matrix(path: Path) -> tuple[list[str], list[dict[str, str]]]:
     with path.open("r", encoding="utf-8-sig", newline="") as file:
         reader = csv.DictReader(file)
         if not reader.fieldnames or reader.fieldnames[0] != "target_id":
-            raise ValueError(f"第一列必须是 target_id：{path}")
+            raise ValueError(f"the first column must be target_id: {path}")
         rows = list(reader)
 
     target_ids = [row["target_id"] for row in rows]
     if len(target_ids) != len(set(target_ids)):
-        raise ValueError(f"存在重复 target_id：{path}")
+        raise ValueError(f"duplicate target_id present: {path}")
 
     tools = reader.fieldnames[1:]
     for row in rows:
         unknown = {row[tool] for tool in tools} - VALID_RESULTS
         if unknown:
             raise ValueError(
-                f"{path} 的 {row['target_id']} 中存在未知状态：{sorted(unknown)}"
+                f"unknown status in {row['target_id']} of {path}: {sorted(unknown)}"
             )
     return list(reader.fieldnames), rows
 
@@ -98,7 +98,7 @@ def main() -> None:
 
     if rq1_header != cve_header:
         raise ValueError(
-            "两个矩阵的列名或工具顺序不一致：\n"
+            "column names or tool order of the two matrices differ:\n"
             f"CVE: {cve_header}\nRQ1: {rq1_header}"
         )
 
@@ -108,29 +108,29 @@ def main() -> None:
         row["target_id"] for row in rq1_rows if row["target_id"] not in cve_by_target
     )
     if missing_targets:
-        raise ValueError(f"RQ1 中的 target_id 不在 CVE 矩阵中：{missing_targets}")
+        raise ValueError(f"target_id from RQ1 is absent from the CVE matrix: {missing_targets}")
 
     changes: list[tuple[str, str, str]] = []
     for rq1_row in rq1_rows:
         target_id = rq1_row["target_id"]
         cve_row = cve_by_target[target_id]
         for tool in tools:
-            # 仅用真实 PoC 的“修复失败”推翻原来的 success；RQ1 中的
-            # empty 代表没有可验证补丁，不应覆盖 CVE 矩阵的状态。
+            # Only a real-PoC repair_failed overrides an earlier success; "empty" in RQ1
+            # means there is no verifiable patch and must not overwrite the CVE matrix status.
             if cve_row[tool] == SUCCESS and rq1_row[tool] == REPAIR_FAILED:
                 cve_row[tool] = REPAIR_FAILED
                 changes.append((target_id, tool, REPAIR_FAILED))
 
-    action = "将修改" if args.dry_run else "已修改"
+    action = "would modify" if args.dry_run else "modified"
     if not args.dry_run and changes:
         write_matrix_atomic(cve_path, cve_header, cve_rows)
 
-    print(f"{action} {len(changes)} 个单元格：{cve_path}")
+    print(f"{action} {len(changes)} cells: {cve_path}")
     by_reason = Counter(reason for _, _, reason in changes)
     by_tool = Counter(tool for _, tool, _ in changes)
     if changes:
-        print("按原因：" + ", ".join(f"{key}={value}" for key, value in by_reason.items()))
-        print("按工具：" + ", ".join(f"{key}={by_tool[key]}" for key in tools if by_tool[key]))
+        print("By reason: " + ", ".join(f"{key}={value}" for key, value in by_reason.items()))
+        print("By tool: " + ", ".join(f"{key}={by_tool[key]}" for key in tools if by_tool[key]))
         for target_id, tool, reason in changes:
             print(f"  {target_id},{tool}: success -> {reason}")
 

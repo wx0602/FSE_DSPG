@@ -1,0 +1,114 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a811a50a7702550a7e18081ef5fb380e81b3..43a9be3cdbf36d56dc05b9f6c94077624039ff96 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -25,8 +25,8 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
++import org.apache.velocity.util.NormalizedPath;
+ 
+ import java.io.File;
+ import java.io.FileInputStream;
+@@ -112,7 +112,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = NormalizedPath.normalize( templateName, true );
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +175,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name =  NormalizedPath.normalize(name);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a552707053dc25670a2a158fadbef6c192e974e..851b6d8f081b4b2745b0c26557009f794b1f87a0 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -25,8 +25,8 @@
+ import org.apache.velocity.runtime.resource.Resource;
+ import org.apache.velocity.util.ExtProperties;
+ 
+-import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang3.StringUtils;
++import org.apache.velocity.util.NormalizedPath;
+ 
+ import java.io.IOException;
+ import java.io.InputStream;
+@@ -186,7 +186,7 @@ public Reader getResourceReader( String source, String encoding )
+         }
+         System.out.println("we get"+result);
+ 
+-        String normalizedPath = FilenameUtils.normalize( source, true );
++        String normalizedPath = NormalizedPath.normalize( source, true );
+ 
+         System.out.println("we make"+normalizedPath);
+ 
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/util/NormalizedPath.java b/velocity-engine-core/src/main/java/org/apache/velocity/util/NormalizedPath.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..2b4db800c830e13a855c74d0151567f639ec9fd0
+--- /dev/null
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/util/NormalizedPath.java
+@@ -0,0 +1,53 @@
++package org.apache.velocity.util;
++
++import org.apache.commons.io.FilenameUtils;
++
++/**
++ * Path normalization used by resource loaders.
++ *
++ * Commons IO 2.6 does not remove repeated separators after a path prefix.
++ * Keep the dependency version fixed, but apply the missing final step here.
++ */
++public final class NormalizedPath
++{
++    private NormalizedPath()
++    {
++    }
++
++    public static String normalize(final String path)
++    {
++        final String normalized = FilenameUtils.normalize(path);
++        return collapseSeparators(normalized);
++    }
++
++    public static String normalize(final String path, final boolean unixSeparator)
++    {
++        final String normalized = FilenameUtils.normalize(path, unixSeparator);
++        return collapseSeparators(normalized);
++    }
++
++    private static String collapseSeparators(final String path)
++    {
++        if (path == null || path.length() < 2)
++        {
++            return path;
++        }
++
++        // A leading double separator is a UNC-style prefix and is retained.
++        int start = path.startsWith("//") ? 2 : (path.charAt(0) == '/' ? 1 : 0);
++        StringBuilder result = new StringBuilder(path.length());
++        result.append(path, 0, start);
++        boolean previousSeparator = start > 0 && path.charAt(start - 1) == '/';
++        for (int i = start; i < path.length(); i++)
++        {
++            char character = path.charAt(i);
++            boolean separator = character == '/' || character == '\\';
++            if (!separator || !previousSeparator)
++            {
++                result.append(character);
++            }
++            previousSeparator = separator;
++        }
++        return result.toString();
++    }
++}

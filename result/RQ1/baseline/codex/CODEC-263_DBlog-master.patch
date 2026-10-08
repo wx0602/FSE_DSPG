@@ -1,0 +1,74 @@
+diff --git a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+index 1eb86ac46c725b401606f1dcc21f50e3041bd8a6..fba5ca059f94aceef42626c01b0d912a6adade66 100755
+--- a/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
++++ b/blog-core/src/main/java/com/zyd/blog/util/AesUtil.java
+@@ -6,6 +6,7 @@ import javax.crypto.Cipher;
+ import javax.crypto.KeyGenerator;
+ import javax.crypto.SecretKey;
+ import javax.crypto.spec.SecretKeySpec;
++import java.nio.charset.StandardCharsets;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.SecureRandom;
+ 
+@@ -35,7 +36,7 @@ public class AesUtil {
+         // 创建密码器
+         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+ 
+-        byte[] byteContent = content.getBytes("utf-8");
++        byte[] byteContent = content.getBytes(StandardCharsets.UTF_8);
+ 
+         // 初始化为加密模式的密码器
+         cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(passwd));
+@@ -65,9 +66,50 @@ public class AesUtil {
+         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+ 
+         //执行操作
+-        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
++        byte[] result = cipher.doFinal(decodeEncrypted(encrypted));
+ 
+-        return new String(result, "utf-8");
++        return new String(result, StandardCharsets.UTF_8);
++    }
++
++    private static byte[] decodeEncrypted(String encrypted) {
++        if (encrypted == null) {
++            throw new IllegalArgumentException("Encrypted content must not be null");
++        }
++        String normalized = normalizeBase64(encrypted);
++        byte[] encryptedBytes;
++        try {
++            encryptedBytes = java.util.Base64.getDecoder().decode(normalized);
++        } catch (IllegalArgumentException e) {
++            try {
++                encryptedBytes = java.util.Base64.getUrlDecoder().decode(normalized);
++            } catch (IllegalArgumentException ignored) {
++                throw new IllegalArgumentException("Encrypted content is not valid Base64", e);
++            }
++        }
++        return validateEncryptedBytes(encryptedBytes);
++    }
++
++    private static byte[] validateEncryptedBytes(byte[] encryptedBytes) {
++        if (encryptedBytes.length == 0 || encryptedBytes.length % 16 != 0) {
++            throw new IllegalArgumentException("Encrypted content is not valid AES ciphertext");
++        }
++        return encryptedBytes;
++    }
++
++    private static String normalizeBase64(String encrypted) {
++        String normalized = encrypted.trim().replaceAll("\\s", "");
++        int remainder = normalized.length() % 4;
++        if (remainder == 1) {
++            throw new IllegalArgumentException("Encrypted content is not valid Base64");
++        }
++        if (remainder > 0) {
++            StringBuilder builder = new StringBuilder(normalized);
++            for (int i = remainder; i < 4; i++) {
++                builder.append('=');
++            }
++            normalized = builder.toString();
++        }
++        return normalized;
+     }
+ 
+     /**

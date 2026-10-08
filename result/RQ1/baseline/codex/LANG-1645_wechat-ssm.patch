@@ -1,0 +1,37 @@
+diff --git a/src/main/java/cn/qs/utils/format/MyNumberUtils.java b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+index 4a488f8afc84c09db543dcc35b496e7833b0b80d..d667d220527152df8e2c9c275e158a795e11b855 100755
+--- a/src/main/java/cn/qs/utils/format/MyNumberUtils.java
++++ b/src/main/java/cn/qs/utils/format/MyNumberUtils.java
+@@ -8,7 +8,7 @@ import org.apache.commons.lang3.math.NumberUtils;
+ public class MyNumberUtils {
+ 
+ 	public static String toFixedDecimal(String value, int scale) {
+-		return toFixedDecimal(NumberUtils.createNumber(value), scale);
++		return toFixedDecimal(NumberUtils.createNumber(normalizePositiveHex(value)), scale);
+ 	}
+ 
+ 	public static String toFixedDecimal(Number value, int scale) {
+@@ -20,7 +20,22 @@ public class MyNumberUtils {
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(String value, int scale) {
+-		return toFixedDecimalWithPercent(NumberUtils.createNumber(value), scale);
++		return toFixedDecimalWithPercent(NumberUtils.createNumber(normalizePositiveHex(value)), scale);
++	}
++
++	/**
++	 * Commons Lang versions used by this application do not accept the Java
++	 * syntax "+0x..." in createNumber, although the syntax is a valid positive
++	 * hexadecimal integer. Remove only that prefix before delegating; all other
++	 * values retain the library's normal parsing and validation.
++	 */
++	private static String normalizePositiveHex(String value) {
++		if (value != null && value.length() > 3 && value.charAt(0) == '+'
++				&& value.charAt(1) == '0'
++				&& (value.charAt(2) == 'x' || value.charAt(2) == 'X')) {
++			return value.substring(1);
++		}
++		return value;
+ 	}
+ 
+ 	public static String toFixedDecimalWithPercent(Number value, int scale) {

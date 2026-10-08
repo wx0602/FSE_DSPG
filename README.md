@@ -1,8 +1,8 @@
 # DSPG-Bench
 
-## Downstream Security Patch Generation for Java: How Far Are We?
+## Automated Repair of Supply Chain Vulnerabilities Across Upstream and Downstream Projects: How Far Are We?
 
-This repository provides the dataset and experimental artifacts for our study of **Downstream Security Patch Generation (DSPG)** for Java third-party library vulnerabilities.
+This repository provides the dataset and experimental artifacts for our study of **Downstream Security Patch Generation (DSPG)** for third-party library vulnerabilities.
 
 Third-party library vulnerabilities are often difficult to remediate by directly adopting an upstream release because downstream projects may face dependency conflicts, API incompatibilities, or substantial upgrade costs. DSPG addresses this setting by generating a security patch in the downstream project's own Java source code while retaining the existing vulnerable dependency version.
 
@@ -22,13 +22,13 @@ The final benchmark contains:
 
 - **40** third-party library vulnerabilities;
 - **63** real-world downstream project instances;
-- **63** primary downstream PoCs;
-- **26** additional PoCs for independent vulnerability propagation paths;
 - **89** downstream PoCs in total;
-- **12** downstream projects with multiple PoCs;
-- **9** evaluated automated program repair tools.
+- **40** upstream PoCs in total;
+- **10** evaluated automated program repair tools.
 
-The 40 vulnerabilities include 32 CVEs and 8 Apache security issues. Every downstream instance contains the vulnerable project version and at least one executable PoC. The largest multi-PoC instance contains seven PoCs corresponding to independent downstream attack paths.
+The 40 vulnerabilities include 32 CVEs and 8 Apache security issues. 
+
+63 downstream instance contains the vulnerable project version and at least one executable PoC. The largest multi-PoC instance contains seven PoCs corresponding to independent downstream attack paths.
 
 The dataset was constructed from VESTA and Magneto artifacts and reproduced under a unified Java 8 and Maven 3.8 environment. Upstream and downstream PoCs are separated so that researchers can evaluate both conventional upstream repair and downstream repair for the same vulnerability.
 
@@ -44,16 +44,18 @@ FSE_DSPG/
 │   ├── upstream_poc/                 # Upstream PoCs for the 40 selected vulnerabilities
 │   └── downstream_poc/
 │       ├── README.md                  # Downstream PoC location and usage
-│       └── additional-pocs.yaml       # 26 additional path-specific PoCs
+│       ├── additional-pocs.yaml       # 26 additional path-specific PoCs
+│       └── resource_with_89poc/       # 63 downstream projects bundled with all 89 PoC classes
 ├── issue/                             # Inputs used in different experimental settings
-├── evaluated_tools_cli_scripe/        # CLI adapters and batch scripts for the 9 tools
+├── evaluated_tools_cli_scripe/        # CLI adapters and batch scripts for tools
+├── SLR/                               # Systematic literature review artifacts
 ├── code/
 │   ├── poc_validate_origin/           # Validate upstream and downstream PoCs
 │   └── evaluate_patch/                # Normalize, apply, and evaluate generated patches
 ├── result/
 │   ├── RQ1/                           # Baseline and downstream-PoC settings
 │   ├── RQ2/                           # VPP Injection
-│   ├── RQ3/                           # Upstream-information and Bootstrapped Repair settings
+│   ├── RQ3/                           # Upstream-accessible, GT upstream patch, and Bootstrapped Repair settings
 │   └── RQ4/                           # Combined strategy
 └── README.md
 ```
@@ -96,14 +98,14 @@ The tool adapters and batch scripts are provided under [`evaluated_tools_cli_scr
 | Vulnerability repair | SAN2PATCH | commit `a8c5ace` |
 | Vulnerability repair | PATCHAGENT | `v2.1.0` |
 | Vulnerability repair | APPATCH | commit `eff3103b` |
-| Automated program repair | Agentless | `v1.5.0` |
-| Automated program repair | PReMM | `v1.0` |
-| Automated program repair | ReInFix | replication-package version |
-| Automated program repair | RepairAgent | commit `701dbb37` |
+| Bug repair | Agentless | `v1.5.0` |
+| Bug repair | PReMM | `v1.0` |
+| Bug repair | ReInFix | replication-package version |
+| Bug  repair | RepairAgent | commit `701dbb37` |
 | Coding agent | OpenHands | `v1.2.0` |
 | Coding agent | SWE-agent | `v1.0.0` |
-
-The adapters convert the benchmark instances into each tool's expected input format and export the generated changes as patch files. The already generated and normalized patches are available under [`result/`](result/), so patch inspection and re-evaluation do not require invoking an LLM.
+| Coding agent | Codex | `v0.141.0` |
+The adapters convert the benchmark instances into the input format expected by each tool and export the generated changes as patch files. The generated and normalized patches are available under [`result/`](result/) directory.
 
 ---
 
@@ -111,7 +113,7 @@ The adapters convert the benchmark instances into each tool's expected input for
 
 ### RQ1: Performance of APR tools in DSPG
 
-RQ1 evaluates the nine tools using vulnerability descriptions without providing downstream PoCs during patch generation. The baseline relies on each tool's native localization mechanism. APPATCH, PReMM, and ReInFix do not provide native localization for this setting and are supplied with the ground-truth function-level localization point.
+RQ1 evaluates the 10 tools using vulnerability descriptions without providing downstream PoCs during patch generation. The baseline relies on each tool's native localization mechanism. APPATCH, PReMM, and ReInFix do not provide native localization for this setting and are supplied with the ground-truth function-level localization point.
 
 RQ1 also contains a downstream-PoC setting that supplies the security oracle to the tools and a comparison between upstream and downstream repair outcomes for the same vulnerability IDs.
 
@@ -144,33 +146,162 @@ RQ4 combines VPP Injection and Bootstrapped Repair. The VPP provides information
 
 ## 4. Evaluation Framework
 
-We evaluate every downstream patch along three dimensions.
+## Evaluation Metrics
 
-### 4.1 Security Effectiveness
+Existing evaluations of APR tools do not always reflect their actual repair capability, particularly in DSPG scenarios. We evaluate generated patches along three dimensions: **Security Effectiveness**, **Functional Correctness**, and **Downstream Repair Compliance**.
 
-Security Effectiveness is determined by executing all PoCs associated with a downstream instance:
+### 1. Security Effectiveness
 
-- **All:** all available PoCs are blocked;
-- **Some:** at least one PoC is blocked, but another remains exploitable;
-- **None:** none of the available PoCs are blocked.
+We evaluate security effectiveness using **BlockPoC** and **BlockVul**.
 
-Compilation failure, environment failure, timeout, or failure to execute the PoC is recorded separately and is not automatically treated as successful vulnerability blocking.
+For each PoC, its blocking status is classified as **Blocked** or **Not Blocked**. A PoC is considered **Blocked** if it can no longer trigger the target vulnerability after the generated patch is applied.
 
-### 4.2 Functional Correctness
+- **BlockPoC**: the percentage of evaluated PoCs that are successfully blocked.
 
-The patched project must preserve its existing functionality. The original test suite is executed after applying the patch. Unaffected tests must pass. Behavioral changes in vulnerability-related tests are manually inspected and accepted only when they are consistent with the intended security repair.
+$$
+\mathrm{BlockPoC}
+=
+\frac{\#\text{Blocked PoCs}}
+{\#\text{Evaluated PoCs}}
+\times 100\%
+$$
 
-### 4.3 Compliance
+Since one vulnerability may be associated with multiple PoCs, we further measure blocking completeness at the vulnerability level.
 
-A compliant DSPG patch modifies the existing downstream Java source code without upgrading or replacing the vulnerable dependency. Dependency upgrades, shading, changes that only bypass compilation, and changes to test or PoC files do not satisfy the downstream source-level repair constraint.
+For vulnerability $v$, let $\mathcal{C}_v$ denote the set of PoCs associated with $v$. A vulnerability is considered blocked only if all of its associated PoCs are blocked:
 
-### 4.4 Aggregate metrics
+$$
+\mathrm{BlockedVul}(v)
+=
+\bigwedge_{c \in \mathcal{C}_v}
+\mathrm{Blocked}(c)
+$$
 
-- **Full Repair Rate (FRR):** percentage of projects for which all PoCs are blocked, the original test suite passes, and the patch is compliant.
-- **Partial Repair Rate (PRR):** percentage of projects for which at least one PoC is blocked, the original test suite passes, and the patch is compliant.
+- **BlockVul**: the percentage of evaluated vulnerabilities for which all associated PoCs are blocked.
 
-Full repairs are included in PRR; therefore, `FRR <= PRR`.
+$$
+\mathrm{BlockVul}
+=
+\frac{\#\text{Blocked Vulnerabilities}}
+{\#\text{Evaluated Vulnerabilities}}
+\times 100\%
+$$
 
+### 2. Functional Correctness
+
+We evaluate functional correctness using **PassTest**.
+
+For each downstream project, test-suite validation is classified as **Pass** or **Fail**. All tests unaffected by the vulnerability must pass. Behavioral changes in vulnerability-related tests are manually inspected and accepted only when they are consistent with the intended repair semantics.
+
+- **PassTest**: the percentage of evaluated projects whose test suites pass after applying the generated patch.
+
+$$
+\mathrm{PassTest}
+=
+\frac{\#\text{Projects Passing Test Validation}}
+{\#\text{Evaluated Projects}}
+\times 100\%
+$$
+
+### 3. Downstream Repair Compliance
+
+We evaluate downstream repair compliance using **ComplyDown**.
+
+For each downstream project $p$, `Compliance(p) = True` indicates that the generated repair satisfies the DSPG constraint. Specifically, the vulnerability must be repaired by modifying the existing downstream project rather than by changing the vulnerable dependency.
+
+Dependency upgrades, dependency replacement, shading, modifications that only bypass compilation, and changes to test or PoC files are considered non-compliant.
+
+- **ComplyDown**: the percentage of evaluated projects whose patches satisfy the downstream repair constraint.
+
+$$
+\mathrm{ComplyDown}
+=
+\frac{\#\text{Compliant Projects}}
+{\#\text{Evaluated Projects}}
+\times 100\%
+$$
+
+### 4. Aggregate Repair Metrics
+
+Based on the three dimensions above, we further define **RepairPath** and **RepairVul** to measure overall repair effectiveness.
+
+#### RepairPath
+
+For each exploit path represented by a PoC $c$, let $p$ denote the corresponding downstream project.
+
+An exploit path is considered successfully repaired only if:
+
+1. the corresponding PoC is blocked;
+2. the patched project passes functional validation; and
+3. the patch satisfies the downstream repair constraint.
+
+Formally:
+
+$$
+\mathrm{RepairedPath}(c)
+=
+\mathrm{Blocked}(c)
+\land
+\bigl(\mathrm{Test}(p)=\mathrm{Pass}\bigr)
+\land
+\bigl(\mathrm{Compliance}(p)=\mathrm{True}\bigr)
+$$
+
+- **RepairPath**: the percentage of evaluated exploit paths satisfying the above conditions.
+
+$$
+\mathrm{RepairPath}
+=
+\frac{\#\text{Repaired Exploit Paths}}
+{\#\text{Evaluated Exploit Paths}}
+\times 100\%
+$$
+
+#### RepairVul
+
+For vulnerability $v$, let $\mathcal{C}_v$ denote the set of PoCs associated with $v$ in downstream project $p$.
+
+A vulnerability is considered successfully repaired only if:
+
+1. all associated PoCs are blocked;
+2. the patched project passes functional validation; and
+3. the patch satisfies the downstream repair constraint.
+
+Formally:
+
+$$
+\mathrm{RepairedVul}(v)
+=
+\left(
+\bigwedge_{c \in \mathcal{C}_v}
+\mathrm{Blocked}(c)
+\right)
+\land
+\bigl(\mathrm{Test}(p)=\mathrm{Pass}\bigr)
+\land
+\bigl(\mathrm{Compliance}(p)=\mathrm{True}\bigr)
+$$
+
+- **RepairVul**: the percentage of evaluated vulnerabilities satisfying the above conditions.
+
+$$
+\mathrm{RepairVul}
+=
+\frac{\#\text{Repaired Vulnerabilities}}
+{\#\text{Evaluated Vulnerabilities}}
+\times 100\%
+$$
+
+### Metric Summary
+
+| Metric | Evaluation Level | Description |
+|---|---|---|
+| **BlockPoC** | PoC / Exploit Path | Percentage of PoCs successfully blocked |
+| **BlockVul** | Vulnerability | Percentage of vulnerabilities for which all associated PoCs are blocked |
+| **PassTest** | Project | Percentage of patched projects passing functional validation |
+| **ComplyDown** | Project | Percentage of patches satisfying the downstream repair constraint |
+| **RepairPath** | PoC / Exploit Path | Percentage of exploit paths that are blocked while also satisfying functional correctness and downstream repair compliance |
+| **RepairVul** | Vulnerability | Percentage of vulnerabilities for which all associated PoCs are blocked while also satisfying functional correctness and downstream repair compliance |
 ---
 
 ## 5. Quick Start
@@ -265,6 +396,32 @@ For a multi-module project, enter the module listed in the table below before ex
 | `TEXT-215_geoportal-server` | `geoportal` | `Val_TEXT215_Test` |
 | `Zip-263_CarStoreApi` | `account/account-web` | `ZipUtil_ESTest` |
 | `Zip-263_ZingClient` | `.` | `ZFile_ESTest` |
+| `CODEC-270_BurpCrypto-master` | `.` | `CODEC_270_DesDecrypt_ExtraPathRealPocTest` |
+| `CODEC-270_BurpCrypto-master` | `.` | `CODEC_270_Sm4Decrypt_ExtraPathRealPocTest` |
+| `CODEC-270_BurpCrypto-master` | `.` | `CODEC_270_StringKeyToByteKey_ExtraPathRealPocTest` |
+| `CODEC-270_BurpCrypto-master` | `.` | `CODEC_270_GetBase64PublicKeyME_ExtraPathRealPocTest` |
+| `CODEC-270_BurpCrypto-master` | `.` | `CODEC_270_ZucDecrypt_ExtraPathRealPocTest` |
+| `CVE-2015-2156_webbit` | `.` | `CVE_2015_2156_NettyRequestCookieValue_ExtraPathRealPocTest` |
+| `CVE-2015-2156_webbit` | `.` | `CVE_2015_2156_WrapperCookieValue_ExtraPathRealPocTest` |
+| `CVE-2015-2156_webbit` | `.` | `CVE_2015_2156_WrapperCookieObject_ExtraPathRealPocTest` |
+| `CVE-2017-7957_rpki-commons` | `.` | `CVE_2017_7957_ChildIdentityDeserialize_ExtraPathRealPocTest` |
+| `CVE-2018-1000632_tcpser4j` | `.` | `CVE_2018_1000632_EntryWriteXmlString_ExtraPathRealPocTest` |
+| `CVE-2018-1000632_tcpser4j` | `.` | `CVE_2018_1000632_EventActionInfoWriteXmlString_ExtraPathRealPocTest` |
+| `CVE-2018-1000632_tcpser4j` | `.` | `CVE_2018_1000632_LineWriteXmlString_ExtraPathRealPocTest` |
+| `CVE-2018-1000632_tcpser4j` | `.` | `CVE_2018_1000632_ModemPoolWriteXmlString_ExtraPathRealPocTest` |
+| `CVE-2018-1000632_tcpser4j` | `.` | `CVE_2018_1000632_PhoneBookWriteXmlString_ExtraPathRealPocTest` |
+| `CVE-2018-1000632_tcpser4j` | `.` | `CVE_2018_1000632_SettingsWriteXmlString_ExtraPathRealPocTest` |
+| `CVE-2020-13956_crawler-jsoup-maven` | `.` | `CVE_2020_13956_SendGet_ExtraPathRealPocTest` |
+| `CVE-2021-23899_OmegaTester` | `.` | `CVE_2021_23899_BatchCtrlAdd_ExtraPathRealPocTest` |
+| `CVE-2021-23899_OmegaTester` | `.` | `CVE_2021_23899_BatchCtrlUpdate_ExtraPathRealPocTest` |
+| `CVE-2021-23899_OmegaTester` | `.` | `CVE_2021_23899_ReqCtrlSend_ExtraPathRealPocTest` |
+| `CVE-2021-23900_OmegaTester` | `.` | `CVE_2021_23900_BatchCtrlAdd_ExtraPathRealPocTest` |
+| `CVE-2021-23900_OmegaTester` | `.` | `CVE_2021_23900_BatchCtrlUpdate_ExtraPathRealPocTest` |
+| `CVE-2021-43859_rpki-commons` | `.` | `CVE_2021_43859_ChildIdentityDeserialize_ExtraPathRealPocTest` |
+| `CVE-2022-25845_geek_framework` | `.` | `CVE_2022_25845_GetIpInfo_ExtraPathRealPocTest` |
+| `LANG-1645_ewallet` | `wallet-base` | `LANG_1645_CreateNumber_ExtraPathRealPocTest` |
+| `TEXT-215_geoportal-esri` | `geoportal` | `TEXT_215_GeoportalEsri_UnescapeNumericEntity_ExtraPathRealPocTest` |
+| `TEXT-215_geoportal-server` | `geoportal` | `TEXT_215_GeoportalServer_UnescapeNumericEntity_ExtraPathRealPocTest` |
 
 The additional 26 path-specific PoCs and their modules are listed in [`dataset/downstream_poc/additional-pocs.yaml`](dataset/downstream_poc/additional-pocs.yaml).
 
@@ -296,9 +453,9 @@ python code/evaluate_patch/normalize_patch/01_detect_and_normalize_patches_sweag
 
 Normalization retains downstream Java source changes and emits one standardized patch per project.
 
-### 6.2 Re-evaluate all nine patch sets
+### 6.2 Re-evaluate all 10 patch sets
 
-The following command validates the vulnerable baseline and all nine RQ1 baseline patch directories:
+The following command validates the vulnerable baseline and all 10 RQ1 baseline patch directories:
 
 ```bash
 python code/evaluate_patch/security_validation/run_nine_patch_validations.py \
@@ -370,9 +527,9 @@ The principal findings reproduced by these artifacts are:
 
 - Existing APR tools remain limited in DSPG; the best baseline tool fully repairs 41 of 63 projects.
 - All evaluated tools exhibit partial repairs on projects with multiple PoCs.
-- VPP Injection reduces function-level localization errors and increases the average FRR.
-- Bootstrapped Repair improves downstream repair for eight of nine tools.
-- Combining VPP Injection and Bootstrapped Repair outperforms either strategy alone for all nine tools.
+- VPP Injection reduces function-level localization errors and increases the average RepairVul.
+- Bootstrapped Repair improves downstream repair for 9 of 10 tools.
+- Combining VPP Injection and Bootstrapped Repair outperforms either strategy alone for all 10 tools.
 
 ---
 
@@ -381,7 +538,7 @@ The principal findings reproduced by these artifacts are:
 - Run commands from the repository root unless a command explicitly changes directory.
 - Some projects are multi-module Maven projects; use the module shown in the PoC table.
 - Some PoCs rely on files, processes, output strings, or exit codes rather than a conventional JUnit failure. Use the supplied YAML oracle instead of interpreting Maven's exit code alone.
-- Tool outputs are stochastic. The paper reports the best validated result from three runs.
+- Tool outputs are stochastic. Each tool is run three times, and the final repair result is determined by majority voting.
 - The full tool reruns require the original tool environments and model access. Patch re-evaluation does not require model access.
 - Several copied scripts retain defaults from the original experimental workspace. Explicit command-line paths, as shown above, should be used when running from this package.
 

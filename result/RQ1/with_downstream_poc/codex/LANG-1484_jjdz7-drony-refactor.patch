@@ -1,0 +1,32 @@
+diff --git a/Web/src/main/java/com.korpodrony/validation/Validator.java b/Web/src/main/java/com.korpodrony/validation/Validator.java
+index 8c15083ac5980fa91fe8b53927c7aa46cc79e284..a2d641040daeb36fbc03a9b41b0caa86fe19af70 100755
+--- a/Web/src/main/java/com.korpodrony/validation/Validator.java
++++ b/Web/src/main/java/com.korpodrony/validation/Validator.java
+@@ -26,9 +26,24 @@ public class Validator {
+ 
+     public boolean validateInteger(String str) {
+         logger.info("Validating integer: " + str);
+-        System.out.println(str);
+-        System.out.println(NumberUtils.isParsable(str));
+-        return NumberUtils.isCreatable(str) && NumberUtils.isParsable(str);
++        // NumberUtils.isParsable is stricter than Java's numeric grammar and
++        // incorrectly rejects values such as "100." (which Double.parseDouble
++        // accepts). Keep the Commons Lang syntax check, but use the JDK parser
++        // for the actual parseability decision so this boundary matches the
++        // documented contract.
++        return NumberUtils.isCreatable(str) && isJdkParsable(str);
++    }
++
++    private boolean isJdkParsable(String str) {
++        if (str == null) {
++            return false;
++        }
++        try {
++            Double.parseDouble(str);
++            return true;
++        } catch (NumberFormatException exception) {
++            return false;
++        }
+     }
+ 
+     public boolean validateIntegerAsPositiveValue(String str) {

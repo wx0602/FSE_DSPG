@@ -1,0 +1,6 @@
+String string0 = "";
+boolean boolean0 = ZipUtil.existZH(string0);
+String string1 = "[\\u4e00-\\u9fa5]";
+String string2 = "";
+MockFile mockFile0 = new MockFile(string1, string2);
+ZipUtil.compressFile(mockFile0, mockFile0);

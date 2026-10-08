@@ -1,0 +1,29 @@
+{
+	"ambiente":"DEV",
+	"report":{
+		"path":"src/main/resources/report"
+	},
+	"capabilities":{
+		"newCommandTimeout": 500
+	},
+	"app":{
+		"id": "100-hml",
+		"platform": "ANDROID",
+		"capabilities": {
+			"appPackage": "br.com.bancopan.cartoes",
+			"appActivity": "br.com.bancopan.loginlegado.presentation.LoginActivity",
+			"allowTestPackages": true
+		}
+	},
+	"devices":[
+		{
+			"id": "emulator-5554",
+			"type": "VIRTUAL",
+			"capabilities": {
+				"platformVersion": "7.0",
+				"deviceName": "AUTOMACAO01_AND6",
+				"udid": "emulator-5554"
+			}
+		}
+	]
+}

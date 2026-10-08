@@ -1,0 +1,70 @@
+diff --git a/src/main/java/burp/utils/Utils.java b/src/main/java/burp/utils/Utils.java
+index c163777f83eec54b5b3851af8952de52c0cd58ec..27f32e001e0486339635148cf8414084f19ec91b 100755
+--- a/src/main/java/burp/utils/Utils.java
++++ b/src/main/java/burp/utils/Utils.java
+@@ -113,9 +113,56 @@ public class Utils {
+     }
+ 
+     public static byte[] base64(String str) {
++        validateBase64(str);
+         return Base64.decodeBase64(str);
+     }
+ 
++    /**
++     * Commons Codec 1.13 accepts non-canonical Base64 values whose discarded
++     * trailing bits are set.  Reject those values before handing them to the
++     * library (for example, "AB==" must not decode to a byte).
++     */
++    private static void validateBase64(String value) {
++        if (value == null) {
++            throw new IllegalArgumentException("Base64 value must not be null");
++        }
++
++        String encoded = value.replaceAll("\\s", "");
++        if ((encoded.length() & 3) != 0) {
++            throw new IllegalArgumentException("Invalid Base64 length");
++        }
++
++        int padding = encoded.endsWith("==") ? 2 : encoded.endsWith("=") ? 1 : 0;
++        int dataLength = encoded.length() - padding;
++        for (int i = 0; i < dataLength; i++) {
++            char c = encoded.charAt(i);
++            if (!isBase64Character(c)) {
++                throw new IllegalArgumentException("Invalid Base64 character");
++            }
++        }
++        for (int i = dataLength; i < encoded.length(); i++) {
++            if (encoded.charAt(i) != '=') {
++                throw new IllegalArgumentException("Invalid Base64 padding");
++            }
++        }
++        if (padding == 1 && (dataLength == 0 || (base64Value(encoded.charAt(dataLength - 1)) & 3) != 0)
++                || padding == 2 && (dataLength < 2 || (base64Value(encoded.charAt(dataLength - 1)) & 15) != 0)) {
++            throw new IllegalArgumentException("Non-zero Base64 trailing bits");
++        }
++    }
++
++    private static boolean isBase64Character(char c) {
++        return c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9'
++                || c == '+' || c == '/' || c == '-' || c == '_';
++    }
++
++    private static int base64Value(char c) {
++        if (c >= 'A' && c <= 'Z') return c - 'A';
++        if (c >= 'a' && c <= 'z') return c - 'a' + 26;
++        if (c >= '0' && c <= '9') return c - '0' + 52;
++        return c == '+' || c == '-' ? 62 : 63;
++    }
++
+     public static String hex(byte[] bytes) {
+         return Hex.encodeHexString(bytes);
+     }
+@@ -130,7 +177,7 @@ public class Utils {
+ 
+     public static BigInteger[] getBase64PublicKeyME(String base64Str) throws Exception {
+         BigInteger[] result = new BigInteger[2];
+-        byte[] decoded = Base64.decodeBase64(base64Str);
++        byte[] decoded = base64(base64Str);
+         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+         result[0] = pubKey.getModulus();
+         result[1] = pubKey.getPublicExponent();

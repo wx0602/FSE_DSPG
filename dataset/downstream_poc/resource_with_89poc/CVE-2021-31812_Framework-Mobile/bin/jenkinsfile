@@ -1,0 +1,8 @@
+@Library('deliveryPipeline') _
+ 
+def config = [:]
+ 
+config.'compiler' = 'maven'
+config.'buildDir' = '/'
+ 
+deliveryPipeline(config)

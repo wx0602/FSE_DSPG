@@ -1,0 +1,101 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a811a50a7702550a7e18081ef5fb380e81b3..b2e79070713eed34f838b964f2c892e1067616a1 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,8 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = FilenameUtils.normalize(
++                ResourcePathUtils.collapseSeparators(templateName), true );
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +176,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = FilenameUtils.normalize(ResourcePathUtils.collapseSeparators(name));
+         if (name == null || name.length() == 0)
+         {
+             return false;
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+index 0a552707053dc25670a2a158fadbef6c192e974e..3d21dc838a2ba71473da83a81c21d9c316cee83d 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/JarResourceLoader.java
+@@ -186,7 +186,8 @@ public Reader getResourceReader( String source, String encoding )
+         }
+         System.out.println("we get"+result);
+ 
+-        String normalizedPath = FilenameUtils.normalize( source, true );
++        String normalizedPath = FilenameUtils.normalize(
++                ResourcePathUtils.collapseSeparators(source), true );
+ 
+         System.out.println("we make"+normalizedPath);
+ 
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..cd24c42f8e9e1e44388df0260ce811d45c1bf202
+--- /dev/null
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/ResourcePathUtils.java
+@@ -0,0 +1,58 @@
++package org.apache.velocity.runtime.resource.loader;
++
++/** Utilities for making resource paths safe for the pinned Commons IO version. */
++final class ResourcePathUtils
++{
++    private ResourcePathUtils()
++    {
++    }
++
++    /**
++     * Commons IO 2.6 does not collapse repeated separators after a path
++     * prefix.  Collapse them here, retaining the two separators of a UNC
++     * prefix, before delegating to FilenameUtils.
++     */
++    static String collapseSeparators(String path)
++    {
++        StringBuilder result = new StringBuilder(path.length());
++        int index = 0;
++        int prefixSeparators = 0;
++        while (index < path.length() && isSeparator(path.charAt(index)))
++        {
++            prefixSeparators++;
++            index++;
++        }
++        if (prefixSeparators > 0)
++        {
++            result.append('/');
++            if (prefixSeparators > 1)
++            {
++                result.append('/');
++            }
++        }
++        boolean separator = prefixSeparators > 0;
++        for (; index < path.length(); index++)
++        {
++            char character = path.charAt(index);
++            if (isSeparator(character))
++            {
++                if (!separator)
++                {
++                    result.append('/');
++                    separator = true;
++                }
++            }
++            else
++            {
++                result.append(character);
++                separator = false;
++            }
++        }
++        return result.toString();
++    }
++
++    private static boolean isSeparator(char character)
++    {
++        return character == '/' || character == '\\';
++    }
++}

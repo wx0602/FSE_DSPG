@@ -1,0 +1,71 @@
+diff --git a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+index f8c5a811a50a7702550a7e18081ef5fb380e81b3..653a1432f392e086e9b69a2de9cb3950b01a3649 100755
+--- a/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
++++ b/velocity-engine-core/src/main/java/org/apache/velocity/runtime/resource/loader/FileResourceLoader.java
+@@ -112,7 +112,7 @@ public Reader getResourceReader(String templateName, String encoding)
+                     "Need to specify a file name or file path!");
+         }
+ 
+-        String template = FilenameUtils.normalize( templateName, true );
++        String template = normalizeTemplateName(templateName, true);
+         if ( template == null || template.length() == 0 )
+         {
+             String msg = "File resource error: argument " + template +
+@@ -175,7 +175,7 @@ public boolean resourceExists(String name)
+         {
+             return false;
+         }
+-        name =  FilenameUtils.normalize(name);
++        name = normalizeTemplateName(name, false);
+         if (name == null || name.length() == 0)
+         {
+             return false;
+@@ -200,6 +200,48 @@ public boolean resourceExists(String name)
+         return false;
+     }
+ 
++    /**
++     * Normalize a resource name and remove duplicate separators left behind
++     * by Commons IO 2.6.  FilenameUtils.normalize() preserves duplicate
++     * separators after a UNC prefix, which can make the name used for lookup
++     * differ from the normalized path described by its contract.
++     *
++     * @param name resource name
++     * @param keepTrailingSeparator whether to preserve a trailing separator
++     * @return normalized resource name, or {@code null} when it is invalid
++     */
++    private String normalizeTemplateName(final String name, final boolean keepTrailingSeparator)
++    {
++        String normalized = FilenameUtils.normalize(name, keepTrailingSeparator);
++        if (normalized == null || normalized.length() < 2)
++        {
++            return normalized;
++        }
++
++        char separator = File.separatorChar;
++        StringBuilder result = new StringBuilder(normalized.length());
++        boolean uncPrefix = normalized.charAt(0) == separator && normalized.charAt(1) == separator;
++        boolean previousSeparator = false;
++        for (int i = 0; i < normalized.length(); i++)
++        {
++            char current = normalized.charAt(i);
++            if (current == separator)
++            {
++                if (previousSeparator && !(uncPrefix && result.length() < 2))
++                {
++                    continue;
++                }
++                previousSeparator = true;
++            }
++            else
++            {
++                previousSeparator = false;
++            }
++            result.append(current);
++        }
++        return result.toString();
++    }
++
+     /**
+      * Try to find a template given a normalized path.
+      *

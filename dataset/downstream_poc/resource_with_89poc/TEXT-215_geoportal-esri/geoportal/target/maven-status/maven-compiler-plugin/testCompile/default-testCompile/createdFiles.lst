@@ -1,0 +1,4 @@
+com/esri/geoportal/base/util/Val_ESTest.class
+com/esri/geoportal/base/util/Val_TEXT215_Test.class
+com/esri/geoportal/base/util/TEXT_215_GeoportalEsri_PocTest_ExtraPath.class
+com/esri/geoportal/base/util/TEXT_215_GeoportalEsri_UnescapeNumericEntity_ExtraPathRealPocTest.class
